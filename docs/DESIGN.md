@@ -747,7 +747,7 @@ effects:
     - id: gooey-liquid
       what: "liquid-gooey 0.2.2 (MIT, no deps): pieces merge and split like liquid, text and icons stay crisp"   # his ask: subtle and consistent
       tier: 1
-      how: "SVG goo filter on a silhouette layer under live DOM; camera menu splits into Log a plate and Ask SlugGrub"
+      how: "SVG goo filter on a silhouette layer under live DOM; the food button splits into Log a plate and Ask SlugGrub. filterPadding must cover how far pieces travel (84px for the food button droplets): too small clips them, which looked like the button glitching on his phone (fixed 2026-11-14)"
       fallback: "plain spring move without goo"
       reduced: "prefers-reduced-motion: instant, no goo travel"
       measured: "not yet (QA Gate B2 before ship)"
