@@ -57,6 +57,27 @@ The whole idea in one sentence: **you work on your own branch, then a pull reque
 
 ---
 
+## Part 2.5: Which model to use in Antigravity
+
+Pick the model in the dropdown at the bottom of the agent chat. Checked 2026-11-14 against Antigravity's models page; their lineup changes often.
+
+| Use it for | Model | Why |
+|---|---|---|
+| **Almost everything** | **Gemini 4 Hydrogen** (leave thinking on High) | Newest (Nov 12), fast, and scores about the same as the bigger Argon for much less per task |
+| When Hydrogen's limit runs out | **Gemini 3.8 Flash** | Strong at coding and cheap per token |
+| When all Gemini limits run out | **Claude Sonnet 4.6** | Claude models use a separate limit from Gemini, so this keeps you going. It's being removed Nov 18, after the hackathon |
+| Avoid | Claude Opus, Gemini 4 Argon, Gemini 4 Carbon, any "Orchestrator" | Opus and the orchestrators use up limits and credits several times faster, and Hydrogen matches Argon anyway |
+
+**How not to burn your $25 credit:**
+- Your plan has a free limit that refreshes (every 5 hours or weekly depending on plan). **Credits are only used after that limit runs out**, and only if overages are on.
+- In Antigravity **Settings**, set **AI Credit Overages** to **Never**. When you hit a limit, switch models (table above) instead of spending credits. Switch it to Always only if you're blocked and the deadline is close.
+- Check what you've used in **Settings** (usage by model).
+- Start a new chat for each new task. Long chats send the whole history every time, which uses more.
+- Ask for one thing at a time and point it at the exact files. "Fix the button in src/app/rank/page.tsx" is cheaper than "fix the app".
+- Don't use the highest thinking level. High is the default and is enough.
+
+---
+
 ## Part 3: Every time you work (the loop)
 
 You can click buttons in Antigravity, type commands in the terminal, or ask the agent to do it. All three do the same thing. The commands are shown so you know what's happening.
