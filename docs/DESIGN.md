@@ -88,7 +88,7 @@ options:
 
 colors:
   primary:
-    base: "<oklch(L C H) — your brand color; anchored to step 9>"
+    base: "oklch(0.45 0.08 158)"  # draft (redwood green; full 12 steps generated and previewed in src/app/brand/brand.css as --g1..--g12; written here on approval)
     # Derived 12-step scale (light mode). Generate at instantiation per §Colors → Generating the scale.
     1:  "<derived>"   # app background
     2:  "<derived>"   # subtle bg / alt stripe
@@ -294,9 +294,9 @@ colors:
 
 typography:
   families:
-    display: "<font family — default 'Geist Sans' or 'Inter'>"
-    body: "<font family — default 'Geist Sans' or 'Inter' (often same as display)>"
-    mono: "<font family — default 'Geist Mono' or 'JetBrains Mono'>"
+    display: "Instrument Serif"  # draft (dish names, headlines, wordmark; previewed at /brand)
+    body: "Geist Sans"  # draft (all UI text; tabular figures for numbers)
+    mono: "Geist Mono"  # draft
 
   # ── Fallback stacks ────────────────────────────────────────────
   # Each custom font resolves to "<family>, <matching fallback>" in generated CSS.
@@ -686,8 +686,8 @@ effects:
 # ═══════════════════════════════════════════════════════════════
 
 icons:
-  family: "<icon family — declare per project. Recommended: Lucide (free default), Phosphor (free, 6 weights), Heroicons (free, outline + solid), Tabler (free, 1.5-px stroke), HugeIcons (free Stroke-Rounded / 51K Pro across 10 styles), or custom>"
-  library: "<lucide | phosphor | heroicons | tabler | hugeicons | custom — the normalized key the brand-kit viewer uses to render this project's real icons (see §Brand Kit). Must match `family`.>"
+  family: "Lucide"  # draft (lucide-react, outline)
+  library: "lucide"  # draft
   fill_style: "{options.icon_fill}"     # outline | filled
   sizes:
     xs: 12
@@ -2842,3 +2842,11 @@ This template is on `template_version: 1.23.1`. Per-project `DESIGN.md` instance
 # Source
 
 This template is generated from the brand-agnostic research in `research.md` (the design dimensions in its `§A` onward, plus measured production-site analysis); section anchors next to each default point at the research behind it. The companion mobile template `DESIGN_TEMPLATE_MOBILE.md` shares brand-identity values and applies the same rules to iOS HIG + Material 3 conventions. The optional `tools/brand-kit` package provides the palette generator + the brand-kit viewer.
+
+<!-- 2026-11-14 draft preview (all # draft until Arshawn approves the intake): the full proposed visual system is rendered at /brand
+(src/app/brand/page.tsx, tokens in src/app/brand/brand.css): cream paper neutrals (--paper oklch(0.965 0.014 85)), redwood green
+primary (generated 12 steps), banana-slug yellow accent (--y9 oklch(0.86 0.14 92), camera button and #1 only), semantic ok/warn/bad,
+macro colors, college colors for the rivalry board only, radius 12/20/28/pill, two shadow levels, floating pill tab bar with a
+detached yellow camera button, one hero number per screen. Direction "Dining Hall Editorial" from Mobbin research (Beli, Alma,
+BitePal, Oura, Revolut, Monzo, Tonal, Yubo, BeReal). On approval these move into the colors/typography/radius/elevation/components
+slots above and the token export replaces brand.css. -->
