@@ -267,3 +267,28 @@ a.btn { text-decoration: none; }
     rgb(0 0 0 / 0.35) 0, rgb(0 0 0 / 0.7) calc(var(--top-chrome) * 0.4), rgb(0 0 0 / 0.9) calc(var(--top-chrome) * 0.7), #000 var(--top-chrome), #000 100%);
 }
 .edge { z-index: 5; }
+
+/* ── Mobile scrolling (his report 2026-11-14: on iPhone Safari and Chrome, sometimes the app scrolls and sometimes the whole web
+   page does). Every iOS browser is WebKit, and WebKit still does not reliably honor overscroll-behavior on the main document, so the
+   fix is structural: the document can never scroll (html and body are pinned and clipped), only .scroller scrolls. The chrome
+   (top bar, nav bar) refuses pan gestures so a drag starting on it cannot move the page. overscroll-behavior is still set for
+   Android Chrome, where it works (no pull-to-refresh, no scroll chaining). touch-action: manipulation removes double-tap zoom and
+   tap delay without blocking pinch zoom (accessibility). ── */
+html, body { position: fixed; inset: 0; width: 100%; height: 100%; overflow: hidden; overscroll-behavior: none; touch-action: manipulation; }
+.app { height: 100%; }
+.scroller { overscroll-behavior: contain; -webkit-overflow-scrolling: touch; touch-action: pan-y pinch-zoom; }
+.carousel { overscroll-behavior-x: contain; touch-action: pan-x pan-y pinch-zoom; }
+.topchrome, .tabbar { touch-action: none; }
+.gs-track { touch-action: none; }
+
+/* ── Apple HIG pass (2026-11-14, his ask), from the HIG Accessibility page: text up to 17pt needs 4.5:1 contrast, 18pt+ or bold 3:1;
+   iOS default text 17pt, minimum 11pt; controls 44x44pt by default. ── */
+:root {
+  --ink-3: oklch(0.52 0.01 255);   /* was 0.6 (3.4 to 3.8:1); now 4.7 to 5.3:1 on page, cards and the nav bar */
+  --ok: oklch(0.48 0.13 145);      /* pill text 5.4:1 on its tint (was 4.0) */
+  --bad: oklch(0.5 0.18 27);       /* pill text 5.6:1 on its tint (was 4.2) */
+}
+.title-xl { font-size: 34px; letter-spacing: -0.035em; }   /* HIG Large Title 34pt */
+.body { font-size: 17px; }                                  /* HIG Body 17pt */
+.tab { font-size: 11px; }                                   /* HIG minimum 11pt (was 10) */
+input, textarea, select { font-size: 17px !important; }     /* 16px or more also stops iOS Safari zooming into the field */

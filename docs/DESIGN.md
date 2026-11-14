@@ -1607,6 +1607,14 @@ Status: values he chose are unmarked; Claude's inferences carry # draft above.
 - **Sizing scale (his ask):** every tap target at least 44px. Nav bar and food button 62 · primary buttons 52 · top bar icon
   buttons 44 (20px icons) · chips 42 (small 40) · segmented buttons 38 in a 46 track · top bar tags 36 · See all 32 with a 44 tap
   area · text buttons 44 tap height. In-card icon chips are decoration, not targets (the whole card is the target).
+- **Apple HIG (his ask, checked against the HIG Accessibility page):** text contrast 4.5:1 up to 17pt, 3:1 at 18pt+ or bold
+  (label gray darkened to oklch 0.52, status pill text darkened); iOS text default 17pt, minimum 11pt (body 17, tab labels 11,
+  Large Title 34); controls 44x44pt (sizing scale); Reduce Motion honored; color never the only signal (arrows and numbers carry
+  rank changes, names carry college colors); inputs 17px. Not yet met, flagged to him: Dynamic Type text scaling to 200% and a
+  dark mode (DESIGN mode.primary is light by his choice). Custom font (Manrope) and icons (Hugeicons) are allowed by the HIG.
+- **Mobile scrolling:** the document never scrolls (html and body pinned and clipped); only the screen's scroller scrolls; the top
+  bar and nav bar refuse pan gestures. WebKit (every iOS browser) does not reliably honor overscroll-behavior on the document, so
+  this is structural, not a CSS property (his report: sometimes the whole page scrolled on iPhone Safari and Chrome).
 - **Nav bar selection:** tabs share the bar equally and fill its height; the goo capsule is inset 5px on every side, so it is wide and
   concentric with the outer pill (his ask, from two references).
 - **In the app:** tokens live in src/app/globals.css (copied from this file; change here first), shared pieces in src/components/ui

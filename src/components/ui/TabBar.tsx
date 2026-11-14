@@ -57,9 +57,10 @@ export function FoodButton() {
     <div className="food-wrap">
       <Liquid
         style={{ position: "relative", width: 62, height: 62 }}
+        filterPadding={96}
         {...GOO}
         fill="var(--p9)"
-        shadow="0 1px 2px rgba(20,30,50,.10), 0 10px 26px -8px rgba(20,30,50,.30), inset 0 26px 26px -14px rgba(255,255,255,.13), inset 0 -26px 26px -14px rgba(8,16,40,.11), inset 0 1px 0 rgba(255,255,255,.28), inset 0 0 0 0.5px rgba(255,255,255,.4)"
+        shadow="0 1px 2px rgba(20,30,50,.12), 0 8px 18px -8px rgba(20,30,50,.32), inset 0 1px 0 rgba(255,255,255,.3)"
       >
         <Liquid.Item x={open ? -60 : 0} y={open ? -48 : 0} transition={t} style={{ position: "absolute", left: 7, top: 7 }}>
           <button type="button" className={`drop ${open ? "on" : ""}`} aria-label="Ask SlugGrub" tabIndex={open ? 0 : -1} onClick={() => go("/ask")}>
