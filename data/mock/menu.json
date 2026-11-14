@@ -1,0 +1,32 @@
+{
+  "_note": "FAKE data for building UI before the real menu fetcher works. Same shape as DayMenu in src/lib/types.ts. Numbers are made up.",
+  "menus": [
+    {
+      "date": "2026-11-14",
+      "hallId": "40",
+      "meals": {
+        "Lunch": [
+          { "recipeId": "mock-101", "name": "Pad Thai", "category": "Entrees", "portion": "1 cup", "nutrition": { "calories": 410, "proteinG": 14, "carbsG": 52, "fatG": 16 } },
+          { "recipeId": "mock-102", "name": "Bean and Cheese Burrito", "category": "Entrees", "portion": "1 each", "nutrition": { "calories": 520, "proteinG": 21, "carbsG": 64, "fatG": 19 } },
+          { "recipeId": "mock-103", "name": "Cheese Pizza", "category": "Pizza", "portion": "1 slice", "nutrition": { "calories": 290, "proteinG": 12, "carbsG": 34, "fatG": 11 } }
+        ],
+        "Dinner": [
+          { "recipeId": "mock-104", "name": "Chicken Tikka Masala", "category": "Entrees", "portion": "1 cup", "nutrition": { "calories": 540, "proteinG": 32, "carbsG": 30, "fatG": 30 } },
+          { "recipeId": "mock-105", "name": "Steamed Jasmine Rice", "category": "Sides", "portion": "1/2 cup", "nutrition": { "calories": 120, "proteinG": 2, "carbsG": 27, "fatG": 0 } },
+          { "recipeId": "mock-103", "name": "Cheese Pizza", "category": "Pizza", "portion": "1 slice", "nutrition": { "calories": 290, "proteinG": 12, "carbsG": 34, "fatG": 11 } }
+        ]
+      }
+    },
+    {
+      "date": "2026-11-14",
+      "hallId": "05",
+      "meals": {
+        "Dinner": [
+          { "recipeId": "mock-201", "name": "Pesto Pasta", "category": "Entrees", "portion": "1 cup", "nutrition": { "calories": 480, "proteinG": 15, "carbsG": 55, "fatG": 22 } },
+          { "recipeId": "mock-202", "name": "Roasted Vegetables", "category": "Sides", "portion": "1/2 cup", "nutrition": { "calories": 90, "proteinG": 2, "carbsG": 10, "fatG": 5 } },
+          { "recipeId": "mock-103", "name": "Cheese Pizza", "category": "Pizza", "portion": "1 slice", "nutrition": { "calories": 290, "proteinG": 12, "carbsG": 34, "fatG": 11 } }
+        ]
+      }
+    }
+  ]
+}

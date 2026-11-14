@@ -22,40 +22,13 @@ Open it on your phone on the same wifi at `http://<your-laptop-ip>:3000` to test
 
 ## The plan
 
-**Tabs:** Today · Rank · [camera] · Halls · Budget
+Everything we're building, who owns what, and what's done: **[PLAN.md](PLAN.md)**. Rules for AI assistants: [CLAUDE.md](CLAUDE.md).
 
-**Today:** what's good to eat right now, where, and whether you can afford it. Changes with the meal (breakfast, lunch, dinner, late night).
-1. Header: current meal and hours at your usual hall
-2. Top pick right now: highest-ranked dish being served at your hall, with calories, plus the best dish on campus tonight
-3. Leaderboard snippet: top 3 halls this week and where your college stands
-4. Budget snippet: points left, days left, pace bar (unlimited plans see their 75 cafe points)
-5. Rank card: "Which was better at lunch?" with two dishes you ate
-6. Calories today (private)
+## How we work
 
-**Features**
-- Gemini photo log: snap your plate, Gemini matches it to that hall's menu for the meal, calories come from the UCSC nutrition labels
-- Ask SlugGrub: "high protein under 700 calories near Porter", Gemini picks from tonight's menus
-- This-or-that ranking (Elo), not star ratings
-- Live QR vote during the demo, leaderboard updates on screen
-- College rivalry board, weekly
-- Budget as a pace tracker (hall vs cafe vs market, run-out week, points left at quarter end)
-- Onboarding: meal plan, current points, college, usual hall
-- Cafe board: cafe menus don't rotate, so rankings carry over
-- Dining services view: which dishes students love or skip, by hall
-- Calories stay private; only taste is social
+1. Make a branch for your feature: `git checkout -b photo-log`
+2. Commit and push to that branch, then open a pull request on GitHub
+3. Pull often: `git pull --rebase origin main`
+4. Merge small pull requests every hour or two
+5. Only edit files you own (table in PLAN.md)
 
-## Data notes
-
-- Menus and nutrition labels: https://nutrition.sa.ucsc.edu/ (FoodPro). Shows yesterday through about a week ahead. Five halls: 40 John R. Lewis & College Nine, 05 Cowell & Stevenson, 20 Crown & Merrill, 25 Porter & Kresge, 30 Rachel Carson & Oakes. Needs a cookie session (load the home page first).
-- TLS quirk: the site's certificate is issued by "InCommon ECC OV SSL CA 3" but the server sends the RSA chain, so Node's `fetch` fails with `UNABLE_TO_VERIFY_LEAF_SIGNATURE`. Fix by adding the missing intermediate through `NODE_EXTRA_CA_CERTS`. Do not turn off certificate checks.
-- Dining hall hours are not on the menu site; enter them by hand for now.
-
-## Structure (planned)
-
-```
-src/app/            pages: / (Today), /rank, /halls, /budget, /log, /api/*
-src/components/     UI pieces
-src/lib/            menu data, Gemini, Firebase, Elo, budget math
-scripts/            menu fetcher
-data/               saved menus (generated)
-```
