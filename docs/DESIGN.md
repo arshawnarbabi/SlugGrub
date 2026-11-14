@@ -2920,3 +2920,8 @@ and button surface rules in separate selectors, never one shared :is() list. -->
 Background menu with 11 steps of the cool page color (oklch L 0.994, 0.985, 0.977, 0.970, 0.962, 0.955, 0.948, 0.944, 0.938, 0.930,
 0.920; chroma 0.004, hue 250); the fill behind segmented controls and the active tab is 0.032 darker. Current default 0.962. Open
 until he picks a step. -->
+
+<!-- 2026-11-14 screenshot review of all 7 screens (his ask): fixed three render bugs: the gooey camera button had a zero-height
+liquid layer (invisible), the scrolling screen's flex column squashed the Halls carousel and the Today photo card to zero height,
+and the rank "or" disc sat under the animated cards. Control bar moved to the bottom of the kit page. Rule for the real build:
+scrolling screens set flex-shrink 0 on their children; a Liquid group always gets an explicit size. -->
