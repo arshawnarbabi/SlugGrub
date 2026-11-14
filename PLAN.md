@@ -23,6 +23,7 @@ Each person owns their folders. **Don't edit files you don't own.** Ask in the g
 | **Arshawn** | All design (look, layout, tab bar, shared UI), the Today page, the Gemini photo log | `src/app/layout.tsx`, `src/app/globals.css`, `src/components/ui/`, `src/app/page.tsx`, `src/app/log/`, `src/app/api/log/` |
 | **Karen** | This-or-that ranking (Elo), Firebase and sign-in, live QR vote, leaderboard and college rivalry, dining services view | `src/app/rank/`, `src/app/vote/`, `src/app/dining-services/`, `src/lib/rankings.ts`, `src/lib/elo.ts`, `src/lib/firebase.ts` |
 | **Ethan** | Menu fetcher and data, Halls tab, Budget, onboarding, Ask SlugGrub | `scripts/`, `data/`, `src/lib/menus.ts`, `src/lib/budget.ts`, `src/app/halls/`, `src/app/budget/`, `src/app/onboarding/`, `src/app/api/ask/` |
+| **Starting branches** | `arshawn-design`, `karen-firebase`, `ethan-menus` (already on GitHub). After each is merged, make a new branch per feature: `<name>-<feature>`. | |
 | **Shared (ask first)** | Data types, fake data, this plan | `src/lib/types.ts`, `data/mock/`, `PLAN.md`, `AGENTS.md`, `package.json` |
 
 **How the pieces connect:** everyone codes against the types in `src/lib/types.ts`. Each owner's `src/lib/*.ts` file exports functions the others call (for example Today calls `getTopDishNow()` from Karen's `rankings.ts` and `getBudgetSnapshot()` from Ethan's `budget.ts`). Those functions return fake data from `data/mock/` until the real version is ready, so nobody waits on anyone. **Keep each function's name and return type stable**; change what's inside freely.

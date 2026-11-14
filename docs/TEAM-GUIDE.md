@@ -101,7 +101,7 @@ Set me up from start to finish:
 3. Run npm install.
 4. If .env.local doesn't exist, copy .env.example to .env.local. Then tell me to open .env.local and paste in the keys Arshawn DMed me. Don't ask me to paste keys into this chat. Wait until I say done.
 5. Start the app with npm run dev and tell me which address to open in my browser. Wait for me to confirm I see the Today page, then stop the app.
-6. Make sure I'm on the latest main (git checkout main, git pull), then create my first branch: karen-firebase.
+6. Make sure I have the latest from GitHub (git checkout main, git pull), then switch to my first branch, which Arshawn already made on GitHub: git checkout karen-firebase. If it says the branch doesn't exist, run git fetch and try again; if it still doesn't, create it with git checkout -b karen-firebase. Then run git pull origin main so the branch has the latest main.
 7. Explain my role in a few short lines: what I own (PLAN.md, "Karen"), the exact folders and files I'm allowed to edit, and the shared files I must ask the team about first.
 8. My first job is Firebase. Walk me through what I have to do by hand in the Firebase console (create the project, add a web app, turn on Firestore and Google sign-in, copy the config into .env.local), one step at a time, waiting for me after each. Then set up src/lib/firebase.ts.
 9. List my remaining tasks from PLAN.md in the order you suggest building them.
@@ -121,7 +121,7 @@ Set me up from start to finish:
 3. Run npm install.
 4. If .env.local doesn't exist, copy .env.example to .env.local. Then tell me to open .env.local and paste in the keys Arshawn DMed me. Don't ask me to paste keys into this chat. Wait until I say done.
 5. Start the app with npm run dev and tell me which address to open in my browser. Wait for me to confirm I see the Today page, then stop the app.
-6. Make sure I'm on the latest main (git checkout main, git pull), then create my first branch: ethan-menus.
+6. Make sure I have the latest from GitHub (git checkout main, git pull), then switch to my first branch, which Arshawn already made on GitHub: git checkout ethan-menus. If it says the branch doesn't exist, run git fetch and try again; if it still doesn't, create it with git checkout -b ethan-menus. Then run git pull origin main so the branch has the latest main.
 7. Explain my role in a few short lines: what I own (PLAN.md, "Ethan"), the exact folders and files I'm allowed to edit, and the shared files I must ask the team about first.
 8. My first job is the menu fetcher. Read PLAN.md, "Menu data", and explain the plan before writing code: which UCSC pages it reads, what it saves to data/menus/, and how it fixes the certificate problem by adding the missing intermediate certificate (never by turning off certificate checks). Then build scripts/fetch-menus.ts so getMenu() in src/lib/menus.ts can return real menus in the same shape as the fake data.
 9. List my remaining tasks from PLAN.md in the order you suggest building them.
