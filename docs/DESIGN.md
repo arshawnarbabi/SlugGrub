@@ -589,7 +589,10 @@ motion:
     # button menu, slider thumbs. Subtle: a short bridge, a small stretch. (his ask: "subtle goo consistently translated for each")
     blur: 5
     contrast: 18
-    move: { springiness: 0.22, trail: 0.16 }   # subtler (his ask): a slight stretch you feel more than see
+    follow: "observe"   # the liquid follows its element exactly. NEVER effect="move" (its trailing second spring stacks on THE
+                        # spring and made the slider and tab pills feel gooier and bouncier than the food button; fixed 2026-11-14
+                        # after his report: "the main button and the slider feel like they have different goo and spring")
+    rule: "one spring drives every goo surface (motion.spring.default); goo shows only where shapes split, merge or bridge"
     transition: "{motion.spring.default}"
     where: ["tab bar active capsule", "segmented control pill", "food button split menu", "slider thumbs"]
     never: ["cards", "text", "photos", "anything that does not move or merge"]
@@ -1595,7 +1598,7 @@ Status: values he chose are unmarked; Claude's inferences carry # draft above.
 - **Scroll edges:** iOS-style progressive blur and fade at the top and bottom of scrolling screens (his ask), 2 cheap layers per edge.
 - **Blur is cheap, always (his MUST):** at most 2 backdrop blurs per edge and 4 per screen, radius 12px max, never animated, never on
   opaque surfaces, photos or lists; state-change blur (4px) only on small elements for 220ms and removed at rest. See effects.blur_budget.
-- **Spring, goo, state change (subtle, his ask):** one spring (300/28, ~1.3% overshoot), one goo (blur 5, contrast 18, trail 0.16), and
+- **Spring, goo, state change (subtle, his ask):** one spring (300/28, ~1.3% overshoot), one goo (blur 5, contrast 18, no trailing spring), and
   one state change (4px blur + fade + 92% scale) everywhere. See motion.spring, motion.goo, motion.state_change.
 - **Food button:** a rice bowl icon (not a camera); it splits into Log a plate and Ask SlugGrub, and the icon blur-morphs to an X with
   a 90 degree turn on the spring.

@@ -1,7 +1,7 @@
 "use client";
 
 // Owner: Arshawn. THE motion system (docs/DESIGN.md motion). Every moving thing uses these, nothing else.
-//   spring: one subtle spring (300/28, ~1.3% overshoot)      goo: one subtle goo (blur 5, contrast 18, trail 0.16)
+//   spring: one subtle spring (300/28, ~1.3% overshoot)      goo: one subtle goo (blur 5, contrast 18), no trailing spring
 //   state change: blur + fade + morph (4px, 92%)             blur is cheap (effects.blur_budget, a MUST)
 
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
@@ -11,7 +11,7 @@ import { Liquid } from "liquid-gooey";
 export const SPRING_CFG = { stiffness: 300, damping: 28, mass: 1 };
 export const SPRING = { type: "spring" as const, ...SPRING_CFG };
 export const GOO = { blur: 5, contrast: 18 };
-export const GOO_MOVE = { springiness: 0.22, trail: 0.16 };
+// No trailing "move" spring anywhere: the liquid follows its element exactly, so THE spring is the only spring (consistency fix).
 export const STATE_IN = { opacity: 1, filter: "blur(0px)", scale: 1 };
 export const STATE_OUT = { opacity: 0, filter: "blur(4px)", scale: 0.92 };
 export const STATE_FADE = { duration: 0.22, ease: [0.22, 1, 0.36, 1] as const };
@@ -80,7 +80,7 @@ export function GooTrack({ index, refs, fill, deps = 0 }: { index: number; refs:
   if (!box || index < 0) return null;
   return (
     <Liquid style={{ position: "absolute", inset: 0, pointerEvents: "none", zIndex: 0 }} {...GOO} fill={fill}>
-      <Liquid.Item effect="move" move={reduce ? { springiness: 0, trail: 0 } : GOO_MOVE}>
+      <Liquid.Item observe>
         <motion.div className="goo-thumb" initial={false} animate={{ x: box.x, width: box.w }} transition={reduce ? { duration: 0 } : SPRING} style={{ height: box.h, top: 0 }} />
       </Liquid.Item>
     </Liquid>
@@ -126,7 +126,7 @@ export function GooSlider({ value, onChange, min = 0.5, max = 3, step = 0.5, lab
     >
       <motion.div className="gs-fill" initial={false} animate={{ width: `${pct * 100}%` }} transition={reduce ? { duration: 0 } : SPRING} />
       <Liquid style={{ position: "absolute", inset: "-14px 0", pointerEvents: "none" }} {...GOO} fill="var(--p9)" shadow="0 1px 2px rgba(20,30,50,.12), inset 0 1px 0 rgba(255,255,255,.3)">
-        <Liquid.Item effect="move" move={reduce ? { springiness: 0, trail: 0 } : GOO_MOVE}>
+        <Liquid.Item observe>
           <motion.div className="gs-thumb" initial={false} animate={{ left: `calc(${pct * 100}% - 13px)` }} transition={reduce ? { duration: 0 } : SPRING} />
         </Liquid.Item>
       </Liquid>

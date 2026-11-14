@@ -27,7 +27,7 @@ export const SPRING = { type: "spring" as const, ...SPRING_CFG };
 const SPRING_SOFT = SPRING;
 /** THE goo: one setting for every liquid surface. Subtle bridge, short trail. */
 export const GOO = { blur: 5, contrast: 18 };
-const GOO_MOVE = { springiness: 0.22, trail: 0.16 };
+// No trailing "move" spring anywhere: the liquid follows its element exactly, so THE spring is the only spring (consistency fix).
 
 /** THE state change (his ask: "when states change i really want the default to be blur + fade in/out/morph"):
  *  outgoing blurs out, fades and shrinks a little; incoming blurs in from the same; scale rides THE spring. */
@@ -101,7 +101,7 @@ function GooTrack({ count, index, refs, fill, shadow, className }: { count: numb
   if (!box) return null;
   return (
     <Liquid className={className} style={{ position: "absolute", inset: 0, pointerEvents: "none", zIndex: 0 }} {...GOO} fill={fill} shadow={shadow}>
-      <Liquid.Item effect="move" move={reduce ? { springiness: 0, trail: 0 } : GOO_MOVE}>
+      <Liquid.Item observe>
         <motion.div className="goo-thumb" initial={false} animate={{ x: box.x, width: box.w }} transition={reduce ? { duration: 0 } : SPRING} style={{ height: box.h, top: 0 }} />
       </Liquid.Item>
     </Liquid>
@@ -181,7 +181,7 @@ export function GooSlider({ min = 0.5, max = 3, step = 0.5, initial = 1.5, unit 
       >
         <motion.div className="gs-fill" initial={false} animate={{ width: `${pct * 100}%` }} transition={reduce ? { duration: 0 } : SPRING} />
         <Liquid style={{ position: "absolute", inset: "-14px 0", pointerEvents: "none" }} {...GOO} fill="var(--p9)" shadow="0 1px 2px rgba(20,30,50,.12), inset 0 1px 0 rgba(255,255,255,.3)">
-          <Liquid.Item effect="move" move={reduce ? { springiness: 0, trail: 0 } : GOO_MOVE}>
+          <Liquid.Item observe>
             <motion.div className="gs-thumb" initial={false} animate={{ left: `calc(${pct * 100}% - 13px)` }} transition={reduce ? { duration: 0 } : SPRING} />
           </Liquid.Item>
         </Liquid>
