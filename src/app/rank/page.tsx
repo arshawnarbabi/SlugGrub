@@ -1,11 +1,17 @@
 "use client";
 
-// Owner: Karen. This-or-that ranking screen and campus leaderboard.
+// Owner: Karen. This-or-that ranking screen, campus leaderboard, and college rivalry.
 
 import { useState, useEffect } from "react";
-import type { DishRank, HallId } from "@/lib/types";
-import { getAllDishes, submitDishVote } from "@/lib/rankings";
-import { getWinProbability } from "@/lib/elo";
+import type { DishRank, HallId, College } from "@/lib/types";
+import {
+  getAllDishes,
+  submitDishVote,
+  getCollegeRivalry,
+  recordDishSkip,
+  type CollegeStanding,
+} from "@/lib/rankings";
+import { getWinProbability, getSmartMatchup } from "@/lib/elo";
 
 const HALL_NAMES: Record<HallId, string> = {
   "40": "College Nine & John R. Lewis",
@@ -15,55 +21,78 @@ const HALL_NAMES: Record<HallId, string> = {
   "30": "Rachel Carson & Oakes",
 };
 
+const COLLEGES: College[] = [
+  "Cowell",
+  "Stevenson",
+  "Crown",
+  "Merrill",
+  "Porter",
+  "Kresge",
+  "Oakes",
+  "Rachel Carson",
+  "College Nine",
+  "John R. Lewis",
+];
+
 export default function RankPage() {
   const [dishes, setDishes] = useState<DishRank[]>([]);
   const [matchup, setMatchup] = useState<[DishRank, DishRank] | null>(null);
-  const [activeTab, setActiveTab] = useState<"vote" | "leaderboard">("vote");
+  const [activeTab, setActiveTab] = useState<"vote" | "leaderboard" | "rivalry">("vote");
   const [lastVoteResult, setLastVoteResult] = useState<string | null>(null);
   const [isVoting, setIsVoting] = useState(false);
+  const [userCollege, setUserCollege] = useState<College>("College Nine");
+  const [rivalryStandings, setRivalryStandings] = useState<CollegeStanding[]>([]);
 
-  // Load dishes and select first matchup
+  // Load dishes and select first matchup with smart matchmaking
   useEffect(() => {
     async function load() {
       const list = await getAllDishes();
       setDishes(list);
-      pickRandomMatchup(list);
+      const nextMatch = getSmartMatchup(list);
+      setMatchup(nextMatch);
+
+      const rivalry = await getCollegeRivalry();
+      setRivalryStandings(rivalry);
     }
     load();
   }, []);
 
-  function pickRandomMatchup(list: DishRank[]) {
-    if (list.length < 2) return;
-    const idx1 = Math.floor(Math.random() * list.length);
-    let idx2 = Math.floor(Math.random() * list.length);
-    while (idx2 === idx1) {
-      idx2 = Math.floor(Math.random() * list.length);
-    }
-    setMatchup([list[idx1], list[idx2]]);
+  function handleNextMatchup(pool: DishRank[]) {
+    const nextMatch = getSmartMatchup(pool);
+    setMatchup(nextMatch);
   }
 
   async function handleVote(winner: DishRank, loser: DishRank) {
     if (isVoting) return;
     setIsVoting(true);
 
-    const result = await submitDishVote(winner.recipeId, loser.recipeId);
-    setLastVoteResult(`+${result.winnerDelta} Elo to ${winner.name}!`);
+    const result = await submitDishVote(winner.recipeId, loser.recipeId, userCollege);
+    setLastVoteResult(`+${result.winnerDelta} Elo to ${winner.name}! (+1 pt for ${userCollege})`);
 
-    // Refresh list and pick next pair
+    // Refresh list and rivalry board
     const updated = await getAllDishes();
     setDishes(updated);
 
+    const updatedRivalry = await getCollegeRivalry();
+    setRivalryStandings(updatedRivalry);
+
     setTimeout(() => {
       setLastVoteResult(null);
-      pickRandomMatchup(updated);
+      handleNextMatchup(updated);
       setIsVoting(false);
-    }, 800);
+    }, 750);
+  }
+
+  async function handleSkip() {
+    if (!matchup) return;
+    await recordDishSkip(matchup[0].recipeId, matchup[1].recipeId);
+    handleNextMatchup(dishes);
   }
 
   return (
     <main className="mx-auto min-h-screen max-w-md px-4 pt-6 pb-28">
       {/* Header */}
-      <header className="mb-6 text-center">
+      <header className="mb-5 text-center">
         <h1 className="text-2xl font-bold tracking-tight">SlugGrub Rank</h1>
         <p className="mt-1 text-xs text-neutral-500">
           UCSC Dining ranked by students. Taste is social.
@@ -73,26 +102,54 @@ export default function RankPage() {
         <div className="mt-4 flex rounded-xl bg-neutral-100 p-1 dark:bg-neutral-800">
           <button
             onClick={() => setActiveTab("vote")}
-            className={`flex-1 rounded-lg py-2 text-xs font-semibold transition ${
+            className={`flex-1 rounded-lg py-1.5 text-xs font-semibold transition ${
               activeTab === "vote"
                 ? "bg-white text-black shadow-sm dark:bg-neutral-900 dark:text-white"
                 : "text-neutral-500 hover:text-black dark:hover:text-white"
             }`}
           >
-            ⚔️ This or That
+            ⚔️ Matchup
           </button>
           <button
             onClick={() => setActiveTab("leaderboard")}
-            className={`flex-1 rounded-lg py-2 text-xs font-semibold transition ${
+            className={`flex-1 rounded-lg py-1.5 text-xs font-semibold transition ${
               activeTab === "leaderboard"
                 ? "bg-white text-black shadow-sm dark:bg-neutral-900 dark:text-white"
                 : "text-neutral-500 hover:text-black dark:hover:text-white"
             }`}
           >
-            🏆 Top Dishes
+            🏆 Dishes
+          </button>
+          <button
+            onClick={() => setActiveTab("rivalry")}
+            className={`flex-1 rounded-lg py-1.5 text-xs font-semibold transition ${
+              activeTab === "rivalry"
+                ? "bg-white text-black shadow-sm dark:bg-neutral-900 dark:text-white"
+                : "text-neutral-500 hover:text-black dark:hover:text-white"
+            }`}
+          >
+            🏛️ Rivalry
           </button>
         </div>
       </header>
+
+      {/* College Selector Bar */}
+      {activeTab === "vote" && (
+        <div className="mb-4 flex items-center justify-between rounded-xl border border-neutral-200 bg-white px-3 py-2 text-xs shadow-2xs dark:border-neutral-800 dark:bg-neutral-900">
+          <span className="text-neutral-400 font-medium">Voting for:</span>
+          <select
+            value={userCollege}
+            onChange={(e) => setUserCollege(e.target.value as College)}
+            className="rounded-md bg-neutral-100 px-2 py-1 font-semibold text-neutral-800 dark:bg-neutral-800 dark:text-neutral-200 outline-none"
+          >
+            {COLLEGES.map((c) => (
+              <option key={c} value={c}>
+                {c}
+              </option>
+            ))}
+          </select>
+        </div>
+      )}
 
       {/* Vote Feedback Toast */}
       {lastVoteResult && (
@@ -101,9 +158,9 @@ export default function RankPage() {
         </div>
       )}
 
-      {/* View: This or That */}
+      {/* View 1: This or That */}
       {activeTab === "vote" && matchup && (
-        <section className="flex flex-col gap-4">
+        <section className="flex flex-col gap-3">
           <div className="text-center text-xs font-medium text-neutral-400">
             Which was better? Tap to vote:
           </div>
@@ -112,7 +169,7 @@ export default function RankPage() {
           <button
             onClick={() => handleVote(matchup[0], matchup[1])}
             disabled={isVoting}
-            className="group relative flex flex-col items-start rounded-2xl border border-neutral-200 bg-white p-5 text-left shadow-sm transition hover:border-black/30 hover:shadow-md active:scale-[0.99] dark:border-neutral-800 dark:bg-neutral-900 dark:hover:border-white/30"
+            className="group relative flex flex-col items-start rounded-2xl border border-neutral-200 bg-white p-5 text-left shadow-2xs transition hover:border-black/30 hover:shadow-sm active:scale-[0.99] dark:border-neutral-800 dark:bg-neutral-900 dark:hover:border-white/30"
           >
             <div className="flex w-full items-center justify-between">
               <span className="text-[11px] font-semibold text-neutral-400">
@@ -126,7 +183,7 @@ export default function RankPage() {
               {matchup[0].name}
             </h2>
             <div className="mt-3 flex w-full items-center justify-between text-xs text-neutral-500">
-              <span>{matchup[0].votes} votes so far</span>
+              <span>{matchup[0].votes} votes</span>
               <span className="font-medium text-blue-600 dark:text-blue-400">
                 {getWinProbability(matchup[0].elo, matchup[1].elo)}% expected win
               </span>
@@ -144,7 +201,7 @@ export default function RankPage() {
           <button
             onClick={() => handleVote(matchup[1], matchup[0])}
             disabled={isVoting}
-            className="group relative flex flex-col items-start rounded-2xl border border-neutral-200 bg-white p-5 text-left shadow-sm transition hover:border-black/30 hover:shadow-md active:scale-[0.99] dark:border-neutral-800 dark:bg-neutral-900 dark:hover:border-white/30"
+            className="group relative flex flex-col items-start rounded-2xl border border-neutral-200 bg-white p-5 text-left shadow-2xs transition hover:border-black/30 hover:shadow-sm active:scale-[0.99] dark:border-neutral-800 dark:bg-neutral-900 dark:hover:border-white/30"
           >
             <div className="flex w-full items-center justify-between">
               <span className="text-[11px] font-semibold text-neutral-400">
@@ -158,7 +215,7 @@ export default function RankPage() {
               {matchup[1].name}
             </h2>
             <div className="mt-3 flex w-full items-center justify-between text-xs text-neutral-500">
-              <span>{matchup[1].votes} votes so far</span>
+              <span>{matchup[1].votes} votes</span>
               <span className="font-medium text-blue-600 dark:text-blue-400">
                 {getWinProbability(matchup[1].elo, matchup[0].elo)}% expected win
               </span>
@@ -167,7 +224,7 @@ export default function RankPage() {
 
           {/* Skip Button */}
           <button
-            onClick={() => pickRandomMatchup(dishes)}
+            onClick={handleSkip}
             className="mt-2 text-center text-xs text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-200"
           >
             Haven&apos;t tried these? Skip to next matchup →
@@ -175,7 +232,7 @@ export default function RankPage() {
         </section>
       )}
 
-      {/* View: Campus Leaderboard */}
+      {/* View 2: Campus Dish Leaderboard */}
       {activeTab === "leaderboard" && (
         <section className="flex flex-col gap-2">
           {dishes.map((dish, index) => {
@@ -207,6 +264,53 @@ export default function RankPage() {
                   </div>
                   <div className="text-[10px] text-neutral-400">
                     {dish.votes} votes
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </section>
+      )}
+
+      {/* View 3: Weekly College Rivalry Board */}
+      {activeTab === "rivalry" && (
+        <section className="flex flex-col gap-2.5">
+          <div className="mb-1 rounded-xl bg-blue-500/10 p-3 text-center text-xs text-blue-600 dark:text-blue-400">
+            Votes boost your college in the weekly campus rivalry standings!
+          </div>
+
+          {rivalryStandings.map((standing, index) => {
+            const isTop3 = index < 3;
+            const rankBadges = ["🥇", "🥈", "🥉"];
+            return (
+              <div
+                key={standing.college}
+                className="flex items-center justify-between rounded-xl border border-neutral-200 bg-white p-3.5 shadow-2xs dark:border-neutral-800 dark:bg-neutral-900"
+              >
+                <div className="flex items-center gap-3">
+                  <span className="flex h-7 w-7 items-center justify-center font-bold text-sm">
+                    {isTop3 ? rankBadges[index] : `#${index + 1}`}
+                  </span>
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <h3 className="text-sm font-semibold">{standing.college}</h3>
+                      {standing.college === userCollege && (
+                        <span className="rounded bg-blue-100 px-1.5 py-0.5 text-[9px] font-bold text-blue-700 dark:bg-blue-900 dark:text-blue-300">
+                          YOU
+                        </span>
+                      )}
+                    </div>
+                    <p className="text-[11px] text-neutral-400">
+                      Top dish: <span className="text-neutral-600 dark:text-neutral-300">{standing.topDish}</span>
+                    </p>
+                  </div>
+                </div>
+                <div className="text-right">
+                  <div className="font-bold text-sm text-neutral-800 dark:text-neutral-200">
+                    {standing.score} pts
+                  </div>
+                  <div className="text-[10px] text-neutral-400">
+                    {standing.votesCast} student votes
                   </div>
                 </div>
               </div>
