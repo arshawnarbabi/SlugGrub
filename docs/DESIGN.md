@@ -50,7 +50,7 @@ profiles:
   motion: "default"           # default | subtle | default | expressive
   elevation: "default"        # flat (border-only) | default (subtle shadows) | dimensional (richer shadows)
   saturation: "default"       # muted (×0.7 chroma) | default (×1.0) | vivid (×1.3)
-  warmth: "warm"              # draft (cream paper neutrals) | cool (hue ≈ 240) | neutral (≈ 60) | warm (≈ 40)
+  warmth: "cool"              # his ask 2026-11-14: "coldish neutral colors" | cool (hue ≈ 240) | neutral (≈ 60) | warm (≈ 40)
   section_padding: "default"  # compact (~96 px) | default (~128 px) | generous (~160 px)
   chart_minimalism: "tufte"   # draft (arcs, rings, one segmented bar; no axes) | tufte (minimal) | default | carbon (full axes/gridlines)
 
@@ -68,7 +68,7 @@ options:
   save_model: "auto-save"            # auto-save | explicit-save
   settings_ia: "single-page"        # draft | sidebar | tabs | single-page
   container_width: "md"              # draft (phone-width column, max 448px, centered on desktop) | md (1024) | lg (1280) | xl (1440)
-  heading_weight: 600                # 600 | 700
+  heading_weight: 700                # draft (bold, tight, like Cal AI) | 600 | 700
   time_format: "hybrid"              # relative-only | absolute-only | hybrid
   number_abbreviation: "contextual"  # short | long | contextual
   product_nav_style: "none"          # draft (a floating bottom tab bar instead: Today, Rank, camera, Halls, Budget) | top-bar | sidebar | hybrid | none
@@ -88,7 +88,7 @@ options:
 
 colors:
   primary:
-    base: "oklch(0.45 0.08 158)"  # draft (redwood green; full 12 steps generated and previewed in src/app/brand/brand.css as --g1..--g12; written here on approval)
+    base: "oklch(0.351 0.1 250.1)"  # UCSC blue #003C6C (his ask 2026-11-14: "use kind of ucsc colors so main is blue"); 12 steps generated, previewed in src/app/brand/brand.css as --p1..--p12, written here on approval
     # Derived 12-step scale (light mode). Generate at instantiation per §Colors → Generating the scale.
     1:  "<derived>"   # app background
     2:  "<derived>"   # subtle bg / alt stripe
@@ -294,8 +294,8 @@ colors:
 
 typography:
   families:
-    display: "Instrument Serif"  # draft (dish names, headlines, wordmark; previewed at /brand)
-    body: "Geist Sans"  # draft (all UI text; tabular figures for numbers)
+    display: "system-ui (SF Pro Display on Apple; -apple-system, BlinkMacSystemFont, system-ui, Segoe UI, Roboto, Geist)"  # his ask 2026-11-14: "i want a modern system sans font"; bold, tight tracking
+    body: "system-ui (SF Pro Text on Apple; same stack)"  # his ask 2026-11-14; tabular figures for numbers
     mono: "Geist Mono"  # draft
 
   # ── Fallback stacks ────────────────────────────────────────────
@@ -2850,3 +2850,10 @@ macro colors, college colors for the rivalry board only, radius 12/20/28/pill, t
 detached yellow camera button, one hero number per screen. Direction "Dining Hall Editorial" from Mobbin research (Beli, Alma,
 BitePal, Oura, Revolut, Monzo, Tonal, Yubo, BeReal). On approval these move into the colors/typography/radius/elevation/components
 slots above and the token export replaces brand.css. -->
+
+<!-- 2026-11-14 redevelopment (his asks): UCSC blue main and UCSC gold accent (#FDC700), cool neutrals, a modern system sans, and
+"i dont want anything all caps text so no overlines or headings all caps or anything": every label, eyebrow and heading is sentence
+case, never uppercase or small caps. Style references he named: Cal AI (via Trackify) and Chalk ("i like hte ui of those"): near-white
+cool canvas, white cards with faint borders and soft shadows, 22 to 28px radius, bold numbers, color only where it means something,
+floating white pill tab bar with a gray capsule on the active tab and a detached navy camera button. Gold is for the #1 dish and
+highlights only. Preview: /brand. The draft markers above stay on anything he has not approved (radius, type scale, options). -->

@@ -2,14 +2,11 @@
 // Mock data only. Not linked from the tab bar.
 
 import type { Metadata } from "next";
-import { Instrument_Serif } from "next/font/google";
 import {
   Camera, Home, Trophy, Utensils, Wallet, Swords, Undo2, ChevronRight, ArrowUp, ArrowDown,
   Sparkles, MapPin, Clock, Minus, Plus, Wifi, BatteryFull, Signal,
 } from "lucide-react";
 import "./brand.css";
-
-const serif = Instrument_Serif({ subsets: ["latin"], weight: "400", style: ["normal", "italic"], variable: "--font-instrument" });
 
 export const metadata: Metadata = { title: "SlugGrub brand kit" };
 
@@ -41,7 +38,7 @@ function TabBar({ active }: { active: "today" | "rank" | "halls" | "budget" | "n
           <div key={id} className={`tab ${active === id ? "on" : ""}`}><Icon size={20} strokeWidth={active === id ? 2.4 : 1.8} />{label}</div>
         ))}
       </div>
-      <div className="cam" aria-label="Log a plate"><Camera size={24} strokeWidth={2.2} /></div>
+      <div className="cam" aria-label="Log a plate"><Camera size={24} strokeWidth={2} /></div>
     </div>
   );
 }
@@ -68,20 +65,20 @@ function TodayScreen() {
         <span className="pill neutral"><Clock size={12} /> Dinner · open till 8 PM</span>
         <span className="pill neutral"><MapPin size={12} /> JRL/C9</span>
       </div>
-      <div className="display" style={{ fontSize: 34, lineHeight: 1.02 }}>Good evening,<br /><em>Maya</em></div>
+      <div className="display" style={{ fontSize: 30, lineHeight: 1.05 }}>Good evening,<br /><em>Maya</em></div>
 
       <div className="card" style={{ display: "grid", gap: 10 }}>
         <div className="eyebrow">Top pick right now</div>
         <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
           <Plate kind="curry" size={78} />
           <div style={{ flex: 1, minWidth: 0 }}>
-            <div className="display" style={{ fontSize: 22, lineHeight: 1.05 }}>Chicken Tikka Masala</div>
+            <div className="display" style={{ fontSize: 18, lineHeight: 1.15, letterSpacing: "-0.02em" }}>Chicken Tikka Masala</div>
             <div style={{ fontSize: 12, color: "var(--ink-3)", marginTop: 4 }} className="num">540 cal · 1 cup · #1 at your hall</div>
           </div>
           <div className="score top num">9.1</div>
         </div>
         <div style={{ fontSize: 12, color: "var(--ink-2)", display: "flex", alignItems: "center", gap: 6, borderTop: "1px solid var(--line)", paddingTop: 9 }}>
-          <Sparkles size={13} color="var(--g9)" /> Best on campus: <b>Pesto Pasta</b> at Cowell
+          <Sparkles size={13} color="var(--p9)" /> Best on campus: <b>Pesto Pasta</b> at Cowell
         </div>
       </div>
 
@@ -99,7 +96,7 @@ function TodayScreen() {
           <div className="eyebrow">Slug Points</div>
           <div className="num" style={{ fontSize: 26, fontWeight: 600, letterSpacing: "-0.02em", marginTop: 6 }}>1,120</div>
           <div style={{ height: 6, background: "var(--paper-2)", borderRadius: 9, marginTop: 6, overflow: "hidden" }}>
-            <div style={{ width: "58%", height: "100%", background: "var(--g9)", borderRadius: 9 }} />
+            <div style={{ width: "58%", height: "100%", background: "var(--p9)", borderRadius: 9 }} />
           </div>
           <div style={{ fontSize: 11, color: "var(--ok)", marginTop: 6, fontWeight: 600 }}>On pace · 27 days</div>
         </div>
@@ -118,18 +115,18 @@ function RankScreen() {
   return (
     <>
       <div className="eyebrow" style={{ marginTop: 8 }}>Lunch at JRL/C9</div>
-      <div className="display" style={{ fontSize: 34, lineHeight: 1.02 }}>Which was <em>better?</em></div>
+      <div className="display" style={{ fontSize: 30, lineHeight: 1.05 }}>Which was <em>better?</em></div>
       <div style={{ fontSize: 13, color: "var(--ink-2)" }}>Tap the one you liked more. It moves up the leaderboard.</div>
       <div className="duel" style={{ marginTop: 10 }}>
         <div className="opt picked">
           <Plate kind="thai" size={100} />
-          <div className="display" style={{ fontSize: 19, lineHeight: 1.05 }}>Pad Thai</div>
+          <div className="display" style={{ fontSize: 16, lineHeight: 1.15, letterSpacing: "-0.02em" }}>Pad Thai</div>
           <div className="num" style={{ fontSize: 11, color: "var(--ink-3)" }}>410 cal · #4</div>
         </div>
         <div className="or">or</div>
         <div className="opt">
           <Plate kind="burrito" size={100} />
-          <div className="display" style={{ fontSize: 19, lineHeight: 1.05 }}>Bean &amp; Cheese Burrito</div>
+          <div className="display" style={{ fontSize: 16, lineHeight: 1.15, letterSpacing: "-0.02em" }}>Bean &amp; Cheese Burrito</div>
           <div className="num" style={{ fontSize: 11, color: "var(--ink-3)" }}>520 cal · #9</div>
         </div>
       </div>
@@ -166,7 +163,7 @@ function PhotoScreen() {
           </div>
         ))}
       </div>
-      <div style={{ fontSize: 12, color: "var(--ink-2)" }}>Something look off? <b style={{ color: "var(--g9)" }}>Fix it</b></div>
+      <div style={{ fontSize: 12, color: "var(--ink-2)" }}>Something look off? <b style={{ color: "var(--p9)" }}>Fix it</b></div>
       <button className="btn btn-primary btn-block" type="button">Save to today</button>
     </>
   );
@@ -181,7 +178,7 @@ function BudgetScreen() {
       <div style={{ position: "relative", height: 210, display: "grid", placeItems: "center" }}>
         <svg width="220" height="220" viewBox="0 0 220 220" style={{ position: "absolute", transform: "rotate(135deg)" }} aria-hidden>
           <circle cx="110" cy="110" r={r} fill="none" stroke="var(--paper-2)" strokeWidth="14" strokeDasharray={`${arc} ${c}`} strokeLinecap="round" />
-          <circle cx="110" cy="110" r={r} fill="none" stroke="var(--g9)" strokeWidth="14" strokeDasharray={`${filled} ${c}`} strokeLinecap="round" />
+          <circle cx="110" cy="110" r={r} fill="none" stroke="var(--p9)" strokeWidth="14" strokeDasharray={`${filled} ${c}`} strokeLinecap="round" />
         </svg>
         <div style={{ textAlign: "center", marginTop: 10 }}>
           <div className="hero-num" style={{ fontSize: 50 }}>1,120</div>
@@ -194,8 +191,8 @@ function BudgetScreen() {
         <div className="eyebrow">Spending vs ideal pace</div>
         <svg viewBox="0 0 240 70" width="100%" height="70" aria-hidden style={{ marginTop: 6 }}>
           <line x1="4" y1="64" x2="236" y2="8" stroke="var(--ink-3)" strokeDasharray="4 4" strokeWidth="1.5" />
-          <polyline points="4,64 40,58 76,47 112,40 148,33" fill="none" stroke="var(--g9)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-          <circle cx="148" cy="33" r="4" fill="var(--g9)" />
+          <polyline points="4,64 40,58 76,47 112,40 148,33" fill="none" stroke="var(--p9)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+          <circle cx="148" cy="33" r="4" fill="var(--p9)" />
         </svg>
       </div>
       <div className="card" style={{ padding: "4px 12px" }}>
@@ -219,7 +216,7 @@ function LeaderboardScreen() {
     <>
       <div className="seg" style={{ alignSelf: "start", marginTop: 6 }}><span className="on">Halls</span><span>Dishes</span><span>Colleges</span></div>
       <div className="eyebrow">Week of Nov 10</div>
-      <div className="display" style={{ fontSize: 32, lineHeight: 1.02 }}>Porter is <em>#3</em><br />and climbing</div>
+      <div className="display" style={{ fontSize: 28, lineHeight: 1.05 }}>Porter is <em>#3</em><br />and climbing</div>
       <div className="card" style={{ padding: "4px 12px" }}>
         {rows.map(([n, h, c, s, ch]) => (
           <div className={`row ${h.startsWith("Porter") ? "me" : ""}`} key={n}>
@@ -240,14 +237,14 @@ function VoteScreen() {
   return (
     <>
       <div className="eyebrow" style={{ marginTop: 8 }}>Live at DevFest · 214 votes</div>
-      <div className="display" style={{ fontSize: 32, lineHeight: 1.02 }}>Dish of the week,<br /><em>final round</em></div>
+      <div className="display" style={{ fontSize: 28, lineHeight: 1.05 }}>Dish of the week,<br /><em>final round</em></div>
       <div className="vote">
-        <div className="blk" style={{ background: "var(--g9)", minHeight: 170 }}>
-          <div><div className="display" style={{ fontSize: 24 }}>Pesto Pasta</div><div style={{ fontSize: 12, opacity: 0.8 }}>Cowell/Stevenson</div></div>
+        <div className="blk" style={{ background: "var(--p9)", minHeight: 170 }}>
+          <div><div className="display" style={{ fontSize: 20 }}>Pesto Pasta</div><div style={{ fontSize: 12, opacity: 0.8 }}>Cowell/Stevenson</div></div>
           <div className="num" style={{ fontSize: 44, fontWeight: 700, letterSpacing: "-0.03em" }}>62%</div>
         </div>
         <div className="blk" style={{ background: "var(--y9)", color: "var(--ink)", minHeight: 110 }}>
-          <div><div className="display" style={{ fontSize: 24 }}>Pad Thai</div><div style={{ fontSize: 12, opacity: 0.7 }}>JRL/C9</div></div>
+          <div><div className="display" style={{ fontSize: 20 }}>Pad Thai</div><div style={{ fontSize: 12, opacity: 0.7 }}>JRL/C9</div></div>
           <div className="num" style={{ fontSize: 36, fontWeight: 700, letterSpacing: "-0.03em" }}>38%</div>
         </div>
       </div>
@@ -260,11 +257,11 @@ function VoteScreen() {
 
 const GREEN = Array.from({ length: 12 }, (_, i) => i + 1);
 const SWATCHES: [string, string, string][] = [
-  ["Paper", "--paper", "Page background"],
+  ["Mist", "--paper", "Page background"],
   ["Card", "--card", "Raised surfaces"],
   ["Ink", "--ink", "Main text"],
-  ["Redwood", "--g9", "Primary action, brand"],
-  ["Slug yellow", "--y9", "Camera, #1, highlights"],
+  ["UCSC Blue", "--p9", "Brand, primary action"],
+  ["UCSC Gold", "--y9", "#1 dish, highlights"],
   ["On track", "--ok", "Good status"],
   ["Heads up", "--warn", "Spending fast"],
   ["Off track", "--bad", "Over budget, drops"],
@@ -273,12 +270,12 @@ const COLLEGES: [string, string][] = [["JRL/C9", "--c-jrl"], ["Cowell/Stevenson"
 
 export default function BrandKit() {
   return (
-    <div className={`sg ${serif.variable}`}>
+    <div className="sg">
       <div className="wrap">
         <header className="hero">
           <span className="draft-tag"><span className="dot" /> Draft design system, for review</span>
           <div className="wordmark">Slug<em>Grub</em></div>
-          <p className="lede">UCSC dining, ranked by students. Cream paper, redwood green and banana-slug yellow, a serif for food and headlines, one big number per screen.</p>
+          <p className="lede">UCSC dining, ranked by students. UC Santa Cruz blue and gold, cool grays, the system sans, one big number per screen.</p>
         </header>
 
         <section style={{ marginTop: 0 }}>
@@ -296,8 +293,8 @@ export default function BrandKit() {
 
         <section>
           <div className="eyebrow">Color</div>
-          <h2 className="sec">Paper, redwood, slug yellow</h2>
-          <p className="note">Green does the work (buttons, active tabs, the brand). Yellow is rare: the camera button, the #1 dish, a highlight. Status colors only mean status. College colors appear only on the rivalry board.</p>
+          <h2 className="sec">UCSC blue and gold, cool grays</h2>
+          <p className="note">Blue does the work (buttons, the camera button, the brand). Gold is rare: the #1 dish and a highlight. Everything else is cool gray and white, like Cal AI. Status colors only mean status. College colors appear only on the rivalry board.</p>
           <div className="swatches">
             {SWATCHES.map(([n, v, use]) => (
               <div className="sw" key={v}>
@@ -306,10 +303,10 @@ export default function BrandKit() {
               </div>
             ))}
           </div>
-          <div className="eyebrow" style={{ margin: "28px 0 10px" }}>Redwood, 12 steps (generated, contrast checked)</div>
+          <div className="eyebrow" style={{ margin: "28px 0 10px" }}>UCSC Blue, 12 steps (generated from #003C6C, contrast checked)</div>
           <div className="scale">
             {GREEN.map((i) => (
-              <div key={i} style={{ background: `var(--g${i})`, color: i >= 9 ? "var(--g1)" : "var(--g12)" }}>{i}</div>
+              <div key={i} style={{ background: `var(--p${i})`, color: i >= 9 ? "var(--p1)" : "var(--p12)" }}>{i}</div>
             ))}
           </div>
           <div className="eyebrow" style={{ margin: "28px 0 10px" }}>College colors (rivalry board only)</div>
@@ -322,15 +319,15 @@ export default function BrandKit() {
 
         <section>
           <div className="eyebrow">Type</div>
-          <h2 className="sec">Instrument Serif and Geist</h2>
-          <p className="note">The serif is for dish names, headlines and the wordmark. Geist does everything you read or tap. Numbers always use tabular figures so they line up.</p>
+          <h2 className="sec">One family: the system sans</h2>
+          <p className="note">SF Pro on iPhone and Mac (the system font, so it loads instantly and feels native), with the platform sans elsewhere. Headlines are bold with tight tracking; body text is regular. Numbers always use tabular figures so they line up.</p>
           <div>
-            <div className="type-row"><div className="meta">Display 56 / serif</div><div className="display" style={{ fontSize: 56, lineHeight: 1 }}>Chicken Tikka <em>Masala</em></div></div>
-            <div className="type-row"><div className="meta">Title 34 / serif</div><div className="display" style={{ fontSize: 34 }}>Which was better?</div></div>
-            <div className="type-row"><div className="meta">Hero number 56 / Geist 600</div><div className="hero-num">1,120<small>pts</small></div></div>
-            <div className="type-row"><div className="meta">Heading 20 / Geist 600</div><div style={{ fontSize: 20, fontWeight: 600 }}>Top pick right now</div></div>
-            <div className="type-row"><div className="meta">Body 15 / Geist 400</div><div style={{ fontSize: 15, lineHeight: 1.5, color: "var(--ink-2)", maxWidth: "60ch" }}>Tap the one you liked more. Every pick moves dishes up or down this week&apos;s leaderboard, and your calories never leave your phone.</div></div>
-            <div className="type-row"><div className="meta">Label 11 / caps</div><div className="eyebrow">Dinner · open till 8 PM</div></div>
+            <div className="type-row"><div className="meta">Display 56 / bold, tight</div><div className="display" style={{ fontSize: 56, lineHeight: 1 }}>Chicken Tikka <em>Masala</em></div></div>
+            <div className="type-row"><div className="meta">Title 30 / bold, tight</div><div className="display" style={{ fontSize: 30 }}>Which was better?</div></div>
+            <div className="type-row"><div className="meta">Hero number 56 / semibold</div><div className="hero-num">1,120<small>pts</small></div></div>
+            <div className="type-row"><div className="meta">Heading 20 / semibold</div><div style={{ fontSize: 20, fontWeight: 600 }}>Top pick right now</div></div>
+            <div className="type-row"><div className="meta">Body 15 / regular</div><div style={{ fontSize: 15, lineHeight: 1.5, color: "var(--ink-2)", maxWidth: "60ch" }}>Tap the one you liked more. Every pick moves dishes up or down this week&apos;s leaderboard, and your calories never leave your phone.</div></div>
+            <div className="type-row"><div className="meta">Label 13 / medium, gray</div><div className="eyebrow">Dinner · open till 8 PM</div></div>
           </div>
         </section>
 
@@ -362,7 +359,7 @@ export default function BrandKit() {
             </div>
             <div className="card stack">
               <div className="eyebrow">Onboarding chips</div>
-              <div style={{ fontFamily: "var(--display)", fontSize: 26, lineHeight: 1.05 }}>Which college are you in?</div>
+              <div className="display" style={{ fontSize: 24, lineHeight: 1.1 }}>Which college are you in?</div>
               <div className="wrapflex">
                 <span className="chip">Cowell</span>
                 <span className="chip on" style={{ background: "var(--c-porter)" }}>Porter</span>
@@ -408,7 +405,7 @@ export default function BrandKit() {
               <div className="wrapflex">
                 {[["12", "--r-sm", "inputs"], ["20", "--r-md", "cards"], ["28", "--r-lg", "big cards, sheets"], ["pill", "--r-pill", "buttons, chips"]].map(([n, v, u]) => (
                   <div key={v} style={{ display: "grid", gap: 6, justifyItems: "center", fontSize: 12, color: "var(--ink-2)" }}>
-                    <div style={{ width: 64, height: 64, background: "var(--g4)", borderRadius: `var(${v})` }} />
+                    <div style={{ width: 64, height: 64, background: "var(--p4)", borderRadius: `var(${v})` }} />
                     <b style={{ color: "var(--ink)" }}>{n}</b>{u}
                   </div>
                 ))}
@@ -440,7 +437,7 @@ export default function BrandKit() {
             <div className="card"><b>Do</b><ul>
               <li>One hero number per screen, everything else quieter</li>
               <li>Let the food photo carry the screen</li>
-              <li>Green for actions, yellow only for the camera and #1</li>
+              <li>Blue for actions and the camera, gold only for #1</li>
               <li>Say what&apos;s good in plain words: &quot;Best on campus: Pesto Pasta&quot;</li>
               <li>Keep calories private and say so on the photo result</li>
             </ul></div>
@@ -449,6 +446,7 @@ export default function BrandKit() {
               <li>Default blue, flat tab bars, full-width rectangle buttons</li>
               <li>Donut charts with legends, tables of tiny numbers</li>
               <li>Mascots, confetti, emoji as icons</li>
+              <li>All-caps text: labels and headings stay sentence case</li>
               <li>Anything that ranks people by eating less</li>
             </ul></div>
           </div>
