@@ -123,7 +123,8 @@ async function describe(ai, names) {
 
 function fill(name, d) {
   const [vessel, short] = VESSEL[d.vessel] ?? VESSEL.plate;
-  return PROMPT.replaceAll("{dish_name}", name).replaceAll("{dish_description}", d.description.replace(/\.$/, ""))
+  const into = short === "bowl" || short === "glass" ? "into" : "onto";
+  return PROMPT.replaceAll("onto {vessel}", `${into} {vessel}`).replaceAll("{dish_name}", name).replaceAll("{dish_description}", d.description.replace(/\.$/, ""))
     .replaceAll("{vessel_short}", short).replaceAll("{vessel}", vessel);
 }
 
