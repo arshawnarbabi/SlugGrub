@@ -2912,3 +2912,6 @@ outranked every later card and hairline rule (0,4,0). So the two "subtler card g
 hairlines never rendered in Sidestash mode. Fixed by raising those rules' specificity (.sg.sg). Verified in the browser by computed
 style: cards solid fill with 0.5px border; top buttons and nav bar gradient with 0.5px border. Lesson for the real build: keep card
 and button surface rules in separate selectors, never one shared :is() list. -->
+
+<!-- 2026-11-14 (his asks): default stays "Sidestash, solid cards", now on the Flat option's page color (L 0.962); the plain
+"Sidestash" option gets a visible card gradient back (L 0.990 to 0.972, still softer than buttons at 0.993 to 0.963). -->

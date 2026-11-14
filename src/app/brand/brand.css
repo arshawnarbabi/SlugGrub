@@ -465,3 +465,9 @@
 /* "Sidestash, solid cards" (his ask 2026-11-14: "lets try sidestash but for the cards no gradient"): everything Sidestash, but the
    cards use one solid fill (still lighter than the page, white hairline and chip shadow kept). Buttons and the nav bar keep the gradient. */
 .sg.sg.sg[data-cards="solid"] :is(.card, .duel .opt, .sw, .font-card) { background: oklch(0.984 0.002 250); }
+
+/* his asks 2026-11-14: (1) the default (Sidestash, solid cards) takes the Flat option's background color; (2) the plain Sidestash
+   option gets a visible card gradient back (the earlier "subtler" values only rendered after the specificity fix and read as none). */
+.sg.sg.sg[data-cards="solid"] { --paper: oklch(0.962 0.004 250); --paper-2: oklch(0.93 0.005 250); }
+.sg.sg.sg[data-cards="solid"] .float-cta { background: linear-gradient(180deg, oklch(0.962 0.004 250 / 0), var(--paper) 45%); }
+.sg.sg[data-surface="sidestash"]:not([data-cards]) { --raise-card: linear-gradient(180deg, oklch(0.99 0.002 250) 0%, oklch(0.972 0.0035 250) 100%); }
