@@ -3094,3 +3094,22 @@ same curve. Blur budget exception, launch only: a 7th backdrop layer for about 1
 Seen frozen at 600 ms in Chrome (blurred Today screen, blue bowl centered). -->
 
 <!-- 2026-11-14 splash tuned at his ask: backdrop blur 8px -> 12px (blur_budget.launch_splash_exception), bowl 64px -> 80px. -->
+
+<!-- 2026-11-14 Today wired to data + photo log end to end (Claude, for his review; values # draft unless quoted).
+Today top bar (his ask: "can you add this text to teh chip that says teh college dining hall: Dinner · open till 8 PM"): the
+.tint.blue hall chip now reads "hall · meal · hours" ("JRL/C9 · Dinner · open till 8 PM"; between meals "opens at 5 PM"), and the
+separate label line above the greeting is gone. New reusable classes in globals.css: .tint.fit (chip may shrink) and .tint .clip
+(one line, ellipsis): the hours end truncates before anything wraps. Checked at every devices.html size: 36px tall, one line; at
+320px it truncates with a 10px gap to the notifications button. Greeting follows the campus clock (Pacific): good morning /
+afternoon / evening. # draft
+Today card 6, "Calories today" (PLAN.md): one row in the Rank card's pattern (.card.tight.press.link, chevron top right, 44px
+paper-2 icon chip with FireIcon, title 14 bold, label 12, number 17 bold tabular at the right); sub-line "Only you see this", or
+"Log a plate to start · only you see this" with no number when nothing is saved today. Sits after the Rank card. Reads this device
+only. # draft
+Top pick card: when a dish has no photo yet, the card drops the photo and shows the gold "#1 at your hall" tint inline, plain chevron.
+Pace text color: on pace --ok, spending fast --bad, spending slow --ink-2. # draft
+Photo log (LogScreen): pick phase adds the meal Seg (Breakfast, Lunch, Dinner, Late night), defaulting to the meal open now or the
+last one that opened (you log after eating); new "error" phase (alert icon chip card + "Try another photo" primary); item rows show
+"servings × official portion · cal", "rough guess" when Gemini is unsure, a rice bowl icon chip when the dish has no photo; servings
+slider 0.25 to 4 in quarter steps (was 0.5 to 3 by halves) because label portions are small (a 1/2 cup side); a line lists food
+not on the menu ("not counted"); "Fix it" became "Retake"; sliders hide once saved. All state changes use Appear and Swap. # draft -->

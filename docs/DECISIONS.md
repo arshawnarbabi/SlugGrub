@@ -145,3 +145,17 @@ Most entries use the plain format above. Two kinds of decision come up on every 
 
 # Source
 ADR (Architecture Decision Record) practice, adapted as an append-only log for agentic builds — so locked choices survive across sessions. Background (finding F11) is in `docs/SYSTEM_RESEARCH.md` (in the premium.md repo, the release zip and the skill bundle).
+
+## 2026-11-14 — Photo log method
+- **Context:** PLAN.md items "Photo log ... calories from UCSC labels" and "Use the standard dining hall plate as a size ruler".
+- **Choice:** Gemini (gemini-3.8-flash, server only, `src/app/api/log/route.ts`) only recognizes: it picks dishes from that hall's menu for the meal (the response schema makes recipeId an enum of the menu's ids, so it cannot invent a dish), lists anything else as "not on the menu" (shown, never counted), and estimates servings against each dish's official portion using the hall plate (about 9 in, a 6 in well about 1 in deep), the bowl (about 5 in, 3 in deep) and the flat pizza plate as rulers, identified by shape, never color. Calories and macros are always the UCSC label numbers times servings, never Gemini's guess. The student fixes servings with the slider before saving.
+- **Disclosure (Devpost):** the method was inspired by Arshawn's earlier personal project, Trackify (a menu-matched photo calorie tracker); SlugGrub's code, prompt and schema were written fresh at DevFest, with no code copied or ported.
+- **Status:** draft (# draft until he signs off)
+
+## 2026-11-14 — Calories stay on the device
+- **Choice:** saved plates live in this browser's localStorage only (`src/components/screens/plates.ts`), never Firebase or the server, so no one else can ever see them (team rule: calories private). Trade-off: they do not follow the student to another phone. Today card 6 reads that store.
+- **Status:** draft
+
+## 2026-11-14 — Today reads through a one-minute cache
+- **Choice:** Today's data (top dish, leaderboard, budget, the hall's menu, the campus clock for meal and hours) is read in one `"use cache"` function with `cacheLife("minutes")` in TodayScreen, so the page still opens static (no loading state) while meal and hours stay within about a minute of the campus clock (Pacific time). Revisit when rankings or budget become per-student (cookies or sign-in cannot be read inside a cache).
+- **Status:** draft
