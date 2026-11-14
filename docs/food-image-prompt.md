@@ -9,8 +9,10 @@ photo from the photo log replaces a dish's image once one exists.
 ## Model and settings
 
 - Model: `gemini-nano-banana-2.1` (newest Flash-tier image model, stable since 2026-10-06; not Pro, to keep cost down).
-  Price per image: not on Google's model page; reported as about half of Nano Banana 2's (which is about $0.067 at 1K),
-  so roughly $0.03 to $0.035 per image (unverified; check the Gemini API pricing page and set a budget alert first).
+  Price (Google's pricing page, read 2026-11-14): $0.0336 per 1K image, no API free tier. Nano Banana 2 Lite
+  (`gemini-3.1-flash-lite-image`) costs the same $0.0336 per 1K image on the API with no free tier either, so 2.1 wins on
+  quality at equal cost; Lite is free only by hand in the AI Studio app (fine for the 3 test dishes, not for a script).
+  Nano Banana 2 (`gemini-3.1-flash-image`) is $0.067. Set a budget alert first.
 - Output: aspect ratio `4:3`, size `1K` (the smallest 2.1 offers; 512px is not supported). Then resize locally with
   sharp into the sizes `Photo.tsx` already uses (sm 160, md 360, full 720 wide), JPEG.
 - JS SDK shape (from Google's image-generation docs, 2026-11): `ai.interactions.create({ model, input, response_format:
