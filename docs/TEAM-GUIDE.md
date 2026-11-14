@@ -1,149 +1,122 @@
 # SlugGrub team guide
 
-Never used GitHub, pull requests or a coding agent before? Start here. Read Part 1 once, then follow Part 3 every time you work.
+Never used GitHub, pull requests or a coding agent before? Start here.
+
+**The short version:** do the few manual steps in Part 1, then paste your setup prompt from Part 2 into Antigravity. The agent does the rest of the setup, explains your job, and tells you when it's ready. After that, use the prompts in Part 3 every time you work.
 
 **Who owns what and what's left to do:** [PLAN.md](../PLAN.md). **Rules your AI follows:** [AGENTS.md](../AGENTS.md).
 
 ---
 
-## Part 1: The words you need
+## Part 1: Manual steps (the agent can't do these for you)
 
-| Word | What it means |
+### 1. Accept the GitHub invite
+Arshawn adds you to the repo. Accept it from your email or https://github.com/notifications. No GitHub account yet? Make one at https://github.com/signup first and send Arshawn your username.
+
+### 2. Antigravity settings
+Open Antigravity, then open **Settings**:
+- **AI Credit Overages: Never.** Your plan has a free limit that refreshes. Credits (your $25) are only spent after that limit runs out, and only if this is on. Leave it on Never; turn it to Always only if you're blocked close to the deadline.
+- That's the only setting to change. Everything else stays on the default.
+
+### 3. Pick the model
+In the agent chat, use the model dropdown at the bottom:
+
+| When | Model |
 |---|---|
-| **Repo** (repository) | The project folder, stored on GitHub so all three of us share it. Ours: https://github.com/arshawnarbabi/SlugGrub |
-| **Clone** | Download the repo to your laptop. You do this once. |
-| **Commit** | A saved checkpoint of your changes, with a short note about what you did. It is saved on your laptop only. |
-| **Push** | Upload your commits to GitHub so others can see them. |
-| **Pull** | Download everyone else's new work from GitHub to your laptop. |
-| **Branch** | Your own copy of the project to work on, so you don't step on anyone. `main` is the shared, working version. You never work on `main` directly. |
-| **Pull request (PR)** | A request to add your branch's work into `main`. GitHub shows exactly what you changed, and anyone can look before it goes in. |
-| **Merge** | Accepting a pull request: your work becomes part of `main`. |
-| **Merge conflict** | Two people changed the same lines of the same file. Git can't guess which one to keep, so a person has to choose. Our file ownership rules exist to prevent this. |
+| **Almost always** | **Gemini 4 Hydrogen**, thinking on High (the default) |
+| Hydrogen's limit ran out | **Gemini 3.8 Flash** |
+| All Gemini limits ran out | **Claude Sonnet 4.6** (separate limit, so it keeps you going) |
+| Avoid | Claude Opus, Gemini 4 Argon, Gemini 4 Carbon, anything called "Orchestrator". They use up limits and credits several times faster. |
 
-The whole idea in one sentence: **you work on your own branch, then a pull request moves your work into `main`.**
+If Hydrogen isn't in your list, use Gemini 3.8 Flash. (Checked 2026-11-14 against Antigravity's models page; the lineup changes often. You can see what you've used under Settings, usage by model.)
+
+### 4. Clone the repo
+On Antigravity's welcome screen choose **Clone Repository** (or press `Cmd+Shift+P` on Mac / `Ctrl+Shift+P` on Windows and type `Git: Clone`). Paste:
+```
+https://github.com/arshawnarbabi/SlugGrub.git
+```
+Pick a folder, then **Open** it when asked. Sign in to GitHub if it asks.
+
+If Clone Repository fails because git isn't installed: on Mac open Terminal and run `xcode-select --install`; on Windows install from https://git-scm.com. Then try again.
+
+### 5. Have your keys ready
+Arshawn will DM you the keys (Gemini, Firebase). Keep that DM open. The agent will tell you where to paste them. **Never paste keys into the agent chat, the group chat, or anywhere on GitHub.**
 
 ---
 
-## Part 2: One-time setup (about 15 minutes)
+## Part 2: Paste your setup prompt
 
-1. **Accept the invite.** Arshawn adds you on GitHub. Check your email or https://github.com/notifications and accept. Without this you can see the code but can't upload to it.
-2. **Install Node.js.** Download the "LTS" version from https://nodejs.org and install it. This runs the app.
-3. **Install git** (if you don't have it).
-   - Mac: open Terminal, type `xcode-select --install`, press Enter, and follow the popup.
-   - Windows: download from https://git-scm.com and install with the default options.
-4. **Clone the repo in Antigravity.**
-   - Open Antigravity. On the welcome screen choose **Clone Repository** (or press `Cmd+Shift+P` on Mac / `Ctrl+Shift+P` on Windows, type `Git: Clone`, press Enter).
-   - Paste `https://github.com/arshawnarbabi/SlugGrub.git`, pick a folder, and open it when asked.
-   - If it asks you to sign in to GitHub, say yes and sign in.
-5. **Install the project's packages.** In Antigravity open a terminal (menu **Terminal > New Terminal**) and run:
-   ```
-   npm install
-   ```
-6. **Add the secret keys.** Run this (Mac) or the Windows line:
-   ```
-   cp .env.example .env.local
-   ```
-   ```
-   copy .env.example .env.local
-   ```
-   Open `.env.local` and paste in the keys Arshawn sends you in a DM. **Never upload this file.** Git already ignores it.
-7. **Run the app.**
-   ```
-   npm run dev
-   ```
-   Open http://localhost:3000. You should see the Today page and the tab bar. Press `Ctrl+C` in the terminal to stop it.
+Open the agent chat inside the SlugGrub folder, make sure the model is set (Part 1, step 3), and paste **your** prompt below. Read what it says and approve its commands as it goes. It ends by saying it's ready.
 
-   To see it on your phone: same wifi, then open `http://<your-laptop-ip>:3000` on the phone.
+### Karen's setup prompt
+```
+I'm Karen, on a 3-person hackathon team building SlugGrub. I'm new to GitHub, pull requests and coding agents, so explain each step in plain words before you do it, and tell me exactly when I need to do something myself.
+
+Set me up from start to finish:
+
+1. Read AGENTS.md, PLAN.md and docs/TEAM-GUIDE.md in this repo. Follow AGENTS.md for everything.
+2. Check that git and Node.js are installed (git --version, node -v). If Node is missing or older than 20, stop and tell me to install the LTS version from https://nodejs.org, then wait for me.
+3. Run npm install.
+4. If .env.local doesn't exist, copy .env.example to .env.local. Then tell me to open .env.local and paste in the keys Arshawn DMed me. Don't ask me to paste keys into this chat. Wait until I say done.
+5. Start the app with npm run dev and tell me which address to open in my browser. Wait for me to confirm I see the Today page, then stop the app.
+6. Make sure I'm on the latest main (git checkout main, git pull), then create my first branch: karen-firebase.
+7. Explain my role in a few short lines: what I own (PLAN.md, "Karen"), the exact folders and files I'm allowed to edit, and the shared files I must ask the team about first.
+8. My first job is Firebase. Walk me through what I have to do by hand in the Firebase console (create the project, add a web app, turn on Firestore and Google sign-in, copy the config into .env.local), one step at a time, waiting for me after each. Then set up src/lib/firebase.ts.
+9. List my remaining tasks from PLAN.md in the order you suggest building them.
+10. Explain how I save and share my work: commit, push, open a pull request, merge. Keep it short; it's in docs/TEAM-GUIDE.md, Part 3.
+
+When everything above is done, end with exactly: "I understand the plan and my role, and I'm ready." If anything failed, tell me what failed instead of saying that.
+```
+
+### Ethan's setup prompt
+```
+I'm Ethan, on a 3-person hackathon team building SlugGrub. I'm new to GitHub, pull requests and coding agents, so explain each step in plain words before you do it, and tell me exactly when I need to do something myself.
+
+Set me up from start to finish:
+
+1. Read AGENTS.md, PLAN.md and docs/TEAM-GUIDE.md in this repo. Follow AGENTS.md for everything.
+2. Check that git and Node.js are installed (git --version, node -v). If Node is missing or older than 20, stop and tell me to install the LTS version from https://nodejs.org, then wait for me.
+3. Run npm install.
+4. If .env.local doesn't exist, copy .env.example to .env.local. Then tell me to open .env.local and paste in the keys Arshawn DMed me. Don't ask me to paste keys into this chat. Wait until I say done.
+5. Start the app with npm run dev and tell me which address to open in my browser. Wait for me to confirm I see the Today page, then stop the app.
+6. Make sure I'm on the latest main (git checkout main, git pull), then create my first branch: ethan-menus.
+7. Explain my role in a few short lines: what I own (PLAN.md, "Ethan"), the exact folders and files I'm allowed to edit, and the shared files I must ask the team about first.
+8. My first job is the menu fetcher. Read PLAN.md, "Menu data", and explain the plan before writing code: which UCSC pages it reads, what it saves to data/menus/, and how it fixes the certificate problem by adding the missing intermediate certificate (never by turning off certificate checks). Then build scripts/fetch-menus.ts so getMenu() in src/lib/menus.ts can return real menus in the same shape as the fake data.
+9. List my remaining tasks from PLAN.md in the order you suggest building them.
+10. Explain how I save and share my work: commit, push, open a pull request, merge. Keep it short; it's in docs/TEAM-GUIDE.md, Part 3.
+
+When everything above is done, end with exactly: "I understand the plan and my role, and I'm ready." If anything failed, tell me what failed instead of saying that.
+```
 
 ---
 
-## Part 2.5: Which model to use in Antigravity
+## Part 3: Every time you work
 
-Pick the model in the dropdown at the bottom of the agent chat. Checked 2026-11-14 against Antigravity's models page; their lineup changes often.
-
-| Use it for | Model | Why |
-|---|---|---|
-| **Almost everything** | **Gemini 4 Hydrogen** (leave thinking on High) | Newest (Nov 12), fast, and scores about the same as the bigger Argon for much less per task |
-| When Hydrogen's limit runs out | **Gemini 3.8 Flash** | Strong at coding and cheap per token |
-| When all Gemini limits run out | **Claude Sonnet 4.6** | Claude models use a separate limit from Gemini, so this keeps you going. It's being removed Nov 18, after the hackathon |
-| Avoid | Claude Opus, Gemini 4 Argon, Gemini 4 Carbon, any "Orchestrator" | Opus and the orchestrators use up limits and credits several times faster, and Hydrogen matches Argon anyway |
-
-**How not to burn your $25 credit:**
-- Your plan has a free limit that refreshes (every 5 hours or weekly depending on plan). **Credits are only used after that limit runs out**, and only if overages are on.
-- In Antigravity **Settings**, set **AI Credit Overages** to **Never**. When you hit a limit, switch models (table above) instead of spending credits. Switch it to Always only if you're blocked and the deadline is close.
-- Check what you've used in **Settings** (usage by model).
-- Start a new chat for each new task. Long chats send the whole history every time, which uses more.
-- Ask for one thing at a time and point it at the exact files. "Fix the button in src/app/rank/page.tsx" is cheaper than "fix the app".
-- Don't use the highest thinking level. High is the default and is enough.
-
----
-
-## Part 3: Every time you work (the loop)
-
-You can click buttons in Antigravity, type commands in the terminal, or ask the agent to do it. All three do the same thing. The commands are shown so you know what's happening.
-
-### Step 1: Get the latest `main`
+### Start of a work session (paste this)
 ```
-git checkout main
-git pull
-```
-Do this before starting anything new, so you build on everyone's latest work.
-
-### Step 2: Make a branch for one feature
-```
-git checkout -b karen-rank-screen
-```
-Name it `<yourname>-<feature>`. One branch per feature. In Antigravity you can also click the branch name in the bottom-left corner and choose **Create new branch**.
-
-### Step 3: Build it with the agent
-Start each agent chat by saying who you are, so it follows the rules for your files:
-
-> I'm Karen. Read PLAN.md and AGENTS.md. Then build the this-or-that ranking screen in src/app/rank/. Use fake data for now.
-
-> I'm Ethan. Read PLAN.md and AGENTS.md. Then write the menu fetcher in scripts/fetch-menus.ts using the notes in PLAN.md under "Menu data".
-
-Tips:
-- Ask for one thing at a time. Small asks work better than "build the whole app".
-- Read what it changed before accepting. If it touched a file you don't own, tell it to undo that part.
-- Run `npm run dev` and actually click through your screen before saving.
-
-### Step 4: Commit (save a checkpoint)
-In Antigravity: open the **Source Control** panel (the branching icon on the left), type a short message like `Rank screen with two dish cards`, and click **Commit**. If it asks to stage all changes, say yes.
-
-Or in the terminal:
-```
-git add -A
-git commit -m "Rank screen with two dish cards"
-```
-Commit often, every time something works.
-
-### Step 5: Push (upload your branch)
-Click **Publish Branch** (first time) or **Sync Changes** in the Source Control panel. Or:
-```
-git push -u origin karen-rank-screen
+I'm <your name>. Read AGENTS.md and PLAN.md again, since they may have changed. Get me onto the latest main (git checkout main, git pull), run npm install in case someone added a package, and make a new branch called <yourname>-<feature> for: <what I'm building next>. Tell me what files you plan to change before you change them.
 ```
 
-### Step 6: Open a pull request
-1. Go to https://github.com/arshawnarbabi/SlugGrub. A yellow bar says your branch had recent pushes. Click **Compare & pull request**.
-2. The description box already has a short checklist. Fill it in.
-3. Click **Create pull request**.
+### While building
+- Ask for one thing at a time, and name the file: "Add a vote button to src/app/rank/page.tsx" works better and costs less than "build the rank page".
+- Start a **new chat** for each new task. Long chats use up your limit faster.
+- Read what it changed. If it touched a file you don't own, tell it to undo that part.
+- Run the app (`npm run dev`) and click through your screen yourself.
 
-### Step 7: Merge it
-- If GitHub says **"This branch has no conflicts with the base branch"**, click **Merge pull request**, then **Confirm merge**.
-- Post in the group chat: "merged the rank screen". Everyone else then runs Step 1 to get it.
-- If it says there are conflicts, see Part 5.
+### When something works: ship it (paste this)
+```
+Commit my changes with a short clear message, push my branch, and open a pull request on GitHub (or give me the link to open one). Fill in the pull request checklist. Before you run any git command, show it to me. Never push to main and never force push.
+```
+Then on GitHub: if the pull request says **"no conflicts"**, click **Merge pull request** and **Confirm merge**. Post "merged <thing>" in the group chat so the others pull it. Then go back to the start-of-session prompt for your next feature.
 
-### Step 8: Next feature
-Go back to Step 1. **Make a new branch for each feature.** Don't keep using an old branch after it's merged.
+Aim for a pull request every hour or two. Small ones almost never conflict.
 
-Aim for a pull request every hour or two. Small pull requests almost never conflict. Big ones at the end of the day almost always do.
-
-### Letting the agent do the git steps
-You can ask the agent, for example:
-
-> Commit my changes with a short message, push my branch, and give me the link to open a pull request.
-
-That's fine. Read the commands it wants to run before you approve them. Say no if you see `main` being pushed to, `--force`, or `reset --hard`.
+### Before approving any command the agent wants to run
+Say **no** if you see any of these, and ask in the group chat:
+- `git push` to `main`
+- `--force` or `-f` on a push
+- `git reset --hard`, `git clean`, or deleting folders
+- anything that prints or uploads `.env.local`
 
 ---
 
@@ -151,38 +124,44 @@ That's fine. Read the commands it wants to run before you approve them. Say no i
 
 1. **Never work on `main` directly.** Always a branch, always a pull request. `main` must always run, since it's what we demo.
 2. **Only edit files you own.** The table in [PLAN.md](../PLAN.md) lists them. Need a change in someone else's file? Ask them in the group chat.
-3. **Shared files need a heads-up first:** `src/lib/types.ts`, `data/mock/`, `package.json`, `AGENTS.md`. Say in the chat before changing them.
-4. **Pull before you start** (Part 3, Step 1).
+3. **Shared files need a heads-up first:** `src/lib/types.ts`, `data/mock/`, `package.json`, `AGENTS.md`.
+4. **Pull before you start** (the start-of-session prompt does this).
 5. **Small pull requests, merged often.**
 6. **Never upload keys.** `.env.local` stays on your laptop. Keys are shared in DMs only.
-7. **Adding a package?** Say so in the chat first (for example "adding the qrcode package").
-8. **Tick your box in PLAN.md** when your thing is merged. Add decisions there too, not just in the chat.
-9. **Never force push** (`git push --force`). It can delete other people's work.
-10. **Stuck for more than 10 minutes?** Ask in the chat. Don't fight git alone.
+7. **Adding a package?** Say so in the chat first.
+8. **Tick your box in PLAN.md** when your thing is merged. Add decisions there too.
+9. **Never force push.** It can delete other people's work.
+10. **Stuck for more than 10 minutes?** Ask in the chat.
 
 ---
 
-## Part 5: When something goes wrong
+## Part 5: The words, if you're curious
 
-**"Updates were rejected" when pushing.** Someone pushed before you. Run:
+| Word | What it means |
+|---|---|
+| **Repo** | The project folder, stored on GitHub so all three of us share it |
+| **Clone** | Download the repo to your laptop (once) |
+| **Commit** | A saved checkpoint of your changes, on your laptop only |
+| **Push** | Upload your commits to GitHub |
+| **Pull** | Download everyone else's new work |
+| **Branch** | Your own copy to work on. `main` is the shared, working version |
+| **Pull request (PR)** | A request to add your branch's work into `main`. GitHub shows exactly what changed |
+| **Merge** | Accepting a pull request, so your work becomes part of `main` |
+| **Merge conflict** | Two people changed the same lines. A person has to pick. Our file ownership rules prevent most of these |
+
+---
+
+## Part 6: When something goes wrong
+
+Paste the error into the agent chat with:
 ```
-git pull --rebase origin main
-git push
+I got this error. Explain what it means in plain words and how to fix it. Show me any command before running it.
 ```
 
-**Merge conflict.** Ask the agent:
-> I have a merge conflict. Show me the conflicting files and help me resolve it, keeping both people's changes where possible. Explain before you change anything.
-
-If it's in a file you don't own, ask that file's owner to help.
-
-**You made changes on `main` by accident** (and haven't committed yet). Move them to a new branch:
-```
-git checkout -b yourname-feature
-```
-Your changes come with you. Commit them there.
-
-**The app won't start or shows "module not found".** Someone added a package. Run `npm install`, then `npm run dev` again.
-
-**"Port 3000 is in use".** The app is already running in another terminal. Close that one, or open the port number it suggests.
-
-**Something is badly broken and you don't know why.** Don't delete folders or reset anything. Ask in the chat.
+Common ones:
+- **"Updates were rejected" when pushing:** someone pushed first. The fix is `git pull --rebase origin main`, then push again.
+- **Merge conflict:** ask the agent to show the conflicting files and help keep both people's changes. If it's in a file you don't own, ask that file's owner.
+- **You worked on `main` by accident** (not committed yet): `git checkout -b <yourname>-<feature>` moves your changes to a new branch.
+- **"Module not found":** someone added a package. Run `npm install`.
+- **"Port 3000 is in use":** the app is already running somewhere. Close that terminal.
+- **Something is badly broken:** don't delete or reset anything. Ask in the chat.
