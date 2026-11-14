@@ -38,14 +38,16 @@ export function Swap({ id, children, rotate = 0, className, style }: { id: strin
 
 /** Pages open static (his rule 2026-11-14: "dont animate the ui coming in on page selection, everything should be static").
  *  ScreenClock marks when a screen mounted; anything that would animate in within that first moment renders in place instead. */
-const ScreenMounted = createContext<number>(0);
+const ScreenReady = createContext<boolean>(false);
 export function ScreenClock({ children }: { children: React.ReactNode }) {
-  const [t0] = useState(() => Date.now());
-  return <ScreenMounted.Provider value={t0}>{children}</ScreenMounted.Provider>;
+  // false while the screen opens, true a moment after it has mounted (no clock read during render)
+  const [ready, setReady] = useState(false);
+  useEffect(() => { const t = window.setTimeout(() => setReady(true), 400); return () => window.clearTimeout(t); }, []);
+  return <ScreenReady.Provider value={ready}>{children}</ScreenReady.Provider>;
 }
 function useOpeningScreen() {
-  const t0 = useContext(ScreenMounted);
-  const [opening] = useState(() => t0 === 0 || Date.now() - t0 < 400);
+  const ready = useContext(ScreenReady);
+  const [opening] = useState(() => !ready); // captured once, when this block mounts
   return opening;
 }
 

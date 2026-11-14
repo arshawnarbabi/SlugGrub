@@ -1,4 +1,4 @@
-// Owner: Arshawn. A scrolling screen between the iOS-style edges (blur budget: 2 layers per edge).
+// Owner: Arshawn. A scrolling screen between the iOS-style edges (Magic UI progressive blur, cheap: 4 layers per edge).
 // Pages open static: ScreenClock stops anything from animating in while the screen opens.
 import { ScreenClock } from "./motion";
 export function Screen({ children, wash, noTabBar }: { children: React.ReactNode; wash?: boolean; noTabBar?: boolean }) {
@@ -8,8 +8,8 @@ export function Screen({ children, wash, noTabBar }: { children: React.ReactNode
         {wash && <div className="wash" aria-hidden />}
         <ScreenClock>{children}</ScreenClock>
       </main>
-      <div className="edge top" aria-hidden><i /><i /><b /></div>
-      {!noTabBar && <div className="edge bottom" aria-hidden><i /><i /><b /></div>}
+      <div className="edge top" aria-hidden><i /><i /><i /><i /></div>
+      {!noTabBar && <div className="edge bottom" aria-hidden><i /><i /><i /><i /></div>}
     </>
   );
 }

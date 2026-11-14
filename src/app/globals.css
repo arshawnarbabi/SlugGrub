@@ -77,31 +77,28 @@ img { display: block; max-width: 100%; }
 .scroller > * { flex-shrink: 0; }
 .scroller.no-tabbar { padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 32px); }
 
-/* ── iOS-style scroll edges (his spec 2026-11-14): the progressive blur and the progressive lighten share ONE ramp, so they sit in
-   the same place with the same gradual intensity. They sit BEHIND the pinned chrome (sticky top bar z 6, nav bar z 8) and above
-   the scrolling content (z 1), and each edge ends where the content starts, so only content scrolled underneath is affected.
-   BLUR BUDGET (DESIGN effects.blur_budget, a MUST): 2 backdrop layers per edge, max 10px, never animated. ── */
+/* ── Scroll edges: Magic UI's progressive blur, cloned cheap (his ask 2026-11-14). Same technique (stacked backdrop-blur layers,
+   each masked to an overlapping band, so blur steps up toward the edge) with 4 layers at 1, 2, 4, 8px instead of 8 layers up to 64px.
+   No lighten layer. The edges sit BEHIND the pinned chrome (sticky top bar z 6, nav bar z 8) and above scrolling content (z 1),
+   and end where content starts at rest. BLUR BUDGET (DESIGN effects.blur_budget, a MUST): 4 layers per edge, max 8px, never
+   animated. ── */
 :root {
-  --top-chrome: calc(env(safe-area-inset-top, 0px) + 60px);     /* status area + sticky top bar */
-  --bottom-chrome: calc(env(safe-area-inset-bottom, 0px) + 96px); /* nav bar zone */
-  --ramp-top: linear-gradient(to bottom, #000 0%, #000 40%, transparent 100%);
-  --ramp-top-strong: linear-gradient(to bottom, #000 0%, transparent 60%);
-  --ramp-bottom: linear-gradient(to top, #000 0%, #000 40%, transparent 100%);
-  --ramp-bottom-strong: linear-gradient(to top, #000 0%, transparent 60%);
+  --top-chrome: calc(env(safe-area-inset-top, 0px) + 64px);
+  --bottom-chrome: calc(env(safe-area-inset-bottom, 0px) + 104px);
 }
 .edge { position: absolute; left: 0; right: 0; pointer-events: none; z-index: 5; }
 .edge.top { top: 0; height: var(--top-chrome); }
 .edge.bottom { bottom: 0; height: var(--bottom-chrome); }
-.edge > i, .edge > b { position: absolute; inset: 0; }
-/* blur: a light layer across the whole ramp plus a stronger one near the edge, both on the same ramp shape */
-.edge.top > i:nth-child(1) { backdrop-filter: blur(4px); mask: var(--ramp-top); }
-.edge.top > i:nth-child(2) { backdrop-filter: blur(10px); mask: var(--ramp-top-strong); }
-.edge.bottom > i:nth-child(1) { backdrop-filter: blur(4px); mask: var(--ramp-bottom); }
-.edge.bottom > i:nth-child(2) { backdrop-filter: blur(10px); mask: var(--ramp-bottom-strong); }
-/* lighten: the page color through the SAME ramp */
-.edge.top > b { background: color-mix(in oklch, var(--paper) 82%, transparent); mask: var(--ramp-top); }
-.edge.bottom > b { background: color-mix(in oklch, var(--paper) 88%, transparent); mask: var(--ramp-bottom); }
-@media (prefers-reduced-transparency: reduce) { .edge > i { display: none; } }
+.edge > i { position: absolute; inset: 0; }
+.edge.top > i:nth-child(1) { backdrop-filter: blur(1px); mask-image: linear-gradient(to top, transparent 0%, #000 25%, #000 50%, transparent 75%); }
+.edge.top > i:nth-child(2) { backdrop-filter: blur(2px); mask-image: linear-gradient(to top, transparent 25%, #000 50%, #000 75%, transparent 100%); }
+.edge.top > i:nth-child(3) { backdrop-filter: blur(4px); mask-image: linear-gradient(to top, transparent 50%, #000 75%, #000 100%, transparent 125%); }
+.edge.top > i:nth-child(4) { backdrop-filter: blur(8px); mask-image: linear-gradient(to top, transparent 75%, #000 100%); }
+.edge.bottom > i:nth-child(1) { backdrop-filter: blur(1px); mask-image: linear-gradient(to bottom, transparent 0%, #000 25%, #000 50%, transparent 75%); }
+.edge.bottom > i:nth-child(2) { backdrop-filter: blur(2px); mask-image: linear-gradient(to bottom, transparent 25%, #000 50%, #000 75%, transparent 100%); }
+.edge.bottom > i:nth-child(3) { backdrop-filter: blur(4px); mask-image: linear-gradient(to bottom, transparent 50%, #000 75%, #000 100%, transparent 125%); }
+.edge.bottom > i:nth-child(4) { backdrop-filter: blur(8px); mask-image: linear-gradient(to bottom, transparent 75%, #000 100%); }
+@media (prefers-reduced-transparency: reduce) { .edge { display: none; } }
 
 /* ── type (DESIGN typography; sentence case only, never all caps) ── */
 .title-xl { font-weight: 700; font-size: 30px; letter-spacing: -0.04em; line-height: 1.05; margin: 0; }

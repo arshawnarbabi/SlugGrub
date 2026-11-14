@@ -698,9 +698,9 @@ effects:
   blur_budget:
     # MUST, a default for every screen (his rule 2026-11-14, "this is very important make sure any blur you use is cheap and not
     # perforamnce heavy. log this as a defualt and a must"). Any new blur is checked against this before it ships.
-    backdrop_filter_layers_per_edge_max: 2      # scroll edges: 2 layers (3px and 10px), masked; never more
-    backdrop_filter_layers_per_screen_max: 4    # top edge + bottom edge
-    backdrop_blur_radius_max_px: 12
+    backdrop_filter_layers_per_edge_max: 4      # scroll edges: Magic UI banded progressive blur, cheap (1, 2, 4, 8px); never more
+    backdrop_filter_layers_per_screen_max: 8    # top edge + bottom edge
+    backdrop_blur_radius_max_px: 8
     animate_blur_radius: "never"                # a backdrop blur radius never animates
     opaque_surfaces: "never carry a backdrop blur"   # an opaque nav bar or card gains nothing from it and still pays for it
     filter_blur: "only for state changes, only on small elements (icons, labels, chips), max 4px, only during the 220ms change; filter none at rest"
@@ -736,9 +736,9 @@ effects:
     - id: scroll-edge-blur
       what: "iOS-style soft scroll edge: progressive blur plus a fade to the page color at the top (under the status bar) and bottom (under the tab bar) of every scrolling screen"   # his ask 2026-11-14
       tier: 2
-      how: "2 backdrop-filter layers per edge (3px and 10px), each masked to a gradient, plus a color fade; pinned outside the scroll layer (cut from 5 layers for his blur budget)"
-      fallback: "the color fade only"
-      reduced: "prefers-reduced-transparency: fade only"
+      how: "Magic UI progressive blur, cloned cheap (his ask): 4 backdrop-filter layers per edge (1, 2, 4, 8px), each masked to an overlapping 25% band so blur steps up toward the edge; no lighten layer; behind the sticky top bar and nav bar, above content"
+      fallback: "no edge (content scrolls under the chrome unblurred)"
+      reduced: "prefers-reduced-transparency: no edge"
       measured: "not yet (QA Gate B2 before ship)"
     - id: gooey-liquid
       what: "liquid-gooey 0.2.2 (MIT, no deps): pieces merge and split like liquid, text and icons stay crisp"   # his ask: subtle and consistent
@@ -1593,8 +1593,9 @@ Status: values he chose are unmarked; Claude's inferences carry # draft above.
 - **Shape:** pill buttons and chips, circle icon buttons, 18px flat cards, concentric corners, 0.5px hairlines (his ask).
 - **Motion:** smooth and subtle micro-interactions everywhere they help, never gimmicky (his ask); reduced
   motion makes everything instant. Numbers no longer count up. Presses just dim (no scale); pages open static, with no entry animation of any kind (his rule).
-- **Scroll edges:** iOS-style progressive blur and fade at the top and bottom of scrolling screens (his ask), 2 cheap layers per edge.
-- **Blur is cheap, always (his MUST):** at most 2 backdrop blurs per edge and 4 per screen, radius 12px max, never animated, never on
+- **Scroll edges:** Magic UI-style banded progressive blur at the top and bottom of scrolling screens, cheap: 4 layers per edge at 1, 2,
+  4, 8px, no lighten (his asks). Behind the sticky top bar and nav bar, only on content scrolled underneath.
+- **Blur is cheap, always (his MUST):** at most 4 backdrop blurs per edge and 8 per screen, radius 8px max, never animated, never on
   opaque surfaces, photos or lists; state-change blur (4px) only on small elements for 220ms and removed at rest. See effects.blur_budget.
 - **Spring, goo, state change (subtle, his ask):** one spring (300/28, ~1.3% overshoot), one goo (blur 5, contrast 18, no trailing spring), and
   one state change (4px blur + fade + 92% scale) everywhere. See motion.spring, motion.goo, motion.state_change.
