@@ -2915,3 +2915,8 @@ and button surface rules in separate selectors, never one shared :is() list. -->
 
 <!-- 2026-11-14 (his asks): default stays "Sidestash, solid cards", now on the Flat option's page color (L 0.962); the plain
 "Sidestash" option gets a visible card gradient back (L 0.990 to 0.972, still softer than buttons at 0.993 to 0.963). -->
+
+<!-- 2026-11-14 (his ask: "just give me all teh steps for hte backgrond color so i can decide what i like hte most"): /brand has a
+Background menu with 11 steps of the cool page color (oklch L 0.994, 0.985, 0.977, 0.970, 0.962, 0.955, 0.948, 0.944, 0.938, 0.930,
+0.920; chroma 0.004, hue 250); the fill behind segmented controls and the active tab is 0.032 darker. Current default 0.962. Open
+until he picks a step. -->
