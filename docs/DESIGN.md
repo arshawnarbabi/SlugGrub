@@ -605,9 +605,20 @@ motion:
     at_rest: "filter: none (never leave a blur(0) filter on an element)"
 
   press:
-    scale: { button: 0.97, icon_button: 0.9, card: 0.985, tab: 0.94 }
-    down: "90ms {motion.easing.standard}"
-    release: "{motion.spring.css_linear} over {motion.spring.css_duration}"
+    # his ask 2026-11-14: "when pressing buttons just make it normal, no expand or compress or anything like that".
+    # A plain iOS highlight: the pressed control dims to 60% opacity while held (120ms). No scale on press, ever.
+    pressed_opacity: 0.6
+    duration: "120ms"
+    scale: "none"
+
+  page_transition:
+    # his ask 2026-11-14: "when changing pages just make it how it works in ios ... a simple very quick fade of the content ...
+    # i dont want any like card animations". iOS 18+ cross-dissolves on tab switch. Content fades in, opacity only, 180ms,
+    # ease-out; the nav bar never moves or fades. No slides, no card or shared-element transitions. Reduced motion: instant.
+    type: "crossfade"
+    property: "opacity"
+    duration: "180ms"
+    easing: "ease-out"
 
   # Profile modifiers
   profile_modifiers:
@@ -1580,7 +1591,7 @@ Status: values he chose are unmarked; Claude's inferences carry # draft above.
 - **Icons:** Hugeicons free Stroke Rounded (his rule), one stroke weight, heavier on the active tab.
 - **Shape:** pill buttons and chips, circle icon buttons, 18px flat cards, concentric corners, 0.5px hairlines (his ask).
 - **Motion:** smooth and subtle micro-interactions everywhere they help, never gimmicky (his ask); numbers count up once; reduced
-  motion makes everything instant.
+  motion makes everything instant. Presses just dim (no scale); page changes are a quick 180ms content fade like iOS tab switches.
 - **Scroll edges:** iOS-style progressive blur and fade at the top and bottom of scrolling screens (his ask), 2 cheap layers per edge.
 - **Blur is cheap, always (his MUST):** at most 2 backdrop blurs per edge and 4 per screen, radius 12px max, never animated, never on
   opaque surfaces, photos or lists; state-change blur (4px) only on small elements for 220ms and removed at rest. See effects.blur_budget.
@@ -3030,3 +3041,9 @@ step (Card fill menu, 8 steps from 1.000 to 0.960, default 0.985). -->
 icon, and the sheen/hairline drew an inner ring because the button is smaller than the gooey blob. Droplet icons now fade in only
 when open; the top sheen and white hairline are inset layers of the Liquid shadow, so they follow the blob's real edge. Checked by
 zoomed screenshot. -->
+
+<!-- 2026-11-14 scroll edges (his spec: "the progressive blur and progressive lighten should be the same location and same gradual
+intensity and BEHIND all of the sticky content like top buttons or nav bar and it should only affect the scrollable content
+underneath"): one shared ramp (--ramp-top / --ramp-bottom) masks both blur layers and the page-color lighten; the top bar is
+sticky (z 6) and the nav bar floats (z 8) above the edges (z 5), which sit above scrolling content (z 1); each edge ends where
+content starts at rest, so nothing is blurred until it scrolls under. Verified in the browser. -->

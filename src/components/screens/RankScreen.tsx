@@ -55,7 +55,7 @@ function Duels() {
             type="button"
             className={`duel-opt ${pick === k ? "picked" : ""}`}
             onClick={() => pick === null && choose(k as 0 | 1)}
-            animate={{ scale: pick === null ? 1 : pick === k ? 1.02 : 0.96, opacity: pick !== null && pick !== k ? 0.5 : 1 }}
+            animate={{ opacity: pick !== null && pick !== k ? 0.5 : 1 }}
             transition={tr}
           >
             <div className="ph" style={{ width: "100%", height: 160, borderRadius: 18 }}>
