@@ -15,20 +15,14 @@ Arshawn adds you to the repo. Accept it from your email or https://github.com/no
 
 ### 2. Antigravity settings
 Open Antigravity, then open **Settings**:
-- **AI Credit Overages: Never.** Your plan has a free limit that refreshes. Credits (your $25) are only spent after that limit runs out, and only if this is on. Leave it on Never; turn it to Always only if you're blocked close to the deadline.
+- **AI Credit Overages: Never** (if you see this setting). Your plan has a free limit that refreshes. Credits (your $25) are only spent after that limit runs out, and only if this is on. Leave it on Never; turn it to Always only if you're blocked close to the deadline.
 - That's the only setting to change. Everything else stays on the default.
+- Your free limit is the real budget, so use it carefully: one task per chat, name the exact file, and start a new chat for each new task (Part 3 has more).
 
 ### 3. Pick the model
-In the agent chat, use the model dropdown at the bottom:
+In the agent chat, use the model dropdown at the bottom and pick **Gemini 3.8 Flash, High**. That's the model our accounts have, and it's strong at coding. Don't switch to a higher thinking level; High is enough and the higher ones use your limit faster.
 
-| When | Model |
-|---|---|
-| **Almost always** | **Gemini 4 Hydrogen**, thinking on High (the default) |
-| Hydrogen's limit ran out | **Gemini 3.8 Flash** |
-| All Gemini limits ran out | **Claude Sonnet 4.6** (separate limit, so it keeps you going) |
-| Avoid | Claude Opus, Gemini 4 Argon, Gemini 4 Carbon, anything called "Orchestrator". They use up limits and credits several times faster. |
-
-If Hydrogen isn't in your list, use Gemini 3.8 Flash. (Checked 2026-11-14 against Antigravity's models page; the lineup changes often. You can see what you've used under Settings, usage by model.)
+If other models show up later: Gemini 4 Hydrogen is a good pick too. Avoid Claude Opus and anything called "Orchestrator", which use limits and credits several times faster. (Checked 2026-11-14. You can see what you've used under Settings, usage by model.)
 
 ### 4. Clone the repo
 On Antigravity's welcome screen choose **Clone Repository** (or press `Cmd+Shift+P` on Mac / `Ctrl+Shift+P` on Windows and type `Git: Clone`). Paste:
