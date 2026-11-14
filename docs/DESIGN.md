@@ -2906,3 +2906,9 @@ hairline and chip shadow. Undecided until he picks. -->
 <!-- 2026-11-14 surface option "Sidestash, solid cards" (his ask: "lets try sidestash but for the cards no gradient"), now the default
 on /brand: the Sidestash surface with cards on one solid fill (L 0.984) instead of a gradient, white 0.5px hairline and chip shadow
 kept; buttons, pills and the nav bar keep the gradient. Undecided until he picks. -->
+
+<!-- 2026-11-14 bug found and fixed: the Sidestash button rule's :is() list included ".seg button.on" (specificity 0,4,1), which
+outranked every later card and hairline rule (0,4,0). So the two "subtler card gradient" tweaks, the solid-cards option and the 0.5px
+hairlines never rendered in Sidestash mode. Fixed by raising those rules' specificity (.sg.sg). Verified in the browser by computed
+style: cards solid fill with 0.5px border; top buttons and nav bar gradient with 0.5px border. Lesson for the real build: keep card
+and button surface rules in separate selectors, never one shared :is() list. -->

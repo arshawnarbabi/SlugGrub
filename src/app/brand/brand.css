@@ -345,7 +345,7 @@
 .sg[data-surface="sidestash"] .float-cta { background: linear-gradient(180deg, oklch(0.955 0.004 250 / 0), var(--paper) 45%); }
 /* his tweak 2026-11-14: cards get a much subtler gradient; buttons, chips and the bottom tab bar keep --raise as is */
 .sg[data-surface="sidestash"] { --raise-card: linear-gradient(180deg, oklch(0.988 0.002 250) 0%, oklch(0.978 0.003 250) 100%); }
-.sg[data-surface="sidestash"] :is(.card, .duel .opt, .sw, .font-card) { background: var(--raise-card); }
+.sg.sg[data-surface="sidestash"] :is(.card, .duel .opt, .sw, .font-card) { background: var(--raise-card); } /* .sg.sg: must outrank the button rule above, whose :is() includes ".seg button.on" */
 
 /* ── blue options (his ask 2026-11-14: "i wnat to try different blue variations"); scales from generate-palette.ts ── */
 .sg, .sg[data-blue="bright"] { --p1: oklch(0.99 0.005 252); --p2: oklch(0.97 0.015 252); --p3: oklch(0.95 0.025 252); --p4: oklch(0.92 0.04 252); --p5: oklch(0.88 0.061 252); --p6: oklch(0.83 0.088 252); --p7: oklch(0.75 0.124 252); --p8: oklch(0.66 0.149 252); --p9: oklch(0.52 0.156 252); --p10: oklch(0.46 0.138 252); --p11: oklch(0.38 0.091 252); --p12: oklch(0.22 0.05 252); --btn-top: oklch(0.590 0.156 252); --btn-bot: oklch(0.500 0.156 252); }
@@ -432,7 +432,7 @@
 /* his ask 2026-11-14: "make the hairlines just look like normal hairlines". Every stroke and divider is a true hairline: 0.5px
    (one device pixel on a retina phone), the white card and button strokes included. */
 .sg .row + .row { border-top-width: 0.5px; }
-.sg[data-surface="sidestash"] :is(.card, .duel .opt, .chip:not(.on), .sw, .seeall, .iconbtn, .btn-secondary, .tabbar .pillbar, .font-card, .surface-toggle, .scale, .seg-pill) { border-width: 0.5px; }
+.sg.sg[data-surface="sidestash"] :is(.card, .duel .opt, .chip:not(.on), .sw, .seeall, .iconbtn, .btn-secondary, .tabbar .pillbar, .font-card, .surface-toggle, .scale, .seg-pill) { border-width: 0.5px; } /* .sg.sg: outranks the 1px border rule */
 .sg[data-surface="sidestash"] :is(.btn-primary, .tabbar .cam) { border-width: 0.5px; }
 .sg[data-surface="chalk"] :is(.card, .duel .opt, .chip:not(.on), .sw, .scale, .seeall, .iconbtn, .tabbar .pillbar) { border-width: 0.5px; }
 .sg :is(.card, .chip, .seeall, .iconbtn, .sw, .scale) { border-width: 0.5px; }
@@ -464,4 +464,4 @@
 
 /* "Sidestash, solid cards" (his ask 2026-11-14: "lets try sidestash but for the cards no gradient"): everything Sidestash, but the
    cards use one solid fill (still lighter than the page, white hairline and chip shadow kept). Buttons and the nav bar keep the gradient. */
-.sg[data-cards="solid"] :is(.card, .duel .opt, .sw, .font-card) { background: oklch(0.984 0.002 250); }
+.sg.sg.sg[data-cards="solid"] :is(.card, .duel .opt, .sw, .font-card) { background: oklch(0.984 0.002 250); }
