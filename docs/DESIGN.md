@@ -736,7 +736,7 @@ effects:
     - id: scroll-edge-blur
       what: "iOS-style soft scroll edge: progressive blur plus a fade to the page color at the top (under the status bar) and bottom (under the tab bar) of every scrolling screen"   # his ask 2026-11-14
       tier: 2
-      how: "Magic UI progressive blur, cloned cheap (his ask): 4 backdrop-filter layers per edge (1, 2, 4, 8px), each masked to an overlapping 25% band so blur steps up toward the edge; no lighten layer; behind the sticky top bar and nav bar, above content"
+      how: "Magic UI progressive blur, cloned cheap (his ask): 4 backdrop-filter layers per edge (1, 2, 4, 8px), each masked to an overlapping 25% band so blur steps up toward the edge; plus a subtle eased fade to the page color (max ~45%, a plain gradient, no filter); behind the sticky top bar and nav bar, above content"
       fallback: "no edge (content scrolls under the chrome unblurred)"
       reduced: "prefers-reduced-transparency: no edge"
       measured: "not yet (QA Gate B2 before ship)"
@@ -1594,7 +1594,8 @@ Status: values he chose are unmarked; Claude's inferences carry # draft above.
 - **Motion:** smooth and subtle micro-interactions everywhere they help, never gimmicky (his ask); reduced
   motion makes everything instant. Numbers no longer count up. Presses just dim (no scale); pages open static, with no entry animation of any kind (his rule).
 - **Scroll edges:** Magic UI-style banded progressive blur at the top and bottom of scrolling screens, cheap: 4 layers per edge at 1, 2,
-  4, 8px, no lighten (his asks). Behind the sticky top bar and nav bar, only on content scrolled underneath.
+  4, 8px, plus a subtle progressive fade to the page color (0 to ~45% at the very edge, eased) on the same direction (his asks).
+  Behind the sticky top bar and nav bar, only on content scrolled underneath.
 - **Blur is cheap, always (his MUST):** at most 4 backdrop blurs per edge and 8 per screen, radius 8px max, never animated, never on
   opaque surfaces, photos or lists; state-change blur (4px) only on small elements for 220ms and removed at rest. See effects.blur_budget.
 - **Spring, goo, state change (subtle, his ask):** one spring (300/28, ~1.3% overshoot), one goo (blur 5, contrast 18, no trailing spring), and

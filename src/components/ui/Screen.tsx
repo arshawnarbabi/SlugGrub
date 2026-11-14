@@ -8,8 +8,8 @@ export function Screen({ children, wash, noTabBar }: { children: React.ReactNode
         {wash && <div className="wash" aria-hidden />}
         <ScreenClock>{children}</ScreenClock>
       </main>
-      <div className="edge top" aria-hidden><i /><i /><i /><i /></div>
-      {!noTabBar && <div className="edge bottom" aria-hidden><i /><i /><i /><i /></div>}
+      <div className="edge top" aria-hidden><i /><i /><i /><i /><b /></div>
+      {!noTabBar && <div className="edge bottom" aria-hidden><i /><i /><i /><i /><b /></div>}
     </>
   );
 }

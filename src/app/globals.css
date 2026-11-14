@@ -238,3 +238,10 @@ a.btn { text-decoration: none; }
 .seeall::before { content: ""; position: absolute; inset: -6px -4px; }
 .textbtn { min-height: 44px; padding: 0 10px; }
 .chip.chip-sm { height: 40px; font-size: 14px; padding: 0 14px; }
+
+/* subtle progressive fade with the blur (his ask 2026-11-14): content fades toward the page color on the same direction as the blur
+   bands, eased (0 at the inner end, ~45% at the very edge). A plain gradient, no filter, so it costs almost nothing. It lives in the
+   edge layer, behind the sticky top bar and nav bar, so only scrolled content fades. */
+.edge > b { position: absolute; inset: 0; pointer-events: none; }
+.edge.top > b { background: linear-gradient(to top, color-mix(in oklch, var(--paper) 0%, transparent) 0%, color-mix(in oklch, var(--paper) 6%, transparent) 30%, color-mix(in oklch, var(--paper) 18%, transparent) 60%, color-mix(in oklch, var(--paper) 45%, transparent) 100%); }
+.edge.bottom > b { background: linear-gradient(to bottom, color-mix(in oklch, var(--paper) 0%, transparent) 0%, color-mix(in oklch, var(--paper) 6%, transparent) 30%, color-mix(in oklch, var(--paper) 18%, transparent) 60%, color-mix(in oklch, var(--paper) 45%, transparent) 100%); }
