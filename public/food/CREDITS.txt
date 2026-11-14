@@ -1,0 +1,2 @@
+Food photos from Unsplash (unsplash.com/license), used as mock content in the /brand preview only:
+photo-1565557623262 tikka, photo-1565299624946 pizza, photo-1546069901 poke, photo-1512621776951 grain-bowl, photo-1504674900247 steak-salad, photo-1540189549336 garden-salad, photo-1567620905732 pancakes, photo-1559314809 pad-thai, photo-1626700051175 wrap, photo-1621996346565 penne

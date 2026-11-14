@@ -1,5 +1,6 @@
-// Owner: Arshawn. Gemini photo log: camera, then /api/log.
+// Owner: Arshawn. Photo log.
+import { LogScreen } from "@/components/screens/LogScreen";
 
 export default function Page() {
-  return <h1 className="text-2xl font-semibold">Log your plate</h1>;
+  return <LogScreen />;
 }

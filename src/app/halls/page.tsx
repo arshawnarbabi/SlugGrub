@@ -1,5 +1,6 @@
-// Owner: Ethan. Halls list and each hall's menu, plus the cafe board.
+// Owner: Ethan (data). UI: src/components/screens/HallsScreen.tsx (Arshawn).
+import { HallsScreen } from "@/components/screens/HallsScreen";
 
 export default function Page() {
-  return <h1 className="text-2xl font-semibold">Halls</h1>;
+  return <HallsScreen />;
 }

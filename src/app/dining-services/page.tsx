@@ -1,5 +1,6 @@
-// Owner: Karen. Loved and skipped dishes by hall.
+// Owner: Karen (data). UI: src/components/screens/MoreScreens.tsx (Arshawn).
+import { DiningServicesScreen } from "@/components/screens/MoreScreens";
 
 export default function Page() {
-  return <h1 className="text-2xl font-semibold">Dining Services</h1>;
+  return <DiningServicesScreen />;
 }

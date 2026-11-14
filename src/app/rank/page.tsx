@@ -1,5 +1,6 @@
-// Owner: Karen. This-or-that ranking and leaderboard.
+// Owner: Karen (data). UI: src/components/screens/RankScreen.tsx (Arshawn).
+import { RankScreen } from "@/components/screens/RankScreen";
 
 export default function Page() {
-  return <h1 className="text-2xl font-semibold">Rank</h1>;
+  return <RankScreen />;
 }

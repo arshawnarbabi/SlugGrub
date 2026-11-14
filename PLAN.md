@@ -20,11 +20,13 @@ Each person owns their folders. **Don't edit files you don't own.** Ask in the g
 
 | Person | Owns | Folders and files |
 |---|---|---|
-| **Arshawn** | All design (look, layout, tab bar, shared UI), the Today page, the Gemini photo log | `src/app/layout.tsx`, `src/app/globals.css`, `src/components/ui/`, `src/app/page.tsx`, `src/app/log/`, `src/app/api/log/` |
+| **Arshawn** | All design (look, layout, tab bar, shared UI), every screen's UI, the Today page, the Gemini photo log | `src/app/layout.tsx`, `src/app/globals.css`, `src/components/ui/`, `src/components/screens/`, `src/app/page.tsx`, `src/app/log/`, `src/app/api/log/`, `docs/` |
 | **Karen** | This-or-that ranking (Elo), Firebase and sign-in, live QR vote, leaderboard and college rivalry, dining services view | `src/app/rank/`, `src/app/vote/`, `src/app/dining-services/`, `src/lib/rankings.ts`, `src/lib/elo.ts`, `src/lib/firebase.ts` |
 | **Ethan** | Menu fetcher and data, Halls tab, Budget, onboarding, Ask SlugGrub | `scripts/`, `data/`, `src/lib/menus.ts`, `src/lib/budget.ts`, `src/app/halls/`, `src/app/budget/`, `src/app/onboarding/`, `src/app/api/ask/` |
 | **Starting branches** | `arshawn-design`, `karen-firebase`, `ethan-menus` (already on GitHub). After each is merged, make a new branch per feature: `<name>-<feature>`. | |
 | **Shared (ask first)** | Data types, fake data, this plan | `src/lib/types.ts`, `data/mock/`, `PLAN.md`, `AGENTS.md`, `package.json` |
+
+**Screens:** every screen's UI lives in `src/components/screens/` (Arshawn) and reads demo content from `src/components/screens/demo.ts`. Your page file (`src/app/<your route>/page.tsx`) just renders that screen. To make a screen real, replace the demo import in it with your data function, or pass props from your page; ask Arshawn before changing how a screen looks. Design rules: `docs/DESIGN.md`.
 
 **How the pieces connect:** everyone codes against the types in `src/lib/types.ts`. Each owner's `src/lib/*.ts` file exports functions the others call (for example Today calls `getTopDishNow()` from Karen's `rankings.ts` and `getBudgetSnapshot()` from Ethan's `budget.ts`). Those functions return fake data from `data/mock/` until the real version is ready, so nobody waits on anyone. **Keep each function's name and return type stable**; change what's inside freely.
 
@@ -40,9 +42,9 @@ Tick a box when it's merged to `main`. Put your name on anything you pick up tha
 - [ ] Repo connected to Vercel for preview links (who: ?)
 
 ### Arshawn
-- [ ] Visual design: colors, type, spacing, components in `src/components/ui/`
-- [ ] Tab bar: Today · Rank · [camera] · Halls · Budget
-- [ ] Today page (cards below)
+- [x] Visual design: colors, type, spacing, components in `src/components/ui/` (docs/DESIGN.md, /brand)
+- [x] Tab bar: Today · Rank · Halls · Budget + gooey food button (Log a plate, Ask SlugGrub)
+- [x] Today page UI (demo data until rankings, menus and budget are real)
 - [ ] Photo log: camera, send to `/api/log`, Gemini matches dishes to that hall's menu for the meal, show dishes, servings slider, calories from UCSC labels
 - [ ] Use the standard dining hall plate as a size ruler in the Gemini prompt
 
@@ -104,6 +106,7 @@ Judging time: **? (fill in)**
 
 Newest first. Add a line when the team decides something.
 
+- 2026-11-14: All screen UI built from docs/DESIGN.md (Flat + Sidestash, Manrope, brighter UCSC blue, one spring, one goo, cheap blur). Screens live in src/components/screens; teammates wire data into them.
 - 2026-11-14: Web app (Next.js), not native, so judges can vote by QR with nothing to install.
 - 2026-11-14: This-or-that ranking with Elo, not star ratings (HungrySlugs already does stars).
 - 2026-11-14: Slug Points budget stays, as a pace tracker. "Cheapest hall" is out: a meal costs the same at every hall.

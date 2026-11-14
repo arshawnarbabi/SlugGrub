@@ -1,5 +1,6 @@
-// Owner: Ethan. Meal plan, current points, college, usual hall.
+// Owner: Ethan (data). UI: src/components/screens/MoreScreens.tsx (Arshawn).
+import { OnboardingScreen } from "@/components/screens/MoreScreens";
 
 export default function Page() {
-  return <h1 className="text-2xl font-semibold">Welcome</h1>;
+  return <OnboardingScreen />;
 }
