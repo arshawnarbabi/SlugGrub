@@ -708,6 +708,7 @@ effects:
     animate_blur_radius: "never"                # a backdrop blur radius never animates
     opaque_surfaces: "never carry a backdrop blur"   # an opaque nav bar or card gains nothing from it and still pays for it
     filter_blur: "only for state changes, only on small elements (icons, labels, chips), max 4px, only during the 220ms change; filter none at rest"
+    launch_splash_exception: "one full-screen backdrop blur of 12px for about 1 s at a full page load only (his asks 2026-11-14: blur the app while the icon draws, then \"make the blur during loading a bit heavier\", \"per the deisgn.md\"); radius fixed, only opacity animates; removed from the DOM after; the only blur allowed past 8px"
     never_blur: ["photos", "full screens", "lists", "anything while it scrolls"]
     svg_goo_blur: "liquid-gooey only, on small moving pieces; it sleeps when idle"
     reduced_transparency: "remove every backdrop blur, keep the color fade"
@@ -3079,3 +3080,17 @@ intensity and BEHIND all of the sticky content like top buttons or nav bar and i
 underneath"): one shared ramp (--ramp-top / --ramp-bottom) masks both blur layers and the page-color lighten; the top bar is
 sticky (z 6) and the nav bar floats (z 8) above the edges (z 5), which sit above scrolling content (z 1); each edge ends where
 content starts at rest, so nothing is blurred until it scrolls under. Verified in the browser. -->
+
+<!-- 2026-11-14 app icon, card chevrons, launch splash (DECISIONS.md, same date). Icon: the food button (white rice bowl, stroke 1.9,
+on --p9 #0069bf, glyph 56% of the tile), src/app/icon.svg + apple-icon.png. Clickable cards (.card.link) carry .card-chev at the top
+right: 16px ArrowRight01Icon in ink-3, or on a white 26px chip (.on-img) over a photo. Launch splash (src/components/ui/Splash.tsx,
+globals.css "Launch splash", # draft trial): 88px tile radius 20 on --paper; strokes draw via stroke-dashoffset (bowl 0-440 ms,
+rice 90-530, chopsticks 300-560 and 360-600, ease 0.65 0 0.35 1); fade-out 760-1020 ms, opacity only on the full-screen layer,
+4px blur on the tile alone; reduced motion: no draw, 200 ms fade after 300 ms. Once per full page load. -->
+
+<!-- 2026-11-14 splash revised at his ask (DECISIONS.md amendment): no tile; 64px rice bowl in --p9 over the app under one fixed 8px
+backdrop blur; draw timings unchanged; at 760 ms the icon fades with 4px blur and the backdrop layer fades by opacity, both 300 ms,
+same curve. Blur budget exception, launch only: a 7th backdrop layer for about 1 s, radius never animated; removed from the DOM after.
+Seen frozen at 600 ms in Chrome (blurred Today screen, blue bowl centered). -->
+
+<!-- 2026-11-14 splash tuned at his ask: backdrop blur 8px -> 12px (blur_budget.launch_splash_exception), bowl 64px -> 80px. -->

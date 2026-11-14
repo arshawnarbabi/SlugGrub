@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Manrope } from "next/font/google";
 import { TabBar } from "@/components/ui/TabBar";
+import { Splash } from "@/components/ui/Splash";
 import "./globals.css";
 
 // Owner: Arshawn (shared shell). Ask before changing. Font: Manrope (DESIGN typography, his pick).
@@ -26,6 +27,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           {children}
           <TabBar />
         </div>
+        <Splash />
       </body>
     </html>
   );

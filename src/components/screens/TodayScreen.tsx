@@ -21,7 +21,8 @@ export function TodayScreen() {
         <h1 className="title-xl">Good evening, {USER.name}</h1>
       </div>
 
-      <Link href="/halls" className="card flush press" style={{ color: "inherit", textDecoration: "none" }}>
+      <Link href="/halls" className="card flush press link">
+        <span className="card-chev on-img" aria-hidden><Icon icon={ArrowRight01Icon} size={15} sw={2} /></span>
         <Photo src={top.photo} h={170} r={0} eager>
           <span className="on-photo gold"><Icon icon={CrownIcon} size={13} sw={2} /> #1 at your hall</span>
         </Photo>
@@ -35,13 +36,15 @@ export function TodayScreen() {
       </Link>
 
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
-        <Link href="/budget" className="card press" style={{ color: "inherit", textDecoration: "none" }}>
+        <Link href="/budget" className="card press link">
+          <span className="card-chev" aria-hidden><Icon icon={ArrowRight01Icon} size={16} sw={2} /></span>
           <div className="label">Slug Points</div>
           <div className="num" style={{ fontSize: 26, fontWeight: 700, letterSpacing: "-0.04em", marginTop: 2 }}><CountUp to={USER.points} /></div>
           <div style={{ height: 6, background: "var(--paper-2)", borderRadius: 9, marginTop: 6, overflow: "hidden" }}><div style={{ width: `${pct}%`, height: "100%", background: "var(--p9)", borderRadius: 9 }} /></div>
           <div style={{ fontSize: 12, color: "var(--ok)", marginTop: 6, fontWeight: 700 }}>On pace</div>
         </Link>
-        <Link href="/rank?view=Leaderboard" className="card press" style={{ color: "inherit", textDecoration: "none" }}>
+        <Link href="/rank?view=Leaderboard" className="card press link">
+          <span className="card-chev" aria-hidden><Icon icon={ArrowRight01Icon} size={16} sw={2} /></span>
           <div className="label">Your college</div>
           <div className="num" style={{ fontSize: 26, fontWeight: 700, letterSpacing: "-0.04em", marginTop: 2 }}>#3</div>
           <div className="label" style={{ fontSize: 12, marginTop: 2 }}>{USER.college} this week</div>
@@ -49,14 +52,14 @@ export function TodayScreen() {
         </Link>
       </div>
 
-      <Link href="/rank" className="card tight press" style={{ display: "flex", alignItems: "center", gap: 10, color: "inherit", textDecoration: "none" }}>
+      <Link href="/rank" className="card tight press link" style={{ display: "flex", alignItems: "center", gap: 10, paddingRight: 32 }}>
+        <span className="card-chev" aria-hidden><Icon icon={ArrowRight01Icon} size={16} sw={2} /></span>
         <Photo src={DISHES.padthai.photo} w={44} h={44} r={12} />
         <Photo src={DISHES.wrap.photo} w={44} h={44} r={12} />
         <div style={{ flex: 1, minWidth: 0 }}>
           <b style={{ fontSize: 14 }}>Rank your lunch</b>
           <div className="label" style={{ fontSize: 12 }}>Pad thai or the wrap?</div>
         </div>
-        <span className="iconbtn" style={{ width: 32, height: 32 }}><Icon icon={ArrowRight01Icon} size={16} /></span>
       </Link>
 
       <div className="sechead" style={{ marginTop: 6 }}><h2>Best on campus tonight</h2><Link href="/halls" className="seeall">See all</Link></div>
