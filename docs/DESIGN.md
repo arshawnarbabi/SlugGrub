@@ -2877,4 +2877,5 @@ typography.families stays as written above until he picks. -->
 <!-- 2026-11-14 surface option "Sidestash" (his spec, from his own Sidestash app, Palette.swift): the page is a mid cool neutral
 (not the brightest), cards and buttons are LIGHTER than the page with a subtle top-to-bottom neutral gradient (lighter on top), a
 pure white 1px stroke, and Sidestash's chip shadow (ink 8%, blur 2, y 1); floating chrome adds a soft wide layer. It is the default
-on /brand now, beside Chalk, Flat, Stroke and Stroke + shadow. Undecided until he picks. Font default on /brand: Manrope. -->
+on /brand now, beside Chalk, Flat, Stroke and Stroke + shadow. Undecided until he picks. Font default on /brand: Manrope.
+His tweak the same day: cards get a much subtler gradient (L 0.988 to 0.978); buttons, chips and the bottom tab bar keep the stronger one (0.993 to 0.963). -->
