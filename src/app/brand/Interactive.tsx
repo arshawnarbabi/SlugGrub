@@ -27,10 +27,11 @@ const SPRING_SOFT = { type: "spring" as const, stiffness: 260, damping: 30 };
 export function CameraMenu() {
   const [open, setOpen] = useState(false);
   const reduce = useReducedMotion();
-  const t = reduce ? { duration: 0 } : "smooth";
+  // his ask: "a bit more spring". Between the library's smooth (190/26, damping ratio 0.94) and bouncy (320/17, 0.48): ratio 0.62
+  const t = reduce ? { duration: 0 } : { stiffness: 260, damping: 20, mass: 1 };
   return (
     <div className="cam-wrap">
-      <Liquid style={{ position: "relative", width: 60, height: 60 }} blur={7} contrast={20} fill="var(--p9)" shadow="0 1px 2px rgba(20,30,50,.10), 0 10px 26px -8px rgba(20,30,50,.30), inset 0 1px 0 rgba(255,255,255,.28), inset 0 0 0 0.5px rgba(255,255,255,.4)">
+      <Liquid style={{ position: "relative", width: 60, height: 60 }} blur={7} contrast={20} fill="var(--p9)" shadow="0 1px 2px rgba(20,30,50,.10), 0 10px 26px -8px rgba(20,30,50,.30), inset 0 26px 26px -14px rgba(255,255,255,.13), inset 0 -26px 26px -14px rgba(8,16,40,.11), inset 0 1px 0 rgba(255,255,255,.28), inset 0 0 0 0.5px rgba(255,255,255,.4)">
         <Liquid.Item x={open ? -58 : 0} y={open ? -46 : 0} transition={t} style={{ position: "absolute", left: 7, top: 7 }}>
           <button type="button" className={`drop ${open ? "on" : ""}`} aria-label="Ask SlugGrub" tabIndex={open ? 0 : -1}><I icon={SparklesIcon} size={20} sw={1.9} /></button>
         </Liquid.Item>

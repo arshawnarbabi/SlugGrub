@@ -48,7 +48,7 @@ profiles:
   type_scale: "spacious"      # draft (hero numbers are set separately, 48-72px) | compact (1.125) | balanced (1.200) | spacious (1.250) | dramatic (1.333) | editorial (1.414)
   density: "comfortable"      # compact (×0.75) | comfortable (×1.0) | spacious (×1.25)
   motion: "default"           # default | subtle | default | expressive
-  elevation: "default"        # flat (border-only) | default (subtle shadows) | dimensional (richer shadows)
+  elevation: "flat"           # his decision 2026-11-14 (Flat + Sidestash) | flat (border-only) | default (subtle shadows) | dimensional (richer shadows)
   saturation: "default"       # muted (×0.7 chroma) | default (×1.0) | vivid (×1.3)
   warmth: "cool"              # his ask 2026-11-14: "coldish neutral colors" | cool (hue ≈ 240) | neutral (≈ 60) | warm (≈ 40)
   section_padding: "default"  # compact (~96 px) | default (~128 px) | generous (~160 px)
@@ -87,169 +87,175 @@ options:
 # Steps 1–12 follow Radix semantic roles (1 = app bg, 9 = solid CTA, 12 = high-contrast text).
 
 colors:
+  # Generated 2026-11-14 by premium.md generate-palette.ts from his choices: base oklch(0.52 0.165 252) (brighter UCSC-style blue,
+  # his asks), neutral hue 250 (his "coldish neutral colors"). APCA: primary step 9 white-on-CTA Lc 82, text11/step2 Lc 87.
   primary:
-    base: "oklch(0.52 0.165 252)"  # his asks 2026-11-14: UCSC-style blue ("main is blue"), then "make het blue primary brighter quite a bit" (was #003C6C, oklch 0.351 0.1 250); 12 steps generated, previewed in src/app/brand/brand.css as --p1..--p12, written here on approval
-    # Derived 12-step scale (light mode). Generate at instantiation per §Colors → Generating the scale.
-    1:  "<derived>"   # app background
-    2:  "<derived>"   # subtle bg / alt stripe
-    3:  "<derived>"   # component background
-    4:  "<derived>"   # hovered component bg
-    5:  "<derived>"   # active/pressed bg
-    6:  "<derived>"   # subtle border
-    7:  "<derived>"   # interactive border
-    8:  "<derived>"   # focus ring / strong border
-    9:  "<derived = base>"  # solid CTA background
-    10: "<derived>"   # hovered solid
-    11: "<derived>"   # low-contrast text (APCA Lc 60 vs step 2)
-    12: "<derived>"   # high-contrast text (APCA Lc 90 vs step 2)
-    # Dark-mode counterpart — separately derived (NOT inverted; see §Colors → Dark mode):
+    base: "oklch(0.52 0.165 252)"
+    1:  "oklch(0.99 0.005 252)"
+    2:  "oklch(0.97 0.015 252)"
+    3:  "oklch(0.95 0.025 252)"
+    4:  "oklch(0.92 0.04 252)"
+    5:  "oklch(0.88 0.061 252)"
+    6:  "oklch(0.83 0.088 252)"
+    7:  "oklch(0.75 0.124 252)"
+    8:  "oklch(0.66 0.149 252)"
+    9:  "oklch(0.52 0.156 252)"
+    10: "oklch(0.46 0.138 252)"
+    11: "oklch(0.38 0.091 252)"
+    12: "oklch(0.22 0.05 252)"
     dark:
-      1:  "<derived>"
-      2:  "<derived>"
-      3:  "<derived>"
-      4:  "<derived>"
-      5:  "<derived>"
-      6:  "<derived>"
-      7:  "<derived>"
-      8:  "<derived>"
-      9:  "<derived>"
-      10: "<derived>"
-      11: "<derived>"
-      12: "<derived>"
-
+      1:  "oklch(0.17 0.012 252)"
+      2:  "oklch(0.21 0.012 252)"
+      3:  "oklch(0.24 0.021 252)"
+      4:  "oklch(0.28 0.036 252)"
+      5:  "oklch(0.32 0.053 252)"
+      6:  "oklch(0.37 0.071 252)"
+      7:  "oklch(0.44 0.089 252)"
+      8:  "oklch(0.53 0.107 252)"
+      9:  "oklch(0.62 0.119 252)"
+      10: "oklch(0.68 0.113 252)"
+      11: "oklch(0.79 0.065 252)"
+      12: "oklch(0.93 0.035 252)"
   neutral:
-    hue: "<0–360 hue angle — slight tint toward brand warmth>"
-    # 12 steps + dark counterpart. Chroma is very low (~0.01–0.03) so neutrals read as gray.
-    1:  "<derived>"
-    2:  "<derived>"
-    3:  "<derived>"
-    4:  "<derived>"
-    5:  "<derived>"
-    6:  "<derived>"
-    7:  "<derived>"
-    8:  "<derived>"
-    9:  "<derived>"
-    10: "<derived>"
-    11: "<derived>"
-    12: "<derived>"
+    hue: 250
+    1:  "oklch(0.99 0.004 250)"
+    2:  "oklch(0.97 0.005 250)"
+    3:  "oklch(0.95 0.005 250)"
+    4:  "oklch(0.92 0.006 250)"
+    5:  "oklch(0.88 0.006 250)"
+    6:  "oklch(0.83 0.005 250)"
+    7:  "oklch(0.75 0.005 250)"
+    8:  "oklch(0.66 0.004 250)"
+    9:  "oklch(0.55 0.003 250)"
+    10: "oklch(0.49 0.003 250)"
+    11: "oklch(0.38 0.003 250)"
+    12: "oklch(0.22 0.002 250)"
     dark:
-      1:  "<derived>"
-      2:  "<derived>"
-      3:  "<derived>"
-      4:  "<derived>"
-      5:  "<derived>"
-      6:  "<derived>"
-      7:  "<derived>"
-      8:  "<derived>"
-      9:  "<derived>"
-      10: "<derived>"
-      11: "<derived>"
-      12: "<derived>"
-
-  # Optional secondary brand color. Leave commented unless brand truly uses two accents.
-  # secondary:
-  #   base: "<oklch(L C H)>"
-  #   1: "<derived>"  # ... through 12 + dark counterpart, same shape as primary
-
-  # Semantic palettes — pre-anchored to conventional hues. Override `base` only if brand requires.
-  # RESERVED — NOT part of the general palette. Each is used ONLY for its meaning:
-  #   success = positive / confirmation / valid   ·   warning = caution / pending / attention
-  #   danger  = error / destructive / invalid.
-  # Never use semantic colors decoratively or as accents. Only `primary` + `neutral` are general-purpose.
+      1:  "oklch(0.17 0.003 250)"
+      2:  "oklch(0.21 0.003 250)"
+      3:  "oklch(0.24 0.003 250)"
+      4:  "oklch(0.28 0.004 250)"
+      5:  "oklch(0.32 0.004 250)"
+      6:  "oklch(0.37 0.003 250)"
+      7:  "oklch(0.44 0.003 250)"
+      8:  "oklch(0.53 0.003 250)"
+      9:  "oklch(0.62 0.003 250)"
+      10: "oklch(0.68 0.003 250)"
+      11: "oklch(0.79 0.002 250)"
+      12: "oklch(0.93 0.002 250)"
   success:
-    base: "oklch(0.55 0.13 145)"   # green
-    1:  "<derived>"
-    2:  "<derived>"
-    3:  "<derived>"
-    4:  "<derived>"
-    5:  "<derived>"
-    6:  "<derived>"
-    7:  "<derived>"
-    8:  "<derived>"
-    9:  "<derived = base>"
-    10: "<derived>"
-    11: "<derived>"
-    12: "<derived>"
+    base: "oklch(0.55 0.13 145)"
+    1:  "oklch(0.99 0.013 145)"
+    2:  "oklch(0.97 0.013 145)"
+    3:  "oklch(0.95 0.023 145)"
+    4:  "oklch(0.92 0.039 145)"
+    5:  "oklch(0.88 0.059 145)"
+    6:  "oklch(0.83 0.078 145)"
+    7:  "oklch(0.75 0.098 145)"
+    8:  "oklch(0.66 0.117 145)"
+    9:  "oklch(0.55 0.13 145)"
+    10: "oklch(0.49 0.124 145)"
+    11: "oklch(0.38 0.072 145)"
+    12: "oklch(0.22 0.039 145)"
     dark:
-      1:  "<derived>"
-      2:  "<derived>"
-      3:  "<derived>"
-      4:  "<derived>"
-      5:  "<derived>"
-      6:  "<derived>"
-      7:  "<derived>"
-      8:  "<derived>"
-      9:  "<derived>"
-      10: "<derived>"
-      11: "<derived>"
-      12: "<derived>"
+      1:  "oklch(0.17 0.009 145)"
+      2:  "oklch(0.21 0.009 145)"
+      3:  "oklch(0.24 0.017 145)"
+      4:  "oklch(0.28 0.028 145)"
+      5:  "oklch(0.32 0.042 145)"
+      6:  "oklch(0.37 0.056 145)"
+      7:  "oklch(0.44 0.07 145)"
+      8:  "oklch(0.53 0.084 145)"
+      9:  "oklch(0.62 0.094 145)"
+      10: "oklch(0.68 0.089 145)"
+      11: "oklch(0.79 0.051 145)"
+      12: "oklch(0.93 0.028 145)"
   warning:
-    base: "oklch(0.72 0.15 75)"    # amber
-    1:  "<derived>"
-    2:  "<derived>"
-    3:  "<derived>"
-    4:  "<derived>"
-    5:  "<derived>"
-    6:  "<derived>"
-    7:  "<derived>"
-    8:  "<derived>"
-    9:  "<derived = base>"
-    10: "<derived>"
-    11: "<derived>"
-    12: "<derived>"
+    base: "oklch(0.72 0.15 75)"
+    1:  "oklch(0.99 0.008 75)"
+    2:  "oklch(0.97 0.015 75)"
+    3:  "oklch(0.94 0.027 75)"
+    4:  "oklch(0.91 0.045 75)"
+    5:  "oklch(0.88 0.068 75)"
+    6:  "oklch(0.84 0.09 75)"
+    7:  "oklch(0.8 0.112 75)"
+    8:  "oklch(0.76 0.135 75)"
+    9:  "oklch(0.72 0.15 75)"
+    10: "oklch(0.64 0.135 75)"
+    11: "oklch(0.5 0.083 75)"
+    12: "oklch(0.34 0.045 75)"
     dark:
-      1:  "<derived>"
-      2:  "<derived>"
-      3:  "<derived>"
-      4:  "<derived>"
-      5:  "<derived>"
-      6:  "<derived>"
-      7:  "<derived>"
-      8:  "<derived>"
-      9:  "<derived>"
-      10: "<derived>"
-      11: "<derived>"
-      12: "<derived>"
+      1:  "oklch(0.18 0.011 75)"
+      2:  "oklch(0.22 0.011 75)"
+      3:  "oklch(0.26 0.019 75)"
+      4:  "oklch(0.31 0.032 75)"
+      5:  "oklch(0.37 0.049 75)"
+      6:  "oklch(0.44 0.065 75)"
+      7:  "oklch(0.52 0.081 75)"
+      8:  "oklch(0.62 0.097 75)"
+      9:  "oklch(0.72 0.108 75)"
+      10: "oklch(0.78 0.103 75)"
+      11: "oklch(0.85 0.059 75)"
+      12: "oklch(0.93 0.032 75)"
   danger:
-    base: "oklch(0.55 0.20 25)"    # red
-    1:  "<derived>"
-    2:  "<derived>"
-    3:  "<derived>"
-    4:  "<derived>"
-    5:  "<derived>"
-    6:  "<derived>"
-    7:  "<derived>"
-    8:  "<derived>"
-    9:  "<derived = base>"
-    10: "<derived>"
-    11: "<derived>"
-    12: "<derived>"
+    base: "oklch(0.55 0.20 25)"
+    1:  "oklch(0.99 0.005 25)"
+    2:  "oklch(0.97 0.015 25)"
+    3:  "oklch(0.95 0.025 25)"
+    4:  "oklch(0.92 0.041 25)"
+    5:  "oklch(0.88 0.064 25)"
+    6:  "oklch(0.83 0.095 25)"
+    7:  "oklch(0.75 0.15 25)"
+    8:  "oklch(0.66 0.18 25)"
+    9:  "oklch(0.55 0.2 25)"
+    10: "oklch(0.49 0.19 25)"
+    11: "oklch(0.38 0.11 25)"
+    12: "oklch(0.22 0.06 25)"
     dark:
-      1:  "<derived>"
-      2:  "<derived>"
-      3:  "<derived>"
-      4:  "<derived>"
-      5:  "<derived>"
-      6:  "<derived>"
-      7:  "<derived>"
-      8:  "<derived>"
-      9:  "<derived>"
-      10: "<derived>"
-      11: "<derived>"
-      12: "<derived>"
+      1:  "oklch(0.17 0.014 25)"
+      2:  "oklch(0.21 0.014 25)"
+      3:  "oklch(0.24 0.026 25)"
+      4:  "oklch(0.28 0.043 25)"
+      5:  "oklch(0.32 0.065 25)"
+      6:  "oklch(0.37 0.086 25)"
+      7:  "oklch(0.44 0.108 25)"
+      8:  "oklch(0.53 0.13 25)"
+      9:  "oklch(0.62 0.144 25)"
+      10: "oklch(0.68 0.137 25)"
+      11: "oklch(0.79 0.079 25)"
+      12: "oklch(0.93 0.036 25)"
+  accent:
+    # UCSC-style gold, used ONLY for #1 moments and highlights (crown badge, top pick). # draft (Claude's rule)
+    3:  "oklch(0.97 0.06 95)"    # gold tint background
+    6:  "oklch(0.92 0.12 93)"
+    9:  "oklch(0.85 0.17 90)"    # solid gold (#FDC700 family)
+    11: "oklch(0.5 0.11 85)"     # gold text on tint
+  college:
+    # Rivalry board only, one hue per dining hall. # draft
+    jrl_c9: "oklch(0.55 0.15 275)"
+    cowell_stevenson: "oklch(0.7 0.14 70)"
+    crown_merrill: "oklch(0.6 0.11 200)"
+    porter_kresge: "oklch(0.58 0.17 345)"
+    carson_oakes: "oklch(0.66 0.16 45)"
+  macro:
+    # Private photo log only. # draft
+    protein: "oklch(0.64 0.16 25)"
+    carbs: "oklch(0.74 0.15 65)"
+    fat: "oklch(0.64 0.12 250)"
 
-  # Surface role tokens — reference the underlying neutral steps
   surface:
-    canvas: "{colors.neutral.1}"   # page background
-    subtle: "{colors.neutral.2}"   # alt-stripe / subtle panel
-    raised: "{colors.neutral.3}"   # cards
-    overlay: "{colors.neutral.1}"  # modals/popovers (white in light, +1 in dark per §Colors)
+    canvas: "oklch(0.948 0.004 250)"   # page background: his pick 2026-11-14, background step 7 "Gray"
+    subtle: "oklch(0.916 0.005 250)"   # segmented-control track, active tab capsule (canvas minus 0.032)
+    raised: "oklch(0.985 0.002 250)"   # flat cards, flat buttons, pills # draft: card fill step 4, his pick still open (Card fill menu on /brand)
+    overlay: "oklch(1 0 0)"            # sheets and popovers
+    raise_gradient: "linear-gradient(180deg, oklch(0.993 0.002 250) 0%, oklch(0.963 0.004 250) 100%)"   # Sidestash finish, ONLY on the bottom nav bar and top bar round buttons, and as inset light/shade of the same strength on the camera blob (his decisions 2026-11-14)
 
   # Border role tokens
   border:
-    subtle: "{colors.neutral.6}"   # non-interactive separators
-    default: "{colors.neutral.7}"  # interactive borders (inputs, buttons)
-    strong: "{colors.neutral.8}"   # hovered/focused interactive
+    subtle: "oklch(0 0 0 / 0.07)"  # list dividers, always a 0.5px hairline (his ask "normal hairlines")
+    default: "oklch(0 0 0 / 0.07)" # flat elements carry NO border; inputs only
+    strong: "{colors.primary.8}"   # focus ring
+    highlight: "oklch(1 0 0)"      # the Sidestash white 0.5px hairline (nav bar, top bar buttons; camera blob at 40% white)
     # Dark-mode role override, optional. Every role ref above already switches with its palette's
     # `dark:` ramp. When a role must point at a DIFFERENT step in dark mode (usually to meet APCA),
     # give its group a `dark:` map, the same shape as a palette's `dark:`, listing only those roles.
@@ -260,8 +266,9 @@ colors:
 
   # Text role tokens
   text:
-    primary: "{colors.neutral.12}"
-    secondary: "{colors.neutral.11}"
+    primary: "oklch(0.18 0.015 255)"   # ink
+    secondary: "oklch(0.42 0.012 255)"
+    tertiary: "oklch(0.6 0.01 255)"     # labels and meta; sentence case, never all caps (his rule)
     disabled: "{colors.neutral.8}"
     inverse: "{colors.neutral.1}"
     link: "{colors.primary.11}"
@@ -481,18 +488,18 @@ spacing:
 radius:
   scale:
     none: 0
-    sm:   4
-    md:   8
-    lg:   12
-    xl:   16
-    "2xl": 24
+    sm:   8
+    md:   12
+    lg:   18     # flat cards
+    xl:   22
+    "2xl": 28
     full: 9999
   # Per-component assignments resolved by profile.
   # Default profile assignments shown:
   components:
-    button: "{radius.scale.md}"     # sharp→sm, soft→lg, pill→full
+    button: "{radius.scale.full}"   # pill buttons everywhere; icon buttons are circles
     input:  "{radius.scale.md}"     # sharp→sm, soft→md, pill→md
-    card:   "{radius.scale.lg}"     # sharp→md, soft→xl, pill→xl
+    card:   "{radius.scale.lg}"     # 18px; inner photos follow concentric corners (outer radius minus inset)
     modal:  "{radius.scale.xl}"     # sharp→lg, soft→2xl, pill→2xl
     badge:  "{radius.scale.sm}"     # sharp→sm, soft→md, pill→full
     chip:   "{radius.scale.full}"
@@ -511,15 +518,15 @@ elevation:
   # Profile applies multiplier: flat = use border instead, dimensional = +1 opacity step.
   scale:
     "0": "none"
-    "1": "0 1px 2px 0 oklch(from {colors.shadow_tint} l c h / 0.06), 0 1px 3px 0 oklch(from {colors.shadow_tint} l c h / 0.08)"
-    "2": "0 2px 4px 0 oklch(from {colors.shadow_tint} l c h / 0.06), 0 4px 8px 0 oklch(from {colors.shadow_tint} l c h / 0.08)"
+    "1": "0 1px 2px oklch(0.22 0.01 255 / 0.08)"   # Sidestash chip shadow (top bar round buttons)
+    "2": "0 1px 2px oklch(0.22 0.01 255 / 0.08), 0 10px 28px -6px oklch(0.22 0.01 255 / 0.14)"   # floating: bottom nav bar
     "3": "0 4px 8px 0 oklch(from {colors.shadow_tint} l c h / 0.06), 0 8px 16px 0 oklch(from {colors.shadow_tint} l c h / 0.10)"
     "4": "0 8px 16px 0 oklch(from {colors.shadow_tint} l c h / 0.08), 0 16px 32px 0 oklch(from {colors.shadow_tint} l c h / 0.12)"
     "5": "0 16px 32px 0 oklch(from {colors.shadow_tint} l c h / 0.10), 0 32px 64px 0 oklch(from {colors.shadow_tint} l c h / 0.16)"
 
   # Per-component default assignments
   components:
-    card: "{elevation.scale.1}"
+    card: "{elevation.scale.0}"   # flat cards: no shadow (his decision 2026-11-14)
     dropdown: "{elevation.scale.2}"
     popover: "{elevation.scale.2}"
     tooltip: "{elevation.scale.3}"
@@ -531,11 +538,11 @@ elevation:
 # `profiles.elevation` picks the preset (flat → border, default → subtle shadow, dimensional → richer
 # shadow); the knobs below are the granular override. All premium-bounded — see body §Surface separation.
 surface_separation:
-  strategy: "shadow"          # shadow | border | surface-tone | shadow+border — the ONE primary strategy (never all three)
+  strategy: "surface-tone"    # his decision 2026-11-14: flat elements separate by tone only; only the nav bar, top bar buttons and camera get the Sidestash finish | shadow | border | surface-tone | shadow+border — the ONE primary strategy (never all three)
   shadow_strength: "default"  # subtle (×0.7 alpha) | default (×1.0) | strong (×1.4) — multiplies each elevation layer's opacity
   shadow_size: "default"      # tight (×0.85 blur+offset) | default (×1.0) | airy (×1.2) — multiplies shadow blur + offset
-  border_width: 1             # 1 | 1.5 | 2 (px) — stroke thickness when the strategy uses a border (system ceiling = 2px)
-  hover: "lift"               # lift (raise one elevation level) | border (darken to border.strong) | none
+  border_width: 0.5           # his ask: "normal hairlines" (one device pixel on retina) | 1 | 1.5 | 2 (px) — stroke thickness when the strategy uses a border (system ceiling = 2px)
+  hover: "none"               # flat: hover lightens the fill slightly instead of lifting | lift (raise one elevation level) | border (darken to border.strong) | none
                               #   applied only under @media (hover: hover) and (pointer: fine); touch gets :active (§Input modality)
 
 # ─── Z-INDEX ───
@@ -563,15 +570,16 @@ motion:
     deliberate: "500ms"
 
   easing:
-    standard: "cubic-bezier(0.2, 0, 0, 1)"
+    standard: "cubic-bezier(0.22, 1, 0.36, 1)"   # the one easing for presses and fades # draft
     emphasized: "cubic-bezier(0.2, 0, 0, 1)"
     decelerate: "cubic-bezier(0, 0, 0, 1)"
     accelerate: "cubic-bezier(0.3, 0, 1, 1)"
 
   spring:
-    gentle:  { stiffness: 170, damping: 26 }
-    snappy:  { stiffness: 300, damping: 30 }
+    gentle:  { stiffness: 260, damping: 30 }             # rank pick settle # draft
+    snappy:  { stiffness: 420, damping: 36, mass: 0.9 }  # THE spring: tab capsule, segmented pill, check marks # draft
     bouncy:  { stiffness: 400, damping: 22 }
+    gooey:   { stiffness: 260, damping: 20, mass: 1 }    # camera menu (liquid-gooey): his ask "a bit more spring" than the smooth preset
 
   # Profile modifiers
   profile_modifiers:
@@ -670,7 +678,21 @@ effects:
 
   # One entry per effect in the build. SPEC.md sections reference these entries by `name`.
   # An effect without an entry, a fallback, a reduced-motion path and a measured result does not ship.
-  registry: []
+  registry:
+    - id: scroll-edge-blur
+      what: "iOS-style soft scroll edge: progressive blur plus a fade to the page color at the top (under the status bar) and bottom (under the tab bar) of every scrolling screen"   # his ask 2026-11-14
+      tier: 2
+      how: "5 stacked backdrop-filter layers (1, 2, 4, 8, 16px), each masked to a gradient band, plus a color fade; pinned outside the scroll layer"
+      fallback: "the color fade only"
+      reduced: "prefers-reduced-transparency: fade only"
+      measured: "not yet (QA Gate B2 before ship)"
+    - id: gooey-liquid
+      what: "liquid-gooey 0.2.2 (MIT, no deps): pieces merge and split like liquid, text and icons stay crisp"   # his ask: subtle and consistent
+      tier: 1
+      how: "SVG goo filter on a silhouette layer under live DOM; camera menu splits into Log a plate and Ask SlugGrub"
+      fallback: "plain spring move without goo"
+      reduced: "prefers-reduced-motion: instant, no goo travel"
+      measured: "not yet (QA Gate B2 before ship)"
   # Example entry (copy into the list above; values are illustrative):
   # registry:
   #   - name: "hero-water-ripple"                 # SPEC.md references the effect by this name
@@ -1500,6 +1522,25 @@ derivation:
   neutral_chroma_default: 0.25   # × the cream base curve; lower = closer to a clean off-white
 
 ---
+
+# SlugGrub design system (current, 2026-11-14)
+
+The one-screen summary. The frontmatter above holds the exact values; /brand (src/app/brand) renders all of it.
+Status: values he chose are unmarked; Claude's inferences carry # draft above.
+
+- **Look:** Flat + Sidestash (his decision). Everything is flat (solid fill, no stroke, no shadow, separated by tone) EXCEPT three
+  things with the Sidestash finish (raised gradient L 0.993 to 0.963, white 0.5px hairline, chip shadow): the bottom nav bar, the
+  round buttons in each screen's top bar, and the camera button (same-strength light and shade inside its gooey blob).
+- **Color:** page oklch(0.948 0.004 250) (his step 7); flat fill oklch(0.985 0.002 250) (draft, his Card fill pick open); primary
+  blue oklch(0.52 0.165 252), a brighter UCSC-style blue (his asks); gold only for #1 moments (draft); cool neutrals hue 250 (his ask).
+- **Type:** Manrope for everything (his pick, trial); bold with tight tracking for titles and hero numbers; tabular figures;
+  sentence case only, never all caps (his rule).
+- **Icons:** Hugeicons free Stroke Rounded (his rule), one stroke weight, heavier on the active tab.
+- **Shape:** pill buttons and chips, circle icon buttons, 18px flat cards, concentric corners, 0.5px hairlines (his ask).
+- **Motion:** one spring for slides and settles, short press feedback, numbers count up once, gooey in the camera menu with a bit
+  more spring than smooth (his ask); reduced motion makes everything instant. See motion and effects.registry above.
+- **Scroll edges:** iOS-style progressive blur and fade at the top and bottom of scrolling screens (his ask).
+- **Open picks on /brand:** Card fill step; blue variant (Bright is current); surface switch kept only for comparison.
 
 # How to use this template
 

@@ -20,9 +20,9 @@ const BACKGROUNDS = [
   { id: "0.985", label: "2 · Near white" },
   { id: "0.977", label: "3 · Mist (Stroke)" },
   { id: "0.970", label: "4 · Light" },
-  { id: "0.962", label: "5 · Flat (current)" },
+  { id: "0.962", label: "5 · Flat" },
   { id: "0.955", label: "6 · Soft gray" },
-  { id: "0.948", label: "7 · Gray" },
+  { id: "0.948", label: "7 · Gray (chosen)" },
   { id: "0.944", label: "8 · Sidestash" },
   { id: "0.938", label: "9 · Sidestash original" },
   { id: "0.930", label: "10 · Deeper gray" },
@@ -55,7 +55,7 @@ export function SurfaceToggle({ fonts, initialFont }: { fonts: FontOption[]; ini
   const [surface, setSurface] = useState<Surface>("hybrid");
   const [font, setFont] = useState(initialFont);
   const [blue, setBlue] = useState<string>("bright");
-  const [bg, setBg] = useState<string>("0.962");
+  const [bg, setBg] = useState<string>("0.948");
   const [cardFill, setCardFill] = useState<string>("0.985");
 
   useEffect(() => {

@@ -92,6 +92,29 @@ Most entries use the plain format above. Two kinds of decision come up on every 
 - **Consequences:** Measured numbers recorded in the registry entry. Revisit only if a new device class is added to QA.md `runtime.devices`, with fresh measurements.
 - **Status:** locked
 
+
+# SlugGrub decisions
+
+## 2026-11-14 — Surface: Flat + Sidestash
+- **Context:** Compared Chalk, Flat, Stroke, Stroke + shadow, Sidestash and mixes on /brand.
+- **Options:** all-flat; all-Sidestash; Sidestash with solid cards; flat with Sidestash on a few controls.
+- **Choice:** his words: "lets do flat + sidestash as defauly ... make the nav bar button and the top bar buttons and the camera button sidestash style but everythign else is flat, like every other button and element is flat." Sidestash finish uses one gradient strength everywhere it appears ("anything sidestash for this version has the same default gradeint strength").
+- **Rationale:** his taste call after seeing every option on the real screens; flat keeps food photos the loudest thing; the tactile finish marks the three controls you press most.
+- **Consequences:** DESIGN.md surface, border, elevation and surface_separation reflect it; card and button rules must live in separate selectors (a shared :is() list caused a specificity bug on 2026-11-14).
+- **Status:** locked
+
+## 2026-11-14 — Page background: step 7 "Gray"
+- **Choice:** oklch(0.948 0.004 250), his pick from 11 steps ("make 7 gray the background").
+- **Status:** locked
+
+## 2026-11-14 — Color, type, icons, case
+- **Choice:** cool neutrals hue 250 ("coldish neutral colors"); a brighter UCSC-style blue, oklch(0.52 0.165 252) ("make het blue primary brighter quite a bit"); Manrope ("lets try manrope as defauly", trial); Hugeicons ("for icons we use hugeicons"); no all-caps text anywhere ("i dont wnat anything all caps text").
+- **Status:** locked (Manrope as a trial; blue variant still comparable on /brand)
+
+## 2026-11-14 — Motion and gooey
+- **Choice:** smooth, premium, subtle micro-interactions, never gimmicky; gooey kept subtle and consistent; the gooey camera spring has "a bit more spring" than the library's smooth preset.
+- **Status:** approved (exact spring values # draft in DESIGN.md motion)
+
 # AI Agent Contract (decisions)
 1. **Read before proposing or changing.** Consult `DECISIONS.md` before suggesting OR making any change to something it covers.
 2. **A request that touches a locked decision is NOT itself authorization to reopen it** — even when phrased as a direct instruction (e.g. "switch the cards to borders," "make it green"). A stakeholder asking for the *change* is not the same as the human explicitly asking to *reopen the locked decision*. Before modifying any file, you MUST: **(a)** surface the locked entry, **(b)** quote its documented rationale, **(c)** ask the human to confirm they intend to supersede it. Implement only after that explicit confirmation — then append a new superseding entry. Do **not** implement in the same turn as the request. (This is the analog of the QA gate: locked decisions are a gate you don't silently pass.)
