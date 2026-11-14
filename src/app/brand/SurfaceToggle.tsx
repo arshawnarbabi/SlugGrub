@@ -5,8 +5,8 @@
 import { useEffect, useState } from "react";
 
 const SURFACES = [
-  { id: "sidestash-solid", label: "Sidestash, solid cards" },
   { id: "hybrid", label: "Flat + Sidestash" },
+  { id: "sidestash-solid", label: "Sidestash, solid cards" },
   { id: "sidestash", label: "Sidestash" },
   { id: "chalk", label: "Chalk" },
   { id: "flat", label: "Flat" },
@@ -29,6 +29,17 @@ const BACKGROUNDS = [
   { id: "0.920", label: "11 · Darkest" },
 ] as const;
 
+const CARD_FILLS = [
+  { id: "1.000", label: "1 · Pure white" },
+  { id: "0.995", label: "2 · White" },
+  { id: "0.990", label: "3 · Soft white" },
+  { id: "0.985", label: "4 · Near white (current)" },
+  { id: "0.980", label: "5 · Mist" },
+  { id: "0.975", label: "6 · Light gray" },
+  { id: "0.970", label: "7 · Gray" },
+  { id: "0.960", label: "8 · Deeper gray" },
+] as const;
+
 const BLUES = [
   { id: "bright", label: "Bright" },
   { id: "ios", label: "iOS blue" },
@@ -41,10 +52,15 @@ const BLUES = [
 export type FontOption = { id: string; label: string; css: string };
 
 export function SurfaceToggle({ fonts, initialFont }: { fonts: FontOption[]; initialFont: string }) {
-  const [surface, setSurface] = useState<Surface>("sidestash-solid");
+  const [surface, setSurface] = useState<Surface>("hybrid");
   const [font, setFont] = useState(initialFont);
   const [blue, setBlue] = useState<string>("bright");
   const [bg, setBg] = useState<string>("0.962");
+  const [cardFill, setCardFill] = useState<string>("0.985");
+
+  useEffect(() => {
+    document.querySelector<HTMLElement>(".sg")?.style.setProperty("--card", `oklch(${parseFloat(cardFill)} 0.002 250)`);
+  }, [cardFill]);
 
   useEffect(() => {
     const el = document.querySelector<HTMLElement>(".sg");
@@ -95,6 +111,12 @@ export function SurfaceToggle({ fonts, initialFont }: { fonts: FontOption[]; ini
       <select id="sg-bg" className="font-select" value={bg} onChange={(e) => setBg(e.target.value)}>
         {BACKGROUNDS.map((b) => (
           <option key={b.id} value={b.id}>{b.label}</option>
+        ))}
+      </select>
+      <label className="eyebrow" htmlFor="sg-card">Card fill</label>
+      <select id="sg-card" className="font-select" value={cardFill} onChange={(e) => setCardFill(e.target.value)}>
+        {CARD_FILLS.map((c) => (
+          <option key={c.id} value={c.id}>{c.label}</option>
         ))}
       </select>
       <label className="eyebrow" htmlFor="sg-blue">Blue</label>

@@ -2925,3 +2925,11 @@ until he picks a step. -->
 liquid layer (invisible), the scrolling screen's flex column squashed the Halls carousel and the Today photo card to zero height,
 and the rank "or" disc sat under the animated cards. Control bar moved to the bottom of the kit page. Rule for the real build:
 scrolling screens set flex-shrink 0 on their children; a Liquid group always gets an explicit size. -->
+
+<!-- 2026-11-14 HIS DECISION (surface): "lets do flat + sidestash as defauly ... make the nav bar button and the top bar buttons and
+the camera button sidestash style but everythign else is flat, like every other button and element is flat." So: the bottom
+navigation bar, the round buttons in each screen's top bar, and the camera button get the Sidestash finish (raised gradient, white
+0.5px hairline, chip shadow; the camera keeps its blue gooey fill with a white top sheen and hairline). Every other element (cards,
+primary and secondary buttons, See all pills, segmented pills, chips, other icon buttons) is flat: solid fill, no stroke, no shadow.
+Verified by computed style on /brand. Still his to pick on /brand: background step (Background menu, default 0.962) and card fill
+step (Card fill menu, 8 steps from 1.000 to 0.960, default 0.985). -->

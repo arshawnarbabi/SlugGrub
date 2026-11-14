@@ -354,7 +354,7 @@ const MANROPE = FONTS.find((f) => f.id === "manrope")!.css;
 
 export default function BrandKit() {
   return (
-    <div className={`sg ${FONT_VARS}`} data-surface="sidestash" data-cards="solid" style={{ "--sans": MANROPE, "--display": MANROPE } as React.CSSProperties}>
+    <div className={`sg ${FONT_VARS}`} data-surface="hybrid" style={{ "--sans": MANROPE, "--display": MANROPE } as React.CSSProperties}>
       <SurfaceToggle fonts={FONTS.map(({ id, label, css }) => ({ id, label, css }))} initialFont="manrope" />
       <div className="wrap">
         <header className="hero">
