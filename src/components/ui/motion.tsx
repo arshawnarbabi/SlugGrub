@@ -12,8 +12,9 @@ export const SPRING_CFG = { stiffness: 300, damping: 28, mass: 1 };
 export const SPRING = { type: "spring" as const, ...SPRING_CFG };
 export const GOO = { blur: 5, contrast: 18 };
 // No trailing "move" spring anywhere: the liquid follows its element exactly, so THE spring is the only spring (consistency fix).
-export const STATE_IN = { opacity: 1, filter: "blur(0px)", scale: 1 };
-export const STATE_OUT = { opacity: 0, filter: "blur(4px)", scale: 0.92 };
+// THE state change (his asks 2026-11-14): a cheap smooth blur + fade out and in. No scale, no slide, nothing "coming in".
+export const STATE_IN = { opacity: 1, filter: "blur(0px)" };
+export const STATE_OUT = { opacity: 0, filter: "blur(4px)" };
 export const STATE_FADE = { duration: 0.22, ease: [0.22, 1, 0.36, 1] as const };
 
 /** Swap: anything whose content changes with state blur-fades and morphs into its new value. */
@@ -28,7 +29,7 @@ export function Swap({ id, children, rotate = 0, className, style }: { id: strin
         initial={reduce ? false : { ...STATE_OUT, rotate: -rotate }}
         animate={{ ...STATE_IN, rotate: 0, transitionEnd: { filter: "none" } }}
         exit={reduce ? { opacity: 0 } : { ...STATE_OUT, rotate }}
-        transition={reduce ? { duration: 0 } : { opacity: STATE_FADE, filter: STATE_FADE, scale: SPRING, rotate: SPRING }}
+        transition={reduce ? { duration: 0 } : { opacity: STATE_FADE, filter: STATE_FADE, rotate: SPRING }}
       >
         {children}
       </motion.span>
@@ -51,15 +52,29 @@ function useOpeningScreen() {
   return opening;
 }
 
-/** Appear: a block that enters with a state change (switching meal, a new result). Never animates while the page is opening. */
-export function Appear({ children, delay = 0, className, style }: { children: React.ReactNode; delay?: number; className?: string; style?: React.CSSProperties }) {
+/** Appear: a block whose content changes with what the student pressed (meal, hall, result, step). The old block blurs and fades
+ *  out, the new one blurs and fades in: a light 2px blur (cheap on big blocks), opacity, nothing moves. Pass `id` so it knows when
+ *  the content changed. Never animates while the page opens (pages open static). */
+const BLOCK_OUT = { opacity: 0, filter: "blur(2px)" };
+const BLOCK_IN = { opacity: 1, filter: "blur(0px)" };
+export function Appear({ id = "static", children, className, style }: { id?: string | number; children: React.ReactNode; delay?: number; className?: string; style?: React.CSSProperties }) {
   const reduce = useReducedMotion();
   const opening = useOpeningScreen();
+  const fast = { duration: 0.16, ease: [0.22, 1, 0.36, 1] as const };
   return (
-    <motion.div className={className} style={style} initial={reduce || opening ? false : STATE_OUT} animate={{ ...STATE_IN, transitionEnd: { filter: "none" } }}
-      transition={reduce ? { duration: 0 } : { opacity: { ...STATE_FADE, delay }, filter: { ...STATE_FADE, delay }, scale: { ...SPRING, delay } }}>
-      {children}
-    </motion.div>
+    <AnimatePresence mode="wait" initial={false}>
+      <motion.div
+        key={id}
+        className={className}
+        style={style}
+        initial={reduce || opening ? false : BLOCK_OUT}
+        animate={{ ...BLOCK_IN, transitionEnd: { filter: "none" } }}
+        exit={reduce ? { opacity: 0, transition: { duration: 0 } } : { ...BLOCK_OUT, transition: { duration: 0.1, ease: "easeOut" } }}
+        transition={reduce ? { duration: 0 } : fast}
+      >
+        {children}
+      </motion.div>
+    </AnimatePresence>
   );
 }
 

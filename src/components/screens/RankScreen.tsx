@@ -25,7 +25,7 @@ export function RankScreen() {
         <Link href="/vote" className="iconbtn" aria-label="Live vote"><Icon icon={QrCodeIcon} size={18} /></Link>
       </div>}>
 <Seg options={VIEWS} value={view} onChange={setView} label="Rank view" />
-      {view === "This or that" ? <Appear key="duel"><Duels /></Appear> : <Appear key="board"><Board /></Appear>}
+      {view === "This or that" ? <Appear id="duel"><Duels /></Appear> : <Appear id="board"><Board /></Appear>}
     </Screen>
   );
 }
@@ -47,7 +47,7 @@ function Duels() {
         <div className="label">Lunch at {USER.hall}</div>
         <div className="title-lg">Which was better?</div>
       </div>
-      <Appear key={i} className="duel">
+      <Appear id={i} className="duel">
         {[a, b].map((d, k) => (
           <motion.button
             key={d.id}
@@ -61,7 +61,7 @@ function Duels() {
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={d.photo} alt="" />
               {pick === k && (
-                <motion.span className="pick-check" initial={reduce ? false : STATE_OUT} animate={{ ...STATE_IN, transitionEnd: { filter: "none" } }} transition={reduce ? { duration: 0 } : { opacity: STATE_FADE, filter: STATE_FADE, scale: SPRING }}>
+                <motion.span className="pick-check" initial={reduce ? false : STATE_OUT} animate={{ ...STATE_IN, transitionEnd: { filter: "none" } }} transition={reduce ? { duration: 0 } : { opacity: STATE_FADE, filter: STATE_FADE }}>
                   <Icon icon={Tick02Icon} size={16} sw={2.6} />
                 </motion.span>
               )}
@@ -101,7 +101,7 @@ function Board() {
         <div className="title-lg" style={{ marginTop: 2 }}>{USER.college} is <span style={{ color: "var(--p9)" }}>#3</span> and climbing</div>
       </div>
       <Seg options={BOARDS} value={kind} onChange={setKind} label="Leaderboard" />
-      <Appear key={kind} className="card" style={{ padding: "2px 14px" }}>
+      <Appear id={kind} className="card" style={{ padding: "2px 14px" }}>
         {rows.map((h, n) => {
           const name = kind === "Halls" ? h.short : h.short.split("/")[0];
           const me = h.short.startsWith(USER.college);

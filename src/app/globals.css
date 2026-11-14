@@ -90,14 +90,6 @@ img { display: block; max-width: 100%; }
 .edge.top { top: 0; height: var(--top-chrome); }
 .edge.bottom { bottom: 0; height: var(--bottom-chrome); }
 .edge > i { position: absolute; inset: 0; }
-.edge.top > i:nth-child(1) { backdrop-filter: blur(1px); mask-image: linear-gradient(to top, transparent 0%, #000 25%, #000 50%, transparent 75%); }
-.edge.top > i:nth-child(2) { backdrop-filter: blur(2px); mask-image: linear-gradient(to top, transparent 25%, #000 50%, #000 75%, transparent 100%); }
-.edge.top > i:nth-child(3) { backdrop-filter: blur(4px); mask-image: linear-gradient(to top, transparent 50%, #000 75%, #000 100%, transparent 125%); }
-.edge.top > i:nth-child(4) { backdrop-filter: blur(8px); mask-image: linear-gradient(to top, transparent 75%, #000 100%); }
-.edge.bottom > i:nth-child(1) { backdrop-filter: blur(1px); mask-image: linear-gradient(to bottom, transparent 0%, #000 25%, #000 50%, transparent 75%); }
-.edge.bottom > i:nth-child(2) { backdrop-filter: blur(2px); mask-image: linear-gradient(to bottom, transparent 25%, #000 50%, #000 75%, transparent 100%); }
-.edge.bottom > i:nth-child(3) { backdrop-filter: blur(4px); mask-image: linear-gradient(to bottom, transparent 50%, #000 75%, #000 100%, transparent 125%); }
-.edge.bottom > i:nth-child(4) { backdrop-filter: blur(8px); mask-image: linear-gradient(to bottom, transparent 75%, #000 100%); }
 @media (prefers-reduced-transparency: reduce) { .edge { display: none; } }
 
 /* ── type (DESIGN typography; sentence case only, never all caps) ── */
@@ -292,3 +284,34 @@ html, body { position: fixed; inset: 0; width: 100%; height: 100%; overflow: hid
 .body { font-size: 17px; }                                  /* HIG Body 17pt */
 .tab { font-size: 11px; }                                   /* HIG minimum 11pt (was 10) */
 input, textarea, select { font-size: 17px !important; }     /* 16px or more also stops iOS Safari zooming into the field */
+
+/* scroll-edge layers (performance pass 2026-11-14): 3 per edge at 2, 4, 8px; the 1px layer added nothing visible */
+.edge.top > i:nth-child(1) { backdrop-filter: blur(2px); mask-image: linear-gradient(to top, transparent 0.00%, #000 33.33%, #000 66.67%, transparent 100.00%); }
+.edge.top > i:nth-child(2) { backdrop-filter: blur(4px); mask-image: linear-gradient(to top, transparent 33.33%, #000 66.67%, #000 100.00%, transparent 133.33%); }
+.edge.top > i:nth-child(3) { backdrop-filter: blur(8px); mask-image: linear-gradient(to top, transparent 66.67%, #000 100%); }
+.edge.bottom > i:nth-child(1) { backdrop-filter: blur(2px); mask-image: linear-gradient(to bottom, transparent 0.00%, #000 33.33%, #000 66.67%, transparent 100.00%); }
+.edge.bottom > i:nth-child(2) { backdrop-filter: blur(4px); mask-image: linear-gradient(to bottom, transparent 33.33%, #000 66.67%, #000 100.00%, transparent 133.33%); }
+.edge.bottom > i:nth-child(3) { backdrop-filter: blur(8px); mask-image: linear-gradient(to bottom, transparent 66.67%, #000 100%); }
+.edge > i:nth-child(n+4) { display: none; }
+/* repaints stay inside each card and photo */
+.card, .ph, .duel-opt, .vote-blk { contain: paint; }
+.goo-thumb, .gs-thumb { will-change: transform; }
+
+/* ── Every phone size (his ask 2026-11-14). Widths from 320 (iPhone SE 1st gen) to 440 (Pro Max); the column caps at 440 and centers on
+   larger screens. Controls scale with the screen instead of overflowing; titles step down on the smallest phones; landscape keeps
+   content clear of the notch. ── */
+.seg { max-width: 100%; }
+.seg > .track { min-width: 0; }
+.seg button { padding: 9px clamp(8px, 3.4vw, 16px); font-size: clamp(13px, 3.6vw, 14px); white-space: nowrap; }
+.title-xl { font-size: clamp(28px, 8.6vw, 34px); }
+.hero-num { font-size: clamp(40px, 12vw, 48px); }
+.scroller, .topchrome { padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.topchrome { left: 0; right: 0; }
+.tabbar { left: max(12px, env(safe-area-inset-left, 0px)); right: max(12px, env(safe-area-inset-right, 0px)); }
+.duel-opt span { overflow-wrap: anywhere; }
+@media (max-width: 359px) {
+  .tab { font-size: 10px; padding: 0; }
+  .pillbar .tab svg { width: 19px; height: 19px; }
+  .chip { padding: 0 12px; font-size: 14px; }
+}
+@media (max-width: 359px) { .seg button { padding: 9px 6px; font-size: 12px; } }

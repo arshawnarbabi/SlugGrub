@@ -14,8 +14,8 @@ export function Screen({ children, top, wash, noTabBar }: { children: React.Reac
       <main className={`scroller ${noTabBar ? "no-tabbar" : ""} ${top ? "has-top" : ""}`}>
         <ScreenClock>{children}</ScreenClock>
       </main>
-      <div className="edge top" aria-hidden><i /><i /><i /><i /></div>
-      {!noTabBar && <div className="edge bottom" aria-hidden><i /><i /><i /><i /></div>}
+      <div className="edge top" aria-hidden><i /><i /><i /></div>
+      {!noTabBar && <div className="edge bottom" aria-hidden><i /><i /><i /></div>}
       {top && <header className="topchrome"><ScreenClock>{top}</ScreenClock></header>}
     </>
   );

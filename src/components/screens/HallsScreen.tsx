@@ -44,7 +44,7 @@ export function HallsScreen() {
         ))}
       </div>
 
-      <Appear key={hall + meal} style={{ display: "grid", gap: 10 }}>
+      <Appear id={hall + meal} style={{ display: "grid", gap: 10 }}>
         <div className="sechead"><h2>{h.short}, {meal.toLowerCase()}</h2><span className="tint blue" style={{ height: 24, fontSize: 12 }}>{h.open}</span></div>
         {MENU_BY_MEAL[meal].map((id) => {
           const d = DISHES[id];

@@ -57,7 +57,7 @@ export function FoodButton() {
     <div className="food-wrap">
       <Liquid
         style={{ position: "relative", width: 62, height: 62 }}
-        filterPadding={96}
+        filterPadding={84}
         {...GOO}
         fill="var(--p9)"
         shadow="0 1px 2px rgba(20,30,50,.12), 0 8px 18px -8px rgba(20,30,50,.32), inset 0 1px 0 rgba(255,255,255,.3)"

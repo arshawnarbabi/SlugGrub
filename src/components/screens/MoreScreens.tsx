@@ -93,12 +93,12 @@ export function OnboardingScreen() {
         <Link href="/" className="textbtn" style={{ fontSize: 13 }}>Skip</Link>
       </div>}>
 {!done ? (
-        <Appear key={step} style={{ display: "grid", gap: 18, marginTop: 24 }}>
+        <Appear id={step} style={{ display: "grid", gap: 18, marginTop: 24 }}>
           <h1 className="title-xl">{steps[step].q}</h1>
           {steps[step].body}
         </Appear>
       ) : (
-        <Appear key="done" style={{ display: "grid", gap: 14, marginTop: 40, justifyItems: "center", textAlign: "center" }}>
+        <Appear id="done" style={{ display: "grid", gap: 14, marginTop: 40, justifyItems: "center", textAlign: "center" }}>
           <span className="iconbtn" style={{ width: 72, height: 72, background: "var(--p9)", color: "white" }}><Icon icon={Tick02Icon} size={30} sw={2.4} /></span>
           <h1 className="title-xl">You&apos;re set</h1>
           <p className="body">{plan} plan · {points.toLocaleString()} points · {college}</p>
@@ -137,7 +137,7 @@ export function AskScreen() {
         {SUGGESTIONS.map((s) => <button key={s} type="button" className="tint blue" onClick={() => { setQ(s); ask(s); }}>{s}</button>)}
       </div>
       {asked && (
-        <Appear key={asked} style={{ display: "grid", gap: 10 }}>
+        <Appear id={asked} style={{ display: "grid", gap: 10 }}>
           <div className="label">For &ldquo;{asked}&rdquo;, tonight</div>
           {["steak", "poke", "tikka"].map((id) => {
             const d = DISHES[id];

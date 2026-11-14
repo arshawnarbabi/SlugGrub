@@ -22,7 +22,7 @@ export function TodayScreen() {
       </div>
 
       <Link href="/halls" className="card flush press" style={{ color: "inherit", textDecoration: "none" }}>
-        <Photo src={top.photo} h={170} r={0}>
+        <Photo src={top.photo} h={170} r={0} eager>
           <span className="on-photo gold"><Icon icon={CrownIcon} size={13} sw={2} /> #1 at your hall</span>
         </Photo>
         <div style={{ padding: "12px 14px 14px", display: "grid", gap: 4 }}>

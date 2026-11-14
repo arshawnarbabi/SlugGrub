@@ -29,7 +29,7 @@ export function BudgetScreen() {
         </div>
       </div>
       <Seg options={RANGES} value={range} onChange={setRange} label="Range" />
-      <Appear key={range} style={{ display: "grid", gap: 10 }}>
+      <Appear id={range} style={{ display: "grid", gap: 10 }}>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
           <div className="card"><div className="label">Per day</div><div className="num" style={{ fontSize: 24, fontWeight: 700, letterSpacing: "-0.03em" }}>{USER.perDay}</div></div>
           <div className="card"><div className="label">{range === "This quarter" ? "Days left" : "Left this week"}</div><div className="num" style={{ fontSize: 24, fontWeight: 700, letterSpacing: "-0.03em" }}>{range === "This quarter" ? USER.daysLeft : 287}</div></div>

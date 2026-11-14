@@ -6,14 +6,8 @@ const nextConfig: NextConfig = {
   /* config options here */
   cacheComponents: true,
   partialPrefetching: true,
-  turbopack: {
-    rules: {
-      "*.css": {
-        loaders: ["@tailwindcss/turbopack"],
-        as: "*.css",
-      },
-    },
-  },
+  // CSS goes through PostCSS (postcss.config.mjs). The @tailwindcss/turbopack loader rule was removed on 2026-11-14: it cached
+  // globals.css and kept serving the original starter stylesheet in dev and in production builds.
 };
 
 export default nextConfig;

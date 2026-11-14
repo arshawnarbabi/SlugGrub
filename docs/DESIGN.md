@@ -600,10 +600,14 @@ motion:
   state_change:
     # THE default for any state change (his ask: "when states change i really want the default to be blur + fade in/out/morph"):
     # outgoing blurs out, fades and shrinks a little; incoming blurs in from the same; scale and rotation ride the spring.
-    out: { opacity: 0, blur_px: 4, scale: 0.92 }   # subtler (his ask)
-    in: { opacity: 1, blur_px: 0, scale: 1 }
+    # his asks 2026-11-14: "i dont like this coming in animation anywhere, can you make it a cheap smooth blur/fade in/out".
+    # Blur + fade only, out and in; no scale, no slide. Small items (icons, numbers, labels) 4px; blocks (lists, results, steps) 2px,
+    # out 100ms then in 160ms. The food icon keeps its 90 degree turn on the spring (his earlier ask).
+    out: { opacity: 0, blur_px: 4 }
+    block_out: { opacity: 0, blur_px: 2 }
+    in: { opacity: 1, blur_px: 0 }
     fade: { duration: "220ms", easing: "{motion.easing.standard}" }
-    scale_and_rotate: "{motion.spring.default}"
+    rotate: "{motion.spring.default}"   # food icon only
     icon_swap_rotation_deg: 90      # e.g. food icon to X on the food button
     at_rest: "filter: none (never leave a blur(0) filter on an element)"
 
@@ -698,8 +702,8 @@ effects:
   blur_budget:
     # MUST, a default for every screen (his rule 2026-11-14, "this is very important make sure any blur you use is cheap and not
     # perforamnce heavy. log this as a defualt and a must"). Any new blur is checked against this before it ships.
-    backdrop_filter_layers_per_edge_max: 4      # scroll edges: Magic UI banded progressive blur, cheap (1, 2, 4, 8px); never more
-    backdrop_filter_layers_per_screen_max: 8    # top edge + bottom edge
+    backdrop_filter_layers_per_edge_max: 3      # scroll edges: Magic UI banded progressive blur, cheap (2, 4, 8px); never more
+    backdrop_filter_layers_per_screen_max: 6    # top edge + bottom edge
     backdrop_blur_radius_max_px: 8
     animate_blur_radius: "never"                # a backdrop blur radius never animates
     opaque_surfaces: "never carry a backdrop blur"   # an opaque nav bar or card gains nothing from it and still pays for it
@@ -736,7 +740,7 @@ effects:
     - id: scroll-edge-blur
       what: "iOS-style soft scroll edge: progressive blur plus a fade to the page color at the top (under the status bar) and bottom (under the tab bar) of every scrolling screen"   # his ask 2026-11-14
       tier: 2
-      how: "Magic UI progressive blur, cloned cheap (his ask): 4 backdrop-filter layers per edge (1, 2, 4, 8px), each masked to an overlapping 25% band so blur steps up toward the edge; plus an eased fade of the content itself (mask-image on the scroller, down to ~35% opacity), so the background is never touched; behind the sticky top bar and nav bar, above content"
+      how: "Magic UI progressive blur, cloned cheap (his ask): 3 backdrop-filter layers per edge (2, 4, 8px), each masked to an overlapping band so blur steps up toward the edge; plus an eased fade of the content itself (mask-image on the scroller, down to ~35% opacity), so the background is never touched; behind the sticky top bar and nav bar, above content"
       fallback: "no edge (content scrolls under the chrome unblurred)"
       reduced: "prefers-reduced-transparency: no edge"
       measured: "not yet (QA Gate B2 before ship)"
@@ -1601,7 +1605,7 @@ Status: values he chose are unmarked; Claude's inferences carry # draft above.
 - **Blur is cheap, always (his MUST):** at most 4 backdrop blurs per edge and 8 per screen, radius 8px max, never animated, never on
   opaque surfaces, photos or lists; state-change blur (4px) only on small elements for 220ms and removed at rest. See effects.blur_budget.
 - **Spring, goo, state change (subtle, his ask):** one spring (300/28, ~1.3% overshoot), one goo (blur 5, contrast 18, no trailing spring), and
-  one state change (4px blur + fade + 92% scale) everywhere. See motion.spring, motion.goo, motion.state_change.
+  one state change (blur + fade out and in, no movement) everywhere. See motion.spring, motion.goo, motion.state_change.
 - **Food button:** a rice bowl icon (not a camera); it splits into Log a plate and Ask SlugGrub, and the icon blur-morphs to an X with
   a 90 degree turn on the spring.
 - **Sizing scale (his ask):** every tap target at least 44px. Nav bar and food button 62 · primary buttons 52 · top bar icon
@@ -1612,6 +1616,16 @@ Status: values he chose are unmarked; Claude's inferences carry # draft above.
   Large Title 34); controls 44x44pt (sizing scale); Reduce Motion honored; color never the only signal (arrows and numbers carry
   rank changes, names carry college colors); inputs 17px. Not yet met, flagged to him: Dynamic Type text scaling to 200% and a
   dark mode (DESIGN mode.primary is light by his choice). Custom font (Manrope) and icons (Hugeicons) are allowed by the HIG.
+- **Performance pass (his ask: minimal or invisible quality loss):** measured in the production build on a laptop at ~120fps
+  (p95 8 to 9ms) for scroll, food button, tabs and meal switch; the only drops were large blocks blurring in, so blocks now fade
+  and settle (blur stays on small things); photos load a copy sized to how big they are drawn (160 / 360 / 720px, async decode,
+  lazy below the fold); scroll edges 3 layers (2, 4, 8px); the food button's goo filter covers only where droplets travel; cards
+  and photos contain their own repaints. The dev server is much slower than production by design: test on the phone with the
+  production build (npm run build, then npx next start -H 0.0.0.0).
+- **Every phone size (his ask):** checked at 320x568 (SE 1st gen), 360x740, 375x667, 393x852, 440x956 and 852x393 landscape on
+  every route, with no element past the screen edge. Segmented buttons, titles and hero numbers scale with the screen (clamp);
+  under 360px wide, tab labels, chips and segmented buttons tighten; landscape keeps content clear of the notch (safe-area
+  insets); the column caps at 440px and centers on anything larger. Check page: /dev/devices.html?p=/route (dev tool).
 - **Mobile scrolling:** the document never scrolls (html and body pinned and clipped); only the screen's scroller scrolls; the top
   bar and nav bar refuse pan gestures. WebKit (every iOS browser) does not reliably honor overscroll-behavior on the document, so
   this is structural, not a CSS property (his report: sometimes the whole page scrolled on iPhone Safari and Chrome).
