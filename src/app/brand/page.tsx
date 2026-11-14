@@ -66,9 +66,10 @@ function Phone({ label, children, tab, wash, footer }: { label: string; children
   return (
     <div className="phone-col">
       <div className="phone">
-        {wash && <div className="wash" />}
+        <div className="screen">{wash && <div className="wash" />}{children}</div>
+        <div className="edge top" aria-hidden><i /><i /><i /><i /><i /><b /></div>
+        <div className="edge bottom" aria-hidden><i /><i /><i /><i /><i /><b /></div>
         <Status />
-        <div className="screen">{children}</div>
         {footer}
         {tab && <TabBar active={tab} />}
       </div>
@@ -125,6 +126,14 @@ function TodayScreen() {
         <div style={{ flex: 1, minWidth: 0, fontSize: 13 }}><b>Which was better at lunch?</b><div style={{ color: "var(--ink-3)", fontSize: 12 }}>Takes 2 seconds</div></div>
         <div className="iconbtn" style={{ width: 32, height: 32 }}><I icon={ArrowRight01Icon} size={16} /></div>
       </div>
+
+      <div className="sechead" style={{ marginTop: 4 }}><b>Best on campus tonight</b><span className="seeall">See all</span></div>
+      {([["penne", "Penne Arrabbiata", "Cowell/Stevenson · 8.8"], ["poke", "Salmon Poke Bowl", "Crown/Merrill · 8.9"], ["grain-bowl", "Harvest Grain Bowl", "Porter/Kresge · 8.6"]] as [Food, string, string][]).map(([f, n, d]) => (
+        <div className="card" key={f} style={{ display: "flex", gap: 12, alignItems: "center", padding: 10 }}>
+          <Photo food={f} w={56} h={56} r={12} />
+          <div style={{ flex: 1, minWidth: 0 }}><div style={{ fontWeight: 600, fontSize: 15, letterSpacing: "-0.01em" }}>{n}</div><div className="num" style={{ fontSize: 12, color: "var(--ink-3)", marginTop: 2 }}>{d}</div></div>
+        </div>
+      ))}
     </>
   );
 }
@@ -156,7 +165,7 @@ function HallsScreen() {
       </div>
       <div className="sechead" style={{ marginTop: 4 }}><b>JRL/C9 tonight</b><span className="tint blue" style={{ height: 24, fontSize: 12 }}>Open till 8</span></div>
       <div style={{ display: "grid", gap: 10 }}>
-        {([["steak-salad", "Steak Salad", "420 cal", "8.2"], ["pizza", "Flatbread Pizza", "290 cal a slice", "7.6"]] as [Food, string, string, string][]).map(([f, n, c, s]) => (
+        {([["steak-salad", "Steak Salad", "420 cal", "8.2"], ["pizza", "Flatbread Pizza", "290 cal a slice", "7.6"], ["garden-salad", "Garden Salad", "180 cal", "7.4"], ["pancakes", "Buttermilk Pancakes", "350 cal, brunch", "8.0"]] as [Food, string, string, string][]).map(([f, n, c, s]) => (
           <div className="card" key={f} style={{ display: "flex", gap: 12, alignItems: "center", padding: 10 }}>
             <div style={{ flex: 1, minWidth: 0 }}><div style={{ fontWeight: 600, fontSize: 15, letterSpacing: "-0.01em" }}>{n}</div><div className="num" style={{ fontSize: 12, color: "var(--ink-3)", marginTop: 2 }}>{c} · <span style={{ color: "var(--ink-2)" }}>{s}</span></div></div>
             <Photo food={f} w={64} h={64} r={14} />
@@ -401,6 +410,7 @@ export default function BrandKit() {
         <section style={{ marginTop: 0 }}>
           <div className="eyebrow">Screens</div>
           <h2 className="sec">How it looks in the app</h2>
+          <p className="note">Scroll inside Today and Halls to see the iOS-style edges: content blurs progressively and fades as it slides under the status bar and the tab bar.</p>
           <div className="phones">
             <Phone label="Today" tab="today" wash><TodayScreen /></Phone>
             <Phone label="Halls" tab="halls"><HallsScreen /></Phone>

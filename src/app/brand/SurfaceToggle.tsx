@@ -13,11 +13,25 @@ const SURFACES = [
 ] as const;
 type Surface = (typeof SURFACES)[number]["id"];
 
+const BLUES = [
+  { id: "bright", label: "Bright" },
+  { id: "ios", label: "iOS blue" },
+  { id: "azure", label: "Azure" },
+  { id: "cobalt", label: "Cobalt" },
+  { id: "ocean", label: "Ocean" },
+  { id: "navy", label: "UCSC navy" },
+] as const;
+
 export type FontOption = { id: string; label: string; css: string };
 
 export function SurfaceToggle({ fonts, initialFont }: { fonts: FontOption[]; initialFont: string }) {
   const [surface, setSurface] = useState<Surface>("sidestash");
   const [font, setFont] = useState(initialFont);
+  const [blue, setBlue] = useState<string>("bright");
+
+  useEffect(() => {
+    document.querySelector(".sg")?.setAttribute("data-blue", blue);
+  }, [blue]);
 
   useEffect(() => {
     document.querySelector(".sg")?.setAttribute("data-surface", surface);
@@ -48,6 +62,12 @@ export function SurfaceToggle({ fonts, initialFont }: { fonts: FontOption[]; ini
           </button>
         ))}
       </div>
+      <label className="eyebrow" htmlFor="sg-blue">Blue</label>
+      <select id="sg-blue" className="font-select" value={blue} onChange={(e) => setBlue(e.target.value)}>
+        {BLUES.map((b) => (
+          <option key={b.id} value={b.id}>{b.label}</option>
+        ))}
+      </select>
       <label className="eyebrow" htmlFor="sg-font">Font</label>
       <select id="sg-font" className="font-select" value={font} onChange={(e) => setFont(e.target.value)}>
         {fonts.map((f) => (

@@ -2879,3 +2879,11 @@ typography.families stays as written above until he picks. -->
 pure white 1px stroke, and Sidestash's chip shadow (ink 8%, blur 2, y 1); floating chrome adds a soft wide layer. It is the default
 on /brand now, beside Chalk, Flat, Stroke and Stroke + shadow. Undecided until he picks. Font default on /brand: Manrope.
 His tweak the same day: cards get a much subtler gradient (L 0.988 to 0.978); buttons, chips and the bottom tab bar keep the stronger one (0.993 to 0.963). -->
+
+<!-- 2026-11-14 (his asks): (1) blue options on /brand, a Blue menu with Bright (default, oklch 0.52 0.165 252), iOS blue, Azure,
+Cobalt, Ocean and UCSC navy, each a generated 12-step scale; buttons, the camera and the Today glow follow the active blue.
+(2) iOS-style scroll edges ("a progressive gaussian blur and lighten on the top and bottom kind of like actual ios has"): five
+stacked backdrop-filter layers (1, 2, 4, 8, 16px) each masked to a band of a gradient, plus a fade toward the page color, pinned at
+the top (under the status bar) and bottom (under the tab bar) of every scrolling screen; hidden under prefers-reduced-transparency.
+This is an effects.registry entry (tier 2, backdrop-filter) to measure under QA Gate B2 before it ships in the app. (3) Sidestash
+background lighter (page L 0.955, was 0.938). Blue and surface still open until he picks. -->

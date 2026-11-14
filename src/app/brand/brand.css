@@ -233,7 +233,7 @@
 .sg .ph .on-photo { position: absolute; left: 10px; top: 10px; display: inline-flex; align-items: center; gap: 5px; height: 26px; padding: 0 10px; border-radius: var(--r-pill); background: oklch(1 0 0 / 0.94); color: var(--ink); font-size: 12px; font-weight: 600; box-shadow: var(--shadow-1); }
 .sg .ph .on-photo.gold { background: var(--y9); }
 .sg .ph .corner { position: absolute; right: 10px; top: 10px; }
-.sg .wash { position: absolute; inset: 0 0 auto; height: 230px; background: linear-gradient(180deg, oklch(0.52 0.156 252 / 0.16), oklch(0.52 0.156 252 / 0)); pointer-events: none; }
+.sg .wash { position: absolute; inset: 0 0 auto; height: 230px; background: linear-gradient(180deg, color-mix(in oklch, var(--p9) 16%, transparent), color-mix(in oklch, var(--p9) 0%, transparent)); pointer-events: none; }
 .sg .phone .screen { position: relative; }
 .sg .topbar { display: flex; align-items: center; justify-content: space-between; position: relative; }
 .sg .iconbtn { width: 38px; height: 38px; border-radius: 50%; background: var(--card); border: 1px solid var(--line); display: grid; place-items: center; color: var(--ink); flex: 0 0 auto; }
@@ -314,8 +314,8 @@
    LIGHTER than the background, with a very subtle top-to-bottom neutral gradient (lighter on top) and a pure white stroke. Shadow is
    Sidestash's chip shadow (ink at 8%, blur 2, y 1); floating chrome adds a soft wide layer. ── */
 .sg[data-surface="sidestash"] {
-  --paper: oklch(0.938 0.005 250);
-  --paper-2: oklch(0.905 0.006 250);
+  --paper: oklch(0.955 0.004 250);   /* lighter, his ask 2026-11-14 */
+  --paper-2: oklch(0.925 0.005 250);
   --line: oklch(0 0 0 / 0.07);
   --raise: linear-gradient(180deg, oklch(0.993 0.002 250) 0%, oklch(0.963 0.004 250) 100%);
   --raise-press: linear-gradient(180deg, oklch(0.97 0.003 250) 0%, oklch(0.945 0.005 250) 100%);
@@ -334,15 +334,49 @@
 .sg[data-surface="sidestash"] .card .card { box-shadow: none; }
 .sg[data-surface="sidestash"] .btn-secondary { box-shadow: var(--chip-shadow); }
 .sg[data-surface="sidestash"] .btn-secondary:active, .sg[data-surface="sidestash"] .iconbtn:active { background: var(--raise-press); }
-.sg[data-surface="sidestash"] .btn-primary { background: linear-gradient(180deg, oklch(0.58 0.16 252) 0%, oklch(0.5 0.156 252) 100%); border: 1px solid oklch(1 0 0 / 0.22); box-shadow: var(--chip-shadow), inset 0 1px 0 oklch(1 0 0 / 0.14); }
-.sg[data-surface="sidestash"] .tabbar .cam { background: linear-gradient(180deg, oklch(0.58 0.16 252) 0%, oklch(0.5 0.156 252) 100%); border: 1px solid oklch(1 0 0 / 0.22); }
+.sg[data-surface="sidestash"] .btn-primary { background: linear-gradient(180deg, var(--btn-top) 0%, var(--btn-bot) 100%); border: 1px solid oklch(1 0 0 / 0.22); box-shadow: var(--chip-shadow), inset 0 1px 0 oklch(1 0 0 / 0.14); }
+.sg[data-surface="sidestash"] .tabbar .cam { background: linear-gradient(180deg, var(--btn-top) 0%, var(--btn-bot) 100%); border: 1px solid oklch(1 0 0 / 0.22); }
 .sg[data-surface="sidestash"] :is(.tabbar .pillbar, .tabbar .cam, .surface-toggle) { box-shadow: var(--shadow-2); }
 .sg[data-surface="sidestash"] .tabbar .tab.on { background: var(--paper-2); }
 .sg[data-surface="sidestash"] .seg { background: var(--paper-2); }
 .sg[data-surface="sidestash"] .scale { border: 1px solid var(--hi); box-shadow: var(--chip-shadow); }
 .sg[data-surface="sidestash"] .duel .opt.picked { box-shadow: inset 0 0 0 2.5px var(--p9), var(--chip-shadow); }
 .sg[data-surface="sidestash"] .phone .screen, .sg[data-surface="sidestash"] .phone { background: var(--paper); }
-.sg[data-surface="sidestash"] .float-cta { background: linear-gradient(180deg, oklch(0.938 0.005 250 / 0), var(--paper) 45%); }
+.sg[data-surface="sidestash"] .float-cta { background: linear-gradient(180deg, oklch(0.955 0.004 250 / 0), var(--paper) 45%); }
 /* his tweak 2026-11-14: cards get a much subtler gradient; buttons, chips and the bottom tab bar keep --raise as is */
 .sg[data-surface="sidestash"] { --raise-card: linear-gradient(180deg, oklch(0.988 0.002 250) 0%, oklch(0.978 0.003 250) 100%); }
 .sg[data-surface="sidestash"] :is(.card, .duel .opt, .sw, .font-card) { background: var(--raise-card); }
+
+/* ── blue options (his ask 2026-11-14: "i wnat to try different blue variations"); scales from generate-palette.ts ── */
+.sg, .sg[data-blue="bright"] { --p1: oklch(0.99 0.005 252); --p2: oklch(0.97 0.015 252); --p3: oklch(0.95 0.025 252); --p4: oklch(0.92 0.04 252); --p5: oklch(0.88 0.061 252); --p6: oklch(0.83 0.088 252); --p7: oklch(0.75 0.124 252); --p8: oklch(0.66 0.149 252); --p9: oklch(0.52 0.156 252); --p10: oklch(0.46 0.138 252); --p11: oklch(0.38 0.091 252); --p12: oklch(0.22 0.05 252); --btn-top: oklch(0.590 0.156 252); --btn-bot: oklch(0.500 0.156 252); }
+.sg[data-blue="navy"] { --p1: oklch(0.99 0.005 250); --p2: oklch(0.97 0.01 250); --p3: oklch(0.95 0.018 250); --p4: oklch(0.92 0.03 250); --p5: oklch(0.88 0.045 250); --p6: oklch(0.83 0.06 250); --p7: oklch(0.75 0.075 250); --p8: oklch(0.66 0.09 250); --p9: oklch(0.351 0.1 250); --p10: oklch(0.291 0.083 250); --p11: oklch(0.38 0.055 250); --p12: oklch(0.22 0.03 250); --btn-top: oklch(0.421 0.100 250); --btn-bot: oklch(0.331 0.100 250); }
+.sg[data-blue="azure"] { --p1: oklch(0.99 0.006 240); --p2: oklch(0.97 0.015 240); --p3: oklch(0.95 0.027 240); --p4: oklch(0.92 0.043 240); --p5: oklch(0.88 0.066 240); --p6: oklch(0.83 0.09 240); --p7: oklch(0.75 0.112 240); --p8: oklch(0.66 0.135 240); --p9: oklch(0.6 0.137 240); --p10: oklch(0.54 0.124 240); --p11: oklch(0.38 0.083 240); --p12: oklch(0.22 0.045 240); --btn-top: oklch(0.670 0.137 240); --btn-bot: oklch(0.580 0.137 240); }
+.sg[data-blue="ios"] { --p1: oklch(0.99 0.005 257); --p2: oklch(0.97 0.015 257); --p3: oklch(0.95 0.024 257); --p4: oklch(0.92 0.039 257); --p5: oklch(0.88 0.059 257); --p6: oklch(0.83 0.086 257); --p7: oklch(0.75 0.13 257); --p8: oklch(0.66 0.183 257); --p9: oklch(0.603 0.214 257); --p10: oklch(0.543 0.193 257); --p11: oklch(0.38 0.12 257); --p12: oklch(0.22 0.065 257); --btn-top: oklch(0.673 0.214 257); --btn-bot: oklch(0.583 0.214 257); }
+.sg[data-blue="cobalt"] { --p1: oklch(0.99 0.005 264); --p2: oklch(0.97 0.014 264); --p3: oklch(0.95 0.024 264); --p4: oklch(0.92 0.039 264); --p5: oklch(0.88 0.059 264); --p6: oklch(0.83 0.085 264); --p7: oklch(0.75 0.128 264); --p8: oklch(0.66 0.18 264); --p9: oklch(0.48 0.2 264); --p10: oklch(0.42 0.19 264); --p11: oklch(0.38 0.11 264); --p12: oklch(0.22 0.06 264); --btn-top: oklch(0.550 0.200 264); --btn-bot: oklch(0.460 0.200 264); }
+.sg[data-blue="ocean"] { --p1: oklch(0.99 0.006 230); --p2: oklch(0.97 0.012 230); --p3: oklch(0.95 0.022 230); --p4: oklch(0.92 0.036 230); --p5: oklch(0.88 0.054 230); --p6: oklch(0.83 0.072 230); --p7: oklch(0.75 0.09 230); --p8: oklch(0.66 0.108 230); --p9: oklch(0.55 0.11 230); --p10: oklch(0.49 0.098 230); --p11: oklch(0.38 0.066 230); --p12: oklch(0.22 0.036 230); --btn-top: oklch(0.620 0.110 230); --btn-bot: oklch(0.530 0.110 230); }
+
+/* ── iOS-style scroll edges: progressive blur plus a light fade at the top and bottom of each phone screen.
+   Web recreation of iOS 26's soft scroll edge: stacked backdrop-filter layers whose blur doubles each step, each masked to a band of
+   a gradient so blur ramps up toward the edge, pinned outside the scrolling content. ── */
+.sg .phone .status { position: absolute; top: 0; left: 0; right: 0; z-index: 6; }
+.sg .phone .screen { position: absolute; inset: 0; overflow-y: auto; overflow-x: hidden; scrollbar-width: none; padding: 46px 16px 112px; }
+.sg .phone .screen::-webkit-scrollbar { display: none; }
+.sg .phone .tabbar, .sg .phone .float-cta { z-index: 7; }
+.sg .edge { position: absolute; left: 0; right: 0; pointer-events: none; z-index: 5; }
+.sg .edge.top { top: 0; height: 92px; }
+.sg .edge.bottom { bottom: 0; height: 130px; }
+.sg .edge > i { position: absolute; inset: 0; }
+.sg .edge.top > i:nth-child(1) { backdrop-filter: blur(1px); -webkit-backdrop-filter: blur(1px); mask: linear-gradient(to top, transparent 0%, #000 20%, #000 40%, transparent 60%); -webkit-mask: linear-gradient(to top, transparent 0%, #000 20%, #000 40%, transparent 60%); }
+.sg .edge.top > i:nth-child(2) { backdrop-filter: blur(2px); -webkit-backdrop-filter: blur(2px); mask: linear-gradient(to top, transparent 20%, #000 40%, #000 60%, transparent 80%); -webkit-mask: linear-gradient(to top, transparent 20%, #000 40%, #000 60%, transparent 80%); }
+.sg .edge.top > i:nth-child(3) { backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); mask: linear-gradient(to top, transparent 40%, #000 60%, #000 80%, transparent 100%); -webkit-mask: linear-gradient(to top, transparent 40%, #000 60%, #000 80%, transparent 100%); }
+.sg .edge.top > i:nth-child(4) { backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); mask: linear-gradient(to top, transparent 60%, #000 80%); -webkit-mask: linear-gradient(to top, transparent 60%, #000 80%); }
+.sg .edge.top > i:nth-child(5) { backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); mask: linear-gradient(to top, transparent 80%, #000 100%); -webkit-mask: linear-gradient(to top, transparent 80%, #000 100%); }
+.sg .edge.top > b { position: absolute; inset: 0; background: linear-gradient(to bottom, color-mix(in oklch, var(--paper) 88%, transparent) 0%, color-mix(in oklch, var(--paper) 55%, transparent) 45%, color-mix(in oklch, var(--paper) 0%, transparent) 100%); }
+.sg .edge.bottom > i:nth-child(1) { backdrop-filter: blur(1px); -webkit-backdrop-filter: blur(1px); mask: linear-gradient(to bottom, transparent 0%, #000 20%, #000 40%, transparent 60%); -webkit-mask: linear-gradient(to bottom, transparent 0%, #000 20%, #000 40%, transparent 60%); }
+.sg .edge.bottom > i:nth-child(2) { backdrop-filter: blur(2px); -webkit-backdrop-filter: blur(2px); mask: linear-gradient(to bottom, transparent 20%, #000 40%, #000 60%, transparent 80%); -webkit-mask: linear-gradient(to bottom, transparent 20%, #000 40%, #000 60%, transparent 80%); }
+.sg .edge.bottom > i:nth-child(3) { backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); mask: linear-gradient(to bottom, transparent 40%, #000 60%, #000 80%, transparent 100%); -webkit-mask: linear-gradient(to bottom, transparent 40%, #000 60%, #000 80%, transparent 100%); }
+.sg .edge.bottom > i:nth-child(4) { backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); mask: linear-gradient(to bottom, transparent 60%, #000 80%); -webkit-mask: linear-gradient(to bottom, transparent 60%, #000 80%); }
+.sg .edge.bottom > i:nth-child(5) { backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); mask: linear-gradient(to bottom, transparent 80%, #000 100%); -webkit-mask: linear-gradient(to bottom, transparent 80%, #000 100%); }
+.sg .edge.bottom > b { position: absolute; inset: 0; background: linear-gradient(to top, color-mix(in oklch, var(--paper) 92%, transparent) 0%, color-mix(in oklch, var(--paper) 60%, transparent) 40%, color-mix(in oklch, var(--paper) 0%, transparent) 100%); }
+@media (prefers-reduced-transparency: reduce) { .sg .edge > i { display: none; } }
+.sg .scroll-hint { position: absolute; left: 0; right: 0; bottom: -26px; text-align: center; font-size: 12px; color: var(--ink-3); }
