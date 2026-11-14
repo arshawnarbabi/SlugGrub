@@ -9,7 +9,8 @@ import {
   ArrowRight01Icon, SparklesIcon, StarIcon, Undo02Icon, MinusSignIcon, PlusSignIcon, FireIcon,
   Notification01Icon, Wifi01Icon, CellularNetworkIcon, CrownIcon, QrCodeIcon,
 } from "@hugeicons/core-free-icons";
-import { SurfaceToggle } from "./SurfaceToggle";
+import { SurfaceToggle, FontCard } from "./SurfaceToggle";
+import { FONTS, FONT_VARS } from "./fonts";
 import "./brand.css";
 
 export const metadata: Metadata = { title: "SlugGrub brand kit" };
@@ -377,14 +378,23 @@ const PATTERNS: [string, string, string][] = [
 
 export default function BrandKit() {
   return (
-    <div className="sg" data-surface="flat">
-      <SurfaceToggle />
+    <div className={`sg ${FONT_VARS}`} data-surface="chalk">
+      <SurfaceToggle fonts={FONTS.map(({ id, label, css }) => ({ id, label, css }))} />
       <div className="wrap">
         <header className="hero">
           <span className="draft-tag"><span className="dot" /> Draft design system, for review</span>
           <div className="wordmark">Slug<em>Grub</em></div>
           <p className="lede">UCSC dining, ranked by students. UC Santa Cruz blue and gold on cool white, the system sans, food photos front and center, one big number per screen.</p>
         </header>
+
+        <section style={{ marginTop: 0, marginBottom: 72 }}>
+          <div className="eyebrow">Fonts</div>
+          <h2 className="sec">Pick a font</h2>
+          <p className="note">Ten modern sans options, each showing a headline, numbers and body text. Tap one to put it on every screen below, or use the Font menu at the top.</p>
+          <div className="fonts">
+            {FONTS.map((f) => (<FontCard key={f.id} id={f.id} label={f.label} css={f.css} note={f.note} />))}
+          </div>
+        </section>
 
         <section style={{ marginTop: 0 }}>
           <div className="eyebrow">Screens</div>

@@ -2866,3 +2866,10 @@ pattern choices are # draft until he approves. -->
 Cards switch (Flat / Stroke / Stroke + shadow). Floating chrome keeps its shadow in every mode. Claude's recommendation # draft: Flat
 (white cards on a slightly darker cool gray, no stroke, no shadow), shadow reserved for what floats. Maps to profiles.elevation flat
 plus floating shadows. Undecided until he picks. -->
+
+<!-- 2026-11-14 (his ask: "i really like the ui of the cards and interface and shadwos and stroke and everything of chalk. why dont we
+try cloning that"): /brand defaults to a "Chalk" surface cloned from ~/Downloads/school-app/design-tokens/tokens.css: white canvas,
+white raised cards, 0.75px strokes in 8% black, Chalk's two-layer elev-1/2/3 shadows, radius 16 cards and 24 big surfaces, concentric
+corners. Font is open again (his: "i want to choos a differnet font but i wnat to see my optiojnks"): /brand shows ten candidates
+(system SF Pro, Geist, Inter, Manrope, Plus Jakarta Sans, DM Sans, Figtree, Instrument Sans, Onest, Outfit) with a live switch.
+typography.families stays as written above until he picks. -->

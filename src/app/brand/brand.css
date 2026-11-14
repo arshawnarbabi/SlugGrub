@@ -275,3 +275,36 @@
 .sg[data-surface="flat"] :is(.card, .duel .opt, .chip:not(.on), .sw, .scale, .seeall, .iconbtn) { border-color: transparent; box-shadow: none; }
 .sg[data-surface="stroke"] :is(.card, .duel .opt, .chip:not(.on), .sw, .scale, .seeall, .iconbtn) { box-shadow: none; }
 .sg[data-surface="flat"] .duel .opt.picked, .sg[data-surface="stroke"] .duel .opt.picked { box-shadow: inset 0 0 0 2.5px var(--p9); }
+
+/* ── "Chalk" surface: cloned from ~/Downloads/school-app/design-tokens/tokens.css (his ask 2026-11-14: "i really like the ui of
+   the cards and interface and shadwos and stroke and everything of chalk"). White canvas, white raised cards, 0.75px hairline
+   strokes in 8% black, two-layer shadows with negative spread (elev-1 cards, elev-2 floating), radius 16 cards / 24 big
+   surfaces, concentric corners. Floating chrome uses Chalk's elev-2/elev-3. ── */
+.sg[data-surface="chalk"] {
+  --paper: oklch(0.994 0.0015 250);
+  --paper-2: oklch(0.96 0.003 250);
+  --line: oklch(0 0 0 / 0.08);
+  --r-md: 16px;
+  --r-lg: 24px;
+  --shadow-1: 0 1px 1.75px 0 oklch(0.22 0.01 255 / 0.04), 0 3.75px 12.75px -1.75px oklch(0.22 0.01 255 / 0.07);
+  --shadow-2: 0 1.75px 3.75px 0 oklch(0.22 0.01 255 / 0.05), 0 9px 25.5px -5.5px oklch(0.22 0.01 255 / 0.11);
+  --shadow-3: 0 3.75px 7.25px 0 oklch(0.22 0.01 255 / 0.06), 0 16.5px 40px -9px oklch(0.22 0.01 255 / 0.15);
+}
+.sg[data-surface="chalk"] :is(.card, .duel .opt, .chip:not(.on), .sw, .scale, .seeall, .iconbtn, .tabbar .pillbar) { border-width: 0.75px; border-color: var(--line); }
+.sg[data-surface="chalk"] :is(.tabbar .pillbar, .tabbar .cam) { box-shadow: var(--shadow-3); }
+.sg[data-surface="chalk"] .seg { box-shadow: inset 0 0 0 0.75px oklch(0 0 0 / 0.05); }
+.sg[data-surface="chalk"] .card .card { box-shadow: none; } /* nested cards: stroke only */
+.sg[data-surface="chalk"] .phone { border-color: oklch(0.2 0.01 255); }
+.sg .surface-toggle { flex-wrap: wrap; justify-content: center; max-width: calc(100vw - 24px); padding-right: 8px; }
+.sg .font-select { font: inherit; font-size: 13px; font-weight: 600; color: var(--ink); background: var(--paper-2); border: 0; border-radius: var(--r-pill); height: 34px; padding: 0 12px; }
+.sg .fonts { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 14px; }
+.sg .font-card { all: unset; box-sizing: border-box; cursor: pointer; display: grid; gap: 6px; background: var(--card); border: 0.75px solid var(--line); border-radius: var(--r-md); box-shadow: var(--shadow-1); padding: 16px; }
+.sg .font-card:hover { box-shadow: var(--shadow-2); }
+.sg .font-card:focus-visible { outline: 2px solid var(--p9); outline-offset: 2px; }
+.sg .fc-name { font-size: 13px; font-weight: 600; color: var(--p9); }
+.sg .fc-title { font-size: 26px; font-weight: 700; letter-spacing: -0.035em; line-height: 1.1; }
+.sg .fc-num { font-size: 22px; font-weight: 700; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; }
+.sg .fc-num small { font-size: 13px; font-weight: 500; color: var(--ink-3); letter-spacing: 0; }
+.sg .fc-body { font-size: 15px; color: var(--ink-2); line-height: 1.45; }
+.sg .fc-note { font-family: var(--sans); font-size: 12px; color: var(--ink-3); line-height: 1.45; }
+.sg .fc-apply { font-family: var(--sans); font-size: 12px; font-weight: 600; color: var(--p9); }
