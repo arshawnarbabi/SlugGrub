@@ -2933,3 +2933,8 @@ navigation bar, the round buttons in each screen's top bar, and the camera butto
 primary and secondary buttons, See all pills, segmented pills, chips, other icon buttons) is flat: solid fill, no stroke, no shadow.
 Verified by computed style on /brand. Still his to pick on /brand: background step (Background menu, default 0.962) and card fill
 step (Card fill menu, 8 steps from 1.000 to 0.960, default 0.985). -->
+
+<!-- 2026-11-14 camera button fix (his screenshot, "this button looks bugged"): closed droplets' icons stacked through the main
+icon, and the sheen/hairline drew an inner ring because the button is smaller than the gooey blob. Droplet icons now fade in only
+when open; the top sheen and white hairline are inset layers of the Liquid shadow, so they follow the blob's real edge. Checked by
+zoomed screenshot. -->

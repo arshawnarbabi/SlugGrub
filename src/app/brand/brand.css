@@ -495,3 +495,9 @@
 .sg.sg.sg .surface-toggle .seg button { padding: 6px 11px; font-size: 12px; }
 .sg.sg.sg .surface-toggle .font-select { height: 30px; font-size: 12px; }
 .sg .wrap { padding-block: 40px 120px; }
+/* camera fixes 2026-11-14 (his screenshot): the closed droplets' icons showed through the main icon, and the sheen/hairline sat on
+   the button, which is smaller than the gooey blob, so it drew an inner ring. Droplet icons now fade in only when open; the sheen
+   and hairline live on the blob's own edge (Liquid shadow). */
+.sg.sg.sg.sg :is(.cam-main, .drop) { background: none; box-shadow: none; }
+.sg .drop { opacity: 0; transition: opacity 180ms var(--ease); }
+.sg .drop.on { opacity: 1; transition-delay: 90ms; }
