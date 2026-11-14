@@ -84,6 +84,19 @@ If Clone Repository fails because git isn't installed: on Mac open Terminal and 
 ### 5. Have your keys ready
 Arshawn will DM you the keys (Gemini, Firebase). Keep that DM open. The agent will tell you where to paste them. **Never paste keys into the agent chat, the group chat, or anywhere on GitHub.**
 
+### 6. Know your branch
+Your starting branch is already made on GitHub. You'll work there, not on `main`:
+
+| Person | Starting branch |
+|---|---|
+| Arshawn | `arshawn-design` |
+| Karen | `karen-firebase` |
+| Ethan | `ethan-menus` |
+
+Your setup prompt switches you to it. You can always see which branch you're on in the **bottom-left corner** of Antigravity. If it ever says `main` while you're building, stop and ask the agent: "Switch me to my branch and bring my changes with me."
+
+After your starting branch is merged, make a new branch for each next feature, named `<yourname>-<feature>` (for example `karen-vote-page`). The start-of-session prompt in Part 3 does this for you. See all branches at https://github.com/arshawnarbabi/SlugGrub/branches
+
 ---
 
 ## Part 2: Paste your setup prompt
