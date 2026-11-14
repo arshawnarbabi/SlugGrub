@@ -436,3 +436,28 @@
 .sg[data-surface="sidestash"] :is(.btn-primary, .tabbar .cam) { border-width: 0.5px; }
 .sg[data-surface="chalk"] :is(.card, .duel .opt, .chip:not(.on), .sw, .scale, .seeall, .iconbtn, .tabbar .pillbar) { border-width: 0.5px; }
 .sg :is(.card, .chip, .seeall, .iconbtn, .sw, .scale) { border-width: 0.5px; }
+
+/* ── "Flat + Sidestash" (his ask 2026-11-14: "lets try flat but sidestach for the top buttons and the navigation bar").
+   Cards are flat: a solid fill lighter than the page, no stroke, no shadow. The round top buttons, "See all" pills, segmented
+   pills and the bottom navigation bar keep the Sidestash treatment: raised gradient, white hairline, chip shadow. ── */
+.sg[data-surface="hybrid"] {
+  --paper: oklch(0.944 0.005 250);
+  --paper-2: oklch(0.912 0.006 250);
+  --card: oklch(0.984 0.002 250);
+  --line: oklch(0 0 0 / 0.07);
+  --raise: linear-gradient(180deg, oklch(0.993 0.002 250) 0%, oklch(0.963 0.004 250) 100%);
+  --hi: oklch(1 0 0);
+  --chip-shadow: 0 1px 2px oklch(0.22 0.01 255 / 0.08);
+  --shadow-1: var(--chip-shadow);
+  --shadow-2: 0 1px 2px oklch(0.22 0.01 255 / 0.08), 0 10px 28px -6px oklch(0.22 0.01 255 / 0.14);
+  --r-md: 18px;
+  --r-lg: 24px;
+}
+.sg[data-surface="hybrid"] :is(.card, .duel .opt, .chip:not(.on), .sw, .scale, .font-card) { background: var(--card); border-color: transparent; box-shadow: none; }
+.sg[data-surface="hybrid"] .duel .opt.picked { box-shadow: inset 0 0 0 2.5px var(--p9); }
+.sg[data-surface="hybrid"] :is(.iconbtn, .seeall, .seg-pill, .btn-secondary) { background: var(--raise); border: 0.5px solid var(--hi); box-shadow: var(--chip-shadow); }
+.sg[data-surface="hybrid"] :is(.tabbar .pillbar, .surface-toggle) { background: var(--raise); border: 0.5px solid var(--hi); box-shadow: var(--shadow-2); }
+.sg[data-surface="hybrid"] .seg { background: var(--paper-2); }
+.sg[data-surface="hybrid"] .phone, .sg[data-surface="hybrid"] .phone .screen { background: var(--paper); }
+.sg[data-surface="hybrid"] .float-cta { background: linear-gradient(180deg, oklch(0.944 0.005 250 / 0), var(--paper) 45%); }
+@media (hover: hover) { .sg[data-surface="hybrid"] :is(.card.press, .font-card):hover { box-shadow: none; background: oklch(0.99 0.002 250); } }

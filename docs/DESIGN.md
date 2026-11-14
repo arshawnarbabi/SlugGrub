@@ -2897,3 +2897,8 @@ slides in; gooey (liquid-gooey 0.2.2, MIT, no dependencies) used in ONE place, t
 SlugGrub on the "smooth" preset; only opacity, scale and position animate; reduced motion makes everything instant. Background a
 step darker (page L 0.944) and card gradient subtler (0.986 to 0.980). All strokes and dividers are 0.5px hairlines (his ask
 "make the hairlines just look like normal hairlines"). -->
+
+<!-- 2026-11-14 surface option "Flat + Sidestash" (his ask: "lets try flat but sidestach for the top buttons and the navigation
+bar"), now the default on /brand: flat cards (solid fill L 0.984 on a page of L 0.944, no stroke, no shadow); round top buttons,
+See all pills, segmented pills, secondary buttons and the bottom navigation bar keep the Sidestash raised gradient, white 0.5px
+hairline and chip shadow. Undecided until he picks. -->

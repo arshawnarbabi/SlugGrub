@@ -5,6 +5,7 @@
 import { useEffect, useState } from "react";
 
 const SURFACES = [
+  { id: "hybrid", label: "Flat + Sidestash" },
   { id: "sidestash", label: "Sidestash" },
   { id: "chalk", label: "Chalk" },
   { id: "flat", label: "Flat" },
@@ -25,7 +26,7 @@ const BLUES = [
 export type FontOption = { id: string; label: string; css: string };
 
 export function SurfaceToggle({ fonts, initialFont }: { fonts: FontOption[]; initialFont: string }) {
-  const [surface, setSurface] = useState<Surface>("sidestash");
+  const [surface, setSurface] = useState<Surface>("hybrid");
   const [font, setFont] = useState(initialFont);
   const [blue, setBlue] = useState<string>("bright");
 
