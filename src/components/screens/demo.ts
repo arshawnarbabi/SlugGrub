@@ -46,3 +46,20 @@ export const CAFES = [
 export const DUELS: [string, string][] = [["padthai", "wrap"], ["tikka", "steak"], ["penne", "pizza"], ["poke", "grain"]];
 
 export const USER = { name: "Maya", hall: "JRL/C9", college: "Porter", plan: "Gold", points: 1120, pointsTotal: 1905, daysLeft: 27, perDay: 41 };
+
+// Made-up hours (same at every hall) until Ethan fills HALL_HOURS in src/lib/halls.ts. Read through hoursFor() in now.ts.
+export const DEMO_HOURS: { meal: "Breakfast" | "Lunch" | "Dinner" | "Late Night"; open: string; close: string }[] = [
+  { meal: "Breakfast", open: "07:00", close: "11:00" },
+  { meal: "Lunch", open: "11:30", close: "14:00" },
+  { meal: "Dinner", open: "17:00", close: "20:00" },
+  { meal: "Late Night", open: "21:00", close: "23:00" },
+];
+
+/** A demo photo for a real dish name, until dishes carry photos: the demo dish whose name matches. */
+export function dishPhoto(name: string): string | undefined {
+  const n = name.toLowerCase();
+  const hit = Object.values(DISHES).find((d) => d.name.toLowerCase() === n)
+    ?? Object.values(DISHES).find((d) => n.includes(d.name.toLowerCase()) || d.name.toLowerCase().includes(n))
+    ?? Object.values(DISHES).find((d) => d.name.toLowerCase().split(" ").pop() === n.split(" ").pop()); // "Cheese Pizza" -> a pizza
+  return hit?.photo;
+}
