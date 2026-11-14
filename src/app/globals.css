@@ -343,3 +343,9 @@ input, textarea, select { font-size: 17px !important; }     /* 16px or more also
   .splash, .splash-tile { animation-delay: 300ms; animation-duration: 200ms; }
   .splash-tile { animation-name: splash-out; }
 }
+
+/* Top bar hall chip carrying "hall · meal · hours" (his ask 2026-11-14): always one line; the end (the hours) truncates with an
+   ellipsis before anything wraps, so it fits beside the notifications button down to 320px. */
+.tint.fit { min-width: 0; max-width: 100%; flex: 0 1 auto; }
+.tint.fit svg { flex: none; }
+.tint .clip { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
