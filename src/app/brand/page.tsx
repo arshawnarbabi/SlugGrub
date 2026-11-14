@@ -354,7 +354,7 @@ const SWATCHES: [string, string, string][] = [
   ["Mist", "--paper", "Page background"],
   ["White", "--card", "Cards and sheets"],
   ["Ink", "--ink", "Main text"],
-  ["UCSC Blue", "--p9", "Brand, actions, camera"],
+  ["SlugGrub Blue", "--p9", "Brand, actions, camera"],
   ["Blue tint", "--p3", "Chip and pill backgrounds"],
   ["UCSC Gold", "--y9", "#1 dish, highlights"],
   ["On track", "--ok", "Good status, up"],
@@ -435,7 +435,7 @@ export default function BrandKit() {
               </div>
             ))}
           </div>
-          <div className="eyebrow" style={{ margin: "28px 0 10px" }}>UCSC Blue, 12 steps (generated from #003C6C, contrast checked)</div>
+          <div className="eyebrow" style={{ margin: "28px 0 10px" }}>SlugGrub Blue, 12 steps (a brighter UCSC blue, generated and contrast checked)</div>
           <div className="scale">
             {SCALE.map((i) => (<div key={i} style={{ background: `var(--p${i})`, color: i >= 9 ? "var(--p1)" : "var(--p12)" }}>{i}</div>))}
           </div>

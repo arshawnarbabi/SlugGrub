@@ -88,7 +88,7 @@ options:
 
 colors:
   primary:
-    base: "oklch(0.351 0.1 250.1)"  # UCSC blue #003C6C (his ask 2026-11-14: "use kind of ucsc colors so main is blue"); 12 steps generated, previewed in src/app/brand/brand.css as --p1..--p12, written here on approval
+    base: "oklch(0.52 0.165 252)"  # his asks 2026-11-14: UCSC-style blue ("main is blue"), then "make het blue primary brighter quite a bit" (was #003C6C, oklch 0.351 0.1 250); 12 steps generated, previewed in src/app/brand/brand.css as --p1..--p12, written here on approval
     # Derived 12-step scale (light mode). Generate at instantiation per §Colors → Generating the scale.
     1:  "<derived>"   # app background
     2:  "<derived>"   # subtle bg / alt stripe

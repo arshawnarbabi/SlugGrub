@@ -14,19 +14,19 @@
   --ink-2: oklch(0.42 0.012 255);
   --ink-3: oklch(0.6 0.01 255);
 
-  /* UCSC blue (primary, generated 12-step scale from #003C6C) */
-  --p1: oklch(0.99 0.005 250.1);
-  --p2: oklch(0.97 0.01 250.1);
-  --p3: oklch(0.95 0.018 250.1);
-  --p4: oklch(0.92 0.03 250.1);
-  --p5: oklch(0.88 0.045 250.1);
-  --p6: oklch(0.83 0.06 250.1);
-  --p7: oklch(0.75 0.075 250.1);
-  --p8: oklch(0.66 0.09 250.1);
-  --p9: oklch(0.351 0.1 250.1);
-  --p10: oklch(0.291 0.083 250.1);
-  --p11: oklch(0.38 0.055 250.1);
-  --p12: oklch(0.22 0.03 250.1);
+  /* SlugGrub blue (primary): brightened from UCSC #003C6C at his ask 2026-11-14 ("make the blue primary brighter quite a bit"); generated 12-step scale */
+  --p1: oklch(0.99 0.005 252);
+  --p2: oklch(0.97 0.015 252);
+  --p3: oklch(0.95 0.025 252);
+  --p4: oklch(0.92 0.04 252);
+  --p5: oklch(0.88 0.061 252);
+  --p6: oklch(0.83 0.088 252);
+  --p7: oklch(0.75 0.124 252);
+  --p8: oklch(0.66 0.149 252);
+  --p9: oklch(0.52 0.156 252);
+  --p10: oklch(0.46 0.138 252);
+  --p11: oklch(0.38 0.091 252);
+  --p12: oklch(0.22 0.05 252);
 
   /* UCSC gold (accent, sparing; #FDC700) */
   --y3: oklch(0.97 0.06 95);
@@ -233,7 +233,7 @@
 .sg .ph .on-photo { position: absolute; left: 10px; top: 10px; display: inline-flex; align-items: center; gap: 5px; height: 26px; padding: 0 10px; border-radius: var(--r-pill); background: oklch(1 0 0 / 0.94); color: var(--ink); font-size: 12px; font-weight: 600; box-shadow: var(--shadow-1); }
 .sg .ph .on-photo.gold { background: var(--y9); }
 .sg .ph .corner { position: absolute; right: 10px; top: 10px; }
-.sg .wash { position: absolute; inset: 0 0 auto; height: 230px; background: linear-gradient(180deg, oklch(0.351 0.1 250.1 / 0.16), oklch(0.351 0.1 250.1 / 0)); pointer-events: none; }
+.sg .wash { position: absolute; inset: 0 0 auto; height: 230px; background: linear-gradient(180deg, oklch(0.52 0.156 252 / 0.16), oklch(0.52 0.156 252 / 0)); pointer-events: none; }
 .sg .phone .screen { position: relative; }
 .sg .topbar { display: flex; align-items: center; justify-content: space-between; position: relative; }
 .sg .iconbtn { width: 38px; height: 38px; border-radius: 50%; background: var(--card); border: 1px solid var(--line); display: grid; place-items: center; color: var(--ink); flex: 0 0 auto; }
@@ -334,8 +334,8 @@
 .sg[data-surface="sidestash"] .card .card { box-shadow: none; }
 .sg[data-surface="sidestash"] .btn-secondary { box-shadow: var(--chip-shadow); }
 .sg[data-surface="sidestash"] .btn-secondary:active, .sg[data-surface="sidestash"] .iconbtn:active { background: var(--raise-press); }
-.sg[data-surface="sidestash"] .btn-primary { background: linear-gradient(180deg, oklch(0.43 0.105 250) 0%, oklch(0.34 0.1 250) 100%); border: 1px solid oklch(1 0 0 / 0.22); box-shadow: var(--chip-shadow), inset 0 1px 0 oklch(1 0 0 / 0.14); }
-.sg[data-surface="sidestash"] .tabbar .cam { background: linear-gradient(180deg, oklch(0.43 0.105 250) 0%, oklch(0.34 0.1 250) 100%); border: 1px solid oklch(1 0 0 / 0.22); }
+.sg[data-surface="sidestash"] .btn-primary { background: linear-gradient(180deg, oklch(0.58 0.16 252) 0%, oklch(0.5 0.156 252) 100%); border: 1px solid oklch(1 0 0 / 0.22); box-shadow: var(--chip-shadow), inset 0 1px 0 oklch(1 0 0 / 0.14); }
+.sg[data-surface="sidestash"] .tabbar .cam { background: linear-gradient(180deg, oklch(0.58 0.16 252) 0%, oklch(0.5 0.156 252) 100%); border: 1px solid oklch(1 0 0 / 0.22); }
 .sg[data-surface="sidestash"] :is(.tabbar .pillbar, .tabbar .cam, .surface-toggle) { box-shadow: var(--shadow-2); }
 .sg[data-surface="sidestash"] .tabbar .tab.on { background: var(--paper-2); }
 .sg[data-surface="sidestash"] .seg { background: var(--paper-2); }
