@@ -1,5 +1,9 @@
 // Owner: Ethan. Slug Points pace tracker.
 
-export default function Page() {
-  return <h1 className="text-2xl font-semibold">Budget</h1>;
+import { getBudgetSnapshot } from "@/lib/budget";
+import { BudgetClient } from "./BudgetClient";
+
+export default async function BudgetPage() {
+  const snapshot = await getBudgetSnapshot();
+  return <BudgetClient fallbackSnapshot={snapshot} />;
 }
