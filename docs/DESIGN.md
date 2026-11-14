@@ -686,8 +686,8 @@ effects:
 # ═══════════════════════════════════════════════════════════════
 
 icons:
-  family: "Lucide"  # draft (lucide-react, outline)
-  library: "lucide"  # draft
+  family: "Hugeicons (free Stroke Rounded set)"  # his call 2026-11-14: "for icons we use hugeicons" (same family as Chalk); @hugeicons/react + @hugeicons/core-free-icons
+  library: "hugeicons"
   fill_style: "{options.icon_fill}"     # outline | filled
   sizes:
     xs: 12
@@ -2857,3 +2857,7 @@ case, never uppercase or small caps. Style references he named: Cal AI (via Trac
 cool canvas, white cards with faint borders and soft shadows, 22 to 28px radius, bold numbers, color only where it means something,
 floating white pill tab bar with a gray capsule on the active tab and a detached navy camera button. Gold is for the #1 dish and
 highlights only. Preview: /brand. The draft markers above stay on anything he has not approved (radius, type scale, options). -->
+
+<!-- 2026-11-14 kit v3: real food photos (public/brand/food, Unsplash), Hugeicons, and twelve premium patterns drawn from Mobbin
+(Cal AI, Beli, Airbnb, Copilot, Partiful, Crouton, Jomo, Opal, Revolut), listed on /brand under "What makes it feel premium". All
+pattern choices are # draft until he approves. -->

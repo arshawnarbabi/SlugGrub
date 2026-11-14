@@ -226,3 +226,42 @@
 @media (prefers-reduced-motion: reduce) {
   .sg .btn { transition: none; }
 }
+
+/* ── v3: photo-led patterns from Airbnb, Copilot, Partiful and food apps ── */
+.sg .photo { display: block; width: 100%; height: 100%; object-fit: cover; }
+.sg .ph { position: relative; overflow: hidden; border-radius: var(--r-md); background: var(--paper-2); flex: 0 0 auto; }
+.sg .ph .on-photo { position: absolute; left: 10px; top: 10px; display: inline-flex; align-items: center; gap: 5px; height: 26px; padding: 0 10px; border-radius: var(--r-pill); background: oklch(1 0 0 / 0.94); color: var(--ink); font-size: 12px; font-weight: 600; box-shadow: var(--shadow-1); }
+.sg .ph .on-photo.gold { background: var(--y9); }
+.sg .ph .corner { position: absolute; right: 10px; top: 10px; }
+.sg .wash { position: absolute; inset: 0 0 auto; height: 230px; background: linear-gradient(180deg, oklch(0.351 0.1 250.1 / 0.16), oklch(0.351 0.1 250.1 / 0)); pointer-events: none; }
+.sg .phone .screen { position: relative; }
+.sg .topbar { display: flex; align-items: center; justify-content: space-between; position: relative; }
+.sg .iconbtn { width: 38px; height: 38px; border-radius: 50%; background: var(--card); border: 1px solid var(--line); display: grid; place-items: center; color: var(--ink); flex: 0 0 auto; }
+.sg .title-xl { font-family: var(--display); font-weight: 700; font-size: 30px; letter-spacing: -0.04em; line-height: 1.05; position: relative; }
+.sg .sechead { display: flex; justify-content: space-between; align-items: center; }
+.sg .sechead b { font-size: 17px; letter-spacing: -0.02em; }
+.sg .seeall { height: 28px; padding: 0 12px; border-radius: var(--r-pill); border: 1px solid var(--line); background: var(--card); font-size: 12px; font-weight: 600; display: inline-flex; align-items: center; }
+.sg .carousel { display: flex; gap: 10px; overflow: hidden; margin-right: -16px; }
+.sg .carousel .item { width: 150px; flex: 0 0 auto; display: grid; gap: 6px; }
+.sg .stars { font-size: 12px; color: var(--ink-2); font-variant-numeric: tabular-nums; display: inline-flex; align-items: center; gap: 4px; }
+.sg .vote .blk.photo-blk { position: relative; overflow: hidden; }
+.sg .vote .blk.photo-blk img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.sg .vote .blk.photo-blk::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, oklch(0.18 0.02 255 / 0.05) 30%, oklch(0.18 0.02 255 / 0.72)); }
+.sg .vote .blk.photo-blk > div { position: relative; z-index: 1; }
+.sg .bar { height: 6px; border-radius: var(--r-pill); background: oklch(1 0 0 / 0.3); overflow: hidden; margin-top: 8px; }
+.sg .bar i { display: block; height: 100%; background: white; border-radius: var(--r-pill); }
+/* floating primary action over a fade (Cal AI "Log", Airbnb "Check availability") */
+.sg .float-cta { position: absolute; left: 0; right: 0; bottom: 0; padding: 36px 16px 22px; background: linear-gradient(180deg, oklch(0.977 0.003 250 / 0), var(--paper) 45%); }
+.sg .btn-lg { height: 54px; font-size: 16px; }
+/* deltas and tinted chips (Copilot) */
+.sg .delta { display: inline-flex; align-items: center; gap: 3px; height: 22px; padding: 0 8px; border-radius: var(--r-pill); font-size: 12px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.sg .delta.up { background: var(--ok-bg); color: var(--ok); }
+.sg .delta.down { background: var(--bad-bg); color: var(--bad); }
+.sg .tint { display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 12px; border-radius: var(--r-pill); font-size: 13px; font-weight: 600; }
+.sg .tint.blue { background: var(--p3); color: var(--p9); }
+.sg .tint.gold { background: var(--y3); color: var(--y11); }
+.sg .q { color: var(--p9); font-weight: 600; } /* inline highlighted quantity (Crouton) */
+.sg .patterns { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
+.sg .patterns .card b { display: block; font-size: 15px; letter-spacing: -0.01em; margin-bottom: 4px; }
+.sg .patterns .card p { margin: 0; font-size: 13px; line-height: 1.5; color: var(--ink-2); }
+.sg .patterns .card span { display: block; margin-top: 8px; font-size: 12px; color: var(--ink-3); }
