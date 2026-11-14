@@ -2,7 +2,8 @@
 //
 //   node --env-file=.env.local scripts/food-images.mjs --dry-run      # fetch menus, count dishes and cost, write nothing paid
 //   node --env-file=.env.local scripts/food-images.mjs                # generate every missing image
-//   options: --limit N   --only "Dish Name"   --max-cost 20   --days 9   --concurrency 3
+//   options: --from -1 --days 9 (menu days, from = offset from today)   --limit N   --only "Dish Name"   --max-cost 20   --concurrency 3
+//   DevFest days only: --from 0 --days 2
 //
 // Steps: (1) read each hall's short menu from nutrition.sa.ucsc.edu for today through --days ahead (curl, one request at a
 // time with a pause; Node's fetch fails on the site's certificate chain, see PLAN.md "Menu data"); (2) one cheap text call per
@@ -31,6 +32,7 @@ const LIMIT = Number(opt("--limit", Infinity));
 const ONLY = opt("--only", null);
 const MAX_COST = Number(opt("--max-cost", 20));
 const DAYS = Number(opt("--days", 9));
+const FROM = Number(opt("--from", -1)); // first day, relative to today (-1 = yesterday)
 const CONC = Number(opt("--concurrency", 3));
 
 const HALLS = [
@@ -67,7 +69,7 @@ async function menus() {
   const names = new Map(); // name -> [{hall, meal, date}]
   const today = new Date();
   for (const [num, hall] of HALLS) {
-    for (let d = -1; d < DAYS - 1; d++) {
+    for (let d = FROM; d < FROM + DAYS; d++) {
       const day = new Date(today.getFullYear(), today.getMonth(), today.getDate() + d);
       const key = `${num}|${day.toDateString()}`;
       let list = cache.menus[key];
@@ -147,7 +149,7 @@ async function draw(ai, name, d, ref) {
 
 const names = await menus();
 const all = [...names.keys()].sort();
-console.log(`${HALLS.length} dining halls x ${DAYS} days: ${Object.keys(cache.menus).length} hall-days, ${all.length} unique dish names`);
+console.log(`${HALLS.length} dining halls x ${DAYS} days: ${all.length} unique dish names`);
 if (!process.env.GEMINI_API_KEY) { console.error("GEMINI_API_KEY missing: run with node --env-file=.env.local"); process.exit(1); }
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
