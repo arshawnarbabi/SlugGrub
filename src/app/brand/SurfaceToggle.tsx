@@ -5,6 +5,7 @@
 import { useEffect, useState } from "react";
 
 const SURFACES = [
+  { id: "sidestash", label: "Sidestash" },
   { id: "chalk", label: "Chalk" },
   { id: "flat", label: "Flat" },
   { id: "stroke", label: "Stroke" },
@@ -14,9 +15,9 @@ type Surface = (typeof SURFACES)[number]["id"];
 
 export type FontOption = { id: string; label: string; css: string };
 
-export function SurfaceToggle({ fonts }: { fonts: FontOption[] }) {
-  const [surface, setSurface] = useState<Surface>("chalk");
-  const [font, setFont] = useState(fonts[0].id);
+export function SurfaceToggle({ fonts, initialFont }: { fonts: FontOption[]; initialFont: string }) {
+  const [surface, setSurface] = useState<Surface>("sidestash");
+  const [font, setFont] = useState(initialFont);
 
   useEffect(() => {
     document.querySelector(".sg")?.setAttribute("data-surface", surface);

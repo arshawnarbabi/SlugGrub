@@ -294,8 +294,8 @@ colors:
 
 typography:
   families:
-    display: "system-ui (SF Pro Display on Apple; -apple-system, BlinkMacSystemFont, system-ui, Segoe UI, Roboto, Geist)"  # his ask 2026-11-14: "i want a modern system sans font"; bold, tight tracking
-    body: "system-ui (SF Pro Text on Apple; same stack)"  # his ask 2026-11-14; tabular figures for numbers
+    display: "Manrope"  # his call 2026-11-14: "lets try manrope as defauly" (trial; system SF Pro was his earlier ask); bold, tight tracking
+    body: "Manrope"  # his call 2026-11-14 (trial); tabular figures for numbers
     mono: "Geist Mono"  # draft
 
   # ── Fallback stacks ────────────────────────────────────────────
@@ -2873,3 +2873,8 @@ white raised cards, 0.75px strokes in 8% black, Chalk's two-layer elev-1/2/3 sha
 corners. Font is open again (his: "i want to choos a differnet font but i wnat to see my optiojnks"): /brand shows ten candidates
 (system SF Pro, Geist, Inter, Manrope, Plus Jakarta Sans, DM Sans, Figtree, Instrument Sans, Onest, Outfit) with a live switch.
 typography.families stays as written above until he picks. -->
+
+<!-- 2026-11-14 surface option "Sidestash" (his spec, from his own Sidestash app, Palette.swift): the page is a mid cool neutral
+(not the brightest), cards and buttons are LIGHTER than the page with a subtle top-to-bottom neutral gradient (lighter on top), a
+pure white 1px stroke, and Sidestash's chip shadow (ink 8%, blur 2, y 1); floating chrome adds a soft wide layer. It is the default
+on /brand now, beside Chalk, Flat, Stroke and Stroke + shadow. Undecided until he picks. Font default on /brand: Manrope. -->

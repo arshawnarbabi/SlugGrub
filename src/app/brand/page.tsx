@@ -376,10 +376,12 @@ const PATTERNS: [string, string, string][] = [
   ["Short, plain words", "Sentence case, numbers first, two to five word labels. \"Takes 2 seconds\" beats a paragraph.", "Cal AI, Airbnb"],
 ];
 
+const MANROPE = FONTS.find((f) => f.id === "manrope")!.css;
+
 export default function BrandKit() {
   return (
-    <div className={`sg ${FONT_VARS}`} data-surface="chalk">
-      <SurfaceToggle fonts={FONTS.map(({ id, label, css }) => ({ id, label, css }))} />
+    <div className={`sg ${FONT_VARS}`} data-surface="sidestash" style={{ "--sans": MANROPE, "--display": MANROPE } as React.CSSProperties}>
+      <SurfaceToggle fonts={FONTS.map(({ id, label, css }) => ({ id, label, css }))} initialFont="manrope" />
       <div className="wrap">
         <header className="hero">
           <span className="draft-tag"><span className="dot" /> Draft design system, for review</span>
