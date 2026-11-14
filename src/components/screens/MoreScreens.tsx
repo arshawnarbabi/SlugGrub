@@ -36,13 +36,12 @@ export function VoteScreen() {
     );
   };
   return (
-    <Screen noTabBar>
-      <div className="topbar">
+    <Screen noTabBar top={<div className="topbar">
         <Link href="/rank" className="iconbtn" aria-label="Back"><Icon icon={ArrowLeft01Icon} size={18} /></Link>
         <span className="tint gold"><span className="dot" style={{ background: "var(--bad)" }} /> Live · <Swap id={String(total)}>{total}</Swap> votes</span>
         <span className="iconbtn" aria-hidden><Icon icon={QrCodeIcon} size={18} /></span>
-      </div>
-      <h1 className="title-xl">Dish of the week</h1>
+      </div>}>
+<h1 className="title-xl">Dish of the week</h1>
       <p className="body" style={{ marginTop: -6 }}>Final round. Tap the one you&apos;d rather eat.</p>
       {blk("a", "penne", pa, true)}
       {blk("b", "padthai", 100 - pa, false)}
@@ -88,13 +87,12 @@ export function OnboardingScreen() {
   ];
   const done = step >= steps.length;
   return (
-    <Screen noTabBar wash>
-      <div className="topbar">
+    <Screen noTabBar wash top={<div className="topbar">
         {step > 0 && !done ? <button type="button" className="iconbtn" aria-label="Back" onClick={() => setStep((s) => s - 1)}><Icon icon={ArrowLeft01Icon} size={18} /></button> : <span style={{ width: 38 }} />}
         <div style={{ display: "flex", gap: 6 }}>{steps.map((_, i) => <motion.span key={i} animate={{ width: i === step ? 22 : 7, background: i <= step ? "var(--p9)" : "var(--paper-2)" }} transition={SPRING} style={{ height: 7, borderRadius: 9, display: "block" }} />)}</div>
         <Link href="/" className="textbtn" style={{ fontSize: 13 }}>Skip</Link>
-      </div>
-      {!done ? (
+      </div>}>
+{!done ? (
         <Appear key={step} style={{ display: "grid", gap: 18, marginTop: 24 }}>
           <h1 className="title-xl">{steps[step].q}</h1>
           {steps[step].body}
@@ -125,13 +123,12 @@ export function AskScreen() {
   const [asked, setAsked] = useState<string | null>(null);
   const ask = (text: string) => { if (text.trim()) setAsked(text.trim()); }; // TODO (Ethan): POST to /api/ask
   return (
-    <Screen>
-      <div className="topbar">
+    <Screen top={<div className="topbar">
         <Link href="/" className="iconbtn" aria-label="Back"><Icon icon={ArrowLeft01Icon} size={18} /></Link>
         <span className="center">Ask SlugGrub</span>
         <span style={{ width: 38 }} />
-      </div>
-      <h1 className="title-xl">What are you in the mood for?</h1>
+      </div>}>
+<h1 className="title-xl">What are you in the mood for?</h1>
       <form onSubmit={(e) => { e.preventDefault(); ask(q); }} style={{ display: "flex", gap: 8 }}>
         <input id="ask" value={q} onChange={(e) => setQ(e.target.value)} placeholder="High protein under 700 cal" aria-label="Ask SlugGrub" style={{ flex: 1, height: 50, borderRadius: 999, border: 0, background: "var(--card)", padding: "0 18px", font: "inherit", fontSize: 15, color: "var(--ink)", outlineColor: "var(--p8)" }} />
         <button type="submit" className="iconbtn" style={{ width: 50, height: 50, background: "var(--p9)", color: "white" }} aria-label="Ask"><Icon icon={SparklesIcon} size={20} sw={1.9} /></button>
@@ -162,13 +159,12 @@ export function DiningServicesScreen() {
   const loved = ["tikka", "poke", "penne"].map((id) => DISHES[id]);
   const skipped = [{ name: "Tofu Scramble", hall: "Carson/Oakes", n: 41 }, { name: "Beet Salad", hall: "Crown/Merrill", n: 33 }];
   return (
-    <Screen noTabBar>
-      <div className="topbar">
+    <Screen noTabBar top={<div className="topbar">
         <Link href="/" className="iconbtn" aria-label="Back"><Icon icon={ArrowLeft01Icon} size={18} /></Link>
         <span className="center">Dining services</span>
         <span style={{ width: 38 }} />
-      </div>
-      <h1 className="title-xl">What students loved this week</h1>
+      </div>}>
+<h1 className="title-xl">What students loved this week</h1>
       <div className="card" style={{ padding: "2px 14px" }}>
         {loved.map((d, i) => (
           <div className="row" key={d.id}>

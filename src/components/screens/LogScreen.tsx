@@ -30,12 +30,11 @@ export function LogScreen() {
   const mac = (k: "protein" | "carbs" | "fat") => Math.round(items.reduce((n, x) => n + x.d[k] * x.s, 0));
 
   return (
-    <Screen>
-      <div className="topbar">
+    <Screen top={<div className="topbar">
         <Link href="/" className="iconbtn" aria-label="Back"><Icon icon={ArrowLeft01Icon} size={18} /></Link>
         <span className="center">Log a plate</span>
         <span style={{ width: 38 }} />
-      </div>
+      </div>}>
 
       {phase === "pick" && (
         <Appear style={{ display: "grid", gap: 14 }}>

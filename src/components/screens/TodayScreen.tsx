@@ -11,11 +11,10 @@ export function TodayScreen() {
   const top = DISHES.tikka;
   const pct = Math.round((USER.points / USER.pointsTotal) * 100);
   return (
-    <Screen wash>
-      <div className="topbar">
+    <Screen wash top={<div className="topbar">
         <span className="tint blue"><Icon icon={Location01Icon} size={14} sw={2} /> {USER.hall}</span>
         <button type="button" className="iconbtn" aria-label="Notifications"><Icon icon={Notification01Icon} size={18} /></button>
-      </div>
+      </div>}>
 
       <div>
         <div className="label">Dinner · open till 8 PM</div>

@@ -245,3 +245,25 @@ a.btn { text-decoration: none; }
 .edge > b { position: absolute; inset: 0; pointer-events: none; }
 .edge.top > b { background: linear-gradient(to top, color-mix(in oklch, var(--paper) 0%, transparent) 0%, color-mix(in oklch, var(--paper) 10%, transparent) 30%, color-mix(in oklch, var(--paper) 30%, transparent) 60%, color-mix(in oklch, var(--paper) 65%, transparent) 100%); }
 .edge.bottom > b { background: linear-gradient(to bottom, color-mix(in oklch, var(--paper) 0%, transparent) 0%, color-mix(in oklch, var(--paper) 10%, transparent) 30%, color-mix(in oklch, var(--paper) 30%, transparent) 60%, color-mix(in oklch, var(--paper) 65%, transparent) 100%); }
+
+/* ── Content-only fade (his rule 2026-11-14: "dont have the blur and lighten over the background"). The color overlay is gone: the
+   scroller itself is masked, so scrolled content fades out toward the edges (to ~35% at the very edge, eased) and the background
+   (page color and the blue glow, both behind the scroller) is never touched. The top bar is outside the scroller. ── */
+.edge > b { display: none; }
+.wash { position: absolute; inset: 0 0 auto; z-index: 0; }
+.scroller { z-index: 1; }
+.scroller.has-top { padding-top: calc(env(safe-area-inset-top, 0px) + 72px); }
+.scroller > :not(.wash):not(.topbar) { position: relative; z-index: auto; }
+.topchrome { position: absolute; left: 16px; right: 16px; top: calc(env(safe-area-inset-top, 0px) + 12px); z-index: 6; }
+.topchrome .topbar { position: static; margin: 0; }
+.scroller {
+  mask-image: linear-gradient(to bottom,
+    rgb(0 0 0 / 0.35) 0, rgb(0 0 0 / 0.7) calc(var(--top-chrome) * 0.4), rgb(0 0 0 / 0.9) calc(var(--top-chrome) * 0.7), #000 var(--top-chrome),
+    #000 calc(100% - var(--bottom-chrome)),
+    rgb(0 0 0 / 0.9) calc(100% - var(--bottom-chrome) * 0.7), rgb(0 0 0 / 0.7) calc(100% - var(--bottom-chrome) * 0.4), rgb(0 0 0 / 0.35) 100%);
+}
+.scroller.no-tabbar {
+  mask-image: linear-gradient(to bottom,
+    rgb(0 0 0 / 0.35) 0, rgb(0 0 0 / 0.7) calc(var(--top-chrome) * 0.4), rgb(0 0 0 / 0.9) calc(var(--top-chrome) * 0.7), #000 var(--top-chrome), #000 100%);
+}
+.edge { z-index: 5; }

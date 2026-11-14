@@ -20,12 +20,11 @@ export function RankScreen() {
     if (new URLSearchParams(window.location.search).get("view") === "Leaderboard") setView("Leaderboard");
   }, []);
   return (
-    <Screen>
-      <div className="topbar">
+    <Screen top={<div className="topbar">
         <h1 className="title-xl">Rank</h1>
         <Link href="/vote" className="iconbtn" aria-label="Live vote"><Icon icon={QrCodeIcon} size={18} /></Link>
-      </div>
-      <Seg options={VIEWS} value={view} onChange={setView} label="Rank view" />
+      </div>}>
+<Seg options={VIEWS} value={view} onChange={setView} label="Rank view" />
       {view === "This or that" ? <Appear key="duel"><Duels /></Appear> : <Appear key="board"><Board /></Appear>}
     </Screen>
   );

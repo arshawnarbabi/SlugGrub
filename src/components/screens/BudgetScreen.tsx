@@ -13,12 +13,11 @@ export function BudgetScreen() {
   const r = 84, c = 2 * Math.PI * r, arc = c * 0.75;
   const used = 1 - USER.points / USER.pointsTotal;
   return (
-    <Screen>
-      <div className="topbar">
+    <Screen top={<div className="topbar">
         <h1 className="title-xl">Budget</h1>
         <span className="tint blue">{USER.plan} plan</span>
-      </div>
-      <div className="card" style={{ position: "relative", height: 226, display: "grid", placeItems: "center" }}>
+      </div>}>
+<div className="card" style={{ position: "relative", height: 226, display: "grid", placeItems: "center" }}>
         <svg width="200" height="200" viewBox="0 0 200 200" style={{ position: "absolute", top: 16, transform: "rotate(135deg)" }} aria-hidden>
           <circle cx="100" cy="100" r={r} fill="none" stroke="var(--paper-2)" strokeWidth="12" strokeDasharray={`${arc} ${c}`} strokeLinecap="round" />
           <circle cx="100" cy="100" r={r} fill="none" stroke="var(--p9)" strokeWidth="12" strokeDasharray={`${arc * (1 - used)} ${c}`} strokeLinecap="round" />

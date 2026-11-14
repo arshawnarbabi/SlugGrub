@@ -14,12 +14,11 @@ export function HallsScreen() {
   const [hall, setHall] = useState(HALLS[0].id);
   const h = HALLS.find((x) => x.id === hall)!;
   return (
-    <Screen>
-      <div className="topbar">
+    <Screen top={<div className="topbar">
         <h1 className="title-xl">Halls</h1>
         <button type="button" className="iconbtn" aria-label="Search dishes"><Icon icon={Search01Icon} size={18} /></button>
-      </div>
-      <Seg options={MEALS} value={meal} onChange={setMeal} label="Meal" />
+      </div>}>
+<Seg options={MEALS} value={meal} onChange={setMeal} label="Meal" />
 
       <div className="sechead"><h2>Best on campus</h2><span className="seeall">See all</span></div>
       <div className="carousel">
