@@ -2902,3 +2902,7 @@ step darker (page L 0.944) and card gradient subtler (0.986 to 0.980). All strok
 bar"), now the default on /brand: flat cards (solid fill L 0.984 on a page of L 0.944, no stroke, no shadow); round top buttons,
 See all pills, segmented pills, secondary buttons and the bottom navigation bar keep the Sidestash raised gradient, white 0.5px
 hairline and chip shadow. Undecided until he picks. -->
+
+<!-- 2026-11-14 surface option "Sidestash, solid cards" (his ask: "lets try sidestash but for the cards no gradient"), now the default
+on /brand: the Sidestash surface with cards on one solid fill (L 0.984) instead of a gradient, white 0.5px hairline and chip shadow
+kept; buttons, pills and the nav bar keep the gradient. Undecided until he picks. -->

@@ -5,6 +5,7 @@
 import { useEffect, useState } from "react";
 
 const SURFACES = [
+  { id: "sidestash-solid", label: "Sidestash, solid cards" },
   { id: "hybrid", label: "Flat + Sidestash" },
   { id: "sidestash", label: "Sidestash" },
   { id: "chalk", label: "Chalk" },
@@ -26,7 +27,7 @@ const BLUES = [
 export type FontOption = { id: string; label: string; css: string };
 
 export function SurfaceToggle({ fonts, initialFont }: { fonts: FontOption[]; initialFont: string }) {
-  const [surface, setSurface] = useState<Surface>("hybrid");
+  const [surface, setSurface] = useState<Surface>("sidestash-solid");
   const [font, setFont] = useState(initialFont);
   const [blue, setBlue] = useState<string>("bright");
 
@@ -35,7 +36,11 @@ export function SurfaceToggle({ fonts, initialFont }: { fonts: FontOption[]; ini
   }, [blue]);
 
   useEffect(() => {
-    document.querySelector(".sg")?.setAttribute("data-surface", surface);
+    const el = document.querySelector(".sg");
+    if (!el) return;
+    el.setAttribute("data-surface", surface === "sidestash-solid" ? "sidestash" : surface);
+    if (surface === "sidestash-solid") el.setAttribute("data-cards", "solid");
+    else el.removeAttribute("data-cards");
   }, [surface]);
 
   useEffect(() => {
