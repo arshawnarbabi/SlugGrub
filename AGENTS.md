@@ -41,5 +41,6 @@ Three people (Arshawn, Karen, Ethan) and their AI assistants work in this repo a
 - Gemini is called only from server code (`src/app/api/`). The key is never sent to the browser.
 - Use the types in `src/lib/types.ts`. Use fake data from `data/mock/` until the real data function is ready.
 - Calories are private: never show one user's calories to another user.
+- Motion and blur follow docs/DESIGN.md: one spring (motion.spring), one goo (motion.goo), one state change (motion.state_change). Blur is a MUST-be-cheap rule (effects.blur_budget): never add a blur layer beyond it.
 - Beginner how-to for the team (git, branches, pull requests): `docs/TEAM-GUIDE.md`. If your person seems new to git, walk them through it step by step and explain each command before running it.
 - Never push to `main`, never force push (`--force`), and never run `git reset --hard` without your person saying yes.

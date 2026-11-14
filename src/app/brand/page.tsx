@@ -10,7 +10,7 @@ import {
   Notification01Icon, Wifi01Icon, CellularNetworkIcon, CrownIcon, QrCodeIcon,
 } from "@hugeicons/core-free-icons";
 import { SurfaceToggle, FontCard } from "./SurfaceToggle";
-import { MotionTabBar, Seg, CountUp, Duel, CameraMenu } from "./Interactive";
+import { MotionTabBar, Seg, CountUp, Duel, CameraMenu, GooSlider } from "./Interactive";
 import { FONTS, FONT_VARS } from "./fonts";
 import "./brand.css";
 
@@ -199,6 +199,7 @@ function PhotoScreen() {
           </div>
         ))}
       </div>
+      <div className="card" style={{ padding: "12px 14px" }}><GooSlider initial={1.5} /></div>
       <div className="card" style={{ padding: "2px 12px" }}>
         {[["Chicken Tikka Masala", "1.5", "810"], ["Steamed Jasmine Rice", "1", "120"]].map(([n, s, c]) => (
           <div className="row" key={n}>
@@ -401,10 +402,10 @@ export default function BrandKit() {
         <section>
           <div className="eyebrow">Motion</div>
           <h2 className="sec">Smooth, quiet, and only where it helps</h2>
-          <p className="note">One spring and one easing for everything, so every motion feels like the same app. Things slide instead of jumping, taps give a small press, numbers count up once, and the gooey effect appears in exactly one place: the camera button, where actions split off and merge back. Try them here and on the screens above.</p>
+          <p className="note">One spring and one easing for everything, so every motion feels like the same app. One subtle spring (about 1% overshoot) and one subtle goo setting for everything, so it all feels like one material. Selections slide on a liquid thumb that stretches a little as it travels, the food button splits into actions, sliders stretch while dragged, buttons release on the same spring, and anything that changes state blurs, fades and morphs into its new value. Try them here and on the screens above.</p>
           <div className="grid2">
             <div className="card stack" style={{ justifyItems: "start" }}>
-              <div className="eyebrow">Gooey camera menu (tap it)</div>
+              <div className="eyebrow">Gooey food button (tap it)</div>
               <div style={{ height: 150, width: "100%", display: "grid", placeItems: "end center", paddingBottom: 8 }}><CameraMenu /></div>
             </div>
             <div className="card stack">
@@ -419,8 +420,11 @@ export default function BrandKit() {
             <div className="card stack">
               <div className="eyebrow">The rules</div>
               <ul style={{ margin: 0, paddingLeft: 18, color: "var(--ink-2)", lineHeight: 1.6, fontSize: 14 }}>
-                <li>Press: buttons shrink to 97%, icon buttons to 90%, cards to 98.5%, in 140ms</li>
-                <li>Slide and settle: one spring (stiffness 420, damping 36), no bounce you can count</li>
+                <li>Press: buttons shrink to 97%, icon buttons to 90%, cards to 98.5%, and spring back on release</li>
+                <li>One spring everywhere: stiffness 300, damping 28 (about 1% overshoot), the same curve in CSS and JS</li>
+                <li>One goo everywhere: blur 5, contrast 18, trail 0.16</li>
+                <li>State changes blur, fade and morph (4px blur, 92% scale) instead of snapping</li>
+                <li>Blur is always cheap: 2 layers per scroll edge at most, never on photos or opaque surfaces</li>
                 <li>Only opacity, scale and position animate, so it stays smooth on phones</li>
                 <li>Reduce motion turns every animation into an instant change</li>
                 <li>No confetti, no shaking, no looping animation</li>
@@ -517,6 +521,10 @@ export default function BrandKit() {
               <Seg options={["This week", "Today", "All time"]} initial="This week" start />
               <div className="macro"><i style={{ flex: 38, background: "var(--protein)" }} /><i style={{ flex: 44, background: "var(--carbs)" }} /><i style={{ flex: 30, background: "var(--fat)" }} /></div>
               <div className="legend"><span><b style={{ background: "var(--protein)" }} />Protein</span><span><b style={{ background: "var(--carbs)" }} />Carbs</span><span><b style={{ background: "var(--fat)" }} />Fat</span></div>
+            </div>
+            <div className="card stack">
+              <div className="eyebrow">Goo slider (drag it)</div>
+              <GooSlider initial={1} />
             </div>
             <div className="card stack">
               <div className="eyebrow">Hero number</div>

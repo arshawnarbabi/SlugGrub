@@ -576,10 +576,38 @@ motion:
     accelerate: "cubic-bezier(0.3, 0, 1, 1)"
 
   spring:
-    gentle:  { stiffness: 260, damping: 30 }             # rank pick settle # draft
-    snappy:  { stiffness: 420, damping: 36, mass: 0.9 }  # THE spring: tab capsule, segmented pill, check marks # draft
-    bouncy:  { stiffness: 400, damping: 22 }
-    gooey:   { stiffness: 260, damping: 20, mass: 1 }    # camera menu (liquid-gooey): his ask "a bit more spring" than the smooth preset
+    # THE spring. One value for every slide, settle, pop, rotation, gooey move and button release (his asks 2026-11-14: "subtle
+    # spring ... consistently translated for each", then "make the overall consistent spring and goo effect subtler").
+    # Damping ratio ~0.81, ~1.3% overshoot: settles with a hint of life, no visible bounce.
+    default: { stiffness: 300, damping: 28, mass: 1 }
+    # The same spring sampled for CSS, so CSS-only presses release on the identical curve (duration 620ms):
+    css_linear: "linear(0, 0.042, 0.138, 0.262, 0.393, 0.518, 0.627, 0.723, 0.802, 0.863, 0.911, 0.947, 0.973, 0.990, 1.001, 1.008, 1.012, 1.013, 1.013, 1.011, 1.010, 1.008, 1.007, 1.005, 1.004, 1.003, 1.002, 1.001, 1)"
+    css_duration: "500ms"
+
+  goo:
+    # THE goo (liquid-gooey). One setting for every liquid surface: sliding selections (tab capsule, segmented pill), the food
+    # button menu, slider thumbs. Subtle: a short bridge, a small stretch. (his ask: "subtle goo consistently translated for each")
+    blur: 5
+    contrast: 18
+    move: { springiness: 0.22, trail: 0.16 }   # subtler (his ask): a slight stretch you feel more than see
+    transition: "{motion.spring.default}"
+    where: ["tab bar active capsule", "segmented control pill", "food button split menu", "slider thumbs"]
+    never: ["cards", "text", "photos", "anything that does not move or merge"]
+
+  state_change:
+    # THE default for any state change (his ask: "when states change i really want the default to be blur + fade in/out/morph"):
+    # outgoing blurs out, fades and shrinks a little; incoming blurs in from the same; scale and rotation ride the spring.
+    out: { opacity: 0, blur_px: 4, scale: 0.92 }   # subtler (his ask)
+    in: { opacity: 1, blur_px: 0, scale: 1 }
+    fade: { duration: "220ms", easing: "{motion.easing.standard}" }
+    scale_and_rotate: "{motion.spring.default}"
+    icon_swap_rotation_deg: 90      # e.g. food icon to X on the food button
+    at_rest: "filter: none (never leave a blur(0) filter on an element)"
+
+  press:
+    scale: { button: 0.97, icon_button: 0.9, card: 0.985, tab: 0.94 }
+    down: "90ms {motion.easing.standard}"
+    release: "{motion.spring.css_linear} over {motion.spring.css_duration}"
 
   # Profile modifiers
   profile_modifiers:
@@ -655,6 +683,20 @@ effects:
     "3": "canvas 2D (main-thread draw loop)"
     "4": "WebGL / shaders / 3D (GPU context, texture upload, shader compile)"
 
+  blur_budget:
+    # MUST, a default for every screen (his rule 2026-11-14, "this is very important make sure any blur you use is cheap and not
+    # perforamnce heavy. log this as a defualt and a must"). Any new blur is checked against this before it ships.
+    backdrop_filter_layers_per_edge_max: 2      # scroll edges: 2 layers (3px and 10px), masked; never more
+    backdrop_filter_layers_per_screen_max: 4    # top edge + bottom edge
+    backdrop_blur_radius_max_px: 12
+    animate_blur_radius: "never"                # a backdrop blur radius never animates
+    opaque_surfaces: "never carry a backdrop blur"   # an opaque nav bar or card gains nothing from it and still pays for it
+    filter_blur: "only for state changes, only on small elements (icons, labels, chips), max 4px, only during the 220ms change; filter none at rest"
+    never_blur: ["photos", "full screens", "lists", "anything while it scrolls"]
+    svg_goo_blur: "liquid-gooey only, on small moving pieces; it sleeps when idle"
+    reduced_transparency: "remove every backdrop blur, keep the color fade"
+    verify: "QA Gate B2 frame-time p95 on a phone before ship; if over budget, drop to the color fade first"
+
   limits:
     budgets: "per QA.md gates.performance and gates.performance.runtime"           # QA.md gates.performance.runtime: frame_p95_ms_max_120hz / _60hz,
                                                #   long_task_ms_max, webgl_contexts_max, backdrop_filter_layers_max
@@ -682,7 +724,7 @@ effects:
     - id: scroll-edge-blur
       what: "iOS-style soft scroll edge: progressive blur plus a fade to the page color at the top (under the status bar) and bottom (under the tab bar) of every scrolling screen"   # his ask 2026-11-14
       tier: 2
-      how: "5 stacked backdrop-filter layers (1, 2, 4, 8, 16px), each masked to a gradient band, plus a color fade; pinned outside the scroll layer"
+      how: "2 backdrop-filter layers per edge (3px and 10px), each masked to a gradient, plus a color fade; pinned outside the scroll layer (cut from 5 layers for his blur budget)"
       fallback: "the color fade only"
       reduced: "prefers-reduced-transparency: fade only"
       measured: "not yet (QA Gate B2 before ship)"
@@ -1537,9 +1579,15 @@ Status: values he chose are unmarked; Claude's inferences carry # draft above.
   sentence case only, never all caps (his rule).
 - **Icons:** Hugeicons free Stroke Rounded (his rule), one stroke weight, heavier on the active tab.
 - **Shape:** pill buttons and chips, circle icon buttons, 18px flat cards, concentric corners, 0.5px hairlines (his ask).
-- **Motion:** one spring for slides and settles, short press feedback, numbers count up once, gooey in the camera menu with a bit
-  more spring than smooth (his ask); reduced motion makes everything instant. See motion and effects.registry above.
-- **Scroll edges:** iOS-style progressive blur and fade at the top and bottom of scrolling screens (his ask).
+- **Motion:** smooth and subtle micro-interactions everywhere they help, never gimmicky (his ask); numbers count up once; reduced
+  motion makes everything instant.
+- **Scroll edges:** iOS-style progressive blur and fade at the top and bottom of scrolling screens (his ask), 2 cheap layers per edge.
+- **Blur is cheap, always (his MUST):** at most 2 backdrop blurs per edge and 4 per screen, radius 12px max, never animated, never on
+  opaque surfaces, photos or lists; state-change blur (4px) only on small elements for 220ms and removed at rest. See effects.blur_budget.
+- **Spring, goo, state change (subtle, his ask):** one spring (300/28, ~1.3% overshoot), one goo (blur 5, contrast 18, trail 0.16), and
+  one state change (4px blur + fade + 92% scale) everywhere. See motion.spring, motion.goo, motion.state_change.
+- **Food button:** a rice bowl icon (not a camera); it splits into Log a plate and Ask SlugGrub, and the icon blur-morphs to an X with
+  a 90 degree turn on the spring.
 - **Open picks on /brand:** Card fill step; blue variant (Bright is current); surface switch kept only for comparison.
 
 # How to use this template

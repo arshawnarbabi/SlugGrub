@@ -182,7 +182,7 @@
 
 /* tab bar */
 .sg .tabbar { position: absolute; left: 14px; right: 14px; bottom: 18px; display: flex; align-items: center; gap: 10px; }
-.sg .tabbar .pillbar { flex: 1; height: 60px; border-radius: var(--r-pill); border: 1px solid var(--line); background: oklch(1 0 0 / 0.86); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); box-shadow: var(--shadow-2); display: flex; justify-content: space-around; align-items: center; padding: 0 6px; }
+.sg .tabbar .pillbar { flex: 1; height: 60px; border-radius: var(--r-pill); border: 1px solid var(--line); background: oklch(1 0 0 / 0.86); backdrop-filter: blur(16px); box-shadow: var(--shadow-2); display: flex; justify-content: space-around; align-items: center; padding: 0 6px; }
 .sg .tabbar .tab { display: grid; justify-items: center; gap: 2px; font-size: 10px; font-weight: 600; color: var(--ink-3); padding: 6px 10px; border-radius: var(--r-pill); }
 .sg .tabbar .tab.on { color: var(--ink); background: var(--paper-2); }
 .sg .tabbar .cam { width: 60px; height: 60px; border-radius: 50%; background: var(--p9); display: grid; place-items: center; box-shadow: var(--shadow-2); flex: 0 0 auto; color: white; }
@@ -267,7 +267,7 @@
 .sg .patterns .card span { display: block; margin-top: 8px; font-size: 12px; color: var(--ink-3); }
 
 /* ── surface style switch (brand kit only). Floating things (tab bar, camera, floating button) keep their shadow in every mode. ── */
-.sg .surface-toggle { position: fixed; top: max(14px, env(safe-area-inset-top, 0px)); left: 50%; transform: translateX(-50%); z-index: 60; display: flex; align-items: center; gap: 10px; padding: 6px 6px 6px 16px; border-radius: var(--r-pill); background: oklch(1 0 0 / 0.88); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); box-shadow: var(--shadow-2); }
+.sg .surface-toggle { position: fixed; top: max(14px, env(safe-area-inset-top, 0px)); left: 50%; transform: translateX(-50%); z-index: 60; display: flex; align-items: center; gap: 10px; padding: 6px 6px 6px 16px; border-radius: var(--r-pill); background: oklch(1 0 0 / 0.88); backdrop-filter: blur(16px); box-shadow: var(--shadow-2); }
 .sg .seg button { all: unset; cursor: pointer; padding: 7px 14px; border-radius: var(--r-pill); font-size: 13px; font-weight: 500; color: var(--ink-2); }
 .sg .seg button.on { background: var(--card); color: var(--ink); font-weight: 600; box-shadow: var(--shadow-1); }
 .sg .seg button:focus-visible { outline: 2px solid var(--p9); outline-offset: 2px; }
@@ -366,17 +366,17 @@
 .sg .edge.top { top: 0; height: 92px; }
 .sg .edge.bottom { bottom: 0; height: 130px; }
 .sg .edge > i { position: absolute; inset: 0; }
-.sg .edge.top > i:nth-child(1) { backdrop-filter: blur(1px); -webkit-backdrop-filter: blur(1px); mask: linear-gradient(to top, transparent 0%, #000 20%, #000 40%, transparent 60%); -webkit-mask: linear-gradient(to top, transparent 0%, #000 20%, #000 40%, transparent 60%); }
-.sg .edge.top > i:nth-child(2) { backdrop-filter: blur(2px); -webkit-backdrop-filter: blur(2px); mask: linear-gradient(to top, transparent 20%, #000 40%, #000 60%, transparent 80%); -webkit-mask: linear-gradient(to top, transparent 20%, #000 40%, #000 60%, transparent 80%); }
-.sg .edge.top > i:nth-child(3) { backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); mask: linear-gradient(to top, transparent 40%, #000 60%, #000 80%, transparent 100%); -webkit-mask: linear-gradient(to top, transparent 40%, #000 60%, #000 80%, transparent 100%); }
-.sg .edge.top > i:nth-child(4) { backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); mask: linear-gradient(to top, transparent 60%, #000 80%); -webkit-mask: linear-gradient(to top, transparent 60%, #000 80%); }
-.sg .edge.top > i:nth-child(5) { backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); mask: linear-gradient(to top, transparent 80%, #000 100%); -webkit-mask: linear-gradient(to top, transparent 80%, #000 100%); }
+.sg .edge.top > i:nth-child(1) { backdrop-filter: blur(1px); mask: linear-gradient(to top, transparent 0%, #000 20%, #000 40%, transparent 60%); -webkit-mask: linear-gradient(to top, transparent 0%, #000 20%, #000 40%, transparent 60%); }
+.sg .edge.top > i:nth-child(2) { backdrop-filter: blur(2px); mask: linear-gradient(to top, transparent 20%, #000 40%, #000 60%, transparent 80%); -webkit-mask: linear-gradient(to top, transparent 20%, #000 40%, #000 60%, transparent 80%); }
+.sg .edge.top > i:nth-child(3) { backdrop-filter: blur(4px); mask: linear-gradient(to top, transparent 40%, #000 60%, #000 80%, transparent 100%); -webkit-mask: linear-gradient(to top, transparent 40%, #000 60%, #000 80%, transparent 100%); }
+.sg .edge.top > i:nth-child(4) { backdrop-filter: blur(8px); mask: linear-gradient(to top, transparent 60%, #000 80%); -webkit-mask: linear-gradient(to top, transparent 60%, #000 80%); }
+.sg .edge.top > i:nth-child(5) { backdrop-filter: blur(16px); mask: linear-gradient(to top, transparent 80%, #000 100%); -webkit-mask: linear-gradient(to top, transparent 80%, #000 100%); }
 .sg .edge.top > b { position: absolute; inset: 0; background: linear-gradient(to bottom, color-mix(in oklch, var(--paper) 88%, transparent) 0%, color-mix(in oklch, var(--paper) 55%, transparent) 45%, color-mix(in oklch, var(--paper) 0%, transparent) 100%); }
-.sg .edge.bottom > i:nth-child(1) { backdrop-filter: blur(1px); -webkit-backdrop-filter: blur(1px); mask: linear-gradient(to bottom, transparent 0%, #000 20%, #000 40%, transparent 60%); -webkit-mask: linear-gradient(to bottom, transparent 0%, #000 20%, #000 40%, transparent 60%); }
-.sg .edge.bottom > i:nth-child(2) { backdrop-filter: blur(2px); -webkit-backdrop-filter: blur(2px); mask: linear-gradient(to bottom, transparent 20%, #000 40%, #000 60%, transparent 80%); -webkit-mask: linear-gradient(to bottom, transparent 20%, #000 40%, #000 60%, transparent 80%); }
-.sg .edge.bottom > i:nth-child(3) { backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); mask: linear-gradient(to bottom, transparent 40%, #000 60%, #000 80%, transparent 100%); -webkit-mask: linear-gradient(to bottom, transparent 40%, #000 60%, #000 80%, transparent 100%); }
-.sg .edge.bottom > i:nth-child(4) { backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); mask: linear-gradient(to bottom, transparent 60%, #000 80%); -webkit-mask: linear-gradient(to bottom, transparent 60%, #000 80%); }
-.sg .edge.bottom > i:nth-child(5) { backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); mask: linear-gradient(to bottom, transparent 80%, #000 100%); -webkit-mask: linear-gradient(to bottom, transparent 80%, #000 100%); }
+.sg .edge.bottom > i:nth-child(1) { backdrop-filter: blur(1px); mask: linear-gradient(to bottom, transparent 0%, #000 20%, #000 40%, transparent 60%); -webkit-mask: linear-gradient(to bottom, transparent 0%, #000 20%, #000 40%, transparent 60%); }
+.sg .edge.bottom > i:nth-child(2) { backdrop-filter: blur(2px); mask: linear-gradient(to bottom, transparent 20%, #000 40%, #000 60%, transparent 80%); -webkit-mask: linear-gradient(to bottom, transparent 20%, #000 40%, #000 60%, transparent 80%); }
+.sg .edge.bottom > i:nth-child(3) { backdrop-filter: blur(4px); mask: linear-gradient(to bottom, transparent 40%, #000 60%, #000 80%, transparent 100%); -webkit-mask: linear-gradient(to bottom, transparent 40%, #000 60%, #000 80%, transparent 100%); }
+.sg .edge.bottom > i:nth-child(4) { backdrop-filter: blur(8px); mask: linear-gradient(to bottom, transparent 60%, #000 80%); -webkit-mask: linear-gradient(to bottom, transparent 60%, #000 80%); }
+.sg .edge.bottom > i:nth-child(5) { backdrop-filter: blur(16px); mask: linear-gradient(to bottom, transparent 80%, #000 100%); -webkit-mask: linear-gradient(to bottom, transparent 80%, #000 100%); }
 .sg .edge.bottom > b { position: absolute; inset: 0; background: linear-gradient(to top, color-mix(in oklch, var(--paper) 92%, transparent) 0%, color-mix(in oklch, var(--paper) 60%, transparent) 40%, color-mix(in oklch, var(--paper) 0%, transparent) 100%); }
 @media (prefers-reduced-transparency: reduce) { .sg .edge > i { display: none; } }
 .sg .scroll-hint { position: absolute; left: 0; right: 0; bottom: -26px; text-align: center; font-size: 12px; color: var(--ink-3); }
@@ -491,7 +491,7 @@
 .sg.sg.sg.sg[data-surface="hybrid"] .tabbar .pillbar { background: var(--raise); border: 0.5px solid var(--hi); box-shadow: var(--shadow-2); }
 .sg.sg.sg[data-surface="hybrid"] :is(.cam-main, .drop) { background: linear-gradient(180deg, oklch(1 0 0 / 0.18) 0%, oklch(1 0 0 / 0) 62%); box-shadow: inset 0 0 0 0.5px oklch(1 0 0 / 0.5); }
 /* kit control bar: a slim sticky strip at the top of the page instead of a floating pill over the phones */
-.sg.sg.sg .surface-toggle { position: sticky; top: 0; left: auto; bottom: auto; transform: none; max-width: none; width: 100%; border-radius: 0; z-index: 60; justify-content: center; gap: 8px 10px; padding: 10px max(16px, env(safe-area-inset-left, 0px)); background: color-mix(in oklch, var(--paper) 86%, transparent); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); border: 0; border-bottom: 0.5px solid var(--line); box-shadow: none; }
+.sg.sg.sg .surface-toggle { position: sticky; top: 0; left: auto; bottom: auto; transform: none; max-width: none; width: 100%; border-radius: 0; z-index: 60; justify-content: center; gap: 8px 10px; padding: 10px max(16px, env(safe-area-inset-left, 0px)); background: color-mix(in oklch, var(--paper) 86%, transparent); backdrop-filter: blur(18px); border: 0; border-bottom: 0.5px solid var(--line); box-shadow: none; }
 .sg.sg.sg .surface-toggle .seg button { padding: 6px 11px; font-size: 12px; }
 .sg.sg.sg .surface-toggle .font-select { height: 30px; font-size: 12px; }
 .sg .wrap { padding-block: 40px 120px; }
@@ -501,3 +501,43 @@
 .sg.sg.sg.sg :is(.cam-main, .drop) { background: none; box-shadow: none; }
 .sg .drop { opacity: 0; transition: opacity 180ms var(--ease); }
 .sg .drop.on { opacity: 1; transition-delay: 90ms; }
+
+/* ── THE spring and THE goo, applied consistently (his ask 2026-11-14). --spring is THE spring (stiffness 280, damping 22) sampled
+   into a CSS easing, so CSS-only presses release on the same curve as every JS animation. ── */
+.sg { --spring: linear(0, 0.047, 0.157, 0.302, 0.456, 0.604, 0.730, 0.838, 0.922, 0.984, 1.024, 1.049, 1.061, 1.064, 1.060, 1.052, 1.043, 1.033, 1.024, 1.016, 1.009, 1.004, 1.001, 0.998, 0.997, 0.996, 0.996, 0.996, 0.997, 0.997, 0.998, 0.999, 1); --dur-spring: 620ms; }
+.sg :is(.btn, .iconbtn, .chip, .seeall, .tint, .textbtn, .press, .font-card, .tab, .seg-m button, .drop) { transition: transform var(--dur-spring) var(--spring), box-shadow var(--dur-ui) var(--ease), background-color var(--dur-ui) var(--ease), opacity var(--dur-ui) var(--ease); }
+.sg :is(.btn, .iconbtn, .chip, .seeall, .tint, .textbtn, .press, .tab, .seg-m button, .drop):active { transition-duration: 90ms; transition-timing-function: var(--ease); }
+/* GooTrack: the liquid thumb under tabs and segmented controls */
+.sg .track { position: relative; display: flex; align-items: center; }
+.sg .pillbar > .track { width: 100%; justify-content: space-around; }
+.sg .goo-thumb { position: absolute; left: 0; border-radius: 999px; }
+.sg .track > button { position: relative; z-index: 1; }
+.sg .tab-cap, .sg .seg-pill { display: none; }
+/* GooSlider */
+.sg .goo-slider { display: grid; gap: 10px; }
+.sg .gs-head { display: flex; justify-content: space-between; align-items: baseline; }
+.sg .gs-head b { font-size: 15px; }
+.sg .gs-track { position: relative; height: 8px; border-radius: 999px; background: var(--paper-2); cursor: pointer; touch-action: none; margin: 10px 0; }
+.sg .gs-track:focus-visible { outline: 2px solid var(--p9); outline-offset: 6px; }
+.sg .gs-fill { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 999px; background: var(--p7); }
+.sg .gs-thumb { position: absolute; top: 14px; width: 26px; height: 26px; border-radius: 50%; margin-top: -9px; }
+
+/* droplet icons use the state change too: blur + fade in when the menu opens */
+.sg .drop { filter: blur(5px); transform: scale(0.86); transition: opacity 220ms var(--ease), filter 220ms var(--ease), transform var(--dur-spring) var(--spring); }
+.sg .drop.on { filter: blur(0); transform: scale(1); }
+
+/* ── BLUR BUDGET (his rule 2026-11-14, a MUST: "make sure any blur you use is cheap and not performance heavy").
+   Scroll edges: 2 backdrop-filter layers per edge (was 5), small radii, never animated. Opaque surfaces never carry a backdrop
+   blur (it is pure cost). State-change blur is a short filter on small elements only and is removed at rest. ── */
+.sg .edge > i:nth-child(n+3) { display: none; }
+.sg .edge.top > i:nth-child(1) { backdrop-filter: blur(3px); mask: linear-gradient(to top, transparent 0%, #000 55%); -webkit-mask: linear-gradient(to top, transparent 0%, #000 55%); }
+.sg .edge.top > i:nth-child(2) { backdrop-filter: blur(10px); mask: linear-gradient(to top, transparent 45%, #000 100%); -webkit-mask: linear-gradient(to top, transparent 45%, #000 100%); }
+.sg .edge.bottom > i:nth-child(1) { backdrop-filter: blur(3px); mask: linear-gradient(to bottom, transparent 0%, #000 55%); -webkit-mask: linear-gradient(to bottom, transparent 0%, #000 55%); }
+.sg .edge.bottom > i:nth-child(2) { backdrop-filter: blur(10px); mask: linear-gradient(to bottom, transparent 45%, #000 100%); -webkit-mask: linear-gradient(to bottom, transparent 45%, #000 100%); }
+.sg .tabbar .pillbar { backdrop-filter: none; }
+.sg .drop.on { filter: none; }
+
+/* subtler spring and goo (his ask 2026-11-14): THE spring is now stiffness 300, damping 28 (~1.3% overshoot), 500ms in CSS */
+.sg { --spring: linear(0, 0.042, 0.138, 0.262, 0.393, 0.518, 0.627, 0.723, 0.802, 0.863, 0.911, 0.947, 0.973, 0.990, 1.001, 1.008, 1.012, 1.013, 1.013, 1.011, 1.010, 1.008, 1.007, 1.005, 1.004, 1.003, 1.002, 1.001, 1); --dur-spring: 500ms; }
+.sg .drop { filter: blur(4px); transform: scale(0.92); }
+.sg .drop.on { filter: none; transform: scale(1); }
