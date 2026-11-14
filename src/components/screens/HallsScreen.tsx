@@ -39,7 +39,7 @@ export function HallsScreen() {
 
       <div className="carousel" style={{ marginTop: 4 }}>
         {HALLS.map((x) => (
-          <button key={x.id} type="button" className={`chip ${hall === x.id ? "on" : ""}`} style={{ height: 36, fontSize: 13 }} onClick={() => setHall(x.id)}>
+          <button key={x.id} type="button" className={`chip chip-sm ${hall === x.id ? "on" : ""}`} onClick={() => setHall(x.id)}>
             {x.short}
           </button>
         ))}

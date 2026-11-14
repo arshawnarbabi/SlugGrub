@@ -615,13 +615,11 @@ motion:
     scale: "none"
 
   page_transition:
-    # his ask 2026-11-14: "when changing pages just make it how it works in ios ... a simple very quick fade of the content ...
-    # i dont want any like card animations". iOS 18+ cross-dissolves on tab switch. Content fades in, opacity only, 180ms,
-    # ease-out; the nav bar never moves or fades. No slides, no card or shared-element transitions. Reduced motion: instant.
-    type: "crossfade"
-    property: "opacity"
-    duration: "180ms"
-    easing: "ease-out"
+    # his rule 2026-11-14 (supersedes the 180ms crossfade from earlier the same day): "dont animate the ui coming in on page
+    # selection, everything should be static". Opening a page shows it in place: no fade, no blur-in, no count-up. Motion is only
+    # for changes the student makes on the screen (switch meal, pick a dish, open the food button).
+    type: "none"
+    entry_animations: "none (Appear and numbers render in place while a screen opens; ScreenClock in src/components/ui/motion.tsx)"
 
   # Profile modifiers
   profile_modifiers:
@@ -1593,8 +1591,8 @@ Status: values he chose are unmarked; Claude's inferences carry # draft above.
   sentence case only, never all caps (his rule).
 - **Icons:** Hugeicons free Stroke Rounded (his rule), one stroke weight, heavier on the active tab.
 - **Shape:** pill buttons and chips, circle icon buttons, 18px flat cards, concentric corners, 0.5px hairlines (his ask).
-- **Motion:** smooth and subtle micro-interactions everywhere they help, never gimmicky (his ask); numbers count up once; reduced
-  motion makes everything instant. Presses just dim (no scale); page changes are a quick 180ms content fade like iOS tab switches.
+- **Motion:** smooth and subtle micro-interactions everywhere they help, never gimmicky (his ask); reduced
+  motion makes everything instant. Numbers no longer count up. Presses just dim (no scale); pages open static, with no entry animation of any kind (his rule).
 - **Scroll edges:** iOS-style progressive blur and fade at the top and bottom of scrolling screens (his ask), 2 cheap layers per edge.
 - **Blur is cheap, always (his MUST):** at most 2 backdrop blurs per edge and 4 per screen, radius 12px max, never animated, never on
   opaque surfaces, photos or lists; state-change blur (4px) only on small elements for 220ms and removed at rest. See effects.blur_budget.
@@ -1602,6 +1600,9 @@ Status: values he chose are unmarked; Claude's inferences carry # draft above.
   one state change (4px blur + fade + 92% scale) everywhere. See motion.spring, motion.goo, motion.state_change.
 - **Food button:** a rice bowl icon (not a camera); it splits into Log a plate and Ask SlugGrub, and the icon blur-morphs to an X with
   a 90 degree turn on the spring.
+- **Sizing scale (his ask):** every tap target at least 44px. Nav bar and food button 62 · primary buttons 52 · top bar icon
+  buttons 44 (20px icons) · chips 42 (small 40) · segmented buttons 38 in a 46 track · top bar tags 36 · See all 32 with a 44 tap
+  area · text buttons 44 tap height. In-card icon chips are decoration, not targets (the whole card is the target).
 - **Nav bar selection:** tabs share the bar equally and fill its height; the goo capsule is inset 5px on every side, so it is wide and
   concentric with the outer pill (his ask, from two references).
 - **In the app:** tokens live in src/app/globals.css (copied from this file; change here first), shared pieces in src/components/ui

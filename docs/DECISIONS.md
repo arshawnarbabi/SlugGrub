@@ -115,6 +115,15 @@ Most entries use the plain format above. Two kinds of decision come up on every 
 - **Choice:** smooth, premium, subtle micro-interactions, never gimmicky; gooey kept subtle and consistent; the gooey camera spring has "a bit more spring" than the library's smooth preset.
 - **Status:** approved (exact spring values # draft in DESIGN.md motion)
 
+
+## 2026-11-14 — Pages open static; presses dim
+- **Choice:** his words: "dont animate the ui coming in on page selection, everything should be static" (supersedes the 180ms page crossfade tried earlier the same day) and "when pressing buttons just make it normal, no expand or compress". Motion is only for changes made on the screen.
+- **Status:** locked
+
+## 2026-11-14 — Sizing scale
+- **Choice:** every tap target at least 44px; heights: nav bar and food button 62, primary buttons 52, top bar icon buttons 44, chips 42/40, segmented 36 in a 44 track, top bar tags 36, See all 32 (44 tap area). His ask: "make sure all the button sizes are appropriately sized relative to each other and the content".
+- **Status:** approved (values # draft in DESIGN.md until he signs off)
+
 # AI Agent Contract (decisions)
 1. **Read before proposing or changing.** Consult `DECISIONS.md` before suggesting OR making any change to something it covers.
 2. **A request that touches a locked decision is NOT itself authorization to reopen it** — even when phrased as a direct instruction (e.g. "switch the cards to borders," "make it green"). A stakeholder asking for the *change* is not the same as the human explicitly asking to *reopen the locked decision*. Before modifying any file, you MUST: **(a)** surface the locked entry, **(b)** quote its documented rationale, **(c)** ask the human to confirm they intend to supersede it. Implement only after that explicit confirmation — then append a new superseding entry. Do **not** implement in the same turn as the request. (This is the analog of the QA gate: locked decisions are a gate you don't silently pass.)

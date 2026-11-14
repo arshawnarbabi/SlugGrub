@@ -4,8 +4,8 @@
 //   spring: one subtle spring (300/28, ~1.3% overshoot)      goo: one subtle goo (blur 5, contrast 18), no trailing spring
 //   state change: blur + fade + morph (4px, 92%)             blur is cheap (effects.blur_budget, a MUST)
 
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { motion, useReducedMotion, animate, AnimatePresence } from "framer-motion";
+import { createContext, useContext, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { motion, useReducedMotion, AnimatePresence } from "framer-motion";
 import { Liquid } from "liquid-gooey";
 
 export const SPRING_CFG = { stiffness: 300, damping: 28, mass: 1 };
@@ -36,31 +36,35 @@ export function Swap({ id, children, rotate = 0, className, style }: { id: strin
   );
 }
 
-/** Appear: a block that enters with the state change (used for results, sheets, messages). */
+/** Pages open static (his rule 2026-11-14: "dont animate the ui coming in on page selection, everything should be static").
+ *  ScreenClock marks when a screen mounted; anything that would animate in within that first moment renders in place instead. */
+const ScreenMounted = createContext<number>(0);
+export function ScreenClock({ children }: { children: React.ReactNode }) {
+  const [t0] = useState(() => Date.now());
+  return <ScreenMounted.Provider value={t0}>{children}</ScreenMounted.Provider>;
+}
+function useOpeningScreen() {
+  const t0 = useContext(ScreenMounted);
+  const [opening] = useState(() => t0 === 0 || Date.now() - t0 < 400);
+  return opening;
+}
+
+/** Appear: a block that enters with a state change (switching meal, a new result). Never animates while the page is opening. */
 export function Appear({ children, delay = 0, className, style }: { children: React.ReactNode; delay?: number; className?: string; style?: React.CSSProperties }) {
   const reduce = useReducedMotion();
+  const opening = useOpeningScreen();
   return (
-    <motion.div className={className} style={style} initial={reduce ? false : STATE_OUT} animate={{ ...STATE_IN, transitionEnd: { filter: "none" } }}
+    <motion.div className={className} style={style} initial={reduce || opening ? false : STATE_OUT} animate={{ ...STATE_IN, transitionEnd: { filter: "none" } }}
       transition={reduce ? { duration: 0 } : { opacity: { ...STATE_FADE, delay }, filter: { ...STATE_FADE, delay }, scale: { ...SPRING, delay } }}>
       {children}
     </motion.div>
   );
 }
 
-/** Numbers count up once when they first appear. */
+/** Numbers: shown in place when a page opens (static, his rule); if the value changes later it blur-morphs like any state change. */
 export function CountUp({ to, decimals = 0 }: { to: number; decimals?: number }) {
-  const ref = useRef<HTMLSpanElement>(null);
-  const reduce = useReducedMotion();
-  const fmt = (v: number) => v.toLocaleString("en-US", { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    if (reduce) { el.textContent = fmt(to); return; }
-    const c = animate(0, to, { duration: 0.9, ease: [0.22, 1, 0.36, 1], onUpdate: (v) => { el.textContent = fmt(v); } });
-    return () => c.stop();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [to, reduce]);
-  return <span ref={ref}>{fmt(to)}</span>;
+  const text = to.toLocaleString("en-US", { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
+  return <Swap id={text}>{text}</Swap>;
 }
 
 /** GooTrack: the one liquid thumb that slides under a row of options (tab bar, segmented controls). */
