@@ -471,3 +471,5 @@
 .sg.sg.sg[data-cards="solid"] { --paper: oklch(0.962 0.004 250); --paper-2: oklch(0.93 0.005 250); }
 .sg.sg.sg[data-cards="solid"] .float-cta { background: linear-gradient(180deg, oklch(0.962 0.004 250 / 0), var(--paper) 45%); }
 .sg.sg[data-surface="sidestash"]:not([data-cards]) { --raise-card: linear-gradient(180deg, oklch(0.99 0.002 250) 0%, oklch(0.972 0.0035 250) 100%); }
+/* the floating button's fade always matches the chosen background */
+.sg.sg.sg.sg .float-cta { background: linear-gradient(180deg, color-mix(in oklch, var(--paper) 0%, transparent), var(--paper) 45%); }
