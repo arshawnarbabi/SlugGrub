@@ -1,10 +1,58 @@
 # SlugGrub team guide
 
-Never used GitHub, pull requests or a coding agent before? Start here.
+Never used GitHub, pull requests or a coding agent before? Start here. Read Part 0 first.
 
-**The short version:** do the few manual steps in Part 1, then paste your setup prompt from Part 2 into Antigravity. The agent does the rest of the setup, explains your job, and tells you when it's ready. After that, use the prompts in Part 3 every time you work.
+**The short version:** read Part 0 (what commit, push, pull requests and the rest mean), do the few manual steps in Part 1, then paste your setup prompt from Part 2 into Antigravity. The agent does the rest of the setup, explains your job, and tells you when it's ready. After that, use the prompts in Part 3 every time you work.
 
 **Who owns what and what's left to do:** [PLAN.md](../PLAN.md). **Rules your AI follows:** [AGENTS.md](../AGENTS.md).
+
+---
+
+## Part 0: GitHub basics in 5 minutes
+
+Git keeps the history of our project. GitHub is the website that stores it so all three of us share one copy. Think of it like a video game with save points.
+
+| Action | What it is | Game version | How often |
+|---|---|---|---|
+| **Clone** | Download the whole project from GitHub to your laptop | Installing the game | Once |
+| **Branch** | Your own copy of the project to work in, so you never mess up anyone else's work. `main` is the shared version we demo | Your own save slot | One per feature |
+| **Commit** | A save point of your changes, with a short note like "Add vote button". Saved on your laptop only | Saving your game | **After every step that works** |
+| **Push** | Upload your commits to GitHub, so they're backed up and others can see them | Uploading your save to the cloud | After a few commits, or when you take a break |
+| **Pull** | Download everyone else's new work into your laptop | Getting the latest update | Every time you start working |
+| **Pull request (PR)** | Asking to add your branch into `main`. GitHub shows every line you changed so the team can see it | Asking to merge your save into the team's game | When a feature (or a piece of one) works |
+| **Merge** | Accepting the pull request: your work is now in `main` for everyone | The team's game now has your progress | Right after the PR looks fine |
+| **Merge conflict** | Two people changed the same lines. Git can't pick, so a person does | Two saves disagree | Rare if we each stick to our own files |
+
+**The whole cycle:**
+
+```
+clone (once)
+  -> pull the latest main
+  -> make a branch
+  -> build a small step -> commit -> build a step -> commit -> ...
+  -> push
+  -> open a pull request -> merge
+  -> back to "pull the latest main" for the next feature
+```
+
+### Two habits that matter most
+1. **Commit after every step that works.** Got a button showing? Commit. Got data loading? Commit. Small commits mean you can always go back if the next step breaks something, and it's easy to see what changed.
+2. **Open a pull request whenever a piece works**, about every hour or two. Don't wait until the end of the day. Small pull requests almost never conflict; big ones almost always do.
+
+### Your AI is your git teacher
+You don't need to memorize any of this. Ask the agent, in plain words, any time:
+
+> What does committing mean, and should I commit right now?
+
+> I just finished the vote button and it works. Walk me through committing it, pushing, and opening a pull request, one step at a time, explaining each.
+
+> What did that command just do? Explain it simply.
+
+> Run git status and tell me in plain words what it means.
+
+> Show me what changed since my last commit before I commit.
+
+If you're ever unsure whether something is safe, ask the agent first, then ask the group chat.
 
 ---
 
@@ -57,7 +105,7 @@ Set me up from start to finish:
 7. Explain my role in a few short lines: what I own (PLAN.md, "Karen"), the exact folders and files I'm allowed to edit, and the shared files I must ask the team about first.
 8. My first job is Firebase. Walk me through what I have to do by hand in the Firebase console (create the project, add a web app, turn on Firestore and Google sign-in, copy the config into .env.local), one step at a time, waiting for me after each. Then set up src/lib/firebase.ts.
 9. List my remaining tasks from PLAN.md in the order you suggest building them.
-10. Explain how I save and share my work: commit, push, open a pull request, merge. Keep it short; it's in docs/TEAM-GUIDE.md, Part 3.
+10. Teach me the git basics using what we just did as the example: what cloning was, what my branch is, and what commit, push, pull, pull request and merge mean (docs/TEAM-GUIDE.md, Part 0). Then show me how to commit after each step that works, and do my first commit with me now if anything changed. From now on, remind me to commit after every step that works, and to push and open a pull request whenever a piece of a feature works.
 
 When everything above is done, end with exactly: "I understand the plan and my role, and I'm ready." If anything failed, tell me what failed instead of saying that.
 ```
@@ -77,7 +125,7 @@ Set me up from start to finish:
 7. Explain my role in a few short lines: what I own (PLAN.md, "Ethan"), the exact folders and files I'm allowed to edit, and the shared files I must ask the team about first.
 8. My first job is the menu fetcher. Read PLAN.md, "Menu data", and explain the plan before writing code: which UCSC pages it reads, what it saves to data/menus/, and how it fixes the certificate problem by adding the missing intermediate certificate (never by turning off certificate checks). Then build scripts/fetch-menus.ts so getMenu() in src/lib/menus.ts can return real menus in the same shape as the fake data.
 9. List my remaining tasks from PLAN.md in the order you suggest building them.
-10. Explain how I save and share my work: commit, push, open a pull request, merge. Keep it short; it's in docs/TEAM-GUIDE.md, Part 3.
+10. Teach me the git basics using what we just did as the example: what cloning was, what my branch is, and what commit, push, pull, pull request and merge mean (docs/TEAM-GUIDE.md, Part 0). Then show me how to commit after each step that works, and do my first commit with me now if anything changed. From now on, remind me to commit after every step that works, and to push and open a pull request whenever a piece of a feature works.
 
 When everything above is done, end with exactly: "I understand the plan and my role, and I'm ready." If anything failed, tell me what failed instead of saying that.
 ```
@@ -96,6 +144,7 @@ I'm <your name>. Read AGENTS.md and PLAN.md again, since they may have changed. 
 - Start a **new chat** for each new task. Long chats use up your limit faster.
 - Read what it changed. If it touched a file you don't own, tell it to undo that part.
 - Run the app (`npm run dev`) and click through your screen yourself.
+- **Commit after every step that works.** Ask the agent: "Commit what we just did with a short message."
 
 ### When something works: ship it (paste this)
 ```
@@ -120,7 +169,7 @@ Say **no** if you see any of these, and ask in the group chat:
 2. **Only edit files you own.** The table in [PLAN.md](../PLAN.md) lists them. Need a change in someone else's file? Ask them in the group chat.
 3. **Shared files need a heads-up first:** `src/lib/types.ts`, `data/mock/`, `package.json`, `AGENTS.md`.
 4. **Pull before you start** (the start-of-session prompt does this).
-5. **Small pull requests, merged often.**
+5. **Commit after every step that works, and open small pull requests often** (every hour or two).
 6. **Never upload keys.** `.env.local` stays on your laptop. Keys are shared in DMs only.
 7. **Adding a package?** Say so in the chat first.
 8. **Tick your box in PLAN.md** when your thing is merged. Add decisions there too.
@@ -129,23 +178,7 @@ Say **no** if you see any of these, and ask in the group chat:
 
 ---
 
-## Part 5: The words, if you're curious
-
-| Word | What it means |
-|---|---|
-| **Repo** | The project folder, stored on GitHub so all three of us share it |
-| **Clone** | Download the repo to your laptop (once) |
-| **Commit** | A saved checkpoint of your changes, on your laptop only |
-| **Push** | Upload your commits to GitHub |
-| **Pull** | Download everyone else's new work |
-| **Branch** | Your own copy to work on. `main` is the shared, working version |
-| **Pull request (PR)** | A request to add your branch's work into `main`. GitHub shows exactly what changed |
-| **Merge** | Accepting a pull request, so your work becomes part of `main` |
-| **Merge conflict** | Two people changed the same lines. A person has to pick. Our file ownership rules prevent most of these |
-
----
-
-## Part 6: When something goes wrong
+## Part 5: When something goes wrong
 
 Paste the error into the agent chat with:
 ```

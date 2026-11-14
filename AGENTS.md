@@ -29,6 +29,7 @@ Three people (Arshawn, Karen, Ethan) and their AI assistants work in this repo a
 - Work on a branch named after the feature (`today`, `photo-log`, `rank`, `menus`), never directly on `main`.
 - `git pull --rebase origin main` before starting and before pushing.
 - Small pull requests, merged often (every hour or two).
+- After every step that works, offer to commit it with a short message. When a piece of a feature works, offer to push and open a pull request. Teammates are new to git: explain what each git step does in one plain sentence as you do it.
 - Never commit `.env.local` or any key.
 - Tell your person before adding a package; they should tell the group chat.
 
