@@ -1602,6 +1602,8 @@ Status: values he chose are unmarked; Claude's inferences carry # draft above.
   one state change (4px blur + fade + 92% scale) everywhere. See motion.spring, motion.goo, motion.state_change.
 - **Food button:** a rice bowl icon (not a camera); it splits into Log a plate and Ask SlugGrub, and the icon blur-morphs to an X with
   a 90 degree turn on the spring.
+- **Nav bar selection:** tabs share the bar equally and fill its height; the goo capsule is inset 5px on every side, so it is wide and
+  concentric with the outer pill (his ask, from two references).
 - **In the app:** tokens live in src/app/globals.css (copied from this file; change here first), shared pieces in src/components/ui
   (Icon, Photo, Screen, TabBar with the food button, motion.tsx: Swap, Appear, CountUp, GooTrack, Seg, GooSlider), screens in
   src/components/screens. /brand stays as the reference kit.
