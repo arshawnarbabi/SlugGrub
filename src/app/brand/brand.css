@@ -380,3 +380,59 @@
 .sg .edge.bottom > b { position: absolute; inset: 0; background: linear-gradient(to top, color-mix(in oklch, var(--paper) 92%, transparent) 0%, color-mix(in oklch, var(--paper) 60%, transparent) 40%, color-mix(in oklch, var(--paper) 0%, transparent) 100%); }
 @media (prefers-reduced-transparency: reduce) { .sg .edge > i { display: none; } }
 .sg .scroll-hint { position: absolute; left: 0; right: 0; bottom: -26px; text-align: center; font-size: 12px; color: var(--ink-3); }
+
+/* ── his tweaks 2026-11-14: background a bit darker, card gradient even subtler ── */
+.sg[data-surface="sidestash"] { --paper: oklch(0.944 0.005 250); --paper-2: oklch(0.912 0.006 250); --raise-card: linear-gradient(180deg, oklch(0.986 0.002 250) 0%, oklch(0.98 0.0025 250) 100%); }
+.sg[data-surface="sidestash"] .float-cta { background: linear-gradient(180deg, oklch(0.944 0.005 250 / 0), var(--paper) 45%); }
+
+/* ── motion system (his ask: smooth, premium, polished, lots of micro-interactions, never gimmicky).
+   One easing and one spring for everything; press feedback on anything tappable; hover lift only where a pointer exists. ── */
+.sg { --ease: cubic-bezier(0.22, 1, 0.36, 1); --dur-press: 140ms; --dur-ui: 220ms; }
+.sg :is(.btn, .iconbtn, .chip, .seeall, .tint, .textbtn, .press, .font-card, .tab, .seg-m button, .cam-main, .drop) { transition: transform var(--dur-press) var(--ease), box-shadow var(--dur-ui) var(--ease), background-color var(--dur-ui) var(--ease), opacity var(--dur-ui) var(--ease); -webkit-tap-highlight-color: transparent; }
+.sg :is(.btn, .chip, .seeall, .tint, .textbtn):active { transform: scale(0.97); }
+.sg :is(.iconbtn, .drop):active { transform: scale(0.9); }
+.sg .tab:active { transform: scale(0.94); }
+.sg .card.press:active { transform: scale(0.985); }
+@media (hover: hover) {
+  .sg :is(.card.press, .font-card):hover { box-shadow: var(--shadow-2); }
+  .sg .btn-primary:hover { filter: brightness(1.05); }
+}
+@media (prefers-reduced-motion: reduce) { .sg * { transition-duration: 0ms !important; } }
+
+/* tab bar with sliding capsule */
+.sg .tabbar .tab { all: unset; box-sizing: border-box; cursor: pointer; position: relative; display: grid; justify-items: center; padding: 6px 10px; border-radius: var(--r-pill); font-size: 10px; font-weight: 600; color: var(--ink-3); }
+.sg .tabbar .tab.on { color: var(--ink); background: transparent !important; }
+.sg .tab-cap { position: absolute; inset: 0; border-radius: var(--r-pill); background: var(--paper-2); }
+.sg .tab-ink { position: relative; display: grid; justify-items: center; gap: 2px; }
+.sg .tab:focus-visible { outline: 2px solid var(--p9); outline-offset: 2px; }
+
+/* segmented control with sliding pill */
+.sg .seg-m { display: inline-flex; padding: 4px; gap: 2px; }
+.sg .seg-m button { all: unset; box-sizing: border-box; cursor: pointer; position: relative; padding: 7px 14px; border-radius: var(--r-pill); font-size: 13px; font-weight: 500; color: var(--ink-2); }
+.sg .seg-m button.is-on { color: var(--ink); font-weight: 600; }
+.sg .seg-m span { padding: 0; }
+.sg .seg-pill { position: absolute; inset: 0; border-radius: var(--r-pill); background: var(--card); box-shadow: var(--shadow-1); }
+.sg[data-surface="sidestash"] .seg-pill { background: var(--raise); border: 1px solid var(--hi); box-shadow: var(--chip-shadow); }
+.sg .seg-ink { position: relative; }
+.sg .seg-m button:focus-visible { outline: 2px solid var(--p9); outline-offset: 2px; }
+
+/* gooey camera menu */
+.sg .cam-wrap { position: relative; width: 60px; height: 60px; flex: 0 0 auto; }
+.sg .cam-main { all: unset; box-sizing: border-box; cursor: pointer; width: 60px; height: 60px; border-radius: 50%; display: grid; place-items: center; color: white; }
+.sg .drop { all: unset; box-sizing: border-box; cursor: pointer; width: 46px; height: 46px; border-radius: 50%; display: grid; place-items: center; color: white; }
+.sg :is(.cam-main, .drop):focus-visible { outline: 2px solid var(--p9); outline-offset: 3px; }
+
+/* rank duel */
+.sg .duel .opt { cursor: pointer; font: inherit; color: inherit; text-align: center; }
+.sg .duel .opt.press { border-style: solid; }
+.sg .pick-check { position: absolute; right: 8px; top: 8px; width: 28px; height: 28px; border-radius: 50%; background: var(--card); color: var(--p9); display: grid; place-items: center; box-shadow: var(--shadow-1); }
+.sg .textbtn { all: unset; cursor: pointer; display: inline-flex; gap: 5px; align-items: center; padding: 4px 6px; border-radius: 8px; }
+.sg .textbtn:focus-visible { outline: 2px solid var(--p9); }
+
+/* his ask 2026-11-14: "make the hairlines just look like normal hairlines". Every stroke and divider is a true hairline: 0.5px
+   (one device pixel on a retina phone), the white card and button strokes included. */
+.sg .row + .row { border-top-width: 0.5px; }
+.sg[data-surface="sidestash"] :is(.card, .duel .opt, .chip:not(.on), .sw, .seeall, .iconbtn, .btn-secondary, .tabbar .pillbar, .font-card, .surface-toggle, .scale, .seg-pill) { border-width: 0.5px; }
+.sg[data-surface="sidestash"] :is(.btn-primary, .tabbar .cam) { border-width: 0.5px; }
+.sg[data-surface="chalk"] :is(.card, .duel .opt, .chip:not(.on), .sw, .scale, .seeall, .iconbtn, .tabbar .pillbar) { border-width: 0.5px; }
+.sg :is(.card, .chip, .seeall, .iconbtn, .sw, .scale) { border-width: 0.5px; }

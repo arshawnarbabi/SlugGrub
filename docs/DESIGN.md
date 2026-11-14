@@ -2887,3 +2887,13 @@ stacked backdrop-filter layers (1, 2, 4, 8, 16px) each masked to a band of a gra
 the top (under the status bar) and bottom (under the tab bar) of every scrolling screen; hidden under prefers-reduced-transparency.
 This is an effects.registry entry (tier 2, backdrop-filter) to measure under QA Gate B2 before it ships in the app. (3) Sidestash
 background lighter (page L 0.955, was 0.938). Blue and surface still open until he picks. -->
+
+<!-- 2026-11-14 motion and polish (his asks): "i want all animations to be smooth and premium and polished nad lots of micro
+interactions where applciable but not doing too much or making stuff look gimmmicky or overdesigned", plus the gooey effect
+"subtle and cnsistent". Draft motion system on /brand: one spring (stiffness 420, damping 36, mass 0.9) and one easing
+(cubic-bezier(0.22, 1, 0.36, 1)) for everything; press feedback (buttons 0.97, icon buttons 0.9, cards 0.985, 140ms); sliding tab
+capsule and segmented pill (Framer Motion layout); numbers count up once; this-or-that pick settles, the other dims, the change
+slides in; gooey (liquid-gooey 0.2.2, MIT, no dependencies) used in ONE place, the camera button splitting into Log a plate and Ask
+SlugGrub on the "smooth" preset; only opacity, scale and position animate; reduced motion makes everything instant. Background a
+step darker (page L 0.944) and card gradient subtler (0.986 to 0.980). All strokes and dividers are 0.5px hairlines (his ask
+"make the hairlines just look like normal hairlines"). -->

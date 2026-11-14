@@ -10,6 +10,7 @@ import {
   Notification01Icon, Wifi01Icon, CellularNetworkIcon, CrownIcon, QrCodeIcon,
 } from "@hugeicons/core-free-icons";
 import { SurfaceToggle, FontCard } from "./SurfaceToggle";
+import { MotionTabBar, Seg, CountUp, Duel, CameraMenu } from "./Interactive";
 import { FONTS, FONT_VARS } from "./fonts";
 import "./brand.css";
 
@@ -44,22 +45,7 @@ function Status({ light }: { light?: boolean }) {
 }
 
 function TabBar({ active }: { active: "today" | "rank" | "halls" | "budget" }) {
-  const tabs = [
-    { id: "today", label: "Today", icon: Home09Icon },
-    { id: "rank", label: "Rank", icon: ChampionIcon },
-    { id: "halls", label: "Halls", icon: Restaurant01Icon },
-    { id: "budget", label: "Budget", icon: Wallet01Icon },
-  ] as const;
-  return (
-    <div className="tabbar">
-      <div className="pillbar">
-        {tabs.map((t) => (
-          <div key={t.id} className={`tab ${active === t.id ? "on" : ""}`}><I icon={t.icon} size={21} sw={active === t.id ? 2.1 : 1.7} />{t.label}</div>
-        ))}
-      </div>
-      <div className="cam" aria-label="Log a plate"><I icon={Camera01Icon} size={25} sw={1.9} /></div>
-    </div>
-  );
+  return <MotionTabBar active={active} />;
 }
 
 function Phone({ label, children, tab, wash, footer }: { label: string; children: React.ReactNode; tab?: Parameters<typeof TabBar>[0]["active"]; wash?: boolean; footer?: React.ReactNode }) {
@@ -92,7 +78,7 @@ function TodayScreen() {
         <div className="title-xl">Good evening, Maya</div>
       </div>
 
-      <div className="card" style={{ padding: 0, overflow: "hidden" }}>
+      <div className="card press" style={{ padding: 0, overflow: "hidden" }}>
         <Photo food="tikka" w="100%" h={148} r={0}>
           <span className="on-photo gold"><I icon={CrownIcon} size={13} sw={2} /> #1 at your hall</span>
         </Photo>
@@ -120,7 +106,7 @@ function TodayScreen() {
         </div>
       </div>
 
-      <div className="card" style={{ display: "flex", alignItems: "center", gap: 10, padding: 10 }}>
+      <div className="card press" style={{ display: "flex", alignItems: "center", gap: 10, padding: 10 }}>
         <Photo food="pad-thai" w={44} h={44} r={12} />
         <Photo food="wrap" w={44} h={44} r={12} />
         <div style={{ flex: 1, minWidth: 0, fontSize: 13 }}><b>Which was better at lunch?</b><div style={{ color: "var(--ink-3)", fontSize: 12 }}>Takes 2 seconds</div></div>
@@ -129,7 +115,7 @@ function TodayScreen() {
 
       <div className="sechead" style={{ marginTop: 4 }}><b>Best on campus tonight</b><span className="seeall">See all</span></div>
       {([["penne", "Penne Arrabbiata", "Cowell/Stevenson · 8.8"], ["poke", "Salmon Poke Bowl", "Crown/Merrill · 8.9"], ["grain-bowl", "Harvest Grain Bowl", "Porter/Kresge · 8.6"]] as [Food, string, string][]).map(([f, n, d]) => (
-        <div className="card" key={f} style={{ display: "flex", gap: 12, alignItems: "center", padding: 10 }}>
+        <div className="card press" key={f} style={{ display: "flex", gap: 12, alignItems: "center", padding: 10 }}>
           <Photo food={f} w={56} h={56} r={12} />
           <div style={{ flex: 1, minWidth: 0 }}><div style={{ fontWeight: 600, fontSize: 15, letterSpacing: "-0.01em" }}>{n}</div><div className="num" style={{ fontSize: 12, color: "var(--ink-3)", marginTop: 2 }}>{d}</div></div>
         </div>
@@ -150,7 +136,7 @@ function HallsScreen() {
         <div className="title-xl">Halls</div>
         <div className="iconbtn"><I icon={Search01Icon} size={18} /></div>
       </div>
-      <div className="seg" style={{ alignSelf: "start" }}><span>Breakfast</span><span>Lunch</span><span className="on">Dinner</span></div>
+      <Seg options={["Breakfast", "Lunch", "Dinner"]} initial="Dinner" start />
       <div className="sechead"><b>Best tonight</b><span className="seeall">See all</span></div>
       <div className="carousel">
         {best.map(([f, n, s, h]) => (
@@ -166,7 +152,7 @@ function HallsScreen() {
       <div className="sechead" style={{ marginTop: 4 }}><b>JRL/C9 tonight</b><span className="tint blue" style={{ height: 24, fontSize: 12 }}>Open till 8</span></div>
       <div style={{ display: "grid", gap: 10 }}>
         {([["steak-salad", "Steak Salad", "420 cal", "8.2"], ["pizza", "Flatbread Pizza", "290 cal a slice", "7.6"], ["garden-salad", "Garden Salad", "180 cal", "7.4"], ["pancakes", "Buttermilk Pancakes", "350 cal, brunch", "8.0"]] as [Food, string, string, string][]).map(([f, n, c, s]) => (
-          <div className="card" key={f} style={{ display: "flex", gap: 12, alignItems: "center", padding: 10 }}>
+          <div className="card press" key={f} style={{ display: "flex", gap: 12, alignItems: "center", padding: 10 }}>
             <div style={{ flex: 1, minWidth: 0 }}><div style={{ fontWeight: 600, fontSize: 15, letterSpacing: "-0.01em" }}>{n}</div><div className="num" style={{ fontSize: 12, color: "var(--ink-3)", marginTop: 2 }}>{c} · <span style={{ color: "var(--ink-2)" }}>{s}</span></div></div>
             <Photo food={f} w={64} h={64} r={14} />
           </div>
@@ -185,28 +171,7 @@ function RankScreen() {
         <div className="iconbtn"><I icon={MoreHorizontalIcon} size={18} /></div>
       </div>
       <div className="title-xl" style={{ marginTop: 4 }}>Which was better?</div>
-      <div style={{ fontSize: 14, color: "var(--ink-2)", marginTop: -4 }}>Tap the one you liked more.</div>
-      <div className="duel" style={{ marginTop: 8 }}>
-        <div className="opt picked" style={{ padding: 8, gap: 8 }}>
-          <Photo food="pad-thai" w="100%" h={150} r={18} />
-          <div style={{ fontSize: 15, fontWeight: 600, letterSpacing: "-0.01em", lineHeight: 1.2 }}>Shrimp Pad Thai</div>
-          <div className="num" style={{ fontSize: 12, color: "var(--ink-3)", marginTop: -4, marginBottom: 6 }}>410 cal · #4</div>
-        </div>
-        <div className="or" style={{ top: "40%" }}>or</div>
-        <div className="opt" style={{ padding: 8, gap: 8 }}>
-          <Photo food="wrap" w="100%" h={150} r={18} />
-          <div style={{ fontSize: 15, fontWeight: 600, letterSpacing: "-0.01em", lineHeight: 1.2 }}>Chicken Wrap</div>
-          <div className="num" style={{ fontSize: 12, color: "var(--ink-3)", marginTop: -4, marginBottom: 6 }}>520 cal · #9</div>
-        </div>
-      </div>
-      <div style={{ display: "flex", justifyContent: "space-between", marginTop: 4, fontSize: 14, color: "var(--ink-2)", fontWeight: 500, padding: "0 6px" }}>
-        <span style={{ display: "flex", gap: 5, alignItems: "center" }}><I icon={Undo02Icon} size={15} /> Undo</span>
-        <span>Too tough</span>
-        <span>Skip</span>
-      </div>
-      <div className="card" style={{ fontSize: 13, color: "var(--ink-2)", display: "flex", gap: 8, alignItems: "center", padding: 12 }}>
-        <span className="delta up"><I icon={ArrowUp01Icon} size={12} sw={2.4} />12</span> Shrimp Pad Thai moved up to <b style={{ color: "var(--ink)" }}>#3</b>
-      </div>
+            <Duel a={{ src: "/brand/food/pad-thai.jpg", name: "Shrimp Pad Thai", meta: "410 cal · #4" }} b={{ src: "/brand/food/wrap.jpg", name: "Chicken Wrap", meta: "520 cal · #9" }} />
     </>
   );
 }
@@ -224,7 +189,7 @@ function PhotoScreen() {
       </Photo>
       <div className="card" style={{ display: "flex", alignItems: "center", gap: 12 }}>
         <div className="iconbtn" style={{ width: 44, height: 44, background: "var(--paper-2)", border: 0 }}><I icon={FireIcon} size={20} sw={2} /></div>
-        <div style={{ flex: 1 }}><div className="eyebrow">Calories · only you see this</div><div className="hero-num" style={{ fontSize: 36 }}>830</div></div>
+        <div style={{ flex: 1 }}><div className="eyebrow">Calories · only you see this</div><div className="hero-num" style={{ fontSize: 36 }}><CountUp to={830} /></div></div>
       </div>
       <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 8 }}>
         {[["Protein", "38g", "var(--protein)"], ["Carbs", "44g", "var(--carbs)"], ["Fat", "30g", "var(--fat)"]].map(([n, v, c]) => (
@@ -264,7 +229,7 @@ function BudgetScreen() {
         </svg>
         <div style={{ textAlign: "center", marginTop: 6 }}>
           <div className="eyebrow">Points left</div>
-          <div className="hero-num" style={{ fontSize: 46 }}>1,120</div>
+          <div className="hero-num" style={{ fontSize: 46 }}><CountUp to={1120} /></div>
           <span className="pill ok" style={{ marginTop: 6 }}><span className="dot" />On track</span>
         </div>
       </div>
@@ -298,7 +263,7 @@ function LeaderboardScreen() {
         <div className="title-xl">Leaderboard</div>
         <div className="iconbtn"><I icon={QrCodeIcon} size={18} /></div>
       </div>
-      <div className="seg" style={{ alignSelf: "start" }}><span className="on">Halls</span><span>Dishes</span><span>Colleges</span></div>
+      <Seg options={["Halls", "Dishes", "Colleges"]} initial="Halls" start />
       <div className="card" style={{ padding: 14 }}>
         <div className="eyebrow">Week of Nov 10</div>
         <div style={{ fontSize: 22, fontWeight: 700, letterSpacing: "-0.035em", lineHeight: 1.15, marginTop: 2 }}>Porter is <span style={{ color: "var(--p9)" }}>#3</span> and climbing</div>
@@ -434,6 +399,37 @@ export default function BrandKit() {
         </section>
 
         <section>
+          <div className="eyebrow">Motion</div>
+          <h2 className="sec">Smooth, quiet, and only where it helps</h2>
+          <p className="note">One spring and one easing for everything, so every motion feels like the same app. Things slide instead of jumping, taps give a small press, numbers count up once, and the gooey effect appears in exactly one place: the camera button, where actions split off and merge back. Try them here and on the screens above.</p>
+          <div className="grid2">
+            <div className="card stack" style={{ justifyItems: "start" }}>
+              <div className="eyebrow">Gooey camera menu (tap it)</div>
+              <div style={{ height: 150, width: "100%", display: "grid", placeItems: "end center", paddingBottom: 8 }}><CameraMenu /></div>
+            </div>
+            <div className="card stack">
+              <div className="eyebrow">Sliding selection</div>
+              <Seg options={["Breakfast", "Lunch", "Dinner", "Late"]} initial="Dinner" start />
+              <Seg options={["Halls", "Dishes", "Colleges"]} initial="Dishes" start />
+            </div>
+            <div className="card stack">
+              <div className="eyebrow">Numbers count up once</div>
+              <div className="hero-num"><CountUp to={1120} /><small>pts</small></div>
+            </div>
+            <div className="card stack">
+              <div className="eyebrow">The rules</div>
+              <ul style={{ margin: 0, paddingLeft: 18, color: "var(--ink-2)", lineHeight: 1.6, fontSize: 14 }}>
+                <li>Press: buttons shrink to 97%, icon buttons to 90%, cards to 98.5%, in 140ms</li>
+                <li>Slide and settle: one spring (stiffness 420, damping 36), no bounce you can count</li>
+                <li>Only opacity, scale and position animate, so it stays smooth on phones</li>
+                <li>Reduce motion turns every animation into an instant change</li>
+                <li>No confetti, no shaking, no looping animation</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section>
           <div className="eyebrow">Color</div>
           <h2 className="sec">UCSC blue and gold, cool grays</h2>
           <p className="note">Blue does the work: buttons, the camera button, the brand. Gold is rare: the #1 dish and a highlight. Everything else is cool gray and white.</p>
@@ -518,7 +514,7 @@ export default function BrandKit() {
             </div>
             <div className="card stack">
               <div className="eyebrow">Segmented control and macro bar</div>
-              <div className="seg" style={{ justifySelf: "start" }}><span className="on">This week</span><span>Today</span><span>All time</span></div>
+              <Seg options={["This week", "Today", "All time"]} initial="This week" start />
               <div className="macro"><i style={{ flex: 38, background: "var(--protein)" }} /><i style={{ flex: 44, background: "var(--carbs)" }} /><i style={{ flex: 30, background: "var(--fat)" }} /></div>
               <div className="legend"><span><b style={{ background: "var(--protein)" }} />Protein</span><span><b style={{ background: "var(--carbs)" }} />Carbs</span><span><b style={{ background: "var(--fat)" }} />Fat</span></div>
             </div>
