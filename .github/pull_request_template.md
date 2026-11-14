@@ -1,6 +1,6 @@
 ## What this does
 
-<!-- One or two lines. Which PLAN.md item? -->
+<!-- One or two lines. Which PLAN.md item? New to this? See docs/TEAM-GUIDE.md, Part 3. -->
 
 ## Checklist
 

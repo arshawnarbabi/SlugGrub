@@ -1,6 +1,6 @@
 # SlugGrub plan
 
-The one shared plan for the team and for every AI working in this repo. **If it is not in this file, it is not decided.** Change it in a commit like any code: tick your boxes, add decisions, move things around. Keep the Google Doc for brainstorming only; this file wins if they disagree.
+The one shared plan for the team and for every AI working in this repo. New to GitHub? Read [docs/TEAM-GUIDE.md](docs/TEAM-GUIDE.md) first. **If it is not in this file, it is not decided.** Change it in a commit like any code: tick your boxes, add decisions, move things around. Keep the Google Doc for brainstorming only; this file wins if they disagree.
 
 Last updated: 2026-11-14
 
@@ -23,7 +23,7 @@ Each person owns their folders. **Don't edit files you don't own.** Ask in the g
 | **Arshawn** | All design (look, layout, tab bar, shared UI), the Today page, the Gemini photo log | `src/app/layout.tsx`, `src/app/globals.css`, `src/components/ui/`, `src/app/page.tsx`, `src/app/log/`, `src/app/api/log/` |
 | **Karen** | This-or-that ranking (Elo), Firebase and sign-in, live QR vote, leaderboard and college rivalry, dining services view | `src/app/rank/`, `src/app/vote/`, `src/app/dining-services/`, `src/lib/rankings.ts`, `src/lib/elo.ts`, `src/lib/firebase.ts` |
 | **Ethan** | Menu fetcher and data, Halls tab, Budget, onboarding, Ask SlugGrub | `scripts/`, `data/`, `src/lib/menus.ts`, `src/lib/budget.ts`, `src/app/halls/`, `src/app/budget/`, `src/app/onboarding/`, `src/app/api/ask/` |
-| **Shared (ask first)** | Data types, fake data, this plan | `src/lib/types.ts`, `data/mock/`, `PLAN.md`, `CLAUDE.md`, `package.json` |
+| **Shared (ask first)** | Data types, fake data, this plan | `src/lib/types.ts`, `data/mock/`, `PLAN.md`, `AGENTS.md`, `package.json` |
 
 **How the pieces connect:** everyone codes against the types in `src/lib/types.ts`. Each owner's `src/lib/*.ts` file exports functions the others call (for example Today calls `getTopDishNow()` from Karen's `rankings.ts` and `getBudgetSnapshot()` from Ethan's `budget.ts`). Those functions return fake data from `data/mock/` until the real version is ready, so nobody waits on anyone. **Keep each function's name and return type stable**; change what's inside freely.
 

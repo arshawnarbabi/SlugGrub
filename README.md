@@ -22,13 +22,21 @@ Open it on your phone on the same wifi at `http://<your-laptop-ip>:3000` to test
 
 ## The plan
 
-Everything we're building, who owns what, and what's done: **[PLAN.md](PLAN.md)**. Rules for AI assistants: [CLAUDE.md](CLAUDE.md).
+Everything we're building, who owns what, and what's done: **[PLAN.md](PLAN.md)**. Rules for AI assistants (Claude Code and Antigravity): [AGENTS.md](AGENTS.md).
 
 ## How we work
 
-1. Make a branch for your feature: `git checkout -b photo-log`
-2. Commit and push to that branch, then open a pull request on GitHub
-3. Pull often: `git pull --rebase origin main`
-4. Merge small pull requests every hour or two
-5. Only edit files you own (table in PLAN.md)
+New to GitHub or pull requests? **[docs/TEAM-GUIDE.md](docs/TEAM-GUIDE.md)** walks through setup, the branch and pull request loop, our rules, and fixes for common problems.
 
+## Structure
+
+```
+src/app/            pages: / (Today), /rank, /log, /halls, /budget, /onboarding, /vote, /dining-services
+src/app/api/        server routes (Gemini runs here only): /api/log, /api/ask
+src/components/ui/  shared UI pieces (Arshawn)
+src/lib/            types, halls, and each owner's data functions (menus, rankings, budget)
+scripts/            menu fetcher (Ethan)
+data/mock/          fake data to build against
+data/menus/         saved real menus (generated)
+docs/               team guide
+```
