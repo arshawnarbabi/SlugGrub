@@ -9,6 +9,7 @@ import {
   ArrowRight01Icon, SparklesIcon, StarIcon, Undo02Icon, MinusSignIcon, PlusSignIcon, FireIcon,
   Notification01Icon, Wifi01Icon, CellularNetworkIcon, CrownIcon, QrCodeIcon,
 } from "@hugeicons/core-free-icons";
+import { SurfaceToggle } from "./SurfaceToggle";
 import "./brand.css";
 
 export const metadata: Metadata = { title: "SlugGrub brand kit" };
@@ -376,7 +377,8 @@ const PATTERNS: [string, string, string][] = [
 
 export default function BrandKit() {
   return (
-    <div className="sg">
+    <div className="sg" data-surface="flat">
+      <SurfaceToggle />
       <div className="wrap">
         <header className="hero">
           <span className="draft-tag"><span className="dot" /> Draft design system, for review</span>

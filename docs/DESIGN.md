@@ -2861,3 +2861,8 @@ highlights only. Preview: /brand. The draft markers above stay on anything he ha
 <!-- 2026-11-14 kit v3: real food photos (public/brand/food, Unsplash), Hugeicons, and twelve premium patterns drawn from Mobbin
 (Cal AI, Beli, Airbnb, Copilot, Partiful, Crouton, Jomo, Opal, Revolut), listed on /brand under "What makes it feel premium". All
 pattern choices are # draft until he approves. -->
+
+<!-- 2026-11-14 open choice (his: "idk if i should keep it flat or add stroke and shadows ... i just dont know the vibe"): /brand has a
+Cards switch (Flat / Stroke / Stroke + shadow). Floating chrome keeps its shadow in every mode. Claude's recommendation # draft: Flat
+(white cards on a slightly darker cool gray, no stroke, no shadow), shadow reserved for what floats. Maps to profiles.elevation flat
+plus floating shadows. Undecided until he picks. -->
