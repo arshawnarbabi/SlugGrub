@@ -45,25 +45,25 @@ Tick a box when it's merged to `main`. Put your name on anything you pick up tha
 - [x] Visual design: colors, type, spacing, components in `src/components/ui/` (docs/DESIGN.md, /brand)
 - [x] Tab bar: Today · Rank · Halls · Budget + gooey food button (Log a plate, Ask SlugGrub)
 - [x] Today page UI (demo data until rankings, menus and budget are real)
-- [ ] Photo log: camera, send to `/api/log`, Gemini matches dishes to that hall's menu for the meal, show dishes, servings slider, calories from UCSC labels
-- [ ] Use the standard dining hall plate as a size ruler in the Gemini prompt
+- [x] Photo log: camera, send to `/api/log`, Gemini matches dishes to that hall's menu for the meal, show dishes, servings slider, calories from UCSC labels (not yet run on a real plate: needs Gemini credits)
+- [x] Use the standard dining hall plate as a size ruler in the Gemini prompt
 
 ### Karen
-- [ ] Firebase setup and Google sign-in
-- [ ] This-or-that ranking screen and Elo scoring
-- [ ] Hall leaderboard and weekly college rivalry board
-- [ ] Live QR vote page (`/vote`) for judges, updates in real time
-- [ ] Dining services view: loved and skipped dishes by hall
-- [ ] `getTopDishNow()` and `getLeaderboard()` return real data
+- [x] Firebase setup and Google sign-in (code done; needs the Firebase config, Anonymous + Google sign-in enabled, `firestore.rules` deployed)
+- [x] This-or-that ranking screen and Elo scoring
+- [x] Hall leaderboard and weekly college rivalry board
+- [x] Live QR vote page (`/vote`) for judges, updates in real time; projector view at `/vote/screen` (shared across phones once Firebase is configured; single-server fallback until then)
+- [x] Dining services view: loved and skipped dishes by hall
+- [x] `getTopDishNow()` and `getLeaderboard()` return real data
 
 ### Ethan
-- [ ] Menu fetcher (see "Menu data" below), saves to `data/menus/`
-- [ ] `getMenu()` returns real data
-- [ ] Halls tab: list of halls, each hall's menu for the current meal
-- [ ] Cafe board: cafe menus don't rotate, so rankings carry over
-- [ ] Onboarding: meal plan, current points, college, usual hall
-- [ ] Budget tab: pace tracker (run-out week, points left at quarter end, hall vs cafe vs market)
-- [ ] Ask SlugGrub: "high protein under 700 calories near Porter", Gemini picks from tonight's menus
+- [x] Menu fetcher (see "Menu data" below), saves to `data/menus/` (`npm run menus`; run daily, the site shows about a week)
+- [x] `getMenu()` returns real data
+- [x] Halls tab: list of halls, each hall's menu for the current meal
+- [x] Cafe board: cafe menus don't rotate, so rankings carry over (`npm run cafes`)
+- [x] Onboarding: meal plan, current points, college, usual hall
+- [x] Budget tab: pace tracker (run-out week, points left at quarter end, hall vs cafe vs market)
+- [x] Ask SlugGrub: "high protein under 700 calories near Porter", Gemini picks from tonight's menus (not yet answered for real: needs Gemini credits)
 
 ### Today page cards (Arshawn builds, data from Karen and Ethan)
 1. Header: current meal and hours at your usual hall
@@ -105,6 +105,8 @@ Judging time: **? (fill in)**
 ## Decisions
 
 Newest first. Add a line when the team decides something.
+
+- 2026-11-14: Every tab renders the shared screens in src/components/screens; data functions in src/lib keep their names. Dish images are generated with Gemini (scripts/food-images.mjs). Merged to main in PR #2.
 
 - 2026-11-14: All screen UI built from docs/DESIGN.md (Flat + Sidestash, Manrope, brighter UCSC blue, one spring, one goo, cheap blur). Screens live in src/components/screens; teammates wire data into them.
 - 2026-11-14: Web app (Next.js), not native, so judges can vote by QR with nothing to install.
