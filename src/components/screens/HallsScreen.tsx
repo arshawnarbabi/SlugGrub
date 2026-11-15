@@ -51,9 +51,14 @@ export function HallsScreen({ data, best }: { data: HallsData; best: BestDish[] 
   const meal = meals[hall] ?? "Dinner";
   const setMeal = (m: Meal) => setMeals((ms) => ({ ...ms, [hall]: m }));
   const pick = (id: HallId) => { if (data.halls.some((x) => x.id === id)) setHall(id); };
-  // open on the student's usual hall once their profile is read (it lives on the phone, so only after the page loads)
+  // open on the hall a link asked for (?hall=, from Today's top dish card), else the student's usual hall once their profile is read
+  // (both live on the phone, so only after the page loads)
   const usual = profile?.usualHall;
-  useEffect(() => { if (usual) pick(usual); }, [usual]); // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    const asked = new URLSearchParams(window.location.search).get("hall");
+    if (asked && data.halls.some((x) => x.id === asked)) pick(asked as HallId);
+    else if (usual) pick(usual);
+  }, [usual]); // eslint-disable-line react-hooks/exhaustive-deps
   // keep the selected chip in view when a swipe changes the hall
   const chips = useRef<HTMLDivElement>(null);
   const chipRefs = useRef<(HTMLElement | null)[]>([]);
