@@ -367,3 +367,5 @@ input, textarea, select { font-size: 17px !important; }     /* 16px or more also
    8px padding with concentric corners (card 24 = photo 16 + 8), instead of running edge to edge. */
 .card.inset { padding: 8px 8px 8px; border-radius: var(--r-lg); }
 .card.inset > .card-chev.on-img { top: 18px; right: 18px; }
+
+.wash { will-change: transform; } /* follows the scroller (Wash.tsx) */
