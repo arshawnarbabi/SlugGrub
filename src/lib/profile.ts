@@ -16,6 +16,7 @@ export interface CalorieGoal {
   age?: number;
   sex?: "male" | "female" | "unsaid"; // for the formula only
   activity?: "light" | "moderate" | "very";
+  direction?: "lose" | "maintain" | "gain"; // 2026-11-15; goals saved before it have none and read as maintain
   typed?: boolean; // true when the student typed their own number instead of the formula's
 }
 

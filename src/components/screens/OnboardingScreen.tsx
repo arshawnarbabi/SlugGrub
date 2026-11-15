@@ -7,18 +7,21 @@
 // sex and activity (src/lib/calorieGoal.ts), or a number they type. Skippable; it stays in the profile on this phone, never sent
 // anywhere and never shown to anyone else (calories are private, taste is social). Today's "Set a goal" opens just this step
 // (?step=4&goal=1), which saves only the goal and returns to Today.
+// Split in two (2026-11-15, his ask: "for the calorie goal you also have to ask if they want to gain weight or lose wieight or maintain.
+// and lets try to make this into 2 onboaring screens so it fis better"): step 5 "About you" (height, weight, age, sex), step 6 "Your
+// goal" (activity, lose / maintain / gain, the number). Skip on either means no goal; ?step=4&goal=1 opens the first of the two.
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { preload } from "react-dom";
-import { PlanArt, PointsArt, CollegeArt, HallArt, GoalArt } from "./OnboardArt";
+import { PlanArt, PointsArt, CollegeArt, HallArt, BodyArt, GoalArt } from "./OnboardArt";
 import { ArrowLeft01Icon, ArrowRight01Icon, Tick02Icon, GoogleIcon } from "@hugeicons/core-free-icons";
 import { Icon } from "@/components/ui/Icon";
 import { Screen } from "@/components/ui/Screen";
 import { Swap, Appear, GooSlider, Seg } from "@/components/ui/motion";
 import { HALLS, MEAL_PLANS } from "@/lib/halls";
 import { getProfile, goalCalories, saveGoal, saveProfile, type CalorieGoal } from "@/lib/profile";
-import { ACTIVITY, goalFromBody, type Activity, type Sex } from "@/lib/calorieGoal";
+import { ACTIVITY, DIRECTION, goalFromBody, type Activity, type Direction, type Sex } from "@/lib/calorieGoal";
 import { signInWithGoogle } from "@/lib/auth";
 import { demoOn } from "@/lib/demoMode";
 import { seedDemoPlates } from "./demoSeed";
@@ -29,12 +32,14 @@ const hallOf = (c: College): HallId => HALLS.find((h) => h.colleges.includes(c))
 const SEXES: [Sex, string][] = [["male", "Male"], ["female", "Female"], ["unsaid", "Rather not say"]];
 const ACTS = Object.keys(ACTIVITY) as Activity[];
 const ACT_LABELS = ACTS.map((a) => ACTIVITY[a].label);
-const GOAL_STEP = 4;
+const DIRS = Object.keys(DIRECTION) as Direction[];
+const DIR_LABELS = DIRS.map((d) => DIRECTION[d].label);
+const GOAL_STEP = 4; // "About you"; the goal itself is the step after it, the last one
 /** The body answers as typed (strings, so a field can be empty). */
-interface Body { ft: string; inch: string; lb: string; age: string; sex: Sex | null; activity: Activity }
-const NO_BODY: Body = { ft: "", inch: "", lb: "", age: "", sex: null, activity: "moderate" };
-// Start demo's example (5'10", 160 lb, 19, moderately active: 2,710 a day), so a demo ends with the ring on Today
-const DEMO_BODY: Body = { ft: "5", inch: "10", lb: "160", age: "19", sex: "male", activity: "moderate" };
+interface Body { ft: string; inch: string; lb: string; age: string; sex: Sex | null; activity: Activity; direction: Direction }
+const NO_BODY: Body = { ft: "", inch: "", lb: "", age: "", sex: null, activity: "moderate", direction: "maintain" };
+// Start demo's example (5'10", 160 lb, 19, moderately active, maintain: 2,710 a day), so a demo ends with the ring on Today
+const DEMO_BODY: Body = { ft: "5", inch: "10", lb: "160", age: "19", sex: "male", activity: "moderate", direction: "maintain" };
 const num = (v: string) => (v.trim() === "" ? undefined : Number(v));
 const digits = (v: string, max: number) => v.replace(/\D/g, "").slice(0, max);
 
@@ -68,6 +73,7 @@ export function OnboardingScreen() {
     setBody(g ? {
       ft: g.heightIn ? String(Math.floor(g.heightIn / 12)) : "", inch: g.heightIn ? String(g.heightIn % 12) : "",
       lb: g.weightLb ? String(g.weightLb) : "", age: g.age ? String(g.age) : "", sex: g.sex ?? null, activity: g.activity ?? "moderate",
+      direction: g.direction ?? "maintain",
     } : demoOn() ? DEMO_BODY : NO_BODY);
     setTyped(g?.typed ? String(g.calories) : null);
     if (p.uid) { setWho({ name: p.name, uid: p.uid }); setGoogle("done"); }
@@ -84,11 +90,11 @@ export function OnboardingScreen() {
   const max = Math.ceil(Math.max(total, points) / 50) * 50;
   const planLabel = MEAL_PLANS.find((p) => p.id === plan)?.label ?? "Gold";
   const heightIn = num(body.ft) !== undefined ? (num(body.ft) ?? 0) * 12 + (num(body.inch) ?? 0) : undefined;
-  const formula = goalFromBody({ heightIn, weightLb: num(body.lb), age: num(body.age), sex: body.sex ?? undefined, activity: body.activity });
+  const formula = goalFromBody({ heightIn, weightLb: num(body.lb), age: num(body.age), sex: body.sex ?? undefined, activity: body.activity, direction: body.direction });
   const typedN = typed !== null ? num(typed) : undefined;
   const goal = typed !== null ? (typedN && typedN >= 800 && typedN <= 8000 ? Math.round(typedN) : null) : formula;
   const goalRecord = (): CalorieGoal | undefined => goal ? {
-    calories: goal, heightIn, weightLb: num(body.lb), age: num(body.age), sex: body.sex ?? undefined, activity: body.activity, typed: typed !== null || undefined,
+    calories: goal, heightIn, weightLb: num(body.lb), age: num(body.age), sex: body.sex ?? undefined, activity: body.activity, direction: body.direction, typed: typed !== null || undefined,
   } : undefined;
   // a body answer changed: the formula's number takes over again
   const setB = (patch: Partial<Body>) => { setBody((b) => ({ ...b, ...patch })); setTyped(null); };
@@ -102,9 +108,9 @@ export function OnboardingScreen() {
     ) },
     { art: <CollegeArt college={college} />, q: "Which college are you in?", body: <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>{COLLEGES.map((c) => <button key={c} type="button" className={`chip ${college === c ? "on" : ""}`} onClick={() => { setCollege(c); if (!hallPicked) setHall(hallOf(c)); }}>{c}</button>)}</div> },
     { art: <HallArt hall={hall} />, q: "Where do you usually eat?", body: <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>{HALLS.map((h) => <button key={h.id} type="button" className={`chip ${hall === h.id ? "on" : ""}`} onClick={() => { setHall(h.id); setHallPicked(true); }}>{h.short}</button>)}</div> },
-    { art: <GoalArt goal={goal} />, q: "Want a daily calorie goal?", body: (
+    { art: <BodyArt ft={body.ft} inch={body.inch} lb={body.lb} age={body.age} sex={body.sex} />, q: "About you", body: (
       <div style={{ display: "grid", gap: 14 }}>
-        <p className="body" style={{ margin: 0 }}>Optional. A rough target for fueling your day, from a standard formula. Skip it to just see what you eat.</p>
+        <p className="body" style={{ margin: 0 }}>Optional, for a daily calorie goal from a standard formula. Skip it to just see what you eat.</p>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1.15fr 1fr", gap: 8, alignItems: "end" }}>
           <NumField label="Height" suffix="ft" value={body.ft} onChange={(v) => setB({ ft: digits(v, 1) })} />
           <NumField label=" " suffix="in" value={body.inch} onChange={(v) => { const d = digits(v, 2); setB({ inch: d === "" ? "" : String(Math.min(11, Number(d))) }); }} aria="Height, inches" />
@@ -115,15 +121,23 @@ export function OnboardingScreen() {
           <div className="label" style={{ fontSize: 12 }}>Sex, used only for the formula</div>
           <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>{SEXES.map(([k, l]) => <button key={k} type="button" className={`chip chip-sm ${body.sex === k ? "on" : ""}`} onClick={() => setB({ sex: k })}>{l}</button>)}</div>
         </div>
+        <div className="label" style={{ fontSize: 12 }}>Stays on this phone. Nobody else ever sees it.</div>
+      </div>
+    ) },
+    { art: <GoalArt goal={goal} />, q: "Your goal", body: (
+      <div style={{ display: "grid", gap: 14 }}>
         <div style={{ display: "grid", gap: 6 }}>
           <Seg options={ACT_LABELS} value={ACTIVITY[body.activity].label} onChange={(v) => setB({ activity: ACTS[ACT_LABELS.indexOf(v)] })} label="How active are you" />
           <div className="label" style={{ fontSize: 12 }}><Swap id={body.activity}>{ACTIVITY[body.activity].sub}</Swap></div>
         </div>
+        <div style={{ display: "grid", gap: 6 }}>
+          <Seg options={DIR_LABELS} value={DIRECTION[body.direction].label} onChange={(v) => setB({ direction: DIRS[DIR_LABELS.indexOf(v)] })} label="What you want your eating to do" />
+          <div className="label" style={{ fontSize: 12 }}><Swap id={body.direction}>{DIRECTION[body.direction].sub}</Swap></div>
+        </div>
         <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
           <div style={{ width: 132, flex: "none" }}><NumField value={typed ?? (formula ? String(formula) : "")} suffix="cal" onChange={(v) => setTyped(digits(v, 4))} aria="Daily goal, calories" /></div>
-          <div className="label" style={{ fontSize: 12 }}><Swap id={typed !== null ? "own" : formula ? "calc" : "none"}>{typed !== null ? "Your own number" : formula ? "Your goal a day. Change it if you like" : "Fill in the above, or type your own goal"}</Swap></div>
+          <div className="label" style={{ fontSize: 12 }}><Swap id={typed !== null ? "own" : formula ? "calc" : "none"}>{typed !== null ? "Your own number" : formula ? "Your goal a day. Change it if you like" : "Fill in About you, or type your own goal"}</Swap></div>
         </div>
-        <div className="label" style={{ fontSize: 12 }}>Stays on this phone. Nobody else ever sees it.</div>
       </div>
     ) },
   ];
@@ -142,8 +156,10 @@ export function OnboardingScreen() {
     if (demoOn()) void seedDemoPlates(hall);
     setStep(steps.length);
   };
+  const LAST = steps.length - 1; // the goal number; GOAL_STEP is the "About you" step before it
+  const inGoal = step >= GOAL_STEP && !done;
   const next = () => {
-    if (step === GOAL_STEP) { finish(goalRecord()); return; }
+    if (step === LAST) { finish(goalRecord()); return; }
     setStep((s) => s + 1);
   };
   const withGoogle = async () => {
@@ -159,12 +175,13 @@ export function OnboardingScreen() {
   };
   return (
     <Screen noTabBar wash top={<div className="topbar">
-        {step > 0 && !done && !goalOnly ? <button type="button" className="iconbtn" aria-label="Back" onClick={() => setStep((s) => s - 1)}><Icon icon={ArrowLeft01Icon} size={18} /></button> : <span style={{ width: 38 }} />}
+        {step > 0 && !done && (!goalOnly || step > GOAL_STEP) ? <button type="button" className="iconbtn" aria-label="Back" onClick={() => setStep((s) => s - 1)}><Icon icon={ArrowLeft01Icon} size={18} /></button> : <span style={{ width: 38 }} />}
         {/* step dots, drawn at their place from the first paint with CSS (.step-dot): the framer version rendered with no width and no
             fill until its spring ran, so a step opened by link or a frozen capture showed none or the wrong one (his review 2026-11-14, S13) */}
         <div role="img" style={{ display: "flex", gap: 6 }} aria-label={`Step ${Math.min(step, steps.length - 1) + 1} of ${steps.length}`}>{steps.map((_, i) => <span key={i} className={`step-dot ${i === step ? "now" : ""} ${i <= step ? "done" : ""}`} />)}</div>
-        {/* on the goal step, Skip means "no goal" (and finishes); on the others it leaves without saving, as before */}
-        {step === GOAL_STEP && !done
+        {/* on either goal step, Skip means "no goal" (and finishes); on the others it leaves without saving, as before. Opened for the goal
+            alone (Today, Settings), Skip leaves without changing the saved goal */}
+        {inGoal
           ? <button type="button" className="textbtn" style={{ fontSize: 13 }} onClick={() => (goalOnly ? router.replace("/") : finish(undefined))}>Skip</button>
           : <Link href="/" replace className="textbtn" style={{ fontSize: 13 }}>Skip</Link>}
       </div>}>
@@ -189,7 +206,7 @@ export function OnboardingScreen() {
       <div style={{ marginTop: "auto", paddingTop: 24, display: "grid", gap: 10 }}>
         {!done ? (
           <button type="button" className="btn btn-primary btn-block raised" onClick={next}>
-            <Swap id={step === GOAL_STEP && !goal ? "none" : "go"}>{step === GOAL_STEP && !goal ? "Continue without a goal" : <span style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>{step === GOAL_STEP && goalOnly ? "Save goal" : "Continue"} <Icon icon={ArrowRight01Icon} size={18} sw={2} /></span>}</Swap>
+            <Swap id={step === LAST && !goal ? "none" : "go"}>{step === LAST && !goal ? "Continue without a goal" : <span style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>{step === LAST && goalOnly ? "Save goal" : "Continue"} <Icon icon={ArrowRight01Icon} size={18} sw={2} /></span>}</Swap>
           </button>
         ) : (
           <>
