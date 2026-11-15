@@ -5,6 +5,7 @@
 // and the screen works signed out.
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { preload } from "react-dom";
 import { PlanArt, PointsArt, CollegeArt, HallArt } from "./OnboardArt";
 import { ArrowLeft01Icon, ArrowRight01Icon, Tick02Icon, GoogleIcon } from "@hugeicons/core-free-icons";
 import { Icon } from "@/components/ui/Icon";
@@ -19,6 +20,9 @@ const COLLEGES: College[] = ["Cowell", "Stevenson", "Crown", "Merrill", "Porter"
 const hallOf = (c: College): HallId => HALLS.find((h) => h.colleges.includes(c))?.id ?? "40";
 
 export function OnboardingScreen() {
+  // the hall step's five photos (public/halls, about 390KB in all) load with the page, so the photo is there when the step opens and
+  // switching halls never flashes an empty tile
+  HALLS.forEach((h) => preload(`/halls/${h.id}.jpg`, { as: "image", fetchPriority: "low" }));
   const [step, setStep] = useState(0);
   const [plan, setPlan] = useState<MealPlanId>("gold");
   const [points, setPoints] = useState(1200);
