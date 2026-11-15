@@ -40,14 +40,17 @@ export interface Dish {
   name: string;
   category: string; // "Entrees", "Soups", ...
   portion?: string; // official portion, e.g. "1 cup"
-  nutrition?: Nutrition;
+  nutrition?: Nutrition; // undefined = the UCSC label is missing (unknown), never 0
   allergens?: string;
+  tags?: string[]; // diet icons on the menu: "vegan", "vegetarian", "halal"
 }
 
 export interface DayMenu {
   date: string; // YYYY-MM-DD
   hallId: HallId;
   meals: Partial<Record<MealName, Dish[]>>;
+  fallbackFor?: string; // set when this is the nearest real day standing in for a date with no menu file (the date asked for)
+  mock?: boolean; // true only when no real menu files exist at all and this is data/mock
 }
 
 export interface HallHours {
@@ -103,6 +106,8 @@ export interface BudgetSnapshot {
   pace: "on-pace" | "fast" | "slow";
   runOutDate?: string; // YYYY-MM-DD, if spending too fast
   leftoverAtQuarterEnd?: number; // if spending slowly
+  planTotal?: number; // the plan's Slug Points per quarter
+  source?: "profile" | "demo"; // "demo" = no onboarding answers were given, so these are example numbers
 }
 
 // Photo log (Arshawn). Private to the user.

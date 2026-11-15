@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "menus": "node scripts/fetch-menus.ts",
+    "cafes": "node scripts/fetch-cafes.ts"
   },
   "dependencies": {
     "@google/genai": "^3.3.0",
