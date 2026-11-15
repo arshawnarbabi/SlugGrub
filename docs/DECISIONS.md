@@ -276,3 +276,5 @@ ADR (Architecture Decision Record) practice, adapted as an append-only log for a
 
 - 2026-11-15: Sliders follow the finger 1:1 while dragged (no spring under the finger; THE spring only for keyboard steps), and the whole 44px row takes the touch. His report on the onboarding Slug Points slider: "weird resistance ... just remove gooey there or fix it"; fixed with the goo kept (DESIGN.md note of the same date).
 
+
+- 2026-11-15: Rank text buttons renamed to say what they do, his yes: "Too tough" is now "Can't decide" (moves on, records nothing) and "Skip" is now "Haven't tried these" (records a skip, which feeds Least picked on Dining services; its note reads "Noted. We'll ask about those another time"). The brand page sample in src/app/brand/Interactive.tsx still shows the old labels until that file is free.

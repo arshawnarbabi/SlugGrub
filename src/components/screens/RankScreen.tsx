@@ -175,7 +175,7 @@ function Duels({ catalog, state }: { catalog: CatalogDish[]; state: RankState | 
     if (page.pick === null) {
       rankBackend().skip(page.pair[0], page.pair[1], matchIdFor(ctx.date, page.pair[0].key, page.pair[1].key)).then((o) => { if (!o.ok && o.error !== "already") setNote(o.message); });
       setLast(null);
-      setNote("Skipped. We'll ask about those another time");
+      setNote("Noted. We'll ask about those another time");
     }
     forward(cur);
   };
@@ -226,8 +226,8 @@ function Duels({ catalog, state }: { catalog: CatalogDish[]; state: RankState | 
       </Pager>
       <div style={{ display: "flex", justifyContent: "space-between", padding: "0 4px" }}>
         <button type="button" className="textbtn" onClick={undo}><Icon icon={Undo02Icon} size={15} /> Undo</button>
-        <button type="button" className="textbtn" onClick={tough}>Too tough</button>
-        <button type="button" className="textbtn" onClick={skip}>Skip</button>
+        <button type="button" className="textbtn" onClick={tough}>Can&apos;t decide</button>
+        <button type="button" className="textbtn" onClick={skip}>Haven&apos;t tried these</button>
       </div>
       <div className="card" style={{ minHeight: 50, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8, fontSize: 14, color: "var(--ink-2)" }}>
         {last && (last.status === "error" || last.status === "already") ? (
