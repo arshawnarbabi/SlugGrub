@@ -360,6 +360,10 @@ input, textarea, select { font-size: 17px !important; }     /* 16px or more also
    and last items rest on the same 16px gutter as everything else. Snapping aligns to scroll-padding, not padding, so it is set too. */
 .carousel { scroll-padding-inline: max(16px, env(safe-area-inset-left, 0px)); padding-inline: max(16px, env(safe-area-inset-left, 0px)); margin-inline: calc(-1 * max(16px, env(safe-area-inset-left, 0px))); }
 .carousel::after { content: ""; flex: 0 0 1px; } /* keeps the right gutter when scrolled to the end */
+/* Pager (src/components/ui/Pager.tsx; Rank matchups, Halls menus): a .carousel of full-width pages, one per snap, 16px apart so the
+   next page never peeks (his trial 2026-11-14: "it scrolls to the side instead of just blurring in a new one") */
+.carousel.pager { gap: 16px; }
+.carousel.pager > .pager-page { flex: 0 0 100%; min-width: 0; }
 /* Text field: the same pill as Ask's question box */
 .input { width: 100%; height: 50px; border-radius: var(--r-pill); border: 0; background: var(--card); padding: 0 18px; font: inherit; color: var(--ink); outline-color: var(--p8); box-sizing: border-box; }
 
