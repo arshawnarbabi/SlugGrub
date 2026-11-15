@@ -86,7 +86,9 @@ function BudgetBody({ profile, range, setRange }: { profile: SavedProfile | null
         <div className="card">
           <div className="label" style={{ marginBottom: 8 }}>Slug Points left this quarter</div>
           <PaceChart planTotal={p.planTotal} pointsLeft={p.pointsLeft} elapsedDays={p.elapsedDays} totalDays={p.totalDays} spentPerDay={p.spentPerDay} />
-          <div style={{ fontSize: 16, fontWeight: 600, letterSpacing: "-0.01em", color: "var(--ink)", marginTop: 6 }}>{outlook}</div>
+          {/* centered under the chart, 16px (spacing.scale.4) clear of the date labels (his review 2026-11-14, S06: "center the at this
+              pace text and increase padding from it and the graph") */}
+          <div style={{ fontSize: 16, fontWeight: 600, letterSpacing: "-0.01em", color: "var(--ink)", marginTop: 16, textAlign: "center", textWrap: "balance" }}>{outlook}</div>
         </div>
         <p className="label" style={{ fontSize: 12, margin: "0 4px" }}>SlugGrub can&apos;t see your card, so it doesn&apos;t split spending between dining halls, cafes and markets. The GET app lists every purchase.</p>
         <p className="label" style={{ fontSize: 12, margin: "0 4px" }}>A dining hall meal costs the same at every hall. Cafes and markets take 10% off with Slug Points.</p>
