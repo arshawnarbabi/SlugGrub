@@ -76,10 +76,10 @@ Tick a box when it's merged to `main`. Put your name on anything you pick up tha
 Keep it to what fits on one phone screen. The cafe snippet lives in the Halls tab.
 
 ### Pitch and demo (everyone, last block)
-- [ ] 3 or 4 tested demo plates (photos that Gemini gets right every time)
-- [ ] Seed rankings so the leaderboard isn't empty
+- [x] 3 or 4 tested demo plates (photos that Gemini gets right every time): "Use a demo plate" on Log picks one from the open menu (2026-11-15)
+- [x] Seed rankings so the leaderboard isn't empty: demo mode, Settings → Start demo (2026-11-15)
 - [ ] Devpost write-up (list any code written before the event)
-- [ ] Rehearse the 2 minute demo twice
+- [ ] Rehearse the 2 minute demo twice (run sheet: docs/DEMO.md)
 - [ ] Code freeze 2 to 3 hours before judging
 
 ## Timeline

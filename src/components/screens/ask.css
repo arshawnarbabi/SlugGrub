@@ -1,0 +1,38 @@
+/* Owner: Arshawn. Ask SlugGrub's action line, thinking orb and streamed words (2026-11-15; ported from his Chalk app, restyled to
+   docs/DESIGN.md). Everything that moves here is transform or opacity, except the 2px word blur, which runs only during a word's
+   220ms fade and ends at filter none (effects.blur_budget: small elements, max 4px, none at rest). */
+
+/* the line: one row, 20px orb, the step's words (cut with an ellipsis), the time. Only during a change does the words box ease to
+   its new width (Chalk's glide), and at the end the orb's slot closes; contain keeps that reflow inside this one row. */
+.action-line { display: flex; align-items: center; gap: 8px; min-height: 28px; font-size: 15px; font-weight: 500; color: var(--ink-3); contain: layout paint; }
+.action-line .al-orb { flex: none; display: inline-flex; width: 20px; color: var(--p9); overflow: hidden;
+  transition: width 220ms cubic-bezier(0.22, 1, 0.36, 1), margin-right 220ms cubic-bezier(0.22, 1, 0.36, 1), opacity 220ms cubic-bezier(0.22, 1, 0.36, 1); }
+.action-line .al-words { position: relative; display: inline-flex; flex: 0 1 auto; min-width: 0; overflow: hidden; transition: width 220ms cubic-bezier(0.22, 1, 0.36, 1); }
+.action-line .al-meas { position: absolute; left: 0; top: 0; visibility: hidden; white-space: nowrap; pointer-events: none; }
+.action-line .al-time { flex: none; font-variant-numeric: tabular-nums; white-space: nowrap; transition: opacity 220ms cubic-bezier(0.22, 1, 0.36, 1); }
+.action-line .al-done { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.action-line.ended .al-orb { width: 0; margin-right: -8px; opacity: 0; }
+.action-line.ended .al-time { opacity: 0; }
+
+/* the thinking orb: dots on a turning globe, each moved by its own Web Animation (src/components/ui/ThinkingOrb.tsx) */
+.orb { position: relative; display: inline-block; flex: none; contain: strict; }
+.orb > span { position: absolute; left: 50%; top: 50%; width: var(--dot); height: var(--dot); margin: calc(var(--dot) / -2) 0 0 calc(var(--dot) / -2);
+  border-radius: 50%; background: currentColor; will-change: transform, opacity; }
+
+/* the light sweep across the words (Chalk's): a 30px masked window carries a blue copy of the label across it, transform only */
+.sweep { position: relative; display: block; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sweep > .sw-win { position: absolute; top: 0; bottom: 0; left: 0; width: 30px; overflow: hidden; pointer-events: none;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 38%, #000 62%, transparent); mask-image: linear-gradient(90deg, transparent, #000 38%, #000 62%, transparent);
+  animation: sg-sw-win var(--sw-dur, 2500ms) linear infinite; will-change: transform; }
+.sweep > .sw-win > span { position: absolute; left: 0; top: 0; white-space: nowrap; color: var(--p9); animation: sg-sw-txt var(--sw-dur, 2500ms) linear infinite; will-change: transform; }
+@keyframes sg-sw-win { from { transform: translateX(-30px); } to { transform: translateX(var(--sw-to, 160px)); } }
+@keyframes sg-sw-txt { from { transform: translateX(30px); } to { transform: translateX(calc(var(--sw-to, 160px) * -1)); } }
+
+/* a released word: fades and unblurs 2px on the standard curve, then rests at filter none */
+.sw-word { animation: sg-word-in 220ms cubic-bezier(0.22, 1, 0.36, 1) both; }
+@keyframes sg-word-in { from { opacity: 0; filter: blur(2px); } to { opacity: 1; filter: none; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .sweep > .sw-win { display: none; }
+  .sw-word { animation: none; }
+}
