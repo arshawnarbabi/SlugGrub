@@ -26,9 +26,11 @@ type View = (typeof VIEWS)[number];
 export function RankScreen({ catalog }: { catalog: CatalogDish[] }) {
   const [view, setView] = useState<View>("This or that");
   const { state, error } = useRankState(catalog);
-  // ?view=Leaderboard (from Today's college card) is read on the client so the route stays static
+  // ?view=Leaderboard (from Today's college card) is read on the client so the route stays static. Read on every arrival, both ways:
+  // Next keeps a visited route's state across navigations (cacheComponents keeps it in a hidden Activity and re-runs this effect when
+  // it shows again), so without the reset "Rank today's food" (/rank) opened on the leaderboard after the college card had been used.
   useEffect(() => {
-    if (new URLSearchParams(window.location.search).get("view") === "Leaderboard") setView("Leaderboard");
+    setView(new URLSearchParams(window.location.search).get("view") === "Leaderboard" ? "Leaderboard" : "This or that");
   }, []);
   return (
     <Screen top={<div className="topbar">
@@ -180,7 +182,9 @@ function Duels({ catalog, state }: { catalog: CatalogDish[]; state: RankState | 
 
   const shownPage = pages[cur];
   const winner = shownPage?.pick == null ? null : last?.winner ?? null;
-  const where = ctx ? `${mealLabel(ctx.meal)} at ${hallShort(ctx.hallId)}` : " ";
+  // name what the pairs come from: this meal at your hall, your hall today, or (your hall closed today) every hall
+  const scope = !ctx ? null : pool.some((c) => c.hallId !== ctx.hallId) ? "campus" : pool.every((c) => c.meals.includes(ctx.meal)) ? "meal" : "hall";
+  const where = !ctx ? " " : scope === "campus" ? "Today across campus" : scope === "meal" ? `${mealLabel(ctx.meal)} at ${hallShort(ctx.hallId)}` : `Today at ${hallShort(ctx.hallId)}`;
   const list: (Page | null)[] = pages.length ? pages : [null];
   return (
     <div style={{ display: "grid", gap: 12 }}>
