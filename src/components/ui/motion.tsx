@@ -115,7 +115,9 @@ export function GooTrack({ index, refs, fill, deps = 0, inset = false }: { index
   const tr = reduce || !live ? { duration: 0 } : SPRING;
   return (
     <>
-      <Liquid key={live ? "live" : `open-${index}`} style={{ position: "absolute", inset: 0, pointerEvents: "none", zIndex: 0 }} {...GOO} fill={fill}>
+      {/* filterPadding 0: the thumb never leaves this box (WebKit clips the goo layer to it anyway, 2026-11-15), so the filter covers
+          only the box plus the goo edge, about a third of the area the default padding made WebKit filter on every frame of a slide */}
+      <Liquid key={live ? "live" : `open-${index}`} style={{ position: "absolute", inset: 0, pointerEvents: "none", zIndex: 0 }} filterPadding={0} {...GOO} fill={fill}>
         <Liquid.Item observe>
           <motion.div className="goo-thumb" initial={false} animate={move} transition={tr} style={{ height: box.h, top: 0 }} />
         </Liquid.Item>
@@ -144,10 +146,15 @@ export function Seg<T extends string>({ options, value, onChange, label, classNa
   );
 }
 
-/** Slider with a gooey thumb (servings, amounts). */
+/** Slider with a gooey thumb (servings, amounts; onboarding's Slug Points).
+ *  Under the finger the thumb and fill follow 1:1 (no spring): THE spring re-aimed on every pointer move made the thumb trail the
+ *  finger by up to 76px in WebKit, which read as resistance (his report 2026-11-15, onboarding: "the slugpoints gooey has some weird
+ *  resistance"). The spring stays for keyboard steps. The goo blob is drawn from the thumb in the same frame, so it tracks exactly.
+ *  The whole 44px-tall row takes the touch (.gs-track::before), not only the 8px track, so grabbing the thumb's edge never misses. */
 export function GooSlider({ value, onChange, min = 0.5, max = 3, step = 0.5, label }: { value: number; onChange: (v: number) => void; min?: number; max?: number; step?: number; label: string }) {
   const track = useRef<HTMLDivElement>(null);
   const reduce = useReducedMotion();
+  const [dragging, setDragging] = useState(false);
   const pct = (value - min) / (max - min);
   const setFrom = (clientX: number) => {
     const r = track.current?.getBoundingClientRect();
@@ -155,19 +162,23 @@ export function GooSlider({ value, onChange, min = 0.5, max = 3, step = 0.5, lab
     const raw = min + Math.min(1, Math.max(0, (clientX - r.left) / r.width)) * (max - min);
     onChange(Math.round(raw / step) * step);
   };
+  const tr = reduce || dragging ? { duration: 0 } : SPRING;
+  const end = () => setDragging(false);
   return (
     <div
       ref={track}
       className="gs-track"
       role="slider" tabIndex={0} aria-valuemin={min} aria-valuemax={max} aria-valuenow={value} aria-label={label}
-      onPointerDown={(e) => { (e.target as HTMLElement).setPointerCapture?.(e.pointerId); setFrom(e.clientX); }}
-      onPointerMove={(e) => { if (e.buttons) setFrom(e.clientX); }}
+      onPointerDown={(e) => { e.currentTarget.setPointerCapture?.(e.pointerId); setDragging(true); setFrom(e.clientX); }}
+      onPointerMove={(e) => { if (dragging) setFrom(e.clientX); }}
+      onPointerUp={end} onPointerCancel={end} onLostPointerCapture={end}
       onKeyDown={(e) => { if (e.key === "ArrowRight") onChange(Math.min(max, value + step)); if (e.key === "ArrowLeft") onChange(Math.max(min, value - step)); }}
     >
-      <motion.div className="gs-fill" initial={false} animate={{ width: `${pct * 100}%` }} transition={reduce ? { duration: 0 } : SPRING} />
-      <Liquid style={{ position: "absolute", inset: "-14px 0", pointerEvents: "none" }} {...GOO} fill="var(--p9)" shadow="0 1px 2px rgba(20,30,50,.12), inset 0 1px 0 rgba(255,255,255,.3)">
+      <motion.div className="gs-fill" initial={false} animate={{ width: `${pct * 100}%` }} transition={tr} />
+      {/* 16px of room at each end: WebKit clips the goo layer to this box, and the thumb overhangs the track ends by 13px */}
+      <Liquid style={{ position: "absolute", inset: "-14px -16px", pointerEvents: "none" }} filterPadding={0} {...GOO} fill="var(--p9)" shadow="0 1px 2px rgba(20,30,50,.12), inset 0 1px 0 rgba(255,255,255,.3)">
         <Liquid.Item observe>
-          <motion.div className="gs-thumb" initial={false} animate={{ left: `calc(${pct * 100}% - 13px)` }} transition={reduce ? { duration: 0 } : SPRING} />
+          <motion.div className="gs-thumb" initial={false} animate={{ left: `calc(16px + (100% - 32px) * ${pct} - 13px)` }} transition={tr} />
         </Liquid.Item>
       </Liquid>
     </div>

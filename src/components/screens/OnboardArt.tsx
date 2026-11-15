@@ -8,13 +8,14 @@
 //   college: a campus map, north up, every college a pin where it really sits; theirs is the blue pin with its name
 //   hall:    a raised card previewing their usual hall: a photo of its building, its name and its open status now
 // (review 2026-11-14: the maps went for cards at S12/S13, then the college map came back, polished, at his "i liked the map more")
-// State changes blur-fade (DESIGN motion.state_change); nothing slides in when a step opens.
-import { useEffect, useState } from "react";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+// Picking an option moves the art on THE spring (2026-11-15, below); text inside still blur-fades. Nothing moves when a step opens.
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { AnimatePresence, motion, useReducedMotion, useSpring, useTransform } from "framer-motion";
 import { RiceBowl01Icon, Location01Icon } from "@hugeicons/core-free-icons";
 import { Icon } from "@/components/ui/Icon";
 import { Photo } from "@/components/ui/Photo";
-import { Swap, STATE_IN, STATE_OUT, STATE_FADE } from "@/components/ui/motion";
+import { Swap, SPRING, SPRING_CFG, STATE_IN, STATE_OUT, STATE_FADE } from "@/components/ui/motion";
+import "./onboard-art.css";
 import type { College, HallId, MealPlanId } from "@/lib/types";
 import { HALLS, MEAL_PLANS, mealNow } from "@/lib/halls";
 import { campusNow } from "./now";
@@ -25,29 +26,52 @@ function Frame({ children }: { children: React.ReactNode }) {
   return <div style={{ height: ART_H, display: "grid", placeItems: "center", position: "relative" }}>{children}</div>;
 }
 
+// Every graphic follows its question's answer on THE spring (his ask 2026-11-15: "make all the onbaording graphics animated as you
+// change the options ... make tehem shuffl and swtich ... dont just snap to the next collge but make it smooth"; DESIGN.md note of
+// the same date). Things that MOVE ride SPRING; text inside them still blur-fades (Swap). Reduced motion: nothing moves, changes
+// are instant. The art never animates while a step opens (initial={false} everywhere: pages open static).
+
+// The plan deck: four cards, one per plan. Slot 0 is the front card; 1 and 2 fan out behind it; 3 waits hidden under the front.
+const DECK = [
+  { x: 0, y: 0, rotate: 0, scale: 1, opacity: 1, z: 4 },
+  { x: -18, y: 6, rotate: -9, scale: 1, opacity: 0.7, z: 3 },
+  { x: 18, y: 10, rotate: 8, scale: 1, opacity: 0.7, z: 2 },
+  { x: 0, y: 14, rotate: 0, scale: 0.92, opacity: 0, z: 1 },
+] as const;
+
 export function PlanArt({ plan }: { plan: MealPlanId }) {
-  const order = MEAL_PLANS.map((p) => p.id);
-  const front = MEAL_PLANS.find((p) => p.id === plan) ?? MEAL_PLANS[0];
-  const back = order.filter((id) => id !== plan).slice(0, 2);
+  const reduce = useReducedMotion();
+  const ids = MEAL_PLANS.map((p) => p.id);
+  const at = Math.max(0, ids.indexOf(plan));
+  // the picked card comes to the front; the one it replaces tilts back into the fan beside it, the rest shuffle one place along
+  const slotOf = (id: MealPlanId) => (at - ids.indexOf(id) + ids.length) % ids.length;
+  const tr = reduce ? { duration: 0 } : { ...SPRING, opacity: STATE_FADE };
   return (
     <Frame>
       <div style={{ position: "relative", width: 230, height: 150 }}>
-        {back.map((id, k) => (
-          <div key={id} className="art-card" style={{ position: "absolute", inset: 0, transform: `rotate(${k === 0 ? -9 : 8}deg) translate(${k === 0 ? -18 : 18}px, ${k === 0 ? 6 : 10}px)`, opacity: 0.7 }} />
-        ))}
-        <div className="art-card raised" style={{ position: "absolute", inset: 0, padding: 18, display: "grid", alignContent: "space-between" }}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-            <span className="art-chip"><Icon icon={RiceBowl01Icon} size={14} sw={2} /> Meal plan</span>
-            <span style={{ width: 34, height: 22, borderRadius: 6, background: "linear-gradient(135deg, var(--y9), var(--y11))", opacity: 0.85 }} />
-          </div>
-          <div>
-            <div className="label" style={{ fontSize: 12 }}><Swap id={front.id}>{front.label} plan</Swap></div>
-            <div className="num" style={{ fontSize: 30, fontWeight: 700, letterSpacing: "-0.04em", lineHeight: 1.1 }}>
-              <Swap id={front.id}>{front.pointsPerQuarter.toLocaleString()}</Swap>
-            </div>
-            <div className="label" style={{ fontSize: 12 }}>Slug Points each quarter</div>
-          </div>
-        </div>
+        {MEAL_PLANS.map((p) => {
+          const slot = slotOf(p.id), d = DECK[slot], front = slot === 0;
+          return (
+            <motion.div key={p.id} className="art-card oa-plan" aria-hidden={!front}
+              // the card being picked jumps above the deck at once, so it passes over the others on its way to the front
+              style={{ zIndex: d.z }}
+              initial={false} animate={{ x: d.x, y: d.y, rotate: d.rotate, scale: d.scale, opacity: d.opacity }} transition={tr}>
+              <motion.span className="oa-raise" initial={false} animate={{ opacity: front ? 1 : 0 }} transition={reduce ? { duration: 0 } : STATE_FADE} />
+              <motion.div className="oa-face" initial={false}
+                animate={front ? { ...STATE_IN, transitionEnd: { filter: "none" } } : STATE_OUT} transition={reduce ? { duration: 0 } : STATE_FADE}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                  <span className="art-chip"><Icon icon={RiceBowl01Icon} size={14} sw={2} /> Meal plan</span>
+                  <span style={{ width: 34, height: 22, borderRadius: 6, background: "linear-gradient(135deg, var(--y9), var(--y11))", opacity: 0.85 }} />
+                </div>
+                <div>
+                  <div className="label" style={{ fontSize: 12 }}>{p.label} plan</div>
+                  <div className="num" style={{ fontSize: 30, fontWeight: 700, letterSpacing: "-0.04em", lineHeight: 1.1 }}>{p.pointsPerQuarter.toLocaleString()}</div>
+                  <div className="label" style={{ fontSize: 12 }}>Slug Points each quarter</div>
+                </div>
+              </motion.div>
+            </motion.div>
+          );
+        })}
       </div>
     </Frame>
   );
@@ -57,13 +81,18 @@ export function PointsArt({ points, total }: { points: number; total: number }) 
   const r = 78, c = 2 * Math.PI * r, SWEEP = 250, arc = c * (SWEEP / 360);
   const share = Math.max(0, Math.min(1, points / Math.max(1, total)));
   const reduce = useReducedMotion();
+  // The ring follows the slider on THE spring (his "i like how the slugpoints ring changes as you change the slider"). A spring keeps
+  // its speed when the target moves again mid-flight, so a drag reads as one continuous sweep; the 200ms tween it replaced restarted
+  // from rest on every pointer move. It starts where the points are (pages open static).
+  const fill = useSpring(share, SPRING_CFG);
+  useEffect(() => { if (reduce) fill.jump(share); else fill.set(share); }, [share, reduce, fill]);
+  const dash = useTransform(fill, (v) => `${arc * Math.max(0, v)} ${c}`);
   return (
     <Frame>
       <div style={{ position: "relative", width: 190, height: 190 }}>
         <svg width="190" height="190" viewBox="0 0 190 190" style={{ transform: `rotate(${90 + (360 - SWEEP) / 2}deg)` }} aria-hidden>
           <circle cx="95" cy="95" r={r} fill="none" stroke="var(--paper-2)" strokeWidth="14" strokeDasharray={`${arc} ${c}`} strokeLinecap="round" />
-          <motion.circle cx="95" cy="95" r={r} fill="none" stroke="var(--p9)" strokeWidth="14" strokeLinecap="round"
-            initial={false} animate={{ strokeDasharray: `${arc * share} ${c}` }} transition={reduce ? { duration: 0 } : { duration: 0.2, ease: "easeOut" }} />
+          <motion.circle cx="95" cy="95" r={r} fill="none" stroke="var(--p9)" strokeWidth="14" strokeLinecap="round" style={{ strokeDasharray: dash }} />
         </svg>
         <div style={{ position: "absolute", inset: 0, display: "grid", placeItems: "center", textAlign: "center" }}>
           <div>
@@ -149,10 +178,25 @@ const CONTOURS = [0, 1, 2, 3, 4].map((k) => {
   return d + "Z";
 });
 
+/** Where the name tag sits for each side: a gap from the pin in px, then a shift by the tag's own size in %. Both are transforms,
+ *  so a flip from one side to another slides on the spring instead of jumping (the old CSS classes swapped a calc() at once). */
+const TAG_AT: Record<Side, { gap: [number, number]; self: [number, number] }> = {
+  right: { gap: [TAG_GAP, 0], self: [0, -50] }, left: { gap: [-TAG_GAP, 0], self: [-100, -50] },
+  above: { gap: [0, -TAG_GAP], self: [-50, -100] }, below: { gap: [0, TAG_GAP], self: [-50, 0] },
+  "above-right": { gap: [CORNER_X, -CORNER_Y], self: [0, -100] }, "above-left": { gap: [-CORNER_X, -CORNER_Y], self: [-100, -100] },
+  "below-right": { gap: [CORNER_X, CORNER_Y], self: [0, 0] }, "below-left": { gap: [-CORNER_X, CORNER_Y], self: [-100, 0] },
+};
+
 export function CollegeArt({ college }: { college: College }) {
   const reduce = useReducedMotion();
   const at = COLLEGE_AT[college] ?? [MAP_W / 2, MAP_H / 2];
   const side = tagSide(college);
+  const tag = TAG_AT[side];
+  const tr = reduce ? { duration: 0 } : SPRING;
+  // the tag's width follows the new name on the spring too (measured from a hidden copy), so it never snaps wider or narrower
+  const measure = useRef<HTMLSpanElement>(null);
+  const [tagW, setTagW] = useState<number | null>(null);
+  useLayoutEffect(() => { if (measure.current) setTagW(measure.current.offsetWidth); }, [college]);
   return (
     <Frame>
       <div className="art-card raised" style={{ width: "min(100%, 320px)", padding: 8 }}>
@@ -161,17 +205,24 @@ export function CollegeArt({ college }: { college: College }) {
             {CONTOURS.map((d, k) => <path key={k} d={d} fill="none" stroke="var(--paper)" strokeWidth="1.5" />)}
             <text x={MAP_W - 14} y={20} textAnchor="middle" fontSize="10" fontWeight="700" fill="var(--ink-3)">N</text>
             <path d={`M${MAP_W - 14} 24 l-3 6 h6 z`} fill="var(--ink-3)" />
-            {Object.entries(COLLEGE_AT).map(([k, [x, y]]) => <circle key={k} cx={x} cy={y} r="4" fill="var(--ink-3)" stroke="var(--card)" strokeWidth="2" />)}
+            {/* the grey pin under the pick fades out as the blue pin lands on it; the one it left fades back in */}
+            {Object.entries(COLLEGE_AT).map(([k, [x, y]]) => (
+              <motion.circle key={k} cx={x} cy={y} r="4" fill="var(--ink-3)" stroke="var(--card)" strokeWidth="2"
+                initial={false} animate={{ opacity: k === college ? 0 : 1 }} transition={reduce ? { duration: 0 } : STATE_FADE} />
+            ))}
           </svg>
-          {/* the pick: blue pin and name tag, blurring out at the old college and in at the new one (nothing slides) */}
-          <AnimatePresence initial={false}>
-            <motion.div key={college} className="art-pick" style={{ left: `${(at[0] / MAP_W) * 100}%`, top: `${(at[1] / MAP_H) * 100}%` }}
-              initial={reduce ? false : STATE_OUT} animate={{ ...STATE_IN, transitionEnd: { filter: "none" } }} exit={reduce ? { opacity: 0 } : STATE_OUT}
-              transition={reduce ? { duration: 0 } : STATE_FADE}>
-              <span className="art-pin" />
-              <span className={`art-chip art-tag ${side}`}><Icon icon={Location01Icon} size={13} sw={2} />{college}</span>
+          {/* the pick: one blue pin and its name tag that travel across the map to the new college on THE spring */}
+          <motion.div className="art-pick" initial={false} animate={{ left: `${(at[0] / MAP_W) * 100}%`, top: `${(at[1] / MAP_H) * 100}%` }} transition={tr}>
+            <span className="art-pin" />
+            <motion.div className="oa-tag-at" initial={false} animate={{ x: tag.gap[0], y: tag.gap[1] }} transition={tr}>
+              <motion.span className="art-chip oa-tag" initial={false}
+                animate={{ x: `${tag.self[0]}%`, y: `${tag.self[1]}%`, ...(tagW ? { width: tagW } : {}) }} transition={tr}>
+                <Icon icon={Location01Icon} size={13} sw={2} />
+                <Swap id={college}>{college}</Swap>
+              </motion.span>
             </motion.div>
-          </AnimatePresence>
+          </motion.div>
+          <span ref={measure} className="art-chip oa-measure"><Icon icon={Location01Icon} size={13} sw={2} />{college}</span>
         </div>
       </div>
     </Frame>
@@ -184,26 +235,42 @@ export function CollegeArt({ college }: { college: College }) {
 export function HallArt({ hall }: { hall: HallId }) {
   const [now, setNow] = useState<{ date: string; minutes: number } | null>(null);
   useEffect(() => { setNow(campusNow(new Date())); }, []);
-  const info = HALLS.find((h) => h.id === hall);
-  const status = now ? mealNow(hall, now.date, now.minutes) : null;
-  const statusText = status ? status.text[0].toUpperCase() + status.text.slice(1) : " ";
+  const reduce = useReducedMotion();
+  // Switching halls deals a new card: the old one tilts away to the left and fades as the new one comes up from the fanned spot on
+  // the right to the front, on THE spring. Everything is absolutely placed in a fixed box, so the question below never moves.
   return (
     <Frame>
       <div style={{ position: "relative", width: 240, height: 212 }}>
         <BackCards />
-        <div className="art-card raised" style={{ position: "absolute", inset: 0, padding: 8, display: "grid", gridTemplateRows: "auto 1fr" }}>
-          <Swap id={hall} style={{ display: "block" }}>
-            <Photo src={`/halls/${hall}.jpg`} h={140} r={16} eager alt={info ? `${info.name} area` : ""} />
-          </Swap>
-          <div style={{ padding: "0 8px", display: "grid", alignContent: "center", gap: 2, minWidth: 0 }}>
-            <div style={{ fontSize: 17, fontWeight: 700, letterSpacing: "-0.02em" }}><Swap id={hall}>{info?.short ?? ""}</Swap></div>
-            <div className="label" style={{ fontSize: 12, display: "flex", alignItems: "center", gap: 6, minWidth: 0 }}>
-              <span style={{ width: 7, height: 7, borderRadius: 9, flex: "none", background: status?.open ? "var(--ok)" : "var(--ink-3)" }} />
-              <Swap id={hall + statusText}>{statusText}</Swap>
-            </div>
-          </div>
-        </div>
+        <AnimatePresence initial={false}>
+          <motion.div key={hall} className="art-card raised" style={{ position: "absolute", inset: 0, padding: 8, display: "grid", gridTemplateRows: "auto 1fr" }}
+            initial={reduce ? { opacity: 0 } : { x: 18, y: 10, rotate: 8, opacity: 0 }}
+            animate={{ x: 0, y: 0, rotate: 0, opacity: 1 }}
+            exit={reduce ? { opacity: 0, transition: { duration: 0 } } : { x: -22, y: 8, rotate: -9, opacity: 0, transition: { ...SPRING, opacity: { duration: 0.14, ease: "easeOut" } } }}
+            // opacity settles fast (120ms) so the two cards' text never reads on top of each other; the move itself is THE spring
+            transition={reduce ? { duration: 0 } : { ...SPRING, opacity: { duration: 0.12, ease: "easeOut" } }}>
+            <HallFace hall={hall} now={now} />
+          </motion.div>
+        </AnimatePresence>
       </div>
     </Frame>
+  );
+}
+
+function HallFace({ hall, now }: { hall: HallId; now: { date: string; minutes: number } | null }) {
+  const info = HALLS.find((h) => h.id === hall);
+  const status = now ? mealNow(hall, now.date, now.minutes) : null;
+  const statusText = status ? status.text[0].toUpperCase() + status.text.slice(1) : " ";
+  return (
+    <>
+      <Photo src={`/halls/${hall}.jpg`} h={140} r={16} eager alt={info ? `${info.name} area` : ""} />
+      <div style={{ padding: "0 8px", display: "grid", alignContent: "center", gap: 2, minWidth: 0 }}>
+        <div style={{ fontSize: 17, fontWeight: 700, letterSpacing: "-0.02em" }}>{info?.short ?? ""}</div>
+        <div className="label" style={{ fontSize: 12, display: "flex", alignItems: "center", gap: 6, minWidth: 0 }}>
+          <span style={{ width: 7, height: 7, borderRadius: 9, flex: "none", background: status?.open ? "var(--ok)" : "var(--ink-3)" }} />
+          <Swap id={statusText}>{statusText}</Swap>
+        </div>
+      </div>
+    </>
   );
 }

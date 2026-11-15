@@ -19,6 +19,7 @@ import { campusClock, daysBetween } from "./campusTime";
 import { fetchLiveCafes, fetchLiveDay, type LiveCafes, type LiveDay } from "./menuLive";
 import type { Cafe } from "./foodpro";
 import mock from "../../data/mock/menu.json";
+import { withDisplayNames } from "./dishNames";
 
 const MENU_DIR = path.join(process.cwd(), "data", "menus");
 const CAFES_FILE = path.join(process.cwd(), "data", "cafes.json");
@@ -105,7 +106,12 @@ export function nearestMenuDate(date: string): string | null {
   return best;
 }
 
+// Display names (src/lib/dishNames.ts: grill patties are burgers) apply to every menu the app reads, live or saved.
 async function dayFor(date: string): Promise<DayMenu[]> {
+  return withDisplayNames(await rawDayFor(date));
+}
+
+async function rawDayFor(date: string): Promise<DayMenu[]> {
   const saved = readDay(date);
   if (saved?.fetchedAt && Date.now() - Date.parse(saved.fetchedAt) < FRESH_MS) return saved.menus;
   const fresh = await live(date);

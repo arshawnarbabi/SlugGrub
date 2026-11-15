@@ -505,3 +505,17 @@ input, textarea, select { font-size: 17px !important; }     /* 16px or more also
 /* ── Demo data chip (docs/DESIGN.md, "Demo data chip"): the small Sidestash chip (raise, white hairline, chip shadow), ink-2 text,
    information only. Shown only in demo mode, in the header of each ranking screen. ── */
 .demo-chip { display: inline-flex; align-items: center; height: 26px; padding: 0 10px; border-radius: var(--r-pill); background: var(--raise); border: 0.5px solid var(--hi); box-shadow: var(--chip-shadow); font-size: 12px; font-weight: 600; color: var(--ink-2); white-space: nowrap; flex: none; cursor: default; }
+
+/* Food button on WebKit (2026-11-15, his iPhone recording: "laggy ... missing the fill and goo ... cutting off the button on the
+   sides"). The goo layer is now a box that covers the whole droplet path (TabBar.tsx FoodButton), hanging off the 62px button; it
+   lets taps through and only the buttons take them. Droplet icons blur-fade in and out like every state change (opacity + 4px blur,
+   220ms, no scale: his "no expand or compress"); the shared press rule above had been cutting their transition to opacity only. */
+.food-liquid { pointer-events: none; }
+.food-liquid :is(.food-main, .cam-main), .food-liquid .drop.on { pointer-events: auto; }
+.food-liquid .drop { transform: none; transition: opacity var(--dur-ui) var(--ease), filter var(--dur-ui) var(--ease); }
+.food-liquid .drop.on { transition-delay: 90ms; }
+
+/* Slider touch area (2026-11-15, his report: onboarding's Slug Points slider had "weird resistance"): the 8px track was the only
+   part that took a touch, so a finger on the thumb's upper or lower edge missed it. The whole 44px row is now the track's hit area. */
+.gs-track::before { content: ""; position: absolute; left: -13px; right: -13px; top: -18px; bottom: -18px; }
+

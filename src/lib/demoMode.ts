@@ -23,8 +23,26 @@ export function demoOn(): boolean {
   return fallback ?? false;
 }
 
-const noSubscribe = () => () => {};
-/** For screens: false on the server and while hydrating, then the device's switch. */
+const CHANGED = "sluggrub:demo";
+
+/** Turns demo mode on or off from a button (Settings: Start demo, Leave demo). Drops a ?demo= left in the address bar, which would
+ *  otherwise win over the new choice, and tells every screen using useDemoMode. */
+export function setDemo(on: boolean) {
+  fallback = on;
+  try { window.localStorage.setItem(KEY, on ? "1" : "0"); } catch { /* blocked storage: the in-memory fallback holds it */ }
+  try {
+    const u = new URL(window.location.href);
+    if (u.searchParams.has("demo")) { u.searchParams.delete("demo"); window.history.replaceState(window.history.state, "", u); }
+  } catch { /* no URL to tidy */ }
+  window.dispatchEvent(new Event(CHANGED));
+}
+
+function subscribe(cb: () => void) {
+  window.addEventListener(CHANGED, cb);
+  window.addEventListener("storage", cb);
+  return () => { window.removeEventListener(CHANGED, cb); window.removeEventListener("storage", cb); };
+}
+/** For screens: false on the server and while hydrating, then the device's switch (and again whenever setDemo changes it). */
 export function useDemoMode(): boolean {
-  return useSyncExternalStore(noSubscribe, demoOn, () => false);
+  return useSyncExternalStore(subscribe, demoOn, () => false);
 }

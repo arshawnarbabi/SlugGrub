@@ -27,6 +27,42 @@ export function savePlate(plate: PlateLog): boolean {
   }
 }
 
+/** Example plates written by demo mode (src/components/screens/demoSeed.ts) carry this id prefix, so Leave demo removes only them. */
+export const DEMO_PLATE = "demo-";
+
+function writePlates(list: PlateLog[]): boolean {
+  try {
+    window.localStorage.setItem(KEY, JSON.stringify(list.slice(-300)));
+    window.dispatchEvent(new Event(CHANGED));
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+/** Adds several plates at once (demo mode's example plates). */
+export function savePlates(plates: PlateLog[]): boolean {
+  return writePlates([...loadPlates(), ...plates]);
+}
+
+/** Removes every plate saved on this device (Settings: Start demo). */
+export function clearPlates(): boolean {
+  try {
+    window.localStorage.removeItem(KEY);
+    window.dispatchEvent(new Event(CHANGED));
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+/** Removes only demo mode's example plates (Settings: Leave demo). */
+export function removeDemoPlates(): boolean {
+  const all = loadPlates();
+  const keep = all.filter((p) => !(typeof p?.id === "string" && p.id.startsWith(DEMO_PLATE)));
+  return keep.length === all.length || writePlates(keep);
+}
+
 function subscribe(cb: () => void) {
   window.addEventListener(CHANGED, cb);
   window.addEventListener("storage", cb);

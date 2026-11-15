@@ -5,12 +5,13 @@
 // usual hall from onboarding (JRL/C9 without a profile, or the first hall serving today when theirs is closed); the meal follows
 // that hall's real hours today (src/lib/halls.ts), Pacific time. The demo plate is a dish on that meal's menu (src/components/screens/demoPlates.ts).
 import Link from "next/link";
-import { useRef, useState, useSyncExternalStore } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { Alert02Icon, ArrowLeft01Icon, Camera01Icon, FireIcon, Image01Icon, RiceBowl01Icon, Tick02Icon } from "@hugeicons/core-free-icons";
 import { Icon } from "@/components/ui/Icon";
 import { Photo } from "@/components/ui/Photo";
 import { Screen } from "@/components/ui/Screen";
-import { Swap, Appear, CountUp, GooSlider, Seg } from "@/components/ui/motion";
+import { Swap, Appear, CountUp, GooSlider, Seg, SPRING, STATE_IN, STATE_OUT, STATE_FADE } from "@/components/ui/motion";
 import { HALLS } from "@/lib/halls";
 import { useProfile } from "@/lib/profile";
 import type { HallId, MealName } from "@/lib/types";
@@ -20,6 +21,7 @@ import { portionText } from "./portion";
 import { campusNow, hoursFor, mealLabel, mealToLog, MEAL_NAMES } from "./now";
 import { savePlate } from "./plates";
 import type { DemoPlates } from "./demoPlates";
+import { ProcessingBeam } from "./ProcessingBeam";
 
 type Phase = "pick" | "reading" | "result" | "saved" | "error";
 const MEAL_OPTIONS = MEAL_NAMES.map(mealLabel);
@@ -72,8 +74,9 @@ export function LogScreen({ demo }: { demo: DemoPlates }) {
   const [stored, setStored] = useState(true);
   const file = useRef<HTMLInputElement>(null);
   const run = useRef(0);
+  const reduce = useReducedMotion();
 
-  const send = async (blob: Blob, preview: string) => {
+  const send = async (blob: Blob, preview: string, menuDate?: string) => {
     const id = ++run.current;
     setPhoto(preview);
     setPhase("reading");
@@ -82,7 +85,7 @@ export function LogScreen({ demo }: { demo: DemoPlates }) {
       form.append("photo", await shrink(blob), "plate.jpg");
       form.append("hall", HALL.id);
       form.append("meal", meal);
-      form.append("date", date ?? campusNow(new Date()).date);
+      form.append("date", menuDate ?? date ?? campusNow(new Date()).date);
       const res: LogResponse = await (await fetch("/api/log", { method: "POST", body: form })).json();
       if (id !== run.current) return; // the student started over meanwhile
       if (!res.ok) { setProblem(res.message); setPhase("error"); return; }
@@ -98,7 +101,7 @@ export function LogScreen({ demo }: { demo: DemoPlates }) {
   const fromCamera = (f: File) => send(f, URL.createObjectURL(f));
   const fromDemo = async () => {
     if (!plate) return;
-    try { send(await (await fetch(plate.photo)).blob(), plate.photo); }
+    try { send(await (await fetch(plate.photo)).blob(), plate.photo, plate.date); }
     catch { setProblem("Couldn't load the demo plate."); setPhase("error"); }
   };
   const again = () => { run.current++; setResult(null); setPhase("pick"); };
@@ -115,7 +118,10 @@ export function LogScreen({ demo }: { demo: DemoPlates }) {
     setPhase("saved");
   };
 
+  const kind = phase === "reading" ? "reading" : phase === "error" ? "error" : "result";
+
   return (
+    <>
     <Screen top={<div className="topbar">
         <Link href="/" className="iconbtn" aria-label="Back"><Icon icon={ArrowLeft01Icon} size={18} /></Link>
         <span className="center">Log a plate</span>
@@ -138,52 +144,86 @@ export function LogScreen({ demo }: { demo: DemoPlates }) {
 
       {phase !== "pick" && (
         <Photo src={photo} h={200} r={24} eager>
-          <span className="on-photo"><Swap id={phase === "reading" ? "r" : "d"}>{phase === "reading" ? "Reading your plate" : `${mealLabel(result?.meal ?? meal)} · ${result?.hallShort ?? HALL.short}`}</Swap></span>
+          <span className="on-photo"><Swap id={`${result?.meal ?? meal}${result?.hallShort ?? HALL.short}`}>{mealLabel(result?.meal ?? meal)} · {result?.hallShort ?? HALL.short}</Swap></span>
         </Photo>
       )}
 
-      {phase === "reading" && (
-        <Appear className="card" style={{ display: "flex", gap: 12, alignItems: "center" }}>
-          <span className="iconbtn" style={{ width: 44, height: 44, background: "var(--paper-2)" }}><Icon icon={FireIcon} size={20} sw={2} /></span>
-          <div><b>Matching to the {mealLabel(meal).toLowerCase()} menu</b><div className="label" style={{ fontSize: 12 }}>Using the plate as a size guide</div></div>
-        </Appear>
-      )}
+      {/* The processing moment (his ask 2026-11-15): one card under the photo says what is happening while the beam rides the
+          frame; when the answer comes it morphs on THE spring into the calorie card (or the error card), its icon chip staying put,
+          and the rest of the stats fade in under it, in place. */}
+      {phase !== "pick" && (kind !== "result" || result) && (
+        <div style={{ display: "grid", gap: 12 }}>
+          <motion.div layout={!reduce} layoutDependency={kind} transition={{ layout: SPRING }} className="card" style={{ display: "flex", alignItems: "center", gap: 12, borderRadius: 18 }}>
+            <motion.span layout={reduce ? false : "position"} layoutDependency={kind} className="iconbtn" style={{ width: 44, height: 44, background: "var(--paper-2)" }}>
+              <Swap id={kind === "error" ? "alert" : "fire"}><Icon icon={kind === "error" ? Alert02Icon : FireIcon} size={20} sw={2} /></Swap>
+            </motion.span>
+            <div style={{ flex: 1, minWidth: 0, position: "relative" }}>
+              <AnimatePresence mode="popLayout" initial={false}>
+                <motion.div
+                  key={kind}
+                  layout={reduce ? false : "position"}
+                  layoutDependency={kind}
+                  initial={reduce ? { opacity: 0 } : STATE_OUT}
+                  animate={{ ...STATE_IN, transitionEnd: { filter: "none" } }}
+                  exit={reduce ? { opacity: 0 } : STATE_OUT}
+                  transition={reduce ? { duration: 0 } : STATE_FADE}
+                >
+                  {kind === "reading" && <Status meal={meal} />}
+                  {kind === "error" && <><b>Couldn&apos;t log this plate</b><div className="label" style={{ fontSize: 13 }}>{problem}</div></>}
+                  {kind === "result" && <><div className="label">Calories · only you see this</div><div className="hero-num" style={{ fontSize: 38 }}><CountUp to={cal} /></div></>}
+                </motion.div>
+              </AnimatePresence>
+            </div>
+          </motion.div>
 
-      {phase === "error" && (
-        <Appear id="error" style={{ display: "grid", gap: 12 }}>
-          <div className="card" style={{ display: "flex", gap: 12, alignItems: "center" }}>
-            <span className="iconbtn" style={{ width: 44, height: 44, background: "var(--paper-2)" }}><Icon icon={Alert02Icon} size={20} sw={2} /></span>
-            <div style={{ flex: 1, minWidth: 0 }}><b>Couldn&apos;t log this plate</b><div className="label" style={{ fontSize: 13 }}>{problem}</div></div>
-          </div>
-          <button type="button" className="btn btn-primary btn-block" onClick={again}><Icon icon={Camera01Icon} size={19} sw={2} /> Try another photo</button>
-        </Appear>
-      )}
-
-      {(phase === "result" || phase === "saved") && result && (
-        <Appear id="result" style={{ display: "grid", gap: 12 }}>
-          <div className="card" style={{ display: "flex", alignItems: "center", gap: 12 }}>
-            <span className="iconbtn" style={{ width: 44, height: 44, background: "var(--paper-2)" }}><Icon icon={FireIcon} size={20} sw={2} /></span>
-            <div style={{ flex: 1 }}><div className="label">Calories · only you see this</div><div className="hero-num" style={{ fontSize: 38 }}><CountUp to={cal} /></div></div>
-          </div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 8 }}>
-            {([["Protein", "proteinG", "var(--protein)"], ["Carbs", "carbsG", "var(--carbs)"], ["Fat", "fatG", "var(--fat)"]] as const).map(([n, k, c]) => (
-              <div className="card tight" key={k}>
-                <div className="label" style={{ fontSize: 12, display: "flex", alignItems: "center", gap: 5 }}><span style={{ width: 7, height: 7, borderRadius: 9, background: c }} />{n}</div>
-                <div className="num" style={{ fontSize: 18, fontWeight: 700, letterSpacing: "-0.03em", marginTop: 2 }}><Swap id={String(mac(k))}>{mac(k)}g</Swap></div>
-              </div>
-            ))}
-          </div>
-          {items.map(({ it, s }) => <ItemCard key={it.recipeId} it={it} s={s} locked={phase === "saved"} onChange={(v) => setServings((m) => ({ ...m, [it.recipeId]: v }))} />)}
-          {result.notOnMenu.length > 0 && (
-            <div className="label" style={{ fontSize: 13 }}>Not on the {mealLabel(result.meal).toLowerCase()} menu, so not counted: {result.notOnMenu.join(", ")}</div>
-          )}
-          <div className="label" style={{ fontSize: 13 }}>Something look off? <button type="button" className="textbtn" style={{ color: "var(--p9)", padding: 0 }} onClick={again}>Retake</button></div>
-          <button type="button" className="btn btn-primary btn-block" onClick={save} disabled={phase === "saved"}>
-            <Swap id={phase}>{phase === "saved" ? <span style={{ display: "inline-flex", gap: 8, alignItems: "center" }}><Icon icon={Tick02Icon} size={18} sw={2.4} /> {stored ? "Saved to today" : "Couldn't save on this device"}</span> : <span>Save to today</span>}</Swap>
-          </button>
-        </Appear>
+          <AnimatePresence initial={false}>
+            {kind !== "reading" && (
+              <motion.div key={kind} style={{ display: "grid", gap: 12 }} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={reduce ? { duration: 0 } : { duration: 0.24, delay: 0.12, ease: [0.22, 1, 0.36, 1] }}>
+                {kind === "error" && <button type="button" className="btn btn-primary btn-block" onClick={again}><Icon icon={Camera01Icon} size={19} sw={2} /> Try another photo</button>}
+                {kind === "result" && result && <>
+                  <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 8 }}>
+                    {([["Protein", "proteinG", "var(--protein)"], ["Carbs", "carbsG", "var(--carbs)"], ["Fat", "fatG", "var(--fat)"]] as const).map(([n, k, c]) => (
+                      <div className="card tight" key={k}>
+                        <div className="label" style={{ fontSize: 12, display: "flex", alignItems: "center", gap: 5 }}><span style={{ width: 7, height: 7, borderRadius: 9, background: c }} />{n}</div>
+                        <div className="num" style={{ fontSize: 18, fontWeight: 700, letterSpacing: "-0.03em", marginTop: 2 }}><Swap id={String(mac(k))}>{mac(k)}g</Swap></div>
+                      </div>
+                    ))}
+                  </div>
+                  {items.map(({ it, s }) => <ItemCard key={it.recipeId} it={it} s={s} locked={phase === "saved"} onChange={(v) => setServings((m) => ({ ...m, [it.recipeId]: v }))} />)}
+                  {result.notOnMenu.length > 0 && (
+                    <div className="label" style={{ fontSize: 13 }}>Not on the {mealLabel(result.meal).toLowerCase()} menu, so not counted: {result.notOnMenu.join(", ")}</div>
+                  )}
+                  <div className="label" style={{ fontSize: 13 }}>Something look off? <button type="button" className="textbtn" style={{ color: "var(--p9)", padding: 0 }} onClick={again}>Retake</button></div>
+                  <button type="button" className="btn btn-primary btn-block" onClick={save} disabled={phase === "saved"}>
+                    <Swap id={phase}>{phase === "saved" ? <span style={{ display: "inline-flex", gap: 8, alignItems: "center" }}><Icon icon={Tick02Icon} size={18} sw={2.4} /> {stored ? "Saved to today" : "Couldn't save on this device"}</span> : <span>Save to today</span>}</Swap>
+                  </button>
+                </>}
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
       )}
     </Screen>
+    <AnimatePresence>{phase === "reading" && <ProcessingBeam key="beam" />}</AnimatePresence>
+    </>
+  );
+}
+
+// What the photo log is doing while Gemini reads the plate: each step blur-fades into the next (a timer, not a loop) and the last
+// one stays until the answer comes.
+function Status({ meal }: { meal: MealName }) {
+  const steps = ["Reading your plate…", `Matching it to the ${mealLabel(meal).toLowerCase()} menu…`, "Sizing up the portions…"];
+  const [i, setI] = useState(0);
+  useEffect(() => {
+    if (i >= steps.length - 1) return;
+    const t = window.setTimeout(() => setI(i + 1), 1800);
+    return () => window.clearTimeout(t);
+  }, [i, steps.length]);
+  return (
+    <>
+      <b style={{ display: "block" }}><Swap id={String(i)}>{steps[i]}</Swap></b>
+      <div className="label" style={{ fontSize: 13 }}>Using the plate as a size guide</div>
+    </>
   );
 }
 

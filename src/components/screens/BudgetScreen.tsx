@@ -62,10 +62,9 @@ function BudgetBody({ profile, range, setRange }: { profile: SavedProfile | null
         </div>
         <span className={`pill ${pillTone}`} style={{ position: "absolute", top: 184, left: "50%", transform: "translateX(-50%)" }}><span className="dot" />{pillText}</span>
       </div>
-      {(
+      {(!mine || p.estimated) && (
         <p className="label" style={{ fontSize: 12, margin: "0 4px" }}>
-          {!mine ? "Example numbers. " : p.estimated ? `Estimated from the ${p.enteredPoints.toLocaleString()} you entered ${short(p.enteredOn)}, at your pace so far. ` : ""}
-          <Link href={mine ? "/onboarding?step=1" : "/onboarding"} className="seeall" style={{ display: "inline" }}>{mine ? "Update points" : "Set up your plan"}</Link>
+          {!mine ? "Example numbers. Set up your plan below to see your own." : p.estimated ? `Estimated from the ${p.enteredPoints.toLocaleString()} you entered ${short(p.enteredOn)}, at your pace so far.` : ""}
         </p>
       )}
       <Seg options={RANGES} value={range} onChange={setRange} label="Range" />
@@ -93,6 +92,9 @@ function BudgetBody({ profile, range, setRange }: { profile: SavedProfile | null
         <p className="label" style={{ fontSize: 12, margin: "0 4px" }}>SlugGrub can&apos;t see your card, so it doesn&apos;t split spending between dining halls, cafes and markets. The GET app lists every purchase.</p>
         <p className="label" style={{ fontSize: 12, margin: "0 4px" }}>A dining hall meal costs the same at every hall. Cafes and markets take 10% off with Slug Points.</p>
       </Appear>
+      {/* a full button at the bottom of the page, the Sidestash white like "Continue with Google" (his ask 2026-11-15: the inline
+          link was "so small. make it follow the style of the other buttons ... and put it at the bottom of thsi page") */}
+      <Link href={mine ? "/onboarding?step=1" : "/onboarding"} className="btn btn-secondary btn-block raised">{mine ? "Update points" : "Set up your plan"}</Link>
     </Screen>
   );
 }
