@@ -116,7 +116,7 @@ export function HallsScreen({ data, best }: { data: HallsData; best: BestDish[] 
       </div>
       </>}
 
-      <div ref={chips} className="carousel" style={{ marginTop: 4, scrollSnapType: "none" }}>
+      <div ref={chips} className="carousel" style={{ marginTop: -4, marginBottom: -8, paddingBlock: 8, scrollSnapType: "none" }}>
         <div className="chip-goo">
           <GooTrack index={chipAt} refs={chipRefs} fill="var(--p9)" />
           {data.halls.map((x, n) => (

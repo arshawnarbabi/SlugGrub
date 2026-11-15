@@ -3215,3 +3215,5 @@ One page margin: .carousel rows scroll edge to edge but rest their first item on
 <!-- 2026-11-14 Concentric corner badges: a pill in a photo corner sits at offset = photo radius - pill radius (24px pills: 4px in a 16px-radius photo, 6px in 18px; never under 4px); the Today hero chevron chip (26px) sits 8 + 3 = 11px in. Card 24 = photo 16 + 8 padding (his ask: "corner rounding ... cohesive with outer inner and ... the pill, pixel width formula"). -->
 
 <!-- 2026-11-14 Budget chart cleanup (his ask: "remove the vertical and horizontal lines thats just clutter. dont allow mouse hover to interact wiht it and make sure hte labels dont clip"): no gridlines and no today line; y axis labels only 0 and the plan total; not interactive; line labels carry a 4px card-colored halo so no line runs through them. -->
+
+<!-- 2026-11-14 Hall chip row: 8px of room above and below inside the scrolling row (negative margins keep the layout), so the goo thumb's soft edge is never cut flat by the row's clipping (his report: "this lookos clipped at the top and bottom"). -->
