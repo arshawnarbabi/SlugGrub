@@ -64,6 +64,9 @@ export interface DishRank {
   hallId: HallId;
   elo: number;
   votes: number;
+  wins?: number; // matchups won (votes - wins = matchups lost)
+  skips?: number; // times students skipped it ("haven't tried")
+  calories?: number; // UCSC label calories per official portion, when the menu has it (dish info, never a user's intake)
 }
 
 export interface Vote {
@@ -72,13 +75,18 @@ export interface Vote {
   userId: string;
   college?: College;
   at: string; // ISO time
+  winnerHallId?: HallId; // a dish is ranked per hall: hallId + recipeId
+  loserHallId?: HallId;
+  matchId?: string; // one vote per user per matchup per day ("<date>_<keyA>_<keyB>") or per live round ("live-<roundId>")
+  delta?: number; // Elo points the winner gained and the loser lost (kept so an undo can reverse it)
 }
 
 export interface HallStanding {
   hallId: HallId;
   rank: number;
   score: number;
-  change: number; // places moved since last week, + is up
+  change: number; // places moved since last week, + is up (0 when openingRank is unknown)
+  openingRank?: number; // rank in last week's closing standings, when a snapshot exists
 }
 
 // Budget and onboarding (Ethan)

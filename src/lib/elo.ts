@@ -35,11 +35,14 @@ export function getDynamicKFactor(votes: number = 0): number {
 
 /**
  * Calculates the new Elo ratings for a winner and a loser after a matchup.
- * Winner gets score = 1, Loser gets score = 0.
+ * Winner gets score = 1, loser gets score = 0.
+ *
+ * One K per match, and the update is symmetric (the winner gains exactly what the loser drops), so the total rating in the pool
+ * never drifts. The match's K is the adaptive K of the less-voted dish, so a new dish still calibrates fast.
  *
  * @param winnerRating Current rating of the winning dish
  * @param loserRating Current rating of the losing dish
- * @param kFactor Optional fixed weight factor. If omitted, uses adaptive K-Factor based on votes.
+ * @param kFactor Optional fixed K for this match. If omitted, uses the adaptive K-factor of the less-voted dish.
  * @param winnerVotes Total votes cast on winner dish so far
  * @param loserVotes Total votes cast on loser dish so far
  */
@@ -51,20 +54,16 @@ export function calculateElo(
   loserVotes: number = 0
 ): EloResult {
   const expectedWinner = getExpectedScore(winnerRating, loserRating);
-  const expectedLoser = getExpectedScore(loserRating, winnerRating);
+  const k = kFactor ?? getDynamicKFactor(Math.min(winnerVotes, loserVotes));
 
-  const kWin = kFactor ?? getDynamicKFactor(winnerVotes);
-  const kLose = kFactor ?? getDynamicKFactor(loserVotes);
-
-  // Winner scored 1 (1 - expectedWinner), Loser scored 0 (0 - expectedLoser)
-  const winnerDelta = Math.round(kWin * (1 - expectedWinner));
-  const loserDelta = Math.round(kLose * (0 - expectedLoser));
+  // Winner scored 1 against an expectation of expectedWinner; the loser loses the same amount.
+  const delta = Math.round(k * (1 - expectedWinner));
 
   return {
-    newWinnerElo: winnerRating + winnerDelta,
-    newLoserElo: Math.max(100, loserRating + loserDelta), // Ensure rating does not drop below 100
-    winnerDelta,
-    loserDelta,
+    newWinnerElo: winnerRating + delta,
+    newLoserElo: loserRating - delta,
+    winnerDelta: delta,
+    loserDelta: -delta,
   };
 }
 
