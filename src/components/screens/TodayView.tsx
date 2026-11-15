@@ -4,7 +4,7 @@
 // this device (src/lib/profile.ts). Before a profile exists the plan and college cards point to onboarding instead of showing
 // made-up numbers. While the page renders on the server (no profile yet) those two cards keep their shape with no values.
 // First open (no profile saved on this device): a "Set up SlugGrub" row card under the greeting opens onboarding, which returns
-// here when done. Never a redirect, so a judge opening /vote from a QR code is never sent to onboarding.
+// here when done. The profile button on the top bar opens Settings (plan edit and demo mode, 2026-11-15). Never a redirect, so a judge opening /vote from a QR code is never sent to onboarding.
 import Link from "next/link";
 import { useMemo } from "react";
 import { Location01Icon, UserCircleIcon, CrownIcon, ArrowRight01Icon, RiceBowl01Icon, UserAdd01Icon } from "@hugeicons/core-free-icons";
@@ -12,6 +12,7 @@ import { Icon } from "@/components/ui/Icon";
 import { Photo } from "@/components/ui/Photo";
 import { Screen } from "@/components/ui/Screen";
 import { CountUp } from "@/components/ui/motion";
+import { DemoChip } from "@/components/ui/DemoChip";
 import { useProfile } from "@/lib/profile";
 import { useDemoMode } from "@/lib/demoMode";
 import { useDemoRank } from "@/lib/rankDemo";
@@ -68,10 +69,14 @@ export function TodayView({ data: served }: { data: TodayData }) {
   return (
     <Screen wash top={<div className="topbar">
         <span className="tint blue fit"><Icon icon={Location01Icon} size={14} sw={2} /><span className="clip">{hall.short} · {statusText}</span></span>
-        <Link href="/onboarding" className="iconbtn" aria-label="Your profile"><Icon icon={UserCircleIcon} size={18} /></Link>
+        <Link href="/settings" className="iconbtn" aria-label="Settings"><Icon icon={UserCircleIcon} size={18} /></Link>
       </div>}>
 
-      <h1 className="title-xl">{data.hello}{profile?.name ? `, ${profile.name.split(" ")[0]}` : ""}.</h1>
+      {/* the Demo data chip sits beside the greeting while demo mode is on: Today's dishes and college rank are mock then too */}
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8 }}>
+        <h1 className="title-xl">{data.hello}{profile?.name ? `, ${profile.name.split(" ")[0]}` : ""}.</h1>
+        <DemoChip />
+      </div>
 
       {profile === null && (
         <Link href="/onboarding" className="card tight press link" style={{ display: "flex", alignItems: "center", gap: 10, paddingRight: 36, borderRadius: "var(--r-pill)", padding: "8px 36px 8px 8px" }}>

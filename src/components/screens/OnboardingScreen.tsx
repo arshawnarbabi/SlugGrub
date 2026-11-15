@@ -14,6 +14,8 @@ import { Swap, Appear, GooSlider } from "@/components/ui/motion";
 import { HALLS, MEAL_PLANS } from "@/lib/halls";
 import { getProfile, saveProfile } from "@/lib/profile";
 import { signInWithGoogle } from "@/lib/auth";
+import { demoOn } from "@/lib/demoMode";
+import { seedDemoPlates } from "./demoSeed";
 import type { College, HallId, MealPlanId } from "@/lib/types";
 
 const COLLEGES: College[] = ["Cowell", "Stevenson", "Crown", "Merrill", "Porter", "Kresge", "Oakes", "Rachel Carson", "College Nine", "John R. Lewis"];
@@ -31,10 +33,14 @@ export function OnboardingScreen() {
   const [hallPicked, setHallPicked] = useState(false); // until they pick a hall, it follows their college
   const [google, setGoogle] = useState<"idle" | "busy" | "done" | "off">("idle");
   const [who, setWho] = useState<{ name?: string; uid?: string }>({});
-  // editing: start from what this device already saved
+  // editing (Settings: "Edit my plan, college and hall"): start from what this device already saved. With nothing saved (first run, or
+  // Settings' "Start demo" just cleared it) start from the defaults, since Next keeps this route's state from an earlier visit.
   useEffect(() => {
     const p = getProfile();
-    if (!p) return;
+    if (!p) {
+      setPlan("gold"); setPoints(1200); setCollege("Porter"); setHall("25"); setHallPicked(false); setWho({}); setGoogle("idle");
+      return;
+    }
     setPlan(p.plan); setPoints(p.pointsNow); setCollege(p.college); setHall(p.usualHall); setHallPicked(true);
     if (p.uid) { setWho({ name: p.name, uid: p.uid }); setGoogle("done"); }
   }, []);
@@ -60,7 +66,11 @@ export function OnboardingScreen() {
   ];
   const done = step >= steps.length;
   const save = (extra: { name?: string; uid?: string } = who) => saveProfile({ plan, pointsNow: points, college, usualHall: hall, ...extra });
-  const next = () => { if (step === steps.length - 1) save(); setStep((s) => s + 1); };
+  // finishing in demo mode primes the app: if nothing is logged today, one or two example plates from today's real menus (demoSeed.ts)
+  const next = () => {
+    if (step === steps.length - 1) { save(); if (demoOn()) void seedDemoPlates(hall); }
+    setStep((s) => s + 1);
+  };
   const withGoogle = async () => {
     setGoogle("busy");
     try {
