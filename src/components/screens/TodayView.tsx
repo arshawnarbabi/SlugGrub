@@ -71,7 +71,7 @@ export function TodayView({ data: served }: { data: TodayData }) {
         <Link href="/onboarding" className="iconbtn" aria-label="Your profile"><Icon icon={UserCircleIcon} size={18} /></Link>
       </div>}>
 
-      <h1 className="title-xl">{data.hello}{profile?.name ? `, ${profile.name.split(" ")[0]}` : ""}</h1>
+      <h1 className="title-xl">{data.hello}{profile?.name ? `, ${profile.name.split(" ")[0]}` : ""}.</h1>
 
       {profile === null && (
         <Link href="/onboarding" className="card tight press link" style={{ display: "flex", alignItems: "center", gap: 10, paddingRight: 36, borderRadius: "var(--r-pill)", padding: "8px 36px 8px 8px" }}>

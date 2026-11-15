@@ -75,7 +75,7 @@ function TodayScreen() {
       </div>
       <div>
         <div className="eyebrow" style={{ position: "relative" }}>Dinner · open till 8 PM</div>
-        <div className="title-xl">Good evening, Maya</div>
+        <div className="title-xl">Good evening, Maya.</div>
       </div>
 
       <div className="card press" style={{ padding: 0, overflow: "hidden" }}>
