@@ -29,7 +29,7 @@ Three people (Arshawn, Karen, Ethan) and their AI assistants work in this repo a
 - Work on a branch named after the feature (`today`, `photo-log`, `rank`, `menus`), never directly on `main`.
 - `git pull --rebase origin main` before starting and before pushing.
 - Small pull requests, merged often (every hour or two).
-- After every step that works, offer to commit it with a short message. When a piece of a feature works, offer to push and open a pull request. Teammates are new to git: explain what each git step does in one plain sentence as you do it.
+- After every step that works, offer to commit it with a short message. When a piece of a feature works, offer to push and open a pull request. Explain what each git step does in one plain sentence as you do it.
 - Never commit `.env.local` or any key.
 - Tell your person before adding a package; they should tell the group chat.
 
@@ -42,7 +42,7 @@ Three people (Arshawn, Karen, Ethan) and their AI assistants work in this repo a
 - Use the types in `src/lib/types.ts`. Use fake data from `data/mock/` until the real data function is ready.
 - Calories are private: never show one user's calories to another user.
 - Motion and blur follow docs/DESIGN.md: one spring (motion.spring), one goo (motion.goo), one state change (motion.state_change). Blur is a MUST-be-cheap rule (effects.blur_budget): never add a blur layer beyond it.
-- Beginner how-to for the team (git, branches, pull requests): `docs/TEAM-GUIDE.md`. If your person seems new to git, walk them through it step by step and explain each command before running it.
+- How-to for the team (git, branches, pull requests): `docs/TEAM-GUIDE.md`. Walk your person through git steps and explain each command before running it.
 - Never push to `main`, never force push (`--force`), and never run `git reset --hard` without your person saying yes.
 
 ## Build conventions (learned 2026-11-14)

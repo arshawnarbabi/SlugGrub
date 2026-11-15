@@ -105,7 +105,7 @@ Open the agent chat inside the SlugGrub folder, make sure the model is set (Part
 
 ### Karen's setup prompt
 ```
-I'm Karen, on a 3-person hackathon team building SlugGrub. I'm new to GitHub, pull requests and coding agents, so explain each step in plain words before you do it, and tell me exactly when I need to do something myself.
+I'm Karen, on a 3-person hackathon team building SlugGrub. Explain each step in plain words before you do it, and tell me exactly when I need to do something myself.
 
 Set me up from start to finish:
 
@@ -125,7 +125,7 @@ When everything above is done, end with exactly: "I understand the plan and my r
 
 ### Ethan's setup prompt
 ```
-I'm Ethan, on a 3-person hackathon team building SlugGrub. I'm new to GitHub, pull requests and coding agents, so explain each step in plain words before you do it, and tell me exactly when I need to do something myself.
+I'm Ethan, on a 3-person hackathon team building SlugGrub. Explain each step in plain words before you do it, and tell me exactly when I need to do something myself.
 
 Set me up from start to finish:
 

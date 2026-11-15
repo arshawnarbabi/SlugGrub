@@ -1,6 +1,6 @@
 # SlugGrub plan
 
-The one shared plan for the team and for every AI working in this repo. New to GitHub? Read [docs/TEAM-GUIDE.md](docs/TEAM-GUIDE.md) first. **If it is not in this file, it is not decided.** Change it in a commit like any code: tick your boxes, add decisions, move things around. Keep the Google Doc for brainstorming only; this file wins if they disagree.
+The one shared plan for the team and for every AI working in this repo. Team how-to: [docs/TEAM-GUIDE.md](docs/TEAM-GUIDE.md). **If it is not in this file, it is not decided.** Change it in a commit like any code: tick your boxes, add decisions, move things around. Keep the Google Doc for brainstorming only; this file wins if they disagree.
 
 Last updated: 2026-11-14
 
