@@ -218,7 +218,8 @@ function Duels({ catalog, state }: { catalog: CatalogDish[]; state: RankState | 
                 <span className="num label" style={{ fontSize: 12, marginTop: -6 }}>{d ? [d.calories !== undefined && `${d.calories} cal`, hallShort(d.hallId)].filter(Boolean).join(" · ") : " "}</span>
               </motion.button>
             ))}
-            <motion.div className="or" aria-hidden animate={page && page.pick !== null ? STATE_OUT : STATE_IN} transition={STATE_FADE}>or</motion.div>
+            {/* the "or" stays after a pick (his ask 2026-11-15: "make the \"or\" circle stay even after you select a meal") */}
+            <div className="or" aria-hidden>or</div>
           </div>
         ))}
       </Pager>
