@@ -139,6 +139,11 @@ Most entries use the plain format above. Two kinds of decision come up on every 
 - **Rationale:** one key and one bill, scriptable over 500+ dishes, counts toward the Gemini prize track; generated images are placeholders that a student's real photo-log photo replaces.
 - **Status:** approved
 
+## 2026-11-14 — One UI: every tab renders the shared screens
+- **Choice:** the rankings, Elo and Firebase code (main, PR #1) and the menu fetcher, menu data, budget math and Ask route (ethan-menus) are merged into arshawn-design; their standalone page UIs (rank, vote, dining services, halls, budget, onboarding) are replaced by the screens in `src/components/screens`, and the data functions are wired into those screens. His words: "hook everything to my ui, dont use theirs". `src/lib/auth.ts` is the shared sign-in surface (`signInWithGoogle`, `ensureUser`); `src/components/screens/dishPhoto.ts` maps a dish name to its generated image.
+- **Rationale:** one design system across every tab (docs/DESIGN.md); the data layer stays with its owners' functions and names.
+- **Status:** approved
+
 # AI Agent Contract (decisions)
 1. **Read before proposing or changing.** Consult `DECISIONS.md` before suggesting OR making any change to something it covers.
 2. **A request that touches a locked decision is NOT itself authorization to reopen it** — even when phrased as a direct instruction (e.g. "switch the cards to borders," "make it green"). A stakeholder asking for the *change* is not the same as the human explicitly asking to *reopen the locked decision*. Before modifying any file, you MUST: **(a)** surface the locked entry, **(b)** quote its documented rationale, **(c)** ask the human to confirm they intend to supersede it. Implement only after that explicit confirmation — then append a new superseding entry. Do **not** implement in the same turn as the request. (This is the analog of the QA gate: locked decisions are a gate you don't silently pass.)
