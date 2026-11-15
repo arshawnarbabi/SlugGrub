@@ -169,7 +169,7 @@ document.getElementById("copyAll").onclick = async () => {
   try {
     await Promise.all(list.map((s) => imgs[s.id].decode()));
     await copyItem({ "image/png": sheetBlob(list), "text/plain": new Blob([notesText(list)], { type: "text/plain" }) });
-    status(`Copied ${list.length} screens with notes (image + text)`);
+    status(`Copied ${list.length} screen${list.length === 1 ? "" : "s"} with notes (image + text)`);
   } catch (e) { status("Copy failed: " + e.message); }
 };
 document.getElementById("copyText").onclick = async () => {
