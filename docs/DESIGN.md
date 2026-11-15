@@ -3174,3 +3174,5 @@ One page margin: .carousel rows scroll edge to edge but rest their first item on
 <!-- 2026-11-14 Wash scrolls with the page (his ask: "make the blue wash not sticky but scroll with the page"): it stays outside the scroller (so the fade mask and edge blur never touch it) and follows scrollTop with a transform, once per frame (src/components/ui/Wash.tsx). -->
 
 <!-- 2026-11-14 Rank "or" badge: centered vertically on the two cards (was 40%) with a 6px ring in the page color (--paper) that notches both cards like a cutout (his ask); it leaves with the blur-fade state change instead of shrinking (his rule: no expand or compress). -->
+
+<!-- 2026-11-14 Rank notch tuned (his ask: "the gap for teh or circile is a bit too much and round the edges"): 4px gap around the "or" badge (was a 6px page-colored ring), cut into both cards with a static mask that has 5px rounded fillets where the notch meets the card edge. -->

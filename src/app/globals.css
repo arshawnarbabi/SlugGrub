@@ -373,3 +373,10 @@ input, textarea, select { font-size: 17px !important; }     /* 16px or more also
 /* "or" between the rank cards (his ask 2026-11-14: "make the or centered between them and have like a cutout for the food cards
    around that"): centered on both cards, with a ring in the page color that cuts a round notch into both cards' edges. */
 .duel > .or { top: 50%; z-index: 2; box-shadow: 0 0 0 6px var(--paper); }
+
+/* Rank cards notched around the "or" badge with rounded entry corners (his ask 2026-11-14: "the gap for teh or circile is a bit too
+   much and round the edges"): a 4px gap around the badge, 5px fillets where the notch meets each card's edge. The notch is a
+   mask, so nothing is painted over the cards (cheap: one static mask image per card, no blur). Geometry: scripts are inline above. */
+.duel > .or { box-shadow: none; }
+.duel > :nth-child(1) { -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-19 -28 19 56' width='19' height='56'%3E%3Cpath d='M0 -26.153 A5 5 0 0 1 3.214 -21.483 A23 23 0 0 0 3.214 21.483 A5 5 0 0 1 0 26.153Z'/%3E%3C/svg%3E") right center / 19px 56px no-repeat, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-19 -28 19 56' width='19' height='56'%3E%3Cpath d='M0 -26.153 A5 5 0 0 1 3.214 -21.483 A23 23 0 0 0 3.214 21.483 A5 5 0 0 1 0 26.153Z'/%3E%3C/svg%3E") right center / 19px 56px no-repeat exclude, linear-gradient(#000 0 0); }
+.duel > :nth-child(2) { -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 -28 19 56' width='19' height='56'%3E%3Cpath d='M0 -26.153 A5 5 0 0 0 -3.214 -21.483 A23 23 0 0 1 -3.214 21.483 A5 5 0 0 0 0 26.153Z'/%3E%3C/svg%3E") left center / 19px 56px no-repeat, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 -28 19 56' width='19' height='56'%3E%3Cpath d='M0 -26.153 A5 5 0 0 0 -3.214 -21.483 A23 23 0 0 1 -3.214 21.483 A5 5 0 0 0 0 26.153Z'/%3E%3C/svg%3E") left center / 19px 56px no-repeat exclude, linear-gradient(#000 0 0); }
