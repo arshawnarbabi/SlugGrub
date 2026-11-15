@@ -420,5 +420,8 @@ input, textarea, select { font-size: 17px !important; }     /* 16px or more also
 /* Top bar status chips (his ask 2026-11-14: "for this chip dont make it clicable and make it sidestash stye"): the hall / meal / hours
    chip on Today and the plan chip on Budget are information, not buttons: the Sidestash finish (raise, white hairline, chip shadow)
    like the top bar's round buttons, and no press dimming. */
-.topbar .tint { background: var(--raise); border: 0.5px solid var(--hi); box-shadow: var(--chip-shadow); color: var(--p9); cursor: default; }
+.topbar .tint { border: 0.5px solid var(--hi); box-shadow: var(--chip-shadow); cursor: default; }
+/* keep each chip's own color, with the Sidestash raise as a gentle top-to-bottom gradient of it (his ask 2026-11-14: "they should
+   still be the color they were before, just sidestash style") */
+.topbar .tint.blue { background: linear-gradient(180deg, color-mix(in oklch, var(--p3) 55%, white) 0%, var(--p3) 100%); color: var(--p9); }
 .topbar .tint:active { opacity: 1; }
