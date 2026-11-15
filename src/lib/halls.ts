@@ -75,9 +75,11 @@ export function mealNow(hallId: HallId, date: string, minutes: number): MealNow 
   if (!hours.length) return { meal: null, open: false, text: "closed today" };
   const now = hours.find((h) => minutes >= toMinutes(h.open) && minutes < toMinutes(h.close));
   if (now) {
-    // brunch: Breakfast hands over to Lunch at 11 without closing, so say when brunch ends
-    const lunch = now.meal === "Breakfast" ? hours.find((h) => h.meal === "Lunch" && h.open === now.close) : undefined;
-    return { meal: now.meal, open: true, text: `open till ${clockLabel(lunch?.close ?? now.close)}` };
+    // the hall stays open while one meal hands straight over to the next (brunch into lunch, dinner into late night), so say
+    // when the hall actually closes, not when this meal ends (his catch 2026-11-14: JRL/C9 on a Saturday is open till 10 PM)
+    let close = now.close;
+    for (let next = hours.find((h) => h.open === close); next; next = hours.find((h) => h.open === close)) close = next.close;
+    return { meal: now.meal, open: true, text: `open till ${clockLabel(close)}` };
   }
   const next = hours.find((h) => toMinutes(h.open) > minutes);
   if (next) return { meal: next.meal, open: false, text: `opens at ${clockLabel(next.open)}` };
