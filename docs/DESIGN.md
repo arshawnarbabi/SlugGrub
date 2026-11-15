@@ -3156,3 +3156,6 @@ today"); when the usual hall is closed the hero shows the best dish at an open h
 Slug Points and college cards say "Add your plan" / "Pick your college" and link to onboarding (no made-up numbers); "Rank today's
 food" pairs two real dishes from the hall; "Best on campus today" lists the top 4 by rating; a dish with no image shows the neutral
 rice-bowl tile (paper-2, ink-3 icon). # draft -->
+
+<!-- 2026-11-14 Today wash (his ask: "make that blue gradeitn the primary blue color, closer to it"): the top wash is --p9 at 30% fading
+through 12% at 45% to clear at 240px (was 15% to clear), so it reads as the primary blue instead of a grey-blue tint. # draft values -->

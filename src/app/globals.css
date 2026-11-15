@@ -203,7 +203,7 @@ img { display: block; max-width: 100%; }
 .bar { height: 6px; border-radius: 999px; background: oklch(1 0 0 / 0.3); overflow: hidden; margin-top: 8px; }
 .bar i { display: block; height: 100%; background: white; border-radius: 999px; }
 
-.wash { position: absolute; inset: 0 0 auto; height: 240px; background: linear-gradient(180deg, color-mix(in oklch, var(--p9) 15%, transparent), color-mix(in oklch, var(--p9) 0%, transparent)); pointer-events: none; z-index: 0; }
+.wash { position: absolute; inset: 0 0 auto; height: 240px; background: linear-gradient(180deg, color-mix(in oklch, var(--p9) 30%, transparent) 0%, color-mix(in oklch, var(--p9) 12%, transparent) 45%, color-mix(in oklch, var(--p9) 0%, transparent) 100%); pointer-events: none; z-index: 0; }
 .scroller > :not(.wash):not(.topbar) { position: relative; z-index: 1; }
 
 /* links styled as cards or buttons */
