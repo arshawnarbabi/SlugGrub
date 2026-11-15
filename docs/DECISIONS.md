@@ -264,3 +264,5 @@ ADR (Architecture Decision Record) practice, adapted as an append-only log for a
 
 - 2026-11-15: Log demo plate carries its menu date. At 12:01 AM a page opened before midnight sent Saturday's Red Curry Tofu with Sunday's date and failed ("nothing on JRL/C9's dinner menu"); the demo plate now sends the day it was picked from (his report, screenshot).
 - 2026-11-15: Ask send button is an up arrow (Hugeicons ArrowUp02), his ask. The button keeps focus in the field on pointer down so an iOS tap is not lost to the keyboard dropping, and the field blurs once the question is sent (his report that sending did not work on his phone; the API answered fine, so the tap was the suspect; unconfirmed on a real iPhone).
+
+- 2026-11-15: Today greeting ends with a period ("Good morning." / "Good morning, Arshawn."), his ask; the brand page sample matches.
