@@ -3159,3 +3159,5 @@ rice-bowl tile (paper-2, ink-3 icon). # draft -->
 
 <!-- 2026-11-14 Today wash (his ask: "make that blue gradeitn the primary blue color, closer to it"): the top wash is --p9 at 30% fading
 through 12% at 45% to clear at 240px (was 15% to clear), so it reads as the primary blue instead of a grey-blue tint. # draft values -->
+
+<!-- 2026-11-14 Row cards (.card.tight, e.g. Rank today's food, Calories today): the chevron sits centered vertically at the right, 12px in (his ask: "for hte cards for the smaller ones make hte chevron centered vertically"); taller cards keep it at the top right. -->
