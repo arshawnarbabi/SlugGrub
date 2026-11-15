@@ -38,10 +38,11 @@ export function OnboardingScreen() {
     setPlan(p.plan); setPoints(p.pointsNow); setCollege(p.college); setHall(p.usualHall); setHallPicked(true);
     if (p.uid) { setWho({ name: p.name, uid: p.uid }); setGoogle("done"); }
   }, []);
-  // review page only (public/dev/review.html): ?step=N opens on that question so every step can be screenshotted
+  // ?step=N opens on that question: Budget's "Update points" (step 1) and the review page (public/dev/review.html). Read on every
+  // arrival, so a visit without it starts at the first question even though Next keeps this route's state between visits.
   useEffect(() => {
     const n = Number(new URLSearchParams(window.location.search).get("step"));
-    if (Number.isInteger(n) && n > 0) setStep(n);
+    setStep(Number.isInteger(n) && n > 0 ? n : 0);
   }, []);
   const total = MEAL_PLANS.find((p) => p.id === plan)?.pointsPerQuarter ?? 2037;
   const max = Math.ceil(Math.max(total, points) / 50) * 50;

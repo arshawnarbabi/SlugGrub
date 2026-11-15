@@ -65,7 +65,7 @@ function BudgetBody({ profile, range, setRange }: { profile: SavedProfile | null
       {(
         <p className="label" style={{ fontSize: 12, margin: "0 4px" }}>
           {!mine ? "Example numbers. " : p.estimated ? `Estimated from the ${p.enteredPoints.toLocaleString()} you entered ${short(p.enteredOn)}, at your pace so far. ` : ""}
-          <Link href="/onboarding" className="seeall" style={{ display: "inline" }}>{mine ? "Update points" : "Set up your plan"}</Link>
+          <Link href={mine ? "/onboarding?step=1" : "/onboarding"} className="seeall" style={{ display: "inline" }}>{mine ? "Update points" : "Set up your plan"}</Link>
         </p>
       )}
       <Seg options={RANGES} value={range} onChange={setRange} label="Range" />
