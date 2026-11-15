@@ -52,7 +52,7 @@ export function TabBar() {
  *  So the Liquid element itself covers everywhere the droplets travel, plus room for the goo edge and the shadow, and nothing relies
  *  on overflow. It hangs off the 62px button with negative offsets, so the tab bar layout is unchanged, and lets taps through
  *  (pointer-events none) except on the buttons. filterPadding 0: the box already holds every piece, so the filter covers only it. */
-const FOOD = { left: 69, top: 87, right: 12, bottom: 14 }; // room around the 62px button: droplets reach 53px left and 71px up, + goo edge and shadow
+const FOOD = { left: 69, top: 99, right: 12, bottom: 14 }; // room around the 62px button: droplets reach 53px left and 83px up, + goo edge and shadow
 const DROP_AT = { position: "absolute", left: FOOD.left + 7, top: FOOD.top + 7 } as const;
 export function FoodButton() {
   const [open, setOpen] = useState(false);
@@ -70,12 +70,13 @@ export function FoodButton() {
         fill="var(--p9)"
         shadow={FOOD_SHADOW}
       >
-        <Liquid.Item x={open ? -60 : 0} y={open ? -48 : 0} transition={t} style={DROP_AT}>
+        {/* Ask sits 11px above the nav bar's top edge, not on it (his screenshot 2026-11-15); Log moves up to keep the 16px gap between them */}
+        <Liquid.Item x={open ? -60 : 0} y={open ? -66 : 0} transition={t} style={DROP_AT}>
           <button type="button" className={`drop ${open ? "on" : ""}`} aria-label="Ask SlugGrub" tabIndex={open ? 0 : -1} onClick={() => go("/ask")}>
             <Icon icon={SparklesIcon} size={20} sw={1.9} />
           </button>
         </Liquid.Item>
-        <Liquid.Item x={0} y={open ? -78 : 0} transition={t} delay={reduce ? 0 : 45} style={DROP_AT}>
+        <Liquid.Item x={0} y={open ? -90 : 0} transition={t} delay={reduce ? 0 : 45} style={DROP_AT}>
           <button type="button" className={`drop ${open ? "on" : ""}`} aria-label="Log a plate" tabIndex={open ? 0 : -1} onClick={() => go("/log")}>
             <Icon icon={Camera01Icon} size={20} sw={1.9} />
           </button>
