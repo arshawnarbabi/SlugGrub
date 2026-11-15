@@ -35,7 +35,8 @@ export async function getAllDishes(): Promise<DishRank[]> {
  *  ranked there. Equal ratings prefer a dish with a photo, then more votes. */
 export async function getTopDishNow(hallId: HallId): Promise<DishRank | null> {
   const { catalog, dishes } = await load();
-  const meal = mealStatus(hoursFor(hallId), campusNow(new Date()).minutes).meal; // the meal Today's header shows (open now, else next)
+  const now = campusNow(new Date());
+  const meal = mealStatus(hoursFor(hallId, now.date), now.minutes).meal; // the meal Today's header shows (open now, else next), today's hours
   const today = catalog.dishes.filter((c) => c.hallId === hallId);
   const inMeal = new Set(today.filter((c) => c.meals.includes(meal)).map((c) => c.key));
   const onToday = new Set(today.map((c) => c.key));

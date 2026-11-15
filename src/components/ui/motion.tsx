@@ -46,6 +46,11 @@ export function ScreenClock({ children }: { children: React.ReactNode }) {
   useEffect(() => { const t = window.setTimeout(() => setReady(true), 400); return () => window.clearTimeout(t); }, []);
   return <ScreenReady.Provider value={ready}>{children}</ScreenReady.Provider>;
 }
+/** True once the screen has finished opening (400 ms after mount); for code that must not move anything while a page opens. */
+export function useScreenReady() {
+  return useContext(ScreenReady);
+}
+
 function useOpeningScreen() {
   const ready = useContext(ScreenReady);
   const [opening] = useState(() => !ready); // captured once, when this block mounts
@@ -109,15 +114,15 @@ export function GooTrack({ index, refs, fill, deps = 0 }: { index: number; refs:
 }
 
 /** Segmented control on the goo thumb. */
-export function Seg<T extends string>({ options, value, onChange, label }: { options: readonly T[]; value: T; onChange: (v: T) => void; label: string }) {
+export function Seg<T extends string>({ options, value, onChange, label, className, render }: { options: readonly T[]; value: T; onChange: (v: T) => void; label: string; className?: string; render?: (o: T) => React.ReactNode }) {
   const refs = useRef<(HTMLElement | null)[]>([]);
   return (
-    <div className="seg" role="radiogroup" aria-label={label}>
+    <div className={className ? `seg ${className}` : "seg"} role="radiogroup" aria-label={label}>
       <div className="track">
         <GooTrack index={options.indexOf(value)} refs={refs} fill="var(--card)" />
         {options.map((o, i) => (
           <button key={o} ref={(el) => { refs.current[i] = el; }} type="button" role="radio" aria-checked={value === o} className={value === o ? "on" : ""} onClick={() => onChange(o)}>
-            {o}
+            {render ? render(o) : o}
           </button>
         ))}
       </div>

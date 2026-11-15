@@ -1,15 +1,6 @@
 "use client";
 
 // Owner: Arshawn (UI). Vote and Dining services: Karen wires data. Onboarding and Ask: Ethan wires data.
-import Link from "next/link";
-import { useState } from "react";
-import { motion, useReducedMotion } from "framer-motion";
-import { ArrowLeft01Icon, QrCodeIcon, SparklesIcon, ArrowRight01Icon, Tick02Icon } from "@hugeicons/core-free-icons";
-import { Icon } from "@/components/ui/Icon";
-import { Photo } from "@/components/ui/Photo";
-import { Screen } from "@/components/ui/Screen";
-import { Swap, Appear, GooSlider, SPRING } from "@/components/ui/motion";
-import { DISHES, HALLS } from "./demo";
 
 /* ── Live QR vote: moved to ./VoteScreen.tsx (real rounds, QR and live tallies) ── */
 export { VoteScreen } from "./VoteScreen";

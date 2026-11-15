@@ -6,17 +6,16 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { QrCodeIcon, Tick02Icon, Undo02Icon, ArrowUp01Icon, ArrowDown01Icon } from "@hugeicons/core-free-icons";
 import { Icon } from "@/components/ui/Icon";
+import { Pager } from "@/components/ui/Pager";
 import { Screen } from "@/components/ui/Screen";
 import { Seg, Swap, Appear, SPRING, STATE_IN, STATE_OUT, STATE_FADE } from "@/components/ui/motion";
 import { calculateElo, getSmartMatchup } from "@/lib/elo";
-import { HALLS as HALL_LIST } from "@/lib/halls";
 import type { College, DishRank, HallId, MealName } from "@/lib/types";
 import {
   baseStat, collegeStandings, hallStandings, matchIdFor, mergeDishes,
   type CatalogDish, type DishStat, type RankState,
 } from "@/lib/rankCore";
 import { rankBackend, readProfile, useRankState } from "@/lib/rankClient";
-import { USER } from "./demo";
 import { dishPhoto } from "./dishPhoto";
 import { campusNow, hoursFor, mealLabel, mealToLog } from "./now";
 import { DishThumb, hallColor, hallShort, shortDate } from "./rankBits";
@@ -52,9 +51,9 @@ const statFor = (state: RankState | null, d: CatalogDish): DishStat => state?.di
 /** Who and when: the student's usual hall and college (onboarding), and the meal that last opened there (you rank after eating). */
 function readCtx(): Ctx {
   const p = readProfile();
-  const hallId = p.usualHall ?? HALL_LIST.find((h) => h.short === USER.hall)?.id ?? "40";
+  const hallId = p.usualHall ?? "40"; // no profile yet: JRL/C9
   const now = campusNow(new Date());
-  return { hallId, meal: mealToLog(hoursFor(hallId), now.minutes), date: now.date, college: p.college };
+  return { hallId, meal: mealToLog(hoursFor(hallId, now.date), now.minutes), date: now.date, college: p.college };
 }
 
 /** Dishes to pair: this meal at your hall (ones with photos first), widening to your hall today, then campus. */
@@ -83,117 +82,140 @@ function nextPair(pool: CatalogDish[], state: RankState | null, avoid?: Pair): P
   return best;
 }
 
+// One page per matchup in a side-scrolling pager (his trial, docs/DESIGN.md 2026-11-14): picking on the newest page saves the
+// vote, then the next matchup is added and scrolled to. Swiping back shows earlier picks; tapping the other card there changes
+// the answer (the old vote is undone first: a matchup's id is the same either way round).
+type Page = { pair: Pair; pick: 0 | 1 | null; matchId?: string };
+
 function Duels({ catalog, state }: { catalog: CatalogDish[]; state: RankState | null }) {
   const [ctx, setCtx] = useState<Ctx | null>(null);
-  const [pairs, setPairs] = useState<Pair[]>([]);
-  const [i, setI] = useState(0);
-  const [pick, setPick] = useState<0 | 1 | null>(null);
+  const [pages, setPages] = useState<Page[]>([]);
+  const [cur, setCur] = useState(0);
   const [last, setLast] = useState<Last | null>(null);
   const [ranked, setRanked] = useState(0);
   const [note, setNote] = useState<string | null>(null);
   const reduce = useReducedMotion();
   const stateRef = useRef(state);
   useEffect(() => { stateRef.current = state; }, [state]);
+  const pagesRef = useRef(pages);
+  useEffect(() => { pagesRef.current = pages; }, [pages]);
   const pool = useMemo(() => (ctx ? poolFor(catalog, ctx) : []), [catalog, ctx]);
 
   // the clock and this device's profile are read after mount (pages open static; no clock during render)
   useEffect(() => { setCtx(readCtx()); }, []);
   useEffect(() => {
-    if (pool.length >= 2 && pairs.length === 0) { const p = nextPair(pool, stateRef.current); if (p) setPairs([p]); }
-  }, [pool, pairs.length]);
-
-  const pair = pairs[i];
-  const tr = reduce ? { duration: 0 } : SPRING;
-  const advance = () => {
-    setPick(null);
-    setPairs((ps) => {
-      if (i + 1 < ps.length) return ps;
-      const p = nextPair(pool, stateRef.current, ps[i]);
-      return p ? [...ps, p] : ps;
-    });
-    setI((n) => n + 1);
+    if (pool.length >= 2 && pages.length === 0) { const p = nextPair(pool, stateRef.current); if (p) setPages([{ pair: p, pick: null }]); }
+  }, [pool, pages.length]);
+  /** Move to the page after `from`, adding a matchup when `from` is the newest; the Pager scrolls there (the one movement). */
+  const forward = (from: number) => {
+    const ps = pagesRef.current;
+    if (from + 1 >= ps.length) {
+      const p = nextPair(pool, stateRef.current, ps[from]?.pair);
+      if (!p) return;
+      setPages([...ps, { pair: p, pick: null }]);
+    }
+    setCur(from + 1);
   };
+
+  const setPick = (n: number, pick: 0 | 1 | null, matchId?: string) =>
+    setPages((ps) => ps.map((pg, j) => (j === n ? { ...pg, pick, matchId } : pg)));
 
   const save = (winner: CatalogDish, loser: CatalogDish, matchId: string) => {
     rankBackend().vote(winner, loser, matchId, ctx?.college).then((o) => {
-      setLast((cur) => {
-        if (!cur || cur.matchId !== matchId) return cur;
-        if (o.ok) return { ...cur, status: "saved", delta: o.delta ?? cur.delta, message: undefined };
-        return { ...cur, status: o.error === "already" ? "already" : "error", message: o.error === "already" ? "Already counted from this phone today" : o.message, retry: o.error === "already" ? undefined : () => { setLast({ ...cur, status: "saving", message: undefined }); save(winner, loser, matchId); } };
+      setLast((c) => {
+        if (!c || c.matchId !== matchId) return c;
+        if (o.ok) return { ...c, status: "saved", delta: o.delta ?? c.delta, message: undefined };
+        return { ...c, status: o.error === "already" ? "already" : "error", message: o.error === "already" ? "Already counted from this phone today" : o.message, retry: o.error === "already" ? undefined : () => { setLast({ ...c, status: "saving", message: undefined }); save(winner, loser, matchId); } };
       });
       if (!o.ok && o.error === "already") setRanked((n) => Math.max(0, n - 1));
     });
   };
 
-  const choose = (k: 0 | 1) => {
-    if (!pair || !ctx || pick !== null) return;
-    const [winner, loser] = k === 0 ? [pair[0], pair[1]] : [pair[1], pair[0]];
+  const choose = (n: number, k: 0 | 1) => {
+    const page = pagesRef.current[n];
+    if (!page || !ctx || page.pick === k) return;
+    const [winner, loser] = k === 0 ? [page.pair[0], page.pair[1]] : [page.pair[1], page.pair[0]];
     const w = statFor(state, winner), l = statFor(state, loser);
     const shown = calculateElo(w.elo, l.elo, undefined, w.votes, l.votes).winnerDelta; // shown at once; the store's number replaces it
     const matchId = matchIdFor(ctx.date, winner.key, loser.key);
-    setPick(k);
+    const changing = page.pick !== null && page.matchId;
+    setPick(n, k, matchId);
     setNote(null);
-    setRanked((n) => n + 1);
     setLast({ winner, delta: shown, matchId, status: "saving" });
+    if (changing) {
+      // changing an earlier answer: undo the old vote, then save the new one; no auto-advance
+      rankBackend().undo(page.matchId!).then(() => save(winner, loser, matchId));
+      return;
+    }
+    setRanked((r) => r + 1);
     save(winner, loser, matchId);
-    window.setTimeout(advance, 1100);
+    if (n === pagesRef.current.length - 1) window.setTimeout(() => { if (pagesRef.current.length === n + 1) forward(n); }, 1100);
   };
 
   const undo = () => {
-    if (pick !== null) return;
-    if (last && last.status === "saved") {
-      const target = last;
-      setLast(null);
-      setRanked((n) => Math.max(0, n - 1));
-      setNote("Vote undone");
-      rankBackend().undo(target.matchId).then((o) => { if (!o.ok) setNote(o.message); });
-    }
-    setI((n) => Math.max(0, n - 1));
+    const page = pages[cur];
+    if (!page || page.pick === null || !page.matchId) return;
+    const id = page.matchId;
+    setPick(cur, null);
+    setLast(null);
+    setRanked((r) => Math.max(0, r - 1));
+    setNote("Vote undone");
+    rankBackend().undo(id).then((o) => { if (!o.ok) setNote(o.message); });
   };
 
   const skip = () => {
-    if (!pair || !ctx || pick !== null) return;
-    rankBackend().skip(pair[0], pair[1], matchIdFor(ctx.date, pair[0].key, pair[1].key)).then((o) => { if (!o.ok && o.error !== "already") setNote(o.message); });
-    setLast(null);
-    setNote("Skipped. We'll ask about those another time");
-    advance();
+    const page = pages[cur];
+    if (!page || !ctx) return;
+    if (page.pick === null) {
+      rankBackend().skip(page.pair[0], page.pair[1], matchIdFor(ctx.date, page.pair[0].key, page.pair[1].key)).then((o) => { if (!o.ok && o.error !== "already") setNote(o.message); });
+      setLast(null);
+      setNote("Skipped. We'll ask about those another time");
+    }
+    forward(cur);
   };
 
-  const tough = () => { if (pick !== null) return; setLast(null); setNote(null); advance(); };
+  const tough = () => { if (pages[cur]?.pick === null) { setLast(null); setNote(null); } forward(cur); };
 
-  const winner = pick === null ? null : last?.winner ?? null;
+  const shownPage = pages[cur];
+  const winner = shownPage?.pick == null ? null : last?.winner ?? null;
   const where = ctx ? `${mealLabel(ctx.meal)} at ${hallShort(ctx.hallId)}` : " ";
+  const list: (Page | null)[] = pages.length ? pages : [null];
   return (
     <div style={{ display: "grid", gap: 12 }}>
       <div>
         <div className="label">{where}</div>
         <div className="title-lg">Which was better?</div>
       </div>
-      <Appear id={pair ? `${i}-${pair[0].key}` : "none"} className="duel">
-        {(pair ?? [null, null]).map((d, k) => (
-          <motion.button
-            key={d?.key ?? k}
-            type="button"
-            className={`duel-opt ${pick === k ? "picked" : ""}`}
-            onClick={() => choose(k as 0 | 1)}
-            disabled={!d}
-            animate={{ opacity: pick !== null && pick !== k ? 0.5 : 1 }}
-            transition={tr}
-          >
-            <div style={{ position: "relative", width: "100%" }}>
-              {d ? <DishThumb name={d.name} w="100%" h={160} r={18} /> : <div className="ph" style={{ width: "100%", height: 160, borderRadius: 18 }} />}
-              {pick === k && (
-                <motion.span className="pick-check" initial={reduce ? false : STATE_OUT} animate={{ ...STATE_IN, transitionEnd: { filter: "none" } }} transition={reduce ? { duration: 0 } : { opacity: STATE_FADE, filter: STATE_FADE }}>
-                  <Icon icon={Tick02Icon} size={16} sw={2.6} />
-                </motion.span>
-              )}
-            </div>
-            <span style={{ fontSize: 15, fontWeight: 700, letterSpacing: "-0.01em", lineHeight: 1.2, minHeight: 36, display: "grid", alignItems: "center" }}>{d?.name ?? " "}</span>
-            <span className="num label" style={{ fontSize: 12, marginTop: -6 }}>{d ? [d.calories !== undefined && `${d.calories} cal`, hallShort(d.hallId)].filter(Boolean).join(" · ") : " "}</span>
-          </motion.button>
+      <Pager index={cur} onIndex={setCur} label="Matchups">
+        {list.map((page, n) => (
+          <div className="duel" key={page ? `${n}-${page.pair[0].key}-${page.pair[1].key}` : "none"}>
+            {(page?.pair ?? [null, null]).map((d, k) => (
+              <motion.button
+                key={d?.key ?? k}
+                type="button"
+                className={`duel-opt ${page?.pick === k ? "picked" : ""}`}
+                onClick={() => choose(n, k as 0 | 1)}
+                disabled={!d}
+                tabIndex={n === cur ? 0 : -1}
+                animate={{ opacity: page && page.pick !== null && page.pick !== k ? 0.5 : 1 }}
+                transition={reduce ? { duration: 0 } : SPRING}
+              >
+                <div style={{ position: "relative", width: "100%" }}>
+                  {d ? <DishThumb name={d.name} w="100%" h={160} r={18} /> : <div className="ph" style={{ width: "100%", height: 160, borderRadius: 18 }} />}
+                  {page?.pick === k && (
+                    <motion.span className="pick-check" initial={reduce ? false : STATE_OUT} animate={{ ...STATE_IN, transitionEnd: { filter: "none" } }} transition={reduce ? { duration: 0 } : { opacity: STATE_FADE, filter: STATE_FADE }}>
+                      <Icon icon={Tick02Icon} size={16} sw={2.6} />
+                    </motion.span>
+                  )}
+                </div>
+                <span style={{ fontSize: 15, fontWeight: 700, letterSpacing: "-0.01em", lineHeight: 1.2, minHeight: 36, display: "grid", alignItems: "center" }}>{d?.name ?? " "}</span>
+                <span className="num label" style={{ fontSize: 12, marginTop: -6 }}>{d ? [d.calories !== undefined && `${d.calories} cal`, hallShort(d.hallId)].filter(Boolean).join(" · ") : " "}</span>
+              </motion.button>
+            ))}
+            <motion.div className="or" aria-hidden animate={page && page.pick !== null ? STATE_OUT : STATE_IN} transition={STATE_FADE}>or</motion.div>
+          </div>
         ))}
-        <motion.div className="or" animate={{ scale: pick !== null ? 0.6 : 1, opacity: pick !== null ? 0 : 1 }} transition={tr}>or</motion.div>
-      </Appear>
+      </Pager>
       <div style={{ display: "flex", justifyContent: "space-between", padding: "0 4px" }}>
         <button type="button" className="textbtn" onClick={undo}><Icon icon={Undo02Icon} size={15} /> Undo</button>
         <button type="button" className="textbtn" onClick={tough}>Too tough</button>

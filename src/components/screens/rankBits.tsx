@@ -5,11 +5,11 @@ import { Photo } from "@/components/ui/Photo";
 import { HALLS as HALL_LIST } from "@/lib/halls";
 import type { HallId } from "@/lib/types";
 import { qrMatrix } from "@/lib/qr";
-import { HALLS as DEMO_HALLS } from "./demo";
+import { HALL_COLORS } from "./hallColors";
 import { dishPhoto } from "./dishPhoto";
 
 export const hallShort = (id: HallId) => HALL_LIST.find((h) => h.id === id)?.short ?? id;
-export const hallColor = (id: HallId) => DEMO_HALLS.find((h) => h.id === id)?.color ?? "var(--ink-3)";
+export const hallColor = (id: HallId) => HALL_COLORS[id] ?? "var(--ink-3)";
 
 /** A dish's generated image, or the neutral dish tile (paper-2 with the rice bowl) when it has none yet. */
 export function DishThumb({ name, w, h, r = 12 }: { name: string; w: number | string; h: number; r?: number }) {

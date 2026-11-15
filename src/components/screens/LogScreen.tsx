@@ -1,7 +1,9 @@
 "use client";
 
 // Owner: Arshawn. Photo log: take or pick a plate photo, POST /api/log (Gemini matches it to this meal's menu), adjust servings,
-// save. Calories are private (PLAN.md design rule): saved plates stay on this device (plates.ts).
+// save. Calories are private (PLAN.md design rule): saved plates stay on this device (plates.ts). The hall is the student's
+// usual hall from onboarding (JRL/C9 without a profile, or the first hall serving today when theirs is closed); the meal follows
+// that hall's real hours today (src/lib/halls.ts), Pacific time. The demo plate is a dish on that meal's menu (src/app/log/page.tsx).
 import Link from "next/link";
 import { useRef, useState, useSyncExternalStore } from "react";
 import { Alert02Icon, ArrowLeft01Icon, Camera01Icon, FireIcon, Image01Icon, RiceBowl01Icon, Tick02Icon } from "@hugeicons/core-free-icons";
@@ -10,19 +12,29 @@ import { Photo } from "@/components/ui/Photo";
 import { Screen } from "@/components/ui/Screen";
 import { Swap, Appear, CountUp, GooSlider, Seg } from "@/components/ui/motion";
 import { HALLS } from "@/lib/halls";
-import type { MealName } from "@/lib/types";
+import { useProfile } from "@/lib/profile";
+import type { HallId, MealName } from "@/lib/types";
 import type { LogItem, LogResponse, LogResult } from "@/app/api/log/contract";
-import { DISHES, USER, dishPhoto } from "./demo";
-import { campusNow, hoursFor, localDate, mealLabel, mealToLog, MEAL_NAMES } from "./now";
+import { dishPhoto } from "./dishPhoto";
+import { campusNow, hoursFor, mealLabel, mealToLog, MEAL_NAMES } from "./now";
 import { savePlate } from "./plates";
 
 type Phase = "pick" | "reading" | "result" | "saved" | "error";
 const MEAL_OPTIONS = MEAL_NAMES.map(mealLabel);
-const HALL = HALLS.find((h) => h.short === USER.hall) ?? HALLS[0]; // TODO: the student's usual hall from onboarding (Ethan)
+const DEFAULT_HALL: HallId = "40";
 
-// The meal a plate is from, by the campus clock; read only in the browser (never during render on the server).
+/** Each hall's demo plate per meal today: a dish on that menu with a generated image. */
+export type DemoPlates = Partial<Record<HallId, Partial<Record<MealName, { name: string; photo: string }>>>>;
+
+// The hall and meal by the campus clock; read only in the browser (never during render on the server). The snapshot is one
+// string so React can compare it between renders.
 const noSubscribe = () => () => {};
-const clockMeal = () => mealToLog(hoursFor(HALL.id), campusNow(new Date()).minutes);
+function clockFor(usual: HallId): string {
+  const now = campusNow(new Date());
+  const open = (id: HallId) => hoursFor(id, now.date).length > 0;
+  const hall = open(usual) ? usual : HALLS.find((h) => open(h.id))?.id ?? usual;
+  return `${hall}|${mealToLog(hoursFor(hall, now.date), now.minutes)}|${now.date}`;
+}
 
 // Phone photos are 3 to 12 MB; a 1280px JPEG reads just as well and uploads in a moment. Falls back to the original file.
 async function shrink(file: Blob): Promise<Blob> {
@@ -43,12 +55,16 @@ async function shrink(file: Blob): Promise<Blob> {
 
 const fmt = (s: number) => String(Number(s.toFixed(2)));
 
-export function LogScreen() {
+export function LogScreen({ demo }: { demo: DemoPlates }) {
   const [phase, setPhase] = useState<Phase>("pick");
-  const [photo, setPhoto] = useState<string>(DISHES.tikka.photo);
+  const [photo, setPhoto] = useState<string>("");
   const [picked, setPicked] = useState<MealName | null>(null);
-  const auto = useSyncExternalStore(noSubscribe, clockMeal, () => null);
+  const profile = useProfile();
+  const clock = useSyncExternalStore(noSubscribe, () => clockFor(profile?.usualHall ?? DEFAULT_HALL), () => null);
+  const [hallId, auto, date] = (clock?.split("|") ?? []) as [HallId?, MealName?, string?];
+  const HALL = HALLS.find((h) => h.id === hallId) ?? HALLS.find((h) => h.id === DEFAULT_HALL)!;
   const meal: MealName = picked ?? auto ?? "Dinner";
+  const plate = demo[HALL.id]?.[meal];
   const [result, setResult] = useState<LogResult | null>(null);
   const [problem, setProblem] = useState("");
   const [servings, setServings] = useState<Record<string, number>>({});
@@ -65,7 +81,7 @@ export function LogScreen() {
       form.append("photo", await shrink(blob), "plate.jpg");
       form.append("hall", HALL.id);
       form.append("meal", meal);
-      form.append("date", localDate(new Date()));
+      form.append("date", date ?? campusNow(new Date()).date);
       const res: LogResponse = await (await fetch("/api/log", { method: "POST", body: form })).json();
       if (id !== run.current) return; // the student started over meanwhile
       if (!res.ok) { setProblem(res.message); setPhase("error"); return; }
@@ -80,7 +96,8 @@ export function LogScreen() {
   };
   const fromCamera = (f: File) => send(f, URL.createObjectURL(f));
   const fromDemo = async () => {
-    try { send(await (await fetch(DISHES.tikka.photo)).blob(), DISHES.tikka.photo); }
+    if (!plate) return;
+    try { send(await (await fetch(plate.photo)).blob(), plate.photo); }
     catch { setProblem("Couldn't load the demo plate."); setPhase("error"); }
   };
   const again = () => { run.current++; setResult(null); setPhase("pick"); };
@@ -114,7 +131,7 @@ export function LogScreen() {
           <Seg options={MEAL_OPTIONS} value={mealLabel(meal)} onChange={(v) => setPicked(MEAL_NAMES[MEAL_OPTIONS.indexOf(v)])} label="Meal" />
           <input ref={file} type="file" accept="image/*" capture="environment" hidden onChange={(e) => { const f = e.target.files?.[0]; e.target.value = ""; if (f) fromCamera(f); }} />
           <button type="button" className="btn btn-primary btn-block" onClick={() => file.current?.click()}><Icon icon={Camera01Icon} size={19} sw={2} /> Take a photo</button>
-          <button type="button" className="btn btn-secondary btn-block" onClick={fromDemo}><Icon icon={Image01Icon} size={19} /> Use a demo plate</button>
+          {plate && <button type="button" className="btn btn-secondary btn-block" onClick={fromDemo}><Icon icon={Image01Icon} size={19} /> Use a demo plate</button>}
         </Appear>
       )}
 

@@ -67,7 +67,7 @@ export function OnboardingScreen() {
     <Screen noTabBar wash top={<div className="topbar">
         {step > 0 && !done ? <button type="button" className="iconbtn" aria-label="Back" onClick={() => setStep((s) => s - 1)}><Icon icon={ArrowLeft01Icon} size={18} /></button> : <span style={{ width: 38 }} />}
         <div style={{ display: "flex", gap: 6 }}>{steps.map((_, i) => <motion.span key={i} animate={{ width: i === step ? 22 : 7, background: i <= step ? "var(--p9)" : "var(--paper-2)" }} transition={SPRING} style={{ height: 7, borderRadius: 9, display: "block" }} />)}</div>
-        <Link href="/" className="textbtn" style={{ fontSize: 13 }}>Skip</Link>
+        <Link href="/" replace className="textbtn" style={{ fontSize: 13 }}>Skip</Link>
       </div>}>
 {!done ? (
         <Appear id={step} style={{ display: "grid", gap: 18, marginTop: 24 }}>
@@ -92,7 +92,7 @@ export function OnboardingScreen() {
             {google !== "done" && google !== "off" && (
               <button type="button" className="btn btn-secondary btn-block" onClick={withGoogle} disabled={google === "busy"}><Icon icon={GoogleIcon} size={18} sw={2} /> Continue with Google</button>
             )}
-            <Link href="/" className="btn btn-primary btn-block">See what&apos;s good tonight</Link>
+            <Link href="/" replace className="btn btn-primary btn-block">See what&apos;s good tonight</Link>
           </>
         )}
       </div>

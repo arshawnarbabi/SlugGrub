@@ -5,13 +5,24 @@ import { cacheLife } from "next/cache";
 import { HallsScreen } from "@/components/screens/HallsScreen";
 import { getHallsData } from "@/lib/hallsView";
 import { campusClock } from "@/lib/campusTime";
+import { getAllDishes } from "@/lib/rankings";
+import { HALLS } from "@/lib/halls";
+import { dishPhoto } from "@/components/screens/dishPhoto";
 
 async function loadHalls() {
   "use cache";
   cacheLife("minutes");
-  return getHallsData(campusClock(new Date()));
+  const [data, all] = await Promise.all([getHallsData(campusClock(new Date())), getAllDishes()]);
+  // best on campus today: highest rated dishes that have a photo, for the carousel (rankings, src/lib/rankings.ts)
+  // one card per dish name (the same dish is served at several halls), the higher rated serving first
+  const seen = new Set<string>();
+  const best = [...all].filter((d) => dishPhoto(d.name)).sort((a, b) => b.elo - a.elo || b.votes - a.votes)
+    .filter((d) => (seen.has(d.name) ? false : (seen.add(d.name), true))).slice(0, 6)
+    .map((d) => ({ name: d.name, hallId: d.hallId, hallShort: HALLS.find((h) => h.id === d.hallId)?.short ?? "", photo: dishPhoto(d.name)!, votes: d.votes }));
+  return { data, best };
 }
 
 export default async function Page() {
-  return <HallsScreen data={await loadHalls()} />;
+  const { data, best } = await loadHalls();
+  return <HallsScreen data={data} best={best} />;
 }

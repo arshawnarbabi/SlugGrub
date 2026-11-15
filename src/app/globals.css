@@ -203,7 +203,7 @@ img { display: block; max-width: 100%; }
 .bar { height: 6px; border-radius: 999px; background: oklch(1 0 0 / 0.3); overflow: hidden; margin-top: 8px; }
 .bar i { display: block; height: 100%; background: white; border-radius: 999px; }
 
-.wash { position: absolute; inset: 0 0 auto; height: 240px; background: linear-gradient(180deg, color-mix(in oklch, var(--p9) 15%, transparent), color-mix(in oklch, var(--p9) 0%, transparent)); pointer-events: none; z-index: 0; }
+.wash { position: absolute; inset: 0 0 auto; height: 240px; background: linear-gradient(180deg, color-mix(in oklch, var(--p9) 30%, transparent) 0%, color-mix(in oklch, var(--p9) 12%, transparent) 45%, color-mix(in oklch, var(--p9) 0%, transparent) 100%); pointer-events: none; z-index: 0; }
 .scroller > :not(.wash):not(.topbar) { position: relative; z-index: 1; }
 
 /* links styled as cards or buttons */
@@ -320,7 +320,7 @@ input, textarea, select { font-size: 17px !important; }     /* 16px or more also
    Plain cards: a quiet ink-3 chevron. Photo-topped cards: the same chevron on a white chip, matching .on-photo. */
 .card.link { position: relative; color: inherit; text-decoration: none; }
 .card-chev { position: absolute; z-index: 2; top: 13px; right: 12px; display: grid; place-items: center; color: var(--ink-3); pointer-events: none; }
-.card.tight > .card-chev { top: 9px; right: 9px; }
+.card.tight > .card-chev { top: 50%; right: 12px; transform: translateY(-50%); } /* row cards: chevron centered vertically (his ask 2026-11-14) */
 .card-chev.on-img { top: 10px; right: 10px; width: 26px; height: 26px; border-radius: var(--r-pill); background: oklch(1 0 0 / 0.94); color: var(--ink); }
 
 /* Launch splash (src/components/ui/Splash.tsx; his idea 2026-11-14 after Trackify's launch, revised the same day: "gaussian blur
@@ -355,3 +355,51 @@ input, textarea, select { font-size: 17px !important; }     /* 16px or more also
 .projector { position: fixed; inset: 0; z-index: 20; overflow: auto; background: var(--paper); padding: clamp(16px, 4vh, 48px) clamp(16px, 4vw, 64px); display: grid; gap: clamp(16px, 3vw, 40px); grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); align-content: start; }
 .projector .vote-blk { min-height: clamp(160px, 30vh, 340px); }
 @media (max-width: 800px) { .projector { grid-template-columns: minmax(0, 1fr); } }
+
+/* One page margin (his ask 2026-11-14: "develop out one consistent margin"): horizontal rows scroll edge to edge, but their first
+   and last items rest on the same 16px gutter as everything else. Snapping aligns to scroll-padding, not padding, so it is set too. */
+.carousel { scroll-padding-inline: max(16px, env(safe-area-inset-left, 0px)); padding-inline: max(16px, env(safe-area-inset-left, 0px)); margin-inline: calc(-1 * max(16px, env(safe-area-inset-left, 0px))); }
+.carousel::after { content: ""; flex: 0 0 1px; } /* keeps the right gutter when scrolled to the end */
+/* Pager (src/components/ui/Pager.tsx; Rank matchups, Halls menus): a .carousel of full-width pages, one per snap, 16px apart so the
+   next page never peeks (his trial 2026-11-14: "it scrolls to the side instead of just blurring in a new one") */
+.carousel.pager { gap: 16px; }
+.carousel.pager > .pager-page { flex: 0 0 100%; min-width: 0; }
+/* Halls meal switch + search in one row, in the Sidestash finish of the top bar buttons (his ask 2026-11-14: "combine it with the
+   search button ... give it the sidestash style too"). The search button is round and as tall as the switch. Under 360px wide
+   "Late night" reads "Late" so the row fits at 320. */
+.seg.raised, .iconbtn.raised { background: var(--raise); border: 0.5px solid var(--hi); box-shadow: var(--chip-shadow); }
+.iconbtn.raised { width: auto; height: auto; min-width: 44px; min-height: 44px; align-self: stretch; aspect-ratio: 1; }
+.seg-short { display: none; }
+@media (max-width: 359px) { .seg-long { display: none; } .seg-short { display: inline; } }
+/* Text field: the same pill as Ask's question box */
+.input { width: 100%; height: 50px; border-radius: var(--r-pill); border: 0; background: var(--card); padding: 0 18px; font: inherit; color: var(--ink); outline-color: var(--p8); box-sizing: border-box; }
+
+/* Inset photo card (trial, his ask 2026-11-14 for Today's "#1 at your hall", like the rank cards): the photo sits inside the card's
+   8px padding with concentric corners (card 24 = photo 16 + 8), instead of running edge to edge. */
+.card.inset { padding: 8px 8px 8px; border-radius: var(--r-lg); }
+.card.inset > .card-chev.on-img { top: 18px; right: 18px; }
+
+.wash { will-change: transform; } /* follows the scroller (Wash.tsx) */
+
+/* "or" between the rank cards (his ask 2026-11-14: "make the or centered between them and have like a cutout for the food cards
+   around that"): centered on both cards, with a ring in the page color that cuts a round notch into both cards' edges. */
+.duel > .or { top: 50%; z-index: 2; box-shadow: 0 0 0 6px var(--paper); }
+
+/* Rank cards notched around the "or" badge with rounded entry corners (his ask 2026-11-14: "the gap for teh or circile is a bit too
+   much and round the edges"): a 4px gap around the badge, 5px fillets where the notch meets each card's edge. The notch is a
+   mask, so nothing is painted over the cards (cheap: one static mask image per card, no blur). Geometry: scripts are inline above. */
+.duel > .or { box-shadow: none; }
+.duel > :nth-child(1) { -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-19 -28 19 56' width='19' height='56'%3E%3Cpath d='M0 -26.153 A5 5 0 0 1 3.214 -21.483 A23 23 0 0 0 3.214 21.483 A5 5 0 0 1 0 26.153Z'/%3E%3C/svg%3E") right center / 19px 56px no-repeat, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-19 -28 19 56' width='19' height='56'%3E%3Cpath d='M0 -26.153 A5 5 0 0 1 3.214 -21.483 A23 23 0 0 0 3.214 21.483 A5 5 0 0 1 0 26.153Z'/%3E%3C/svg%3E") right center / 19px 56px no-repeat exclude, linear-gradient(#000 0 0); }
+.duel > :nth-child(2) { -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 -28 19 56' width='19' height='56'%3E%3Cpath d='M0 -26.153 A5 5 0 0 0 -3.214 -21.483 A23 23 0 0 1 -3.214 21.483 A5 5 0 0 0 0 26.153Z'/%3E%3C/svg%3E") left center / 19px 56px no-repeat, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 -28 19 56' width='19' height='56'%3E%3Cpath d='M0 -26.153 A5 5 0 0 0 -3.214 -21.483 A23 23 0 0 1 -3.214 21.483 A5 5 0 0 0 0 26.153Z'/%3E%3C/svg%3E") left center / 19px 56px no-repeat exclude, linear-gradient(#000 0 0); }
+
+/* Two-line name, cut with an ellipsis, in a fixed two-line box so a row of cards stays the same height (his ask 2026-11-14:
+   "truncate names if needed but i dont like how some are longer than others"). */
+.clamp2 { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; overflow: hidden; overflow-wrap: anywhere; }
+
+/* Hall chips on a goo thumb (his ask 2026-11-14: the chip follows the swipe "while its going" with "a bit of goo ... or spring", per
+   DESIGN motion.goo / motion.spring). The row is one positioned strip so the thumb (GooTrack) spans every chip, even those scrolled
+   off; white chip pills paint under the thumb and each label sits above it; the selected chip shows the blue thumb, not its own fill. */
+.chip-goo { position: relative; display: flex; gap: 10px; flex: 0 0 auto; }
+.chip-goo > .chip { position: static; } /* static so its white pill paints below the thumb; offsetLeft is measured against .chip-goo */
+.chip-goo > .chip > span { position: relative; z-index: 2; transition: color var(--dur-ui) var(--ease); }
+.chip-goo > .chip.on { background: var(--card); color: white; }
