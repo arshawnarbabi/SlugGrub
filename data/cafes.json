@@ -1,0 +1,5468 @@
+{
+ "_note": "Owner: Ethan. Campus cafe menus (not dining halls or markets), read from https://nutrition.sa.ucsc.edu/ by scripts/fetch-cafes.ts (npm run cafes). Location and description are hand-written.",
+ "fetchedOn": "2026-11-14",
+ "cafes": [
+  {
+   "id": "21",
+   "name": "Banana Joe's",
+   "short": "Banana Joe's",
+   "location": "Crown College",
+   "description": "Late-night grilled burgers, chicken tenders, fries, pizza, and milkshakes at Crown College.",
+   "itemCount": 25,
+   "menuDate": "2026-11-13",
+   "categories": [
+    {
+     "name": "Burgers and Sandwiches",
+     "items": [
+      {
+       "recipeId": "110014",
+       "name": "ABC Burger Banana Joe's",
+       "portion": "1 ea"
+      },
+      {
+       "recipeId": "400001",
+       "name": "Banana Joe's Classic Cheese Burger",
+       "portion": "1 ea",
+       "tags": [
+        "halal"
+       ]
+      },
+      {
+       "recipeId": "399992",
+       "name": "Banana Joe's Vegan Tender Sandwich",
+       "portion": "1 ea",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "400009",
+       "name": "Chicken Tender Sandwich Banana Joe's",
+       "portion": "1 ea"
+      },
+      {
+       "recipeId": "400119",
+       "name": "Vegan Black Bean Burger",
+       "portion": "1 ea",
+       "tags": [
+        "vegan"
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Pizza",
+     "items": [
+      {
+       "recipeId": "399998",
+       "name": "Bacon and Ranch Pizza",
+       "portion": "1 slice"
+      },
+      {
+       "recipeId": "400012",
+       "name": "Cheese Pizza",
+       "portion": "1 slice",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "399997",
+       "name": "Combo Meat Pizza",
+       "portion": "1 slice"
+      },
+      {
+       "recipeId": "399999",
+       "name": "Hawaiian Pizza",
+       "portion": "1 slice"
+      },
+      {
+       "recipeId": "400011",
+       "name": "Pepperoni Pizza",
+       "portion": "1 slice"
+      },
+      {
+       "recipeId": "400000",
+       "name": "Sausage and Onion Pizza",
+       "portion": "1 slice"
+      }
+     ]
+    },
+    {
+     "name": "ON THE FRY SIDE",
+     "items": [
+      {
+       "recipeId": "040103",
+       "name": "Chicken Tenders, 3",
+       "portion": "1 ea"
+      },
+      {
+       "recipeId": "400010",
+       "name": "French Fries",
+       "portion": "6 oz",
+       "tags": [
+        "vegetarian"
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Bakery",
+     "items": [
+      {
+       "recipeId": "021398",
+       "name": "Brownie M&M",
+       "portion": "1 ea",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "212050",
+       "name": "Brownies",
+       "portion": "1 ea",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "212028",
+       "name": "Cream Cheese Swirled Brownie",
+       "portion": "1 ea",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "213191",
+       "name": "Vegan Chocolate Chip Cookie",
+       "portion": "1 ea",
+       "tags": [
+        "vegan"
+       ]
+      }
+     ]
+    },
+    {
+     "name": "All Day",
+     "items": [
+      {
+       "recipeId": "040004",
+       "name": "Add Bacon",
+       "portion": "2 ea"
+      },
+      {
+       "recipeId": "020566",
+       "name": "Add Cheddar Cheese",
+       "portion": "1 ea",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "020572",
+       "name": "Add Chicken Tender (1)",
+       "portion": "1 oz"
+      },
+      {
+       "recipeId": "020562",
+       "name": "Add Pepper Jack Cheese",
+       "portion": "1 ea",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "020569",
+       "name": "American Cheese",
+       "portion": "1 ea",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "020570",
+       "name": "BJ's Add Burger Patty",
+       "portion": "1 ea",
+       "tags": [
+        "halal"
+       ]
+      },
+      {
+       "recipeId": "840074",
+       "name": "Hass Avocado",
+       "portion": "1 ozl",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "400106",
+       "name": "Vegan Burger Patty",
+       "portion": "1 ea",
+       "tags": [
+        "vegan"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "23",
+   "name": "Oakes Cafe",
+   "short": "Oakes Cafe",
+   "location": "Oakes College",
+   "description": "Specialty burgers, chicken sandwiches, boba tea, and sides at Oakes College.",
+   "itemCount": 111,
+   "menuDate": "2026-11-13",
+   "categories": [
+    {
+     "name": "Burgers",
+     "items": [
+      {
+       "recipeId": "400214",
+       "name": "Basic Burger",
+       "portion": "1 ea",
+       "tags": [
+        "halal"
+       ]
+      },
+      {
+       "recipeId": "040061",
+       "name": "Chicken Tender Sandwich",
+       "portion": "1 ea"
+      },
+      {
+       "recipeId": "040160",
+       "name": "Chipotle Bacon Chicken Sandwich",
+       "portion": "1 ea"
+      }
+     ]
+    },
+    {
+     "name": "Specialties",
+     "items": [
+      {
+       "recipeId": "087013",
+       "name": "BLT Sandwich",
+       "portion": "1 ea"
+      },
+      {
+       "recipeId": "040538",
+       "name": "Cheesy Chicken Pesto",
+       "portion": "1 ea"
+      },
+      {
+       "recipeId": "040109",
+       "name": "Chicken Teriyaki Bowl",
+       "portion": "1 ea"
+      },
+      {
+       "recipeId": "040073",
+       "name": "Grilled Cheese Sandwich",
+       "portion": "1 ea",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "040060",
+       "name": "Spicy Crispy Chicken Sandwich",
+       "portion": "1 ea"
+      },
+      {
+       "recipeId": "868911",
+       "name": "Veggie Burger",
+       "portion": "1 ea",
+       "tags": [
+        "vegetarian"
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Bakery",
+     "items": [
+      {
+       "recipeId": "213168",
+       "name": "Chocolate Croissant",
+       "portion": "1 each",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "212776",
+       "name": "Chocolate Muffin",
+       "portion": "1 each",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "213164",
+       "name": "Croissant",
+       "portion": "1 each",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "300009",
+       "name": "Pumpkin Spice Muffin",
+       "portion": "1 ea",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "300019",
+       "name": "UCSC Bakery Feta Onion Rolls",
+       "portion": "1 ea",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "213189",
+       "name": "Vegan Chocolate Chip Cookies",
+       "portion": "1 ea",
+       "tags": [
+        "vegan"
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Sides",
+     "items": [
+      {
+       "recipeId": "040026",
+       "name": "Garden Salad (SIDE)",
+       "portion": "4 oz",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "086035",
+       "name": "Grilled Chicken, No Antibotics Ever",
+       "portion": "1 ea"
+      },
+      {
+       "recipeId": "040025",
+       "name": "Side French Fries",
+       "portion": "6 oz",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "086036",
+       "name": "Tofu",
+       "portion": "5 oz",
+       "tags": [
+        "vegan"
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Boba",
+     "items": [
+      {
+       "recipeId": "290004",
+       "name": "Classic Milk Tea",
+       "portion": "20 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "290016",
+       "name": "Dragon Fruit Smoothie",
+       "portion": "20 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "290013",
+       "name": "Dragon Fruit Strawberry Lemonade",
+       "portion": "20 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "290009",
+       "name": "Mango Black Tea",
+       "portion": "20 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "290010",
+       "name": "Mango Green Tea",
+       "portion": "20 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "290011",
+       "name": "Mango Lemonade",
+       "portion": "20 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "290002",
+       "name": "Mango Popping Pearls",
+       "portion": "1 oz",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "290014",
+       "name": "Mango Smoothie",
+       "portion": "20 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "290019",
+       "name": "Salted Caramel Milk Tea Smoothie",
+       "portion": "20 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "290005",
+       "name": "Salted Caramel Milk Tea",
+       "portion": "20 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "290006",
+       "name": "Strawberry Jasmine Milk Tea",
+       "portion": "20 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "290012",
+       "name": "Strawberry Lemonade",
+       "portion": "20 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "290003",
+       "name": "Strawberry Popping Pearls",
+       "portion": "1 oz",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "290015",
+       "name": "Strawberry Smoothie",
+       "portion": "20 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "290000",
+       "name": "Tapioca Boba Pearls",
+       "portion": "2 ozl",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "290007",
+       "name": "Taro Milk Tea",
+       "portion": "20 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "290017",
+       "name": "Taro Smoothie",
+       "portion": "20 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "290018",
+       "name": "Thai Milk Tea Smoothie",
+       "portion": "20 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "290008",
+       "name": "Thai Milk Tea",
+       "portion": "20 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Coffee & Tea",
+     "items": [
+      {
+       "recipeId": "044297",
+       "name": "16 oz Cold Brew Coffee",
+       "portion": "16 ozl",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "013181",
+       "name": "Add Espresso Shot",
+       "portion": "1 ozl",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "013183",
+       "name": "Americano 12oz",
+       "portion": "1 ea",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "013186",
+       "name": "Americano 16oz",
+       "portion": "1 ea",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "013187",
+       "name": "Americano 20 oz",
+       "portion": "1 ea",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "025036",
+       "name": "Cappuccino, Single",
+       "portion": "12 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "026006",
+       "name": "Cappucino, Double",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "085021",
+       "name": "Caramel Latte, Double",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "077047",
+       "name": "Caramel Latte, Single",
+       "portion": "12 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "085050",
+       "name": "Caramel Latte, Triple",
+       "portion": "20 oz",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "042121",
+       "name": "Chai Latte",
+       "portion": "16 oz",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "085066",
+       "name": "Coconut Caramel Latte, 16 oz",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "042115",
+       "name": "Coffee, 12 oz",
+       "portion": "12 ozl",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "042116",
+       "name": "Coffee, 16 oz",
+       "portion": "16 ozl",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "042117",
+       "name": "Coffee, 20 oz",
+       "portion": "20 ozl",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "085076",
+       "name": "Cookie Butter Mocha 16 OZ",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "085065",
+       "name": "Dirty Hazelnut Chai Latte",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "044253",
+       "name": "Espresso, Double Shot",
+       "portion": "4 ozl",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "044252",
+       "name": "Espresso, Single Shot",
+       "portion": "2 ozl",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "044255",
+       "name": "Espresso, Triple Shot",
+       "portion": "6 ozl",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "868840",
+       "name": "Hazelnut Brittle Latte, 16 oz",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "868873",
+       "name": "Hazelnut Latte, Double",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "868872",
+       "name": "Hazelnut Latte, Single",
+       "portion": "12 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "868874",
+       "name": "Hazelnut Latte, Triple",
+       "portion": "20 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "085074",
+       "name": "Hazelnut Milk Chocolate Mocha 16 OZ",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "085077",
+       "name": "Horchata Latte",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "044239",
+       "name": "Hot Chocolate",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "042125",
+       "name": "Hot Tea",
+       "portion": "12 ozl",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "042078",
+       "name": "Latte, Double",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "028020",
+       "name": "Latte, Single",
+       "portion": "12 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "042091",
+       "name": "Latte, Triple",
+       "portion": "20 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "085075",
+       "name": "London Fog Tea Latte",
+       "portion": "16 oz",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "044247",
+       "name": "Matcha Green Tea Latte",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "085078",
+       "name": "Mexican Mocha, 16 oz",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "042097",
+       "name": "Mocha, Double",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "042095",
+       "name": "Mocha, Single",
+       "portion": "12 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "042103",
+       "name": "Mocha, Triple",
+       "portion": "20 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "085063",
+       "name": "Peppermint Matcha Latte",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "868826",
+       "name": "Peppermint Mocha, 16 oz",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "085064",
+       "name": "Pumpkin Chai Latte",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "868817",
+       "name": "Pumpkin Latte, 16 oz",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "868829",
+       "name": "Raspberry White Mocha, 16 oz",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "868841",
+       "name": "Salted Caramel Mocha, 16 oz",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "085073",
+       "name": "Spanish Latte 16 OZ",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "044250",
+       "name": "Strawberry Matcha Latte",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "868823",
+       "name": "Tea Latte",
+       "portion": "16 oz",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "087023",
+       "name": "Vanilla Latte, Double",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "085055",
+       "name": "Vanilla Latte, Single",
+       "portion": "12 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "087040",
+       "name": "Vanilla Latte, Triple",
+       "portion": "20 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "085067",
+       "name": "Vietnamese Coffee, 16 oz",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "044209",
+       "name": "Whipped Cream",
+       "portion": "1 oz",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "042105",
+       "name": "White Mocha, Double",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "042104",
+       "name": "White Mocha, Single",
+       "portion": "12 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "042106",
+       "name": "White Mocha, Triple",
+       "portion": "20 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      }
+     ]
+    },
+    {
+     "name": "All Day",
+     "items": [
+      {
+       "recipeId": "040004",
+       "name": "Add Bacon",
+       "portion": "2 ea"
+      },
+      {
+       "recipeId": "020566",
+       "name": "Add Cheddar Cheese",
+       "portion": "1 ea",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "020572",
+       "name": "Add Chicken Tender (1)",
+       "portion": "3 oz"
+      },
+      {
+       "recipeId": "020562",
+       "name": "Add Pepper Jack Cheese",
+       "portion": "1 ea",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "020595",
+       "name": "Add Pickled Jalapeno",
+       "portion": "2 ozl",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "020560",
+       "name": "Add Sliced Red Onion",
+       "portion": "1 oz",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "020559",
+       "name": "Add Sliced Tomato",
+       "portion": "1 oz",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "020569",
+       "name": "American Cheese",
+       "portion": "1 ea",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "868865",
+       "name": "Chipotle Aioli",
+       "portion": "1 ozl",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "401022",
+       "name": "Coffee Bar Syrup Add On",
+       "portion": "1 oz",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "868861",
+       "name": "Gluten-Free Oat Milk",
+       "portion": "16 ozl",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "889988",
+       "name": "Half & Half",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "868892",
+       "name": "Pesto Vegannaise",
+       "portion": "1 ozl",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "020557",
+       "name": "Side Chipotle Vegannaise",
+       "portion": "2 ozl",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "888983",
+       "name": "Sliced Smoked Provolone Cheese",
+       "portion": "1 oz",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "840117",
+       "name": "Sour Cream",
+       "portion": "1 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "868863",
+       "name": "Soy Milk",
+       "portion": "16 ozl",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "400106",
+       "name": "Vegan Burger Patty",
+       "portion": "1 ea",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "044209",
+       "name": "Whipped Cream",
+       "portion": "1 oz",
+       "tags": [
+        "vegetarian"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "46",
+   "name": "Global Village Cafe",
+   "short": "Global Village Cafe",
+   "location": "McHenry Library",
+   "description": "Fresh coffee, specialty teas, and grab-and-go options located at McHenry Library.",
+   "itemCount": 137,
+   "menuDate": "2026-11-13",
+   "categories": [
+    {
+     "name": "Daily",
+     "items": [
+      {
+       "recipeId": "100069",
+       "name": "Avocado Toast",
+       "portion": "1 ea",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "868834",
+       "name": "BLT Avocado Toast",
+       "portion": "1 ea"
+      },
+      {
+       "recipeId": "100071",
+       "name": "Caprese Avocado Toast",
+       "portion": "1 ea",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "868880",
+       "name": "Cheesy Toast",
+       "portion": "1 ea",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "100074",
+       "name": "Club Avocado Toast",
+       "portion": "1 ea"
+      },
+      {
+       "recipeId": "100076",
+       "name": "Egg-rything Avocado Toast",
+       "portion": "1 ea",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "100072",
+       "name": "El Gallo",
+       "portion": "1 ea",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "888009",
+       "name": "French Macaroons",
+       "portion": "1 ea",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "868895",
+       "name": "Hot Honey Bacon Waffle",
+       "portion": "1 ea"
+      },
+      {
+       "recipeId": "010193",
+       "name": "Hummus Bagel",
+       "portion": "1 ea",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "868881",
+       "name": "Jalapeno Popper Toast",
+       "portion": "1 ea",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "868832",
+       "name": "Le Veg Avocado Toast",
+       "portion": "1 ea",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "010197",
+       "name": "Mixed Green Salad",
+       "portion": "5 oz",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "868893",
+       "name": "Nutella Banana Waffle",
+       "portion": "1 ea",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "868894",
+       "name": "Strawberry Cream Cheese Waffle",
+       "portion": "1 ea",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "010194",
+       "name": "Toasted Bagel & Cream Cheese",
+       "portion": "1 ea",
+       "tags": [
+        "vegetarian"
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Campus Bakery",
+     "items": [
+      {
+       "recipeId": "213406",
+       "name": "Chocolate Croissant",
+       "portion": "1 ea",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "212778",
+       "name": "Chocolate Muffin",
+       "portion": "1 ea",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "213405",
+       "name": "Croissant",
+       "portion": "1 ea",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "300007",
+       "name": "Pumpkin Spice Muffin",
+       "portion": "1 ea",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "300017",
+       "name": "UCSC Bakery Feta Onion Rolls",
+       "portion": "1 ea",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "213408",
+       "name": "Vegan Chocolate Chip Cookie",
+       "portion": "1 ea",
+       "tags": [
+        "vegan"
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Bagels",
+     "items": [
+      {
+       "recipeId": "300203",
+       "name": "Everything Bagelry Bagel",
+       "portion": "1 ea",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "300212",
+       "name": "Garlic Bagelry Bagel",
+       "portion": "1 ea",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "300210",
+       "name": "Jalapeno Cheese Bagelry Bagel",
+       "portion": "1 ea",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "300200",
+       "name": "Plain Bagelry Bagel",
+       "portion": "1 ea",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "300213",
+       "name": "Tomato Basil Bagelry Bagel",
+       "portion": "1 ea",
+       "tags": [
+        "vegan"
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Commissary",
+     "items": [
+      {
+       "recipeId": "460008",
+       "name": "Breakfast Bacon Burrito",
+       "portion": "1 ea"
+      },
+      {
+       "recipeId": "700105",
+       "name": "Breakfast Burrito",
+       "portion": "1 ea",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "900164",
+       "name": "Calabrian Italian Club",
+       "portion": "1 ea"
+      },
+      {
+       "recipeId": "700165",
+       "name": "Chicken Penne Alfredo",
+       "portion": "1 ea"
+      },
+      {
+       "recipeId": "700147",
+       "name": "Chicken Salad Sandwich",
+       "portion": "1 ea"
+      },
+      {
+       "recipeId": "449901",
+       "name": "Chipotle Chicken Wrap",
+       "portion": "1 ea"
+      },
+      {
+       "recipeId": "700159",
+       "name": "Pesto Chicken Salad Pita Sandwich",
+       "portion": "1 ea"
+      },
+      {
+       "recipeId": "700117",
+       "name": "Pesto Pasta Salad",
+       "portion": "1 ea",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "460010",
+       "name": "Roma Sandwich",
+       "portion": "1 ea",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "400642",
+       "name": "Rotisserie Chicken Caesar Salad",
+       "portion": "1 ea"
+      },
+      {
+       "recipeId": "212546",
+       "name": "The Gobbler",
+       "portion": "1 ea"
+      },
+      {
+       "recipeId": "700123",
+       "name": "Turkey Bacon Provolone Sandwich",
+       "portion": "1 ea"
+      },
+      {
+       "recipeId": "700129",
+       "name": "Turkey Cheddar Croissant Sandwich",
+       "portion": "1 ea"
+      }
+     ]
+    },
+    {
+     "name": "Coffee Drinks",
+     "items": [
+      {
+       "recipeId": "044297",
+       "name": "16 oz Cold Brew Coffee",
+       "portion": "16 ozl",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "013181",
+       "name": "Add Espresso Shot",
+       "portion": "1 ozl",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "013183",
+       "name": "Americano 12oz",
+       "portion": "1 ea",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "013186",
+       "name": "Americano 16oz",
+       "portion": "1 ea",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "013187",
+       "name": "Americano 20 oz",
+       "portion": "1 ea",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "025036",
+       "name": "Cappuccino, Single",
+       "portion": "12 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "026006",
+       "name": "Cappucino, Double",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "085021",
+       "name": "Caramel Latte, Double",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "077047",
+       "name": "Caramel Latte, Single",
+       "portion": "12 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "085050",
+       "name": "Caramel Latte, Triple",
+       "portion": "20 oz",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "042121",
+       "name": "Chai Latte",
+       "portion": "16 oz",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "085066",
+       "name": "Coconut Caramel Latte, 16 oz",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "042115",
+       "name": "Coffee, 12 oz",
+       "portion": "12 ozl",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "042116",
+       "name": "Coffee, 16 oz",
+       "portion": "16 ozl",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "042117",
+       "name": "Coffee, 20 oz",
+       "portion": "20 ozl",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "085076",
+       "name": "Cookie Butter Mocha 16 OZ",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "085065",
+       "name": "Dirty Hazelnut Chai Latte",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "044253",
+       "name": "Espresso, Double Shot",
+       "portion": "4 ozl",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "044252",
+       "name": "Espresso, Single Shot",
+       "portion": "2 ozl",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "044255",
+       "name": "Espresso, Triple Shot",
+       "portion": "6 ozl",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "868840",
+       "name": "Hazelnut Brittle Latte, 16 oz",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "868873",
+       "name": "Hazelnut Latte, Double",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "868872",
+       "name": "Hazelnut Latte, Single",
+       "portion": "12 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "868874",
+       "name": "Hazelnut Latte, Triple",
+       "portion": "20 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "085074",
+       "name": "Hazelnut Milk Chocolate Mocha 16 OZ",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "085072",
+       "name": "Honey Lavender Latte, 16 oz",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "085077",
+       "name": "Horchata Latte",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "044239",
+       "name": "Hot Chocolate",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "042125",
+       "name": "Hot Tea",
+       "portion": "12 ozl",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "042078",
+       "name": "Latte, Double",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "028020",
+       "name": "Latte, Single",
+       "portion": "12 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "042091",
+       "name": "Latte, Triple",
+       "portion": "20 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "085075",
+       "name": "London Fog Tea Latte",
+       "portion": "16 oz",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "044247",
+       "name": "Matcha Green Tea Latte",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "085078",
+       "name": "Mexican Mocha, 16 oz",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "042097",
+       "name": "Mocha, Double",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "042095",
+       "name": "Mocha, Single",
+       "portion": "12 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "042103",
+       "name": "Mocha, Triple",
+       "portion": "20 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "085063",
+       "name": "Peppermint Matcha Latte",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "868826",
+       "name": "Peppermint Mocha, 16 oz",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "085064",
+       "name": "Pumpkin Chai Latte",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "868817",
+       "name": "Pumpkin Latte, 16 oz",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "868829",
+       "name": "Raspberry White Mocha, 16 oz",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "868841",
+       "name": "Salted Caramel Mocha, 16 oz",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "085073",
+       "name": "Spanish Latte 16 OZ",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "044250",
+       "name": "Strawberry Matcha Latte",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "868823",
+       "name": "Tea Latte",
+       "portion": "16 oz",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "087023",
+       "name": "Vanilla Latte, Double",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "085055",
+       "name": "Vanilla Latte, Single",
+       "portion": "12 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "087040",
+       "name": "Vanilla Latte, Triple",
+       "portion": "20 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "085067",
+       "name": "Vietnamese Coffee, 16 oz",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "044209",
+       "name": "Whipped Cream",
+       "portion": "1 oz",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "042105",
+       "name": "White Mocha, Double",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "042104",
+       "name": "White Mocha, Single",
+       "portion": "12 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "042106",
+       "name": "White Mocha, Triple",
+       "portion": "20 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Coffee & Tea -- New City of Santa Cruz Cup Fee of $.025 BYO and save up to $0.50 when ordering a togo drink",
+     "items": [
+      {
+       "recipeId": "868824",
+       "name": "Dirty Vanilla Tonic",
+       "portion": "16 ozl",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "868876",
+       "name": "Iced Horchata",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "044261",
+       "name": "Italian Soda",
+       "portion": "16 ozl",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "044234",
+       "name": "Peach Mango Refresher",
+       "portion": "16 ozl",
+       "tags": [
+        "vegan"
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Smoothies",
+     "items": [
+      {
+       "recipeId": "044260",
+       "name": "Frozen Caramel Latte",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "044263",
+       "name": "Frozen Cookies & Cream",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "044258",
+       "name": "Frozen Espresso Cookies & Cream",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "044259",
+       "name": "Frozen Latte",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "044275",
+       "name": "Frozen Matcha",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "044262",
+       "name": "Frozen Mocha",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "868876",
+       "name": "Iced Horchata",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "044261",
+       "name": "Italian Soda",
+       "portion": "16 ozl",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "868819",
+       "name": "Lemon Cream Smoothie",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "868815",
+       "name": "Lemonade Smoothie",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "044264",
+       "name": "Mango Cream Smoothie",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "044270",
+       "name": "Mango Fruit Smoothie",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "044247",
+       "name": "Matcha Green Tea Latte",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "044265",
+       "name": "Strawberry Cream Smoothie",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "044268",
+       "name": "Strawberry Fruit Smoothie",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "868821",
+       "name": "Strawberry Lemonade Smoothie",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      }
+     ]
+    },
+    {
+     "name": "All Day",
+     "items": [
+      {
+       "recipeId": "020561",
+       "name": "Add Avocado",
+       "portion": "1/4 ea",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "040004",
+       "name": "Add Bacon",
+       "portion": "2 ea"
+      },
+      {
+       "recipeId": "020566",
+       "name": "Add Cheddar Cheese",
+       "portion": "1 ea",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "044280",
+       "name": "Add Hard Boiled Egg",
+       "portion": "1 ea",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "044281",
+       "name": "Add Hummus",
+       "portion": "3 oz",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "020595",
+       "name": "Add Pickled Jalapeno",
+       "portion": "2 ozl",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "020598",
+       "name": "Add Side Pico De Gallo Salsa",
+       "portion": "2 ozl",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "401022",
+       "name": "Coffee Bar Syrup Add On",
+       "portion": "1 oz",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "868861",
+       "name": "Gluten-Free Oat Milk",
+       "portion": "16 ozl",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "889988",
+       "name": "Half & Half",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "888983",
+       "name": "Sliced Smoked Provolone Cheese",
+       "portion": "1 oz",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "868863",
+       "name": "Soy Milk",
+       "portion": "16 ozl",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "044209",
+       "name": "Whipped Cream",
+       "portion": "1 oz",
+       "tags": [
+        "vegetarian"
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Add Ons",
+     "items": [
+      {
+       "recipeId": "020561",
+       "name": "Add Avocado",
+       "portion": "1/4 ea",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "044282",
+       "name": "Add Chicken, 2 oz",
+       "portion": "2 oz"
+      },
+      {
+       "recipeId": "044283",
+       "name": "Add Fresh Mozzarella",
+       "portion": "2 oz",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "044280",
+       "name": "Add Hard Boiled Egg",
+       "portion": "1 ea",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "044281",
+       "name": "Add Hummus",
+       "portion": "3 oz",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "044284",
+       "name": "Add Queso Fresco",
+       "portion": "1 oz",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "020598",
+       "name": "Add Side Pico De Gallo Salsa",
+       "portion": "2 ozl",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "100068",
+       "name": "Mashed Avocado",
+       "portion": "3 ozl",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "868820",
+       "name": "Pesto Ricotta Spread",
+       "portion": "1 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "24",
+   "name": "Owl's Nest Cafe",
+   "short": "Owl's Nest Cafe",
+   "location": "Kresge College",
+   "description": "Organic bowls, smoothies, bagels, and artisan espresso drinks at Kresge College.",
+   "itemCount": 146,
+   "menuDate": "2026-11-13",
+   "categories": [
+    {
+     "name": "Campus Bakery",
+     "items": [
+      {
+       "recipeId": "213169",
+       "name": "Chocolate Croissant",
+       "portion": "1 ea",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "212775",
+       "name": "Chocolate Muffin",
+       "portion": "1 each",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "213165",
+       "name": "Croissant",
+       "portion": "1 ea",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "300008",
+       "name": "Pumpkin Spice Muffin",
+       "portion": "1 ea",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "300018",
+       "name": "UCSC Bakery Feta Onion Rolls",
+       "portion": "1 ea",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "213188",
+       "name": "Vegan Chocolate Chip Cookie",
+       "portion": "1 ea",
+       "tags": [
+        "vegan"
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Coffee and Tea",
+     "items": [
+      {
+       "recipeId": "044297",
+       "name": "16 oz Cold Brew Coffee",
+       "portion": "16 ozl",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "013181",
+       "name": "Add Espresso Shot",
+       "portion": "1 ozl",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "013183",
+       "name": "Americano 12oz",
+       "portion": "1 ea",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "013186",
+       "name": "Americano 16oz",
+       "portion": "1 ea",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "013187",
+       "name": "Americano 20 oz",
+       "portion": "1 ea",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "025036",
+       "name": "Cappuccino, Single",
+       "portion": "12 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "026006",
+       "name": "Cappucino, Double",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "085021",
+       "name": "Caramel Latte, Double",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "077047",
+       "name": "Caramel Latte, Single",
+       "portion": "12 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "085050",
+       "name": "Caramel Latte, Triple",
+       "portion": "20 oz",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "042121",
+       "name": "Chai Latte",
+       "portion": "16 oz",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "085066",
+       "name": "Coconut Caramel Latte, 16 oz",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "042115",
+       "name": "Coffee, 12 oz",
+       "portion": "12 ozl",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "042116",
+       "name": "Coffee, 16 oz",
+       "portion": "16 ozl",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "042117",
+       "name": "Coffee, 20 oz",
+       "portion": "20 ozl",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "085076",
+       "name": "Cookie Butter Mocha 16 OZ",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "085065",
+       "name": "Dirty Hazelnut Chai Latte",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "044253",
+       "name": "Espresso, Double Shot",
+       "portion": "4 ozl",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "044252",
+       "name": "Espresso, Single Shot",
+       "portion": "2 ozl",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "044255",
+       "name": "Espresso, Triple Shot",
+       "portion": "6 ozl",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "868840",
+       "name": "Hazelnut Brittle Latte, 16 oz",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "868873",
+       "name": "Hazelnut Latte, Double",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "868872",
+       "name": "Hazelnut Latte, Single",
+       "portion": "12 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "868874",
+       "name": "Hazelnut Latte, Triple",
+       "portion": "20 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "085074",
+       "name": "Hazelnut Milk Chocolate Mocha 16 OZ",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "085077",
+       "name": "Horchata Latte",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "044239",
+       "name": "Hot Chocolate",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "042125",
+       "name": "Hot Tea",
+       "portion": "12 ozl",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "042078",
+       "name": "Latte, Double",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "028020",
+       "name": "Latte, Single",
+       "portion": "12 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "042091",
+       "name": "Latte, Triple",
+       "portion": "20 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "085075",
+       "name": "London Fog Tea Latte",
+       "portion": "16 oz",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "044247",
+       "name": "Matcha Green Tea Latte",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "085078",
+       "name": "Mexican Mocha, 16 oz",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "042097",
+       "name": "Mocha, Double",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "042095",
+       "name": "Mocha, Single",
+       "portion": "12 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "042103",
+       "name": "Mocha, Triple",
+       "portion": "20 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "085063",
+       "name": "Peppermint Matcha Latte",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "868826",
+       "name": "Peppermint Mocha, 16 oz",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "085064",
+       "name": "Pumpkin Chai Latte",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "868817",
+       "name": "Pumpkin Latte, 16 oz",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "868829",
+       "name": "Raspberry White Mocha, 16 oz",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "868841",
+       "name": "Salted Caramel Mocha, 16 oz",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "085073",
+       "name": "Spanish Latte 16 OZ",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "044250",
+       "name": "Strawberry Matcha Latte",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "868823",
+       "name": "Tea Latte",
+       "portion": "16 oz",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "087023",
+       "name": "Vanilla Latte, Double",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "085055",
+       "name": "Vanilla Latte, Single",
+       "portion": "12 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "087040",
+       "name": "Vanilla Latte, Triple",
+       "portion": "20 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "085067",
+       "name": "Vietnamese Coffee, 16 oz",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "044209",
+       "name": "Whipped Cream",
+       "portion": "1 oz",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "042105",
+       "name": "White Mocha, Double",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "042104",
+       "name": "White Mocha, Single",
+       "portion": "12 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "042106",
+       "name": "White Mocha, Triple",
+       "portion": "20 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Drinks Specials",
+     "items": [
+      {
+       "recipeId": "868824",
+       "name": "Dirty Vanilla Tonic",
+       "portion": "16 ozl",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "868876",
+       "name": "Iced Horchata",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "044261",
+       "name": "Italian Soda",
+       "portion": "16 ozl",
+       "tags": [
+        "vegan"
+       ]
+      }
+     ]
+    },
+    {
+     "name": "All Day",
+     "items": [
+      {
+       "recipeId": "210006",
+       "name": "Ahi Poke",
+       "portion": "4 oz"
+      },
+      {
+       "recipeId": "210000",
+       "name": "Brown Rice Quinoa Blend",
+       "portion": "3 oz",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "210008",
+       "name": "Candied Miso Salmon Poke",
+       "portion": "4 oz"
+      },
+      {
+       "recipeId": "210005",
+       "name": "Chilled Soba Noodles",
+       "portion": "2 oz",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "210028",
+       "name": "Coconut Chili Sauce",
+       "portion": "1 oz",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "401022",
+       "name": "Coffee Bar Syrup Add On",
+       "portion": "1 oz",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "210029",
+       "name": "Creamy Wasabi Avocado Sauce",
+       "portion": "2 oz",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "210033",
+       "name": "Crispy Fried Garlic",
+       "portion": "1/10 oz",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "210022",
+       "name": "Cubed Mango",
+       "portion": "1/2 oz",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "210023",
+       "name": "Cubed Pineapple",
+       "portion": "1/2 oz",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "210018",
+       "name": "Cucumber",
+       "portion": "1 oz",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "210017",
+       "name": "Diced Avocado",
+       "portion": "1 oz",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "210020",
+       "name": "Diced Green Onion",
+       "portion": "1/2 oz",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "210016",
+       "name": "Edamame",
+       "portion": "1 oz",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "210035",
+       "name": "Furikake",
+       "portion": "1/2 oz",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "210004",
+       "name": "Glass Noodles",
+       "portion": "3 oz"
+      },
+      {
+       "recipeId": "868861",
+       "name": "Gluten-Free Oat Milk",
+       "portion": "16 ozl",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "889988",
+       "name": "Half & Half",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "210002",
+       "name": "Japanese White Rice",
+       "portion": "3 oz",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "210010",
+       "name": "Miso Ginger Tofu",
+       "portion": "4 oz",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "210001",
+       "name": "Organic Mixed Greens",
+       "portion": "1 oz",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "210024",
+       "name": "Pickled Ginger",
+       "portion": "1/4 oz",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "210026",
+       "name": "Pickled Jalapeno",
+       "portion": "1/2 oz",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "210030",
+       "name": "Roasted Garlic and Onion",
+       "portion": "1 oz",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "210003",
+       "name": "Seasoned Japanese White Rice",
+       "portion": "3 oz",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "210025",
+       "name": "Seaweed Salad",
+       "portion": "1/4 oz",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "210019",
+       "name": "Shredded Carrots",
+       "portion": "1/2 oz",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "210021",
+       "name": "Shredded Coleslaw Mix",
+       "portion": "1/2 oz",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "868863",
+       "name": "Soy Milk",
+       "portion": "16 ozl",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "210007",
+       "name": "Spicy Ahi Poke",
+       "portion": "4 oz"
+      },
+      {
+       "recipeId": "210031",
+       "name": "Spicy Yuzu Aioli",
+       "portion": "1 oz",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "210011",
+       "name": "Tamari Maple Tempeh",
+       "portion": "4 oz",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "210032",
+       "name": "Tempura Crunch",
+       "portion": "1 oz",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "210009",
+       "name": "Teriyaki Chicken",
+       "portion": "4 oz"
+      },
+      {
+       "recipeId": "210027",
+       "name": "Turmeric Yuzu Ponzu Sauce",
+       "portion": "1 oz",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "044209",
+       "name": "Whipped Cream",
+       "portion": "1 oz",
+       "tags": [
+        "vegetarian"
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Bagels",
+     "items": [
+      {
+       "recipeId": "300208",
+       "name": "Blueberry Bagelry Bagel",
+       "portion": "1 ea",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "040115",
+       "name": "Cream Cheese pck",
+       "portion": "1 each",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "300203",
+       "name": "Everything Bagelry Bagel",
+       "portion": "1 ea",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "300210",
+       "name": "Jalapeno Cheese Bagelry Bagel",
+       "portion": "1 ea",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "300209",
+       "name": "Pesto Bagelry Bagel",
+       "portion": "1 ea",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "300200",
+       "name": "Plain Bagelry Bagel",
+       "portion": "1 ea",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "300213",
+       "name": "Tomato Basil Bagelry Bagel",
+       "portion": "1 ea",
+       "tags": [
+        "vegan"
+       ]
+      }
+     ]
+    },
+    {
+     "name": "All Day Bowls",
+     "items": [
+      {
+       "recipeId": "839920",
+       "name": "Build Your Own Bowl",
+       "portion": "1 ea"
+      },
+      {
+       "recipeId": "210043",
+       "name": "Coastal Shirataki Ahi Bowl",
+       "portion": "1 ea"
+      },
+      {
+       "recipeId": "210039",
+       "name": "Fire Island Chicken Bowl",
+       "portion": "1 ea"
+      },
+      {
+       "recipeId": "210037",
+       "name": "Island Salmon Bowl",
+       "portion": "1 ea"
+      },
+      {
+       "recipeId": "210038",
+       "name": "Pacific Harvest Chicken Bowl",
+       "portion": "1 ea"
+      },
+      {
+       "recipeId": "210042",
+       "name": "Pacific Soba Market Bowl",
+       "portion": "1 ea"
+      },
+      {
+       "recipeId": "210040",
+       "name": "Redwood Garden Bowl",
+       "portion": "1 ea",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "210036",
+       "name": "Santa Cruz Ahi Bowl",
+       "portion": "1 ea"
+      },
+      {
+       "recipeId": "210041",
+       "name": "Wasabi Tempeh Bowl",
+       "portion": "1 ea",
+       "tags": [
+        "vegan"
+       ]
+      }
+     ]
+    },
+    {
+     "name": "All Day Base",
+     "items": [
+      {
+       "recipeId": "210000",
+       "name": "Brown Rice Quinoa Blend",
+       "portion": "3 oz",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "210005",
+       "name": "Chilled Soba Noodles",
+       "portion": "2 oz",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "210004",
+       "name": "Glass Noodles",
+       "portion": "3 oz"
+      },
+      {
+       "recipeId": "210002",
+       "name": "Japanese White Rice",
+       "portion": "3 oz",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "210001",
+       "name": "Organic Mixed Greens",
+       "portion": "1 oz",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "210003",
+       "name": "Seasoned Japanese White Rice",
+       "portion": "3 oz",
+       "tags": [
+        "vegan"
+       ]
+      }
+     ]
+    },
+    {
+     "name": "All Day Protein (1)",
+     "items": [
+      {
+       "recipeId": "210006",
+       "name": "Ahi Poke",
+       "portion": "4 oz"
+      },
+      {
+       "recipeId": "210008",
+       "name": "Candied Miso Salmon Poke",
+       "portion": "4 oz"
+      },
+      {
+       "recipeId": "210010",
+       "name": "Miso Ginger Tofu",
+       "portion": "4 oz",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "210007",
+       "name": "Spicy Ahi Poke",
+       "portion": "4 oz"
+      },
+      {
+       "recipeId": "210011",
+       "name": "Tamari Maple Tempeh",
+       "portion": "4 oz",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "210009",
+       "name": "Teriyaki Chicken",
+       "portion": "4 oz"
+      }
+     ]
+    },
+    {
+     "name": "All Day Finish (1)",
+     "items": [
+      {
+       "recipeId": "210033",
+       "name": "Crispy Fried Garlic",
+       "portion": "1/10 oz",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "210035",
+       "name": "Furikake",
+       "portion": "1/2 oz",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "210032",
+       "name": "Tempura Crunch",
+       "portion": "1 oz",
+       "tags": [
+        "vegan"
+       ]
+      }
+     ]
+    },
+    {
+     "name": "All Day Topping (4) cold",
+     "items": [
+      {
+       "recipeId": "210022",
+       "name": "Cubed Mango",
+       "portion": "1/2 oz",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "210023",
+       "name": "Cubed Pineapple",
+       "portion": "1/2 oz",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "210018",
+       "name": "Cucumber",
+       "portion": "1 oz",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "210017",
+       "name": "Diced Avocado",
+       "portion": "1 oz",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "210020",
+       "name": "Diced Green Onion",
+       "portion": "1/2 oz",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "210016",
+       "name": "Edamame",
+       "portion": "1 oz",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "210024",
+       "name": "Pickled Ginger",
+       "portion": "1/4 oz",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "210026",
+       "name": "Pickled Jalapeno",
+       "portion": "1/2 oz",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "210025",
+       "name": "Seaweed Salad",
+       "portion": "1/4 oz",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "210019",
+       "name": "Shredded Carrots",
+       "portion": "1/2 oz",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "210021",
+       "name": "Shredded Coleslaw Mix",
+       "portion": "1/2 oz",
+       "tags": [
+        "vegan"
+       ]
+      }
+     ]
+    },
+    {
+     "name": "All Day Sauce",
+     "items": [
+      {
+       "recipeId": "210028",
+       "name": "Coconut Chili Sauce",
+       "portion": "1 oz",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "210029",
+       "name": "Creamy Wasabi Avocado Sauce",
+       "portion": "2 oz",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "210030",
+       "name": "Roasted Garlic and Onion",
+       "portion": "1 oz",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "210031",
+       "name": "Spicy Yuzu Aioli",
+       "portion": "1 oz",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "210027",
+       "name": "Turmeric Yuzu Ponzu Sauce",
+       "portion": "1 oz",
+       "tags": [
+        "vegan"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "45",
+   "name": "UCen Coffee Bar",
+   "short": "UCen Coffee Bar",
+   "location": "Quarry Plaza",
+   "description": "Espresso drinks, freshly baked campus bakery pastries, and cold beverages at Quarry Plaza.",
+   "itemCount": 75,
+   "menuDate": "2026-11-13",
+   "categories": [
+    {
+     "name": "Campus Bakery",
+     "items": [
+      {
+       "recipeId": "213170",
+       "name": "Chocolate Croissant",
+       "portion": "1 ea",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "212774",
+       "name": "Chocolate Muffin",
+       "portion": "1 each",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "213166",
+       "name": "Croissant",
+       "portion": "1 each",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "299993",
+       "name": "Pumpkin Spice Muffin",
+       "portion": "1 ea",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "213190",
+       "name": "Vegan Chocolate Chip Cookie",
+       "portion": "1 ea",
+       "tags": [
+        "vegan"
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Coffee and Tea",
+     "items": [
+      {
+       "recipeId": "044297",
+       "name": "16 oz Cold Brew Coffee",
+       "portion": "16 ozl",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "013181",
+       "name": "Add Espresso Shot",
+       "portion": "1 ozl",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "013183",
+       "name": "Americano 12oz",
+       "portion": "1 ea",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "013186",
+       "name": "Americano 16oz",
+       "portion": "1 ea",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "013187",
+       "name": "Americano 20 oz",
+       "portion": "1 ea",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "025036",
+       "name": "Cappuccino, Single",
+       "portion": "12 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "026006",
+       "name": "Cappucino, Double",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "085021",
+       "name": "Caramel Latte, Double",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "077047",
+       "name": "Caramel Latte, Single",
+       "portion": "12 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "085050",
+       "name": "Caramel Latte, Triple",
+       "portion": "20 oz",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "042121",
+       "name": "Chai Latte",
+       "portion": "16 oz",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "085066",
+       "name": "Coconut Caramel Latte, 16 oz",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "042115",
+       "name": "Coffee, 12 oz",
+       "portion": "12 ozl",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "042116",
+       "name": "Coffee, 16 oz",
+       "portion": "16 ozl",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "042117",
+       "name": "Coffee, 20 oz",
+       "portion": "20 ozl",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "085076",
+       "name": "Cookie Butter Mocha 16 OZ",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "085065",
+       "name": "Dirty Hazelnut Chai Latte",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "044253",
+       "name": "Espresso, Double Shot",
+       "portion": "4 ozl",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "044252",
+       "name": "Espresso, Single Shot",
+       "portion": "2 ozl",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "044255",
+       "name": "Espresso, Triple Shot",
+       "portion": "6 ozl",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "868840",
+       "name": "Hazelnut Brittle Latte, 16 oz",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "868873",
+       "name": "Hazelnut Latte, Double",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "868872",
+       "name": "Hazelnut Latte, Single",
+       "portion": "12 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "868874",
+       "name": "Hazelnut Latte, Triple",
+       "portion": "20 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "085074",
+       "name": "Hazelnut Milk Chocolate Mocha 16 OZ",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "085077",
+       "name": "Horchata Latte",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "044239",
+       "name": "Hot Chocolate",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "042125",
+       "name": "Hot Tea",
+       "portion": "12 ozl",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "042078",
+       "name": "Latte, Double",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "028020",
+       "name": "Latte, Single",
+       "portion": "12 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "042091",
+       "name": "Latte, Triple",
+       "portion": "20 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "085075",
+       "name": "London Fog Tea Latte",
+       "portion": "16 oz",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "044247",
+       "name": "Matcha Green Tea Latte",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "085078",
+       "name": "Mexican Mocha, 16 oz",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "042097",
+       "name": "Mocha, Double",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "042095",
+       "name": "Mocha, Single",
+       "portion": "12 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "042103",
+       "name": "Mocha, Triple",
+       "portion": "20 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "085063",
+       "name": "Peppermint Matcha Latte",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "868826",
+       "name": "Peppermint Mocha, 16 oz",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "085064",
+       "name": "Pumpkin Chai Latte",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "868817",
+       "name": "Pumpkin Latte, 16 oz",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "868829",
+       "name": "Raspberry White Mocha, 16 oz",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "868841",
+       "name": "Salted Caramel Mocha, 16 oz",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "085073",
+       "name": "Spanish Latte 16 OZ",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "044250",
+       "name": "Strawberry Matcha Latte",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "868823",
+       "name": "Tea Latte",
+       "portion": "16 oz",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "087023",
+       "name": "Vanilla Latte, Double",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "085055",
+       "name": "Vanilla Latte, Single",
+       "portion": "12 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "087040",
+       "name": "Vanilla Latte, Triple",
+       "portion": "20 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "085067",
+       "name": "Vietnamese Coffee, 16 oz",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "044209",
+       "name": "Whipped Cream",
+       "portion": "1 oz",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "042105",
+       "name": "White Mocha, Double",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "042104",
+       "name": "White Mocha, Single",
+       "portion": "12 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "042106",
+       "name": "White Mocha, Triple",
+       "portion": "20 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Drinks",
+     "items": [
+      {
+       "recipeId": "868824",
+       "name": "Dirty Vanilla Tonic",
+       "portion": "16 ozl",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "868876",
+       "name": "Iced Horchata",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "044261",
+       "name": "Italian Soda",
+       "portion": "16 ozl",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "044234",
+       "name": "Peach Mango Refresher",
+       "portion": "16 ozl",
+       "tags": [
+        "vegan"
+       ]
+      }
+     ]
+    },
+    {
+     "name": "All Day",
+     "items": [
+      {
+       "recipeId": "013174",
+       "name": "Add Caramel Sauce",
+       "portion": "1 oz",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "013176",
+       "name": "Add Chai",
+       "portion": "3 oz",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "013175",
+       "name": "Add Chocolate Sauce",
+       "portion": "1 oz",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "013181",
+       "name": "Add Espresso Shot",
+       "portion": "1 ozl",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "012179",
+       "name": "Add Horchata",
+       "portion": "1/2 oz",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "013180",
+       "name": "Add Matcha",
+       "portion": "1 tbsp",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "013173",
+       "name": "Add Pumpkin Sauce",
+       "portion": "1 oz",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "401022",
+       "name": "Coffee Bar Syrup Add On",
+       "portion": "1 oz",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "868861",
+       "name": "Gluten-Free Oat Milk",
+       "portion": "16 ozl",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "889988",
+       "name": "Half & Half",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "868863",
+       "name": "Soy Milk",
+       "portion": "16 ozl",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "044209",
+       "name": "Whipped Cream",
+       "portion": "1 oz",
+       "tags": [
+        "vegetarian"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "26",
+   "name": "Stevenson Coffee House",
+   "short": "Stevenson Coffee House",
+   "location": "Stevenson College",
+   "description": "Fresh Bagelry bagels, hot soups, specialty deli sandwiches, and boba at Stevenson College.",
+   "itemCount": 105,
+   "menuDate": "2026-11-13",
+   "categories": [
+    {
+     "name": "Bagels Flavors",
+     "items": [
+      {
+       "recipeId": "300208",
+       "name": "Blueberry Bagelry Bagel",
+       "portion": "1 ea",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "300203",
+       "name": "Everything Bagelry Bagel",
+       "portion": "1 ea",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "300210",
+       "name": "Jalapeno Cheese Bagelry Bagel",
+       "portion": "1 ea",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "300200",
+       "name": "Plain Bagelry Bagel",
+       "portion": "1 ea",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "300213",
+       "name": "Tomato Basil Bagelry Bagel",
+       "portion": "1 ea",
+       "tags": [
+        "vegan"
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Soup",
+     "items": [
+      {
+       "recipeId": "010221",
+       "name": "Organic Tomato Bisque",
+       "portion": "1 ea",
+       "tags": [
+        "vegetarian"
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Boba",
+     "items": [
+      {
+       "recipeId": "290004",
+       "name": "Classic Milk Tea",
+       "portion": "20 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "290021",
+       "name": "Coconut Thai Milk Tea",
+       "portion": "20 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "290025",
+       "name": "Dragon Coconut Smoothie",
+       "portion": "20 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "290013",
+       "name": "Dragon Fruit Strawberry Lemonade",
+       "portion": "20 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "290024",
+       "name": "Frozen Strawberry Passionfruit",
+       "portion": "20 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "290009",
+       "name": "Mango Black Tea",
+       "portion": "20 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "290011",
+       "name": "Mango Lemonade",
+       "portion": "20 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "290020",
+       "name": "Mango Passionfruit Lemonade",
+       "portion": "20 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "290002",
+       "name": "Mango Popping Pearls",
+       "portion": "1 oz",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "290014",
+       "name": "Mango Smoothie",
+       "portion": "20 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "290019",
+       "name": "Salted Caramel Milk Tea Smoothie",
+       "portion": "20 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "290005",
+       "name": "Salted Caramel Milk Tea",
+       "portion": "20 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "290023",
+       "name": "Salted Caramel Thai Milk Tea",
+       "portion": "20 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "290012",
+       "name": "Strawberry Lemonade",
+       "portion": "20 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "290003",
+       "name": "Strawberry Popping Pearls",
+       "portion": "1 oz",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "290015",
+       "name": "Strawberry Smoothie",
+       "portion": "20 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "290000",
+       "name": "Tapioca Boba Pearls",
+       "portion": "2 ozl",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "290008",
+       "name": "Thai Milk Tea",
+       "portion": "20 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "290022",
+       "name": "Tropical Lemon Thai Tea",
+       "portion": "20 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Sandwiches",
+     "items": [
+      {
+       "recipeId": "010184",
+       "name": "Avocado & Arugula Sandwich",
+       "portion": "1 ea",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "868844",
+       "name": "BLT Sandwich",
+       "portion": "1 ea"
+      },
+      {
+       "recipeId": "010243",
+       "name": "Big and Green Salad",
+       "portion": "1 ea",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "700103",
+       "name": "Breakfast Burrito",
+       "portion": "1 ea",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "010229",
+       "name": "Chipotle Chickpea Salad Sandwich",
+       "portion": "1 ea",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "868882",
+       "name": "Hot Turkey Pesto Sandwich",
+       "portion": "1 ea"
+      },
+      {
+       "recipeId": "010187",
+       "name": "Salami Sandwich",
+       "portion": "1 ea"
+      },
+      {
+       "recipeId": "868811",
+       "name": "Soup and Cheese Toast Combo",
+       "portion": "1 ea",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "010188",
+       "name": "Turkey Sandwich",
+       "portion": "1 ea"
+      }
+     ]
+    },
+    {
+     "name": "Campus Bakery",
+     "items": [
+      {
+       "recipeId": "213414",
+       "name": "Chocolate Croissant",
+       "portion": "1 ea",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "213412",
+       "name": "Chocolate Muffin",
+       "portion": "1 ea",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "010237",
+       "name": "Cinnamon Roll",
+       "portion": "1 ea",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "213413",
+       "name": "Croissant",
+       "portion": "1 ea",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "299994",
+       "name": "Pumpkin Spice Muffin",
+       "portion": "1 ea",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "300014",
+       "name": "UCSC Bakery Feta Onion Rolls",
+       "portion": "1 ea",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "213410",
+       "name": "Vegan Chocolate Chip Cookies",
+       "portion": "1 ea",
+       "tags": [
+        "vegan"
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Grab & Go",
+     "items": [
+      {
+       "recipeId": "900165",
+       "name": "Calabrian Italian Club",
+       "portion": "1 ea"
+      },
+      {
+       "recipeId": "700163",
+       "name": "Chicken Penne Alfredo",
+       "portion": "1 ea"
+      },
+      {
+       "recipeId": "449903",
+       "name": "Chipotle Chicken Wrap",
+       "portion": "1 ea"
+      },
+      {
+       "recipeId": "700157",
+       "name": "Pesto Chicken Salad Pita Sandwich",
+       "portion": "1 ea"
+      },
+      {
+       "recipeId": "700115",
+       "name": "Pesto Pasta Salad",
+       "portion": "1 ea",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "260010",
+       "name": "Roma Sandwich",
+       "portion": "1 ea",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "260007",
+       "name": "Rotisserie Chicken Caesar Salad",
+       "portion": "1 ea"
+      },
+      {
+       "recipeId": "212556",
+       "name": "The Gobbler",
+       "portion": "1 ea"
+      },
+      {
+       "recipeId": "700121",
+       "name": "Turkey Bacon Provolone Sandwich",
+       "portion": "1 ea"
+      },
+      {
+       "recipeId": "700127",
+       "name": "Turkey Cheddar Croissant Sandwich",
+       "portion": "1 ea"
+      }
+     ]
+    },
+    {
+     "name": "Coffee & Tea -- New City of Santa Cruz Cup Fee of $.025 BYO and save up to $0.50 when ordering a togo drink",
+     "items": [
+      {
+       "recipeId": "013181",
+       "name": "Add Espresso Shot",
+       "portion": "1 ozl",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "013183",
+       "name": "Americano 12oz",
+       "portion": "1 ea",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "013186",
+       "name": "Americano 16oz",
+       "portion": "1 ea",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "013187",
+       "name": "Americano 20 oz",
+       "portion": "1 ea",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "025036",
+       "name": "Cappuccino, Single",
+       "portion": "12 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "026006",
+       "name": "Cappucino, Double",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "085021",
+       "name": "Caramel Latte, Double",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "077047",
+       "name": "Caramel Latte, Single",
+       "portion": "12 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "085050",
+       "name": "Caramel Latte, Triple",
+       "portion": "20 oz",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "042121",
+       "name": "Chai Latte",
+       "portion": "16 oz",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "085065",
+       "name": "Dirty Hazelnut Chai Latte",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "044253",
+       "name": "Espresso, Double Shot",
+       "portion": "4 ozl",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "044252",
+       "name": "Espresso, Single Shot",
+       "portion": "2 ozl",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "044255",
+       "name": "Espresso, Triple Shot",
+       "portion": "6 ozl",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "868873",
+       "name": "Hazelnut Latte, Double",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "868872",
+       "name": "Hazelnut Latte, Single",
+       "portion": "12 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "868874",
+       "name": "Hazelnut Latte, Triple",
+       "portion": "20 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "044239",
+       "name": "Hot Chocolate",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "042125",
+       "name": "Hot Tea",
+       "portion": "12 ozl",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "042078",
+       "name": "Latte, Double",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "028020",
+       "name": "Latte, Single",
+       "portion": "12 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "042091",
+       "name": "Latte, Triple",
+       "portion": "20 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "044247",
+       "name": "Matcha Green Tea Latte",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "042097",
+       "name": "Mocha, Double",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "042095",
+       "name": "Mocha, Single",
+       "portion": "12 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "042103",
+       "name": "Mocha, Triple",
+       "portion": "20 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "085063",
+       "name": "Peppermint Matcha Latte",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "868826",
+       "name": "Peppermint Mocha, 16 oz",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "085064",
+       "name": "Pumpkin Chai Latte",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "868817",
+       "name": "Pumpkin Latte, 16 oz",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "868829",
+       "name": "Raspberry White Mocha, 16 oz",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "868823",
+       "name": "Tea Latte",
+       "portion": "16 oz",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "087023",
+       "name": "Vanilla Latte, Double",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "085055",
+       "name": "Vanilla Latte, Single",
+       "portion": "12 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "087040",
+       "name": "Vanilla Latte, Triple",
+       "portion": "20 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "044209",
+       "name": "Whipped Cream",
+       "portion": "1 oz",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "042105",
+       "name": "White Mocha, Double",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "042104",
+       "name": "White Mocha, Single",
+       "portion": "12 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "042106",
+       "name": "White Mocha, Triple",
+       "portion": "20 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      }
+     ]
+    },
+    {
+     "name": "All Day",
+     "items": [
+      {
+       "recipeId": "020561",
+       "name": "Add Avocado",
+       "portion": "1/4 ea",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "040004",
+       "name": "Add Bacon",
+       "portion": "2 ea"
+      },
+      {
+       "recipeId": "020566",
+       "name": "Add Cheddar Cheese",
+       "portion": "1 ea",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "020562",
+       "name": "Add Pepper Jack Cheese",
+       "portion": "1 ea",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "020560",
+       "name": "Add Sliced Red Onion",
+       "portion": "1 oz",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "020559",
+       "name": "Add Sliced Tomato",
+       "portion": "1 oz",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "868865",
+       "name": "Chipotle Aioli",
+       "portion": "1 ozl",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "401022",
+       "name": "Coffee Bar Syrup Add On",
+       "portion": "1 oz",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "868861",
+       "name": "Gluten-Free Oat Milk",
+       "portion": "16 ozl",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "889988",
+       "name": "Half & Half",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "888968",
+       "name": "Italian Dry Salami",
+       "portion": "3 oz"
+      },
+      {
+       "recipeId": "888969",
+       "name": "Oven Roasted Turkey Breast",
+       "portion": "2 oz"
+      },
+      {
+       "recipeId": "888983",
+       "name": "Sliced Smoked Provolone Cheese",
+       "portion": "1 oz",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "868863",
+       "name": "Soy Milk",
+       "portion": "16 ozl",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "044209",
+       "name": "Whipped Cream",
+       "portion": "1 oz",
+       "tags": [
+        "vegetarian"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "22",
+   "name": "Perk Coffee Bar",
+   "short": "Perk Coffee Bar",
+   "location": "Baskin Engineering",
+   "description": "Grab-and-go breakfast burritos, hot panini, specialty espresso, and snacks at Baskin Engineering.",
+   "itemCount": 72,
+   "menuDate": "2026-11-13",
+   "categories": [
+    {
+     "name": "Grab & Go",
+     "items": [
+      {
+       "recipeId": "450113",
+       "name": "Bacon Breakfast Burrito",
+       "portion": "1 ea"
+      },
+      {
+       "recipeId": "700101",
+       "name": "Breakfast Burrito",
+       "portion": "1 ea",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "900161",
+       "name": "Calabrian Italian Club",
+       "portion": "1 ea"
+      },
+      {
+       "recipeId": "700161",
+       "name": "Chicken Penne Alfredo",
+       "portion": "1 ea"
+      },
+      {
+       "recipeId": "700143",
+       "name": "Chicken Salad Sandwich",
+       "portion": "1 ea"
+      },
+      {
+       "recipeId": "449904",
+       "name": "Chipotle Chicken Wrap",
+       "portion": "1 ea"
+      },
+      {
+       "recipeId": "700155",
+       "name": "Pesto Chicken Salad Pita Sandwich",
+       "portion": "1 ea"
+      },
+      {
+       "recipeId": "700113",
+       "name": "Pesto Pasta Salad",
+       "portion": "1 ea",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "850010",
+       "name": "Roma Sandwich",
+       "portion": "1 ea",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "480080",
+       "name": "Rotisserie Chicken Caesar Salad",
+       "portion": "1 ea"
+      },
+      {
+       "recipeId": "480085",
+       "name": "The Gobbler",
+       "portion": "1 ea"
+      },
+      {
+       "recipeId": "700119",
+       "name": "Turkey Bacon Provolone Sandwich",
+       "portion": "1 ea"
+      },
+      {
+       "recipeId": "700125",
+       "name": "Turkey Cheddar Croissant Sandwich",
+       "portion": "1 ea"
+      }
+     ]
+    },
+    {
+     "name": "Campus Bakery",
+     "items": [
+      {
+       "recipeId": "213110",
+       "name": "Chocolate Croissant",
+       "portion": "1 each",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "212771",
+       "name": "Chocolate Muffin",
+       "portion": "1 each",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "213106",
+       "name": "Croissant",
+       "portion": "1 each",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "299990",
+       "name": "Pumpkin Spice Muffin",
+       "portion": "1 ea",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "300010",
+       "name": "UCSC Bakery Feta Onion Rolls",
+       "portion": "1 ea",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "213130",
+       "name": "Vegan Chocolate Chip Cookies",
+       "portion": "1 ea",
+       "tags": [
+        "vegan"
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Coffee & Tea -- New City of Santa Cruz Cup Fee of $.025 BYO and save up to $0.50 when ordering a togo drink",
+     "items": [
+      {
+       "recipeId": "044297",
+       "name": "16 oz Cold Brew Coffee",
+       "portion": "16 ozl",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "013181",
+       "name": "Add Espresso Shot",
+       "portion": "1 ozl",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "013183",
+       "name": "Americano 12oz",
+       "portion": "1 ea",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "013186",
+       "name": "Americano 16oz",
+       "portion": "1 ea",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "013187",
+       "name": "Americano 20 oz",
+       "portion": "1 ea",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "025036",
+       "name": "Cappuccino, Single",
+       "portion": "12 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "026006",
+       "name": "Cappucino, Double",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "085021",
+       "name": "Caramel Latte, Double",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "077047",
+       "name": "Caramel Latte, Single",
+       "portion": "12 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "085050",
+       "name": "Caramel Latte, Triple",
+       "portion": "20 oz",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "042121",
+       "name": "Chai Latte",
+       "portion": "16 oz",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "042115",
+       "name": "Coffee, 12 oz",
+       "portion": "12 ozl",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "042116",
+       "name": "Coffee, 16 oz",
+       "portion": "16 ozl",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "042117",
+       "name": "Coffee, 20 oz",
+       "portion": "20 ozl",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "044253",
+       "name": "Espresso, Double Shot",
+       "portion": "4 ozl",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "044252",
+       "name": "Espresso, Single Shot",
+       "portion": "2 ozl",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "044255",
+       "name": "Espresso, Triple Shot",
+       "portion": "6 ozl",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "868873",
+       "name": "Hazelnut Latte, Double",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "868872",
+       "name": "Hazelnut Latte, Single",
+       "portion": "12 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "868874",
+       "name": "Hazelnut Latte, Triple",
+       "portion": "20 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "044239",
+       "name": "Hot Chocolate",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "042125",
+       "name": "Hot Tea",
+       "portion": "12 ozl",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "042078",
+       "name": "Latte, Double",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "028020",
+       "name": "Latte, Single",
+       "portion": "12 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "042091",
+       "name": "Latte, Triple",
+       "portion": "20 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "044247",
+       "name": "Matcha Green Tea Latte",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "042097",
+       "name": "Mocha, Double",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "042095",
+       "name": "Mocha, Single",
+       "portion": "12 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "042103",
+       "name": "Mocha, Triple",
+       "portion": "20 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "868823",
+       "name": "Tea Latte",
+       "portion": "16 oz",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "087023",
+       "name": "Vanilla Latte, Double",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "085055",
+       "name": "Vanilla Latte, Single",
+       "portion": "12 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "087040",
+       "name": "Vanilla Latte, Triple",
+       "portion": "20 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "085067",
+       "name": "Vietnamese Coffee, 16 oz",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "044209",
+       "name": "Whipped Cream",
+       "portion": "1 oz",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "042105",
+       "name": "White Mocha, Double",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "042104",
+       "name": "White Mocha, Single",
+       "portion": "12 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "042106",
+       "name": "White Mocha, Triple",
+       "portion": "20 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Beverages",
+     "items": [
+      {
+       "recipeId": "868876",
+       "name": "Iced Horchata",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "044261",
+       "name": "Italian Soda",
+       "portion": "16 ozl",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "044234",
+       "name": "Peach Mango Refresher",
+       "portion": "16 ozl",
+       "tags": [
+        "vegan"
+       ]
+      }
+     ]
+    },
+    {
+     "name": "All Day",
+     "items": [
+      {
+       "recipeId": "013174",
+       "name": "Add Caramel Sauce",
+       "portion": "1 oz",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "013176",
+       "name": "Add Chai",
+       "portion": "3 oz",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "013175",
+       "name": "Add Chocolate Sauce",
+       "portion": "1 oz",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "013181",
+       "name": "Add Espresso Shot",
+       "portion": "1 ozl",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "012179",
+       "name": "Add Horchata",
+       "portion": "1/2 oz",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "013180",
+       "name": "Add Matcha",
+       "portion": "1 tbsp",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "013173",
+       "name": "Add Pumpkin Sauce",
+       "portion": "1 oz",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "401022",
+       "name": "Coffee Bar Syrup Add On",
+       "portion": "1 oz",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "868861",
+       "name": "Gluten-Free Oat Milk",
+       "portion": "16 ozl",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "889988",
+       "name": "Half & Half",
+       "portion": "16 ozl",
+       "tags": [
+        "vegetarian"
+       ]
+      },
+      {
+       "recipeId": "868863",
+       "name": "Soy Milk",
+       "portion": "16 ozl",
+       "tags": [
+        "vegan"
+       ]
+      },
+      {
+       "recipeId": "044209",
+       "name": "Whipped Cream",
+       "portion": "1 oz",
+       "tags": [
+        "vegetarian"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

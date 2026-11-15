@@ -1,0 +1,112 @@
+rules_version = '2';
+
+// SlugGrub rankings (Karen). Deploy: `npx firebase-tools deploy --only firestore:rules --project <project-id>` (uses firebase.json).
+// Every write comes from src/lib/rankClient.ts inside one runTransaction. The rules tie each counter change to a vote (or skip)
+// document created or deleted in that same transaction, so a signed-in device can move each number by one vote, once per matchup.
+//   dishes/{hallId_recipeId}              Elo, votes, wins, skips per dish per hall (public read)
+//   votes/{uid}_{matchId}                 one per user per matchup per day, or per live round (matchId "live-<roundId>")
+//   skips/{uid}_{matchId}                 one per user per matchup per day
+//   rivalry/{week}/colleges/{college}     votes cast this week by each college's students (increment only)
+//   boards/{week}                         hall ranks when the week opened (create once)
+//   live/current                          the live QR round: two dishes and their tallies
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() { return request.auth != null; }
+    function d() { return request.resource.data; }
+    function old() { return resource.data; }
+    function mine(id) { return signedIn() && id.matches(request.auth.uid + '_.+'); }
+    function votePath(id) { return /databases/$(database)/documents/votes/$(id); }
+    function skipPath(id) { return /databases/$(database)/documents/skips/$(id); }
+    function voteAdded(id) { return mine(id) && !exists(votePath(id)) && existsAfter(votePath(id)); }
+    function voteRemoved(id) { return mine(id) && exists(votePath(id)) && !existsAfter(votePath(id)); }
+    function skipAdded(id) { return mine(id) && !exists(skipPath(id)) && existsAfter(skipPath(id)); }
+    function eloStep(a, b) { return a - b <= 48 && b - a <= 48; }
+    function colleges() {
+      return ['Cowell', 'Stevenson', 'Crown', 'Merrill', 'Porter', 'Kresge', 'Oakes', 'Rachel Carson', 'College Nine', 'John R. Lewis'];
+    }
+    function halls() { return ['40', '05', '20', '25', '30']; }
+
+    match /dishes/{dishId} {
+      allow read: if true;
+      function shape() {
+        return d().keys().hasOnly(['recipeId', 'name', 'hallId', 'elo', 'votes', 'wins', 'skips', 'lastVoteId', 'lastSkipId'])
+          && d().recipeId is string && d().name is string && d().name.size() <= 120 && d().hallId in halls()
+          && dishId == d().hallId + '_' + d().recipeId
+          && d().elo is number && d().votes is int && d().wins is int && d().skips is int
+          && d().votes >= 0 && d().wins >= 0 && d().wins <= d().votes && d().skips >= 0;
+      }
+      allow create: if shape() && d().elo >= 1000 && d().elo <= 1400 && (
+          (d().votes == 1 && d().wins <= 1 && d().skips == 0 && voteAdded(d().lastVoteId))
+          || (d().votes == 0 && d().wins == 0 && d().skips == 1 && skipAdded(d().lastSkipId)));
+      allow update: if shape()
+        && d().recipeId == old().recipeId && d().name == old().name && d().hallId == old().hallId
+        && (
+          // a vote: one more match, at most one more win, Elo moves by at most one K
+          (d().votes == old().votes + 1 && d().wins - old().wins in [0, 1] && d().skips == old().skips
+            && eloStep(d().elo, old().elo) && voteAdded(d().lastVoteId))
+          // an undo of this user's vote
+          || (d().votes == old().votes - 1 && old().wins - d().wins in [0, 1] && d().skips == old().skips
+            && eloStep(d().elo, old().elo) && voteRemoved(d().lastVoteId))
+          // a skip
+          || (d().votes == old().votes && d().wins == old().wins && d().elo == old().elo
+            && d().skips == old().skips + 1 && skipAdded(d().lastSkipId))
+        );
+      allow delete: if false;
+    }
+
+    match /votes/{id} {
+      allow read: if mine(id);
+      allow create: if mine(id) && d().userId == request.auth.uid
+        && d().keys().hasOnly(['winnerRecipeId', 'loserRecipeId', 'winnerHallId', 'loserHallId', 'userId', 'college', 'matchId', 'delta', 'at'])
+        && id == request.auth.uid + '_' + d().matchId
+        && d().winnerHallId in halls() && d().loserHallId in halls()
+        && (!('college' in d()) || d().college in colleges())
+        && d().delta is int && d().delta >= 0 && d().delta <= 48;
+      // undo a this-or-that vote; live-round ballots stay
+      allow delete: if mine(id) && !old().matchId.matches('live-.*');
+      allow update: if false;
+    }
+
+    match /skips/{id} {
+      allow read: if mine(id);
+      allow create: if mine(id) && d().userId == request.auth.uid && d().keys().hasOnly(['userId', 'a', 'b', 'at']);
+      allow update, delete: if false;
+    }
+
+    match /rivalry/{week}/colleges/{college} {
+      allow read: if true;
+      allow create: if signedIn() && college in colleges() && d().keys().hasOnly(['votes', 'lastVoteId'])
+        && d().votes == 1 && voteAdded(d().lastVoteId);
+      allow update: if signedIn() && d().keys().hasOnly(['votes', 'lastVoteId'])
+        && ((d().votes == old().votes + 1 && voteAdded(d().lastVoteId))
+          || (d().votes == old().votes - 1 && voteRemoved(d().lastVoteId)));
+      allow delete: if false;
+    }
+
+    match /boards/{week} {
+      allow read: if true;
+      allow create: if signedIn() && d().keys().hasOnly(['ranks', 'at']) && d().ranks is map && d().ranks.keys().hasOnly(halls());
+      allow update, delete: if false;
+    }
+
+    match /live/{id} {
+      allow read: if true;
+      function sideOk(s) { return s is map && s.keys().hasOnly(['key', 'recipeId', 'name', 'hallId']) && s.hallId in halls(); }
+      function newRound() {
+        return id == 'current' && d().keys().hasOnly(['roundId', 'a', 'b', 'aVotes', 'bVotes', 'startedAt'])
+          && d().roundId is string && sideOk(d().a) && sideOk(d().b) && d().aVotes == 0 && d().bVotes == 0;
+      }
+      // one ballot: one tally up by one, tied to this user's vote document for this round
+      function ballot() {
+        return d().roundId == old().roundId && d().a == old().a && d().b == old().b && d().startedAt == old().startedAt
+          && ((d().aVotes == old().aVotes + 1 && d().bVotes == old().bVotes) || (d().bVotes == old().bVotes + 1 && d().aVotes == old().aVotes))
+          && voteAdded(request.auth.uid + '_live-' + d().roundId);
+      }
+      // any signed-in device may start a round (the projector's Next round); tighten to a host uid before a public launch
+      allow create: if signedIn() && newRound();
+      allow update: if signedIn() && ((newRound() && d().roundId != old().roundId) || ballot());
+      allow delete: if false;
+    }
+  }
+}

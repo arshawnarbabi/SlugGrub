@@ -1,26 +1,357 @@
 @import "tailwindcss";
 
+/* ─────────────────────────────────────────────────────────────────────────────
+   SlugGrub tokens. Owner: Arshawn. Every value comes from docs/DESIGN.md (frontmatter);
+   change it there first, then here. Light mode only for the hackathon.
+   Surface rule (his decision, DECISIONS.md 2026-11-14): everything is FLAT except the
+   bottom nav bar, the top bar round buttons and the food button (Sidestash finish).
+   ───────────────────────────────────────────────────────────────────────────── */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* surfaces (DESIGN colors.surface) */
+  --paper: oklch(0.948 0.004 250);       /* page, his step 7 */
+  --paper-2: oklch(0.916 0.005 250);     /* tracks, capsules */
+  --card: oklch(0.985 0.002 250);        /* flat cards, flat buttons */
+  --overlay: oklch(1 0 0);
+  --raise: linear-gradient(180deg, oklch(0.993 0.002 250) 0%, oklch(0.963 0.004 250) 100%); /* Sidestash finish */
+  --hi: oklch(1 0 0);                    /* Sidestash white hairline */
+  --line: oklch(0 0 0 / 0.07);           /* 0.5px dividers */
+
+  /* ink (DESIGN colors.text) */
+  --ink: oklch(0.18 0.015 255);
+  --ink-2: oklch(0.42 0.012 255);
+  --ink-3: oklch(0.6 0.01 255);
+
+  /* primary blue, generated (DESIGN colors.primary) */
+  --p1: oklch(0.99 0.005 252); --p2: oklch(0.97 0.015 252); --p3: oklch(0.95 0.025 252); --p4: oklch(0.92 0.04 252);
+  --p5: oklch(0.88 0.061 252); --p6: oklch(0.83 0.088 252); --p7: oklch(0.75 0.124 252); --p8: oklch(0.66 0.149 252);
+  --p9: oklch(0.52 0.156 252); --p10: oklch(0.46 0.138 252); --p11: oklch(0.38 0.091 252); --p12: oklch(0.22 0.05 252);
+
+  /* gold accent: #1 moments only (DESIGN colors.accent) */
+  --y3: oklch(0.97 0.06 95); --y9: oklch(0.85 0.17 90); --y11: oklch(0.5 0.11 85);
+
+  /* status, macros, colleges */
+  --ok: oklch(0.55 0.13 145); --ok-bg: oklch(0.95 0.035 145);
+  --warn: oklch(0.7 0.15 65); --warn-bg: oklch(0.95 0.045 75);
+  --bad: oklch(0.57 0.18 27); --bad-bg: oklch(0.95 0.03 27);
+  --protein: oklch(0.64 0.16 25); --carbs: oklch(0.74 0.15 65); --fat: oklch(0.64 0.12 250);
+  --c-jrl: oklch(0.55 0.15 275); --c-cowell: oklch(0.7 0.14 70); --c-crown: oklch(0.6 0.11 200);
+  --c-porter: oklch(0.58 0.17 345); --c-oakes: oklch(0.66 0.16 45);
+
+  /* shape */
+  --r-sm: 12px; --r-md: 18px; --r-lg: 24px; --r-pill: 999px;
+  --chip-shadow: 0 1px 2px oklch(0.22 0.01 255 / 0.08);
+  --float-shadow: 0 1px 2px oklch(0.22 0.01 255 / 0.08), 0 10px 28px -6px oklch(0.22 0.01 255 / 0.14);
+
+  /* motion (DESIGN motion): THE spring sampled for CSS, THE easing */
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --spring: linear(0, 0.042, 0.138, 0.262, 0.393, 0.518, 0.627, 0.723, 0.802, 0.863, 0.911, 0.947, 0.973, 0.990, 1.001, 1.008, 1.012, 1.013, 1.013, 1.011, 1.010, 1.008, 1.007, 1.005, 1.004, 1.003, 1.002, 1.001, 1);
+  --dur-spring: 500ms;
+  --dur-ui: 220ms;
+
+  --font: var(--font-manrope), -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  color-scheme: light;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
+* { box-sizing: border-box; }
+html, body { height: 100%; }
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font);
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
 }
+button { font: inherit; color: inherit; }
+img { display: block; max-width: 100%; }
+.num { font-variant-numeric: tabular-nums; }
+
+/* ── app shell: one phone-width column, scrolling between pinned edges ── */
+.app { position: relative; height: 100dvh; max-width: 440px; margin: 0 auto; overflow: hidden; background: var(--paper); }
+.scroller { position: absolute; inset: 0; overflow-y: auto; overflow-x: hidden; scrollbar-width: none; padding: calc(env(safe-area-inset-top, 0px) + 12px) 16px calc(env(safe-area-inset-bottom, 0px) + 116px); display: flex; flex-direction: column; gap: 14px; }
+.scroller::-webkit-scrollbar { display: none; }
+.scroller > * { flex-shrink: 0; }
+.scroller.no-tabbar { padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 32px); }
+
+/* ── Scroll edges: Magic UI's progressive blur, cloned cheap (his ask 2026-11-14). Same technique (stacked backdrop-blur layers,
+   each masked to an overlapping band, so blur steps up toward the edge) with 4 layers at 1, 2, 4, 8px instead of 8 layers up to 64px.
+   No lighten layer. The edges sit BEHIND the pinned chrome (sticky top bar z 6, nav bar z 8) and above scrolling content (z 1),
+   and end where content starts at rest. BLUR BUDGET (DESIGN effects.blur_budget, a MUST): 4 layers per edge, max 8px, never
+   animated. ── */
+:root {
+  --top-chrome: calc(env(safe-area-inset-top, 0px) + 64px);
+  --bottom-chrome: calc(env(safe-area-inset-bottom, 0px) + 104px);
+}
+.edge { position: absolute; left: 0; right: 0; pointer-events: none; z-index: 5; }
+.edge.top { top: 0; height: var(--top-chrome); }
+.edge.bottom { bottom: 0; height: var(--bottom-chrome); }
+.edge > i { position: absolute; inset: 0; }
+@media (prefers-reduced-transparency: reduce) { .edge { display: none; } }
+
+/* ── type (DESIGN typography; sentence case only, never all caps) ── */
+.title-xl { font-weight: 700; font-size: 30px; letter-spacing: -0.04em; line-height: 1.05; margin: 0; }
+.title-lg { font-weight: 700; font-size: 22px; letter-spacing: -0.035em; line-height: 1.15; margin: 0; }
+.label { font-size: 13px; font-weight: 500; color: var(--ink-3); }
+.body { font-size: 15px; line-height: 1.5; color: var(--ink-2); margin: 0; }
+.hero-num { font-size: 48px; font-weight: 700; letter-spacing: -0.045em; line-height: 1; font-variant-numeric: tabular-nums; }
+.hero-num small { font-size: 0.42em; font-weight: 500; color: var(--ink-3); letter-spacing: 0; margin-left: 4px; }
+.sechead { display: flex; justify-content: space-between; align-items: center; }
+.sechead h2 { font-size: 17px; font-weight: 700; letter-spacing: -0.02em; margin: 0; }
+
+/* ── flat elements ── */
+.card { background: var(--card); border-radius: var(--r-md); padding: 14px; }
+.card.tight { padding: 10px; }
+.card.flush { padding: 0; overflow: hidden; }
+.row { display: flex; align-items: center; gap: 12px; padding: 10px 0; }
+.row + .row { border-top: 0.5px solid var(--line); }
+.row .grow { flex: 1; min-width: 0; }
+.row .title { font-weight: 600; font-size: 15px; letter-spacing: -0.01em; }
+.row .sub { font-size: 12px; color: var(--ink-3); margin-top: 2px; }
+
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 50px; padding: 0 22px; border-radius: var(--r-pill); border: 0; font-weight: 700; font-size: 15px; letter-spacing: -0.01em; cursor: pointer; text-decoration: none; }
+.btn-primary { background: var(--p9); color: white; }
+.btn-secondary { background: var(--card); color: var(--ink); }
+.btn-ghost { background: transparent; color: var(--p9); }
+.btn-block { width: 100%; }
+.btn-sm { height: 36px; padding: 0 14px; font-size: 13px; }
+.btn:focus-visible, .iconbtn:focus-visible, .chip:focus-visible { outline: 2px solid var(--p8); outline-offset: 2px; }
+
+.pill { display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: var(--r-pill); font-size: 12px; font-weight: 600; }
+.pill.ok { background: var(--ok-bg); color: var(--ok); }
+.pill.warn { background: var(--warn-bg); color: oklch(0.5 0.12 60); }
+.pill.neutral { background: var(--paper-2); color: var(--ink-2); }
+.dot { width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+.tint { display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 12px; border-radius: var(--r-pill); font-size: 13px; font-weight: 600; border: 0; }
+.tint.blue { background: var(--p3); color: var(--p9); }
+.tint.gold { background: var(--y3); color: var(--y11); }
+.delta { display: inline-flex; align-items: center; gap: 3px; height: 22px; padding: 0 8px; border-radius: var(--r-pill); font-size: 12px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.delta.up { background: var(--ok-bg); color: var(--ok); }
+.delta.down { background: var(--bad-bg); color: var(--bad); }
+.seeall { display: inline-flex; align-items: center; height: 28px; padding: 0 12px; border-radius: var(--r-pill); background: var(--card); font-size: 12px; font-weight: 600; border: 0; color: var(--ink); text-decoration: none; cursor: pointer; }
+.chip { display: inline-flex; align-items: center; height: 42px; padding: 0 16px; border-radius: var(--r-pill); font-size: 15px; font-weight: 600; background: var(--card); border: 0; cursor: pointer; }
+.chip.on { background: var(--p9); color: white; }
+.iconbtn { width: 38px; height: 38px; border-radius: 50%; background: var(--card); display: grid; place-items: center; color: var(--ink); flex: 0 0 auto; border: 0; cursor: pointer; text-decoration: none; }
+
+/* Sidestash finish: ONLY top bar round buttons, the nav bar, the food button */
+.topbar { display: flex; align-items: center; justify-content: space-between; gap: 10px; min-height: 38px; position: sticky; top: calc(env(safe-area-inset-top, 0px) + 12px); z-index: 6 !important; margin-bottom: 8px; }
+.topbar .iconbtn { background: var(--raise); border: 0.5px solid var(--hi); box-shadow: var(--chip-shadow); }
+.topbar .center { font-size: 15px; font-weight: 600; }
+
+/* photos */
+.ph { position: relative; overflow: hidden; border-radius: var(--r-md); background: var(--paper-2); flex: 0 0 auto; }
+.ph img { width: 100%; height: 100%; object-fit: cover; }
+.on-photo { position: absolute; left: 10px; top: 10px; display: inline-flex; align-items: center; gap: 5px; height: 26px; padding: 0 10px; border-radius: var(--r-pill); background: oklch(1 0 0 / 0.94); color: var(--ink); font-size: 12px; font-weight: 600; }
+.on-photo.gold { background: var(--y9); }
+.carousel { display: flex; gap: 10px; overflow-x: auto; scrollbar-width: none; margin: 0 -16px; padding: 0 16px; scroll-snap-type: x mandatory; }
+.carousel::-webkit-scrollbar { display: none; }
+.carousel > * { scroll-snap-align: start; flex: 0 0 auto; }
+
+/* segmented control + tab bar, both ride one goo thumb (DESIGN motion.goo) */
+.seg { display: inline-flex; padding: 4px; border-radius: var(--r-pill); background: var(--paper-2); align-self: flex-start; }
+.track { position: relative; display: flex; align-items: center; }
+.track > button { position: relative; z-index: 1; }
+.goo-thumb { position: absolute; left: 0; border-radius: 999px; }
+.seg button { all: unset; position: relative; z-index: 1; cursor: pointer; padding: 7px 14px; border-radius: var(--r-pill); font-size: 13px; font-weight: 500; color: var(--ink-2); }
+.seg button.on { color: var(--ink); font-weight: 700; }
+.seg button:focus-visible { outline: 2px solid var(--p8); outline-offset: 2px; }
+
+.tabbar { position: absolute; left: 12px; right: 12px; bottom: calc(env(safe-area-inset-bottom, 0px) + 14px); display: flex; align-items: center; gap: 10px; z-index: 8; }
+.pillbar { flex: 1; height: 62px; border-radius: var(--r-pill); background: var(--raise); border: 0.5px solid var(--hi); box-shadow: var(--float-shadow); padding: 0 6px; display: flex; align-items: center; }
+.pillbar > .track { width: 100%; justify-content: space-around; }
+.tab { all: unset; cursor: pointer; position: relative; z-index: 1; display: grid; justify-items: center; gap: 2px; padding: 7px 10px; border-radius: var(--r-pill); font-size: 10px; font-weight: 700; color: var(--ink-3); }
+.tab.on { color: var(--ink); }
+.tab:focus-visible { outline: 2px solid var(--p8); outline-offset: 2px; }
+
+/* food button (gooey, Sidestash light and shade inside the blob) */
+.food-wrap { position: relative; width: 62px; height: 62px; flex: 0 0 auto; }
+.food-main { all: unset; cursor: pointer; width: 62px; height: 62px; border-radius: 50%; display: grid; place-items: center; color: white; }
+.drop { all: unset; cursor: pointer; width: 48px; height: 48px; border-radius: 50%; display: grid; place-items: center; color: white; opacity: 0; filter: blur(4px); transform: scale(0.92); transition: opacity var(--dur-ui) var(--ease), filter var(--dur-ui) var(--ease), transform var(--dur-spring) var(--spring); }
+.drop.on { opacity: 1; filter: none; transform: scale(1); transition-delay: 90ms; }
+.food-main:focus-visible, .drop:focus-visible { outline: 2px solid var(--p8); outline-offset: 3px; }
+
+/* ── press feedback (his ask 2026-11-14: "when pressing buttons just make it normal, no expand or compress"): a plain iOS-style
+   highlight, the pressed control dims a little while held. No scale anywhere. ── */
+:is(.btn, .chip, .seeall, .tint, .press, .tab, .seg button, .iconbtn, .drop, .duel-opt, .textbtn, .vote-blk) { transition: opacity 120ms ease, background-color var(--dur-ui) var(--ease); }
+:is(.btn, .chip, .seeall, .tint, .press, .tab, .seg button, .iconbtn, .duel-opt, .textbtn, .vote-blk):active { opacity: 0.6; }
+@media (hover: hover) { .press:hover { background: oklch(0.99 0.002 250); } }
+@media (prefers-reduced-motion: reduce) { * { transition-duration: 0ms !important; animation-duration: 0ms !important; } }
+
+/* rank duel */
+.duel { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; position: relative; }
+.duel-opt { all: unset; cursor: pointer; background: var(--card); border-radius: var(--r-lg); padding: 8px 8px 12px; display: grid; justify-items: center; gap: 8px; text-align: center; }
+.duel-opt.picked { box-shadow: inset 0 0 0 2.5px var(--p9); }
+.duel-opt:focus-visible { outline: 2px solid var(--p8); outline-offset: 2px; }
+.or { position: absolute; left: 50%; top: 40%; transform: translate(-50%, -50%); width: 38px; height: 38px; border-radius: 50%; background: var(--ink); color: var(--paper); display: grid; place-items: center; font-size: 13px; font-weight: 700; z-index: 2; }
+.pick-check { position: absolute; right: 8px; top: 8px; width: 28px; height: 28px; border-radius: 50%; background: var(--card); color: var(--p9); display: grid; place-items: center; }
+.textbtn { all: unset; cursor: pointer; display: inline-flex; gap: 5px; align-items: center; padding: 4px 6px; border-radius: 8px; font-size: 14px; font-weight: 600; color: var(--ink-2); }
+
+/* slider */
+.gs-track { position: relative; height: 8px; border-radius: 999px; background: var(--paper-2); cursor: pointer; touch-action: none; margin: 10px 0; }
+.gs-track:focus-visible { outline: 2px solid var(--p8); outline-offset: 6px; }
+.gs-fill { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 999px; background: var(--p7); }
+.gs-thumb { position: absolute; top: 14px; width: 26px; height: 26px; border-radius: 50%; margin-top: -9px; }
+
+/* vote blocks */
+.vote-blk { position: relative; overflow: hidden; border-radius: var(--r-lg); color: white; display: flex; align-items: flex-end; padding: 18px; border: 0; cursor: pointer; text-align: left; font: inherit; width: 100%; }
+.vote-blk img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.vote-blk::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, oklch(0.18 0.02 255 / 0.05) 30%, oklch(0.18 0.02 255 / 0.74)); }
+.vote-blk > div { position: relative; z-index: 1; width: 100%; }
+.bar { height: 6px; border-radius: 999px; background: oklch(1 0 0 / 0.3); overflow: hidden; margin-top: 8px; }
+.bar i { display: block; height: 100%; background: white; border-radius: 999px; }
+
+.wash { position: absolute; inset: 0 0 auto; height: 240px; background: linear-gradient(180deg, color-mix(in oklch, var(--p9) 15%, transparent), color-mix(in oklch, var(--p9) 0%, transparent)); pointer-events: none; z-index: 0; }
+.scroller > :not(.wash):not(.topbar) { position: relative; z-index: 1; }
+
+/* links styled as cards or buttons */
+a.card { display: block; color: inherit; text-decoration: none; }
+a.btn { text-decoration: none; }
+
+/* nav bar selection (his ask 2026-11-14, refs: wide capsule hugging the bar): tabs split the bar equally and fill its height, inset
+   5px on every side, so the goo capsule is wide and concentric with the outer pill (inner radius = outer radius minus the inset). */
+.pillbar { padding: 5px; }
+.pillbar > .track { width: 100%; height: 100%; justify-content: stretch; }
+.pillbar .tab { flex: 1 1 0; height: 100%; padding: 0; display: grid; place-content: center; justify-items: center; gap: 2px; border-radius: var(--r-pill); }
+
+/* ── sizing scale (his ask 2026-11-14: buttons sized right relative to each other and the content). Every tap target is at least
+   44px (Apple HIG). Heights: nav bar and food button 62 · primary buttons 52 · top bar icon buttons 44 · chips 42 (small 40) ·
+   segmented buttons 38 in a 46 track · top bar tags 36 · See all 32 (44 tap area) · text buttons 44 tap height. ── */
+.topbar { min-height: 44px; }
+.topbar .iconbtn { width: 44px; height: 44px; }
+.topbar .iconbtn svg { width: 20px; height: 20px; }
+.topbar .tint { height: 36px; padding: 0 14px; font-size: 14px; }
+.btn { height: 52px; font-size: 16px; }
+.btn-sm { height: 40px; font-size: 14px; }
+.seg button { padding: 9px 16px; font-size: 14px; }
+.seeall { height: 32px; padding: 0 14px; font-size: 13px; position: relative; }
+.seeall::before { content: ""; position: absolute; inset: -6px -4px; }
+.textbtn { min-height: 44px; padding: 0 10px; }
+.chip.chip-sm { height: 40px; font-size: 14px; padding: 0 14px; }
+
+/* subtle progressive fade with the blur (his ask 2026-11-14): content fades toward the page color on the same direction as the blur
+   bands, eased (0 at the inner end, ~65% at the very edge; raised from 45% at his ask "make fade out a bit more intense"). A plain gradient, no filter, so it costs almost nothing. It lives in the
+   edge layer, behind the sticky top bar and nav bar, so only scrolled content fades. */
+.edge > b { position: absolute; inset: 0; pointer-events: none; }
+.edge.top > b { background: linear-gradient(to top, color-mix(in oklch, var(--paper) 0%, transparent) 0%, color-mix(in oklch, var(--paper) 10%, transparent) 30%, color-mix(in oklch, var(--paper) 30%, transparent) 60%, color-mix(in oklch, var(--paper) 65%, transparent) 100%); }
+.edge.bottom > b { background: linear-gradient(to bottom, color-mix(in oklch, var(--paper) 0%, transparent) 0%, color-mix(in oklch, var(--paper) 10%, transparent) 30%, color-mix(in oklch, var(--paper) 30%, transparent) 60%, color-mix(in oklch, var(--paper) 65%, transparent) 100%); }
+
+/* ── Content-only fade (his rule 2026-11-14: "dont have the blur and lighten over the background"). The color overlay is gone: the
+   scroller itself is masked, so scrolled content fades out toward the edges (to ~35% at the very edge, eased) and the background
+   (page color and the blue glow, both behind the scroller) is never touched. The top bar is outside the scroller. ── */
+.edge > b { display: none; }
+.wash { position: absolute; inset: 0 0 auto; z-index: 0; }
+.scroller { z-index: 1; }
+.scroller.has-top { padding-top: calc(env(safe-area-inset-top, 0px) + 72px); }
+.scroller > :not(.wash):not(.topbar) { position: relative; z-index: auto; }
+.topchrome { position: absolute; left: 16px; right: 16px; top: calc(env(safe-area-inset-top, 0px) + 12px); z-index: 6; }
+.topchrome .topbar { position: static; margin: 0; }
+.scroller {
+  mask-image: linear-gradient(to bottom,
+    rgb(0 0 0 / 0.35) 0, rgb(0 0 0 / 0.7) calc(var(--top-chrome) * 0.4), rgb(0 0 0 / 0.9) calc(var(--top-chrome) * 0.7), #000 var(--top-chrome),
+    #000 calc(100% - var(--bottom-chrome)),
+    rgb(0 0 0 / 0.9) calc(100% - var(--bottom-chrome) * 0.7), rgb(0 0 0 / 0.7) calc(100% - var(--bottom-chrome) * 0.4), rgb(0 0 0 / 0.35) 100%);
+}
+.scroller.no-tabbar {
+  mask-image: linear-gradient(to bottom,
+    rgb(0 0 0 / 0.35) 0, rgb(0 0 0 / 0.7) calc(var(--top-chrome) * 0.4), rgb(0 0 0 / 0.9) calc(var(--top-chrome) * 0.7), #000 var(--top-chrome), #000 100%);
+}
+.edge { z-index: 5; }
+
+/* ── Mobile scrolling (his report 2026-11-14: on iPhone Safari and Chrome, sometimes the app scrolls and sometimes the whole web
+   page does). Every iOS browser is WebKit, and WebKit still does not reliably honor overscroll-behavior on the main document, so the
+   fix is structural: the document can never scroll (html and body are pinned and clipped), only .scroller scrolls. The chrome
+   (top bar, nav bar) refuses pan gestures so a drag starting on it cannot move the page. overscroll-behavior is still set for
+   Android Chrome, where it works (no pull-to-refresh, no scroll chaining). touch-action: manipulation removes double-tap zoom and
+   tap delay without blocking pinch zoom (accessibility). ── */
+html, body { position: fixed; inset: 0; width: 100%; height: 100%; overflow: hidden; overscroll-behavior: none; touch-action: manipulation; }
+.app { height: 100%; }
+.scroller { overscroll-behavior: contain; -webkit-overflow-scrolling: touch; touch-action: pan-y pinch-zoom; }
+.carousel { overscroll-behavior-x: contain; touch-action: pan-x pan-y pinch-zoom; }
+.topchrome, .tabbar { touch-action: none; }
+.gs-track { touch-action: none; }
+
+/* ── Apple HIG pass (2026-11-14, his ask), from the HIG Accessibility page: text up to 17pt needs 4.5:1 contrast, 18pt+ or bold 3:1;
+   iOS default text 17pt, minimum 11pt; controls 44x44pt by default. ── */
+:root {
+  --ink-3: oklch(0.52 0.01 255);   /* was 0.6 (3.4 to 3.8:1); now 4.7 to 5.3:1 on page, cards and the nav bar */
+  --ok: oklch(0.48 0.13 145);      /* pill text 5.4:1 on its tint (was 4.0) */
+  --bad: oklch(0.5 0.18 27);       /* pill text 5.6:1 on its tint (was 4.2) */
+}
+.title-xl { font-size: 34px; letter-spacing: -0.035em; }   /* HIG Large Title 34pt */
+.body { font-size: 17px; }                                  /* HIG Body 17pt */
+.tab { font-size: 11px; }                                   /* HIG minimum 11pt (was 10) */
+input, textarea, select { font-size: 17px !important; }     /* 16px or more also stops iOS Safari zooming into the field */
+
+/* scroll-edge layers (performance pass 2026-11-14): 3 per edge at 2, 4, 8px; the 1px layer added nothing visible */
+.edge.top > i:nth-child(1) { backdrop-filter: blur(2px); mask-image: linear-gradient(to top, transparent 0.00%, #000 33.33%, #000 66.67%, transparent 100.00%); }
+.edge.top > i:nth-child(2) { backdrop-filter: blur(4px); mask-image: linear-gradient(to top, transparent 33.33%, #000 66.67%, #000 100.00%, transparent 133.33%); }
+.edge.top > i:nth-child(3) { backdrop-filter: blur(8px); mask-image: linear-gradient(to top, transparent 66.67%, #000 100%); }
+.edge.bottom > i:nth-child(1) { backdrop-filter: blur(2px); mask-image: linear-gradient(to bottom, transparent 0.00%, #000 33.33%, #000 66.67%, transparent 100.00%); }
+.edge.bottom > i:nth-child(2) { backdrop-filter: blur(4px); mask-image: linear-gradient(to bottom, transparent 33.33%, #000 66.67%, #000 100.00%, transparent 133.33%); }
+.edge.bottom > i:nth-child(3) { backdrop-filter: blur(8px); mask-image: linear-gradient(to bottom, transparent 66.67%, #000 100%); }
+.edge > i:nth-child(n+4) { display: none; }
+/* repaints stay inside each card and photo */
+.card, .ph, .duel-opt, .vote-blk { contain: paint; }
+.goo-thumb, .gs-thumb { will-change: transform; }
+
+/* ── Every phone size (his ask 2026-11-14). Widths from 320 (iPhone SE 1st gen) to 440 (Pro Max); the column caps at 440 and centers on
+   larger screens. Controls scale with the screen instead of overflowing; titles step down on the smallest phones; landscape keeps
+   content clear of the notch. ── */
+.seg { max-width: 100%; }
+.seg > .track { min-width: 0; }
+.seg button { padding: 9px clamp(8px, 3.4vw, 16px); font-size: clamp(13px, 3.6vw, 14px); white-space: nowrap; }
+.title-xl { font-size: clamp(28px, 8.6vw, 34px); }
+.hero-num { font-size: clamp(40px, 12vw, 48px); }
+.scroller, .topchrome { padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.topchrome { left: 0; right: 0; }
+.tabbar { left: max(12px, env(safe-area-inset-left, 0px)); right: max(12px, env(safe-area-inset-right, 0px)); }
+.duel-opt span { overflow-wrap: anywhere; }
+@media (max-width: 359px) {
+  .tab { font-size: 10px; padding: 0; }
+  .pillbar .tab svg { width: 19px; height: 19px; }
+  .chip { padding: 0 12px; font-size: 14px; }
+}
+@media (max-width: 359px) { .seg button { padding: 9px 6px; font-size: 12px; } }
+
+/* Clickable cards get a right chevron at the top right (his ask 2026-11-14: "on clicable ui cards at a right chevron on the top right").
+   Plain cards: a quiet ink-3 chevron. Photo-topped cards: the same chevron on a white chip, matching .on-photo. */
+.card.link { position: relative; color: inherit; text-decoration: none; }
+.card-chev { position: absolute; z-index: 2; top: 13px; right: 12px; display: grid; place-items: center; color: var(--ink-3); pointer-events: none; }
+.card.tight > .card-chev { top: 9px; right: 9px; }
+.card-chev.on-img { top: 10px; right: 10px; width: 26px; height: 26px; border-radius: var(--r-pill); background: oklch(1 0 0 / 0.94); color: var(--ink); }
+
+/* Launch splash (src/components/ui/Splash.tsx; his idea 2026-11-14 after Trackify's launch, revised the same day: "gaussian blur
+   the app backgrond whil hte loading icon is animating in, and remove hte fill card behind it. when the icon fades out at the same
+   time blur in the content at the same length"). The real app sits under one 8px backdrop blur while the blue rice bowl draws
+   itself; then the icon blur-fades out while the blur layer fades off over the same 300ms, so the app comes into focus.
+   Blur budget: the radius is fixed at 8px and never animates (only the layer's opacity does); it is a 7th backdrop layer for
+   about 1 s at launch only, then removed from the DOM. Once per full page load. */
+.splash { position: fixed; inset: 0; z-index: 100; display: grid; place-items: center; pointer-events: none; backdrop-filter: blur(12px); animation: splash-out 300ms cubic-bezier(.4, 0, .2, 1) 760ms forwards; }
+.splash-tile { display: grid; place-items: center; color: var(--p9); animation: splash-icon-out 300ms cubic-bezier(.4, 0, .2, 1) 760ms forwards; }
+.splash path { stroke-dasharray: 1; stroke-dashoffset: 1; animation: splash-draw 440ms cubic-bezier(.65, 0, .35, 1) forwards; }
+.splash .splash-p1 { animation-delay: 90ms; }
+.splash .splash-p2 { animation-delay: 300ms; animation-duration: 260ms; }
+.splash .splash-p3 { animation-delay: 360ms; animation-duration: 240ms; }
+@keyframes splash-draw { to { stroke-dashoffset: 0; } }
+@keyframes splash-out { to { opacity: 0; visibility: hidden; } }
+@keyframes splash-icon-out { to { opacity: 0; filter: blur(4px); } }
+@media (prefers-reduced-motion: reduce) {
+  .splash path { animation: none; stroke-dashoffset: 0; }
+  .splash, .splash-tile { animation-delay: 300ms; animation-duration: 200ms; }
+  .splash-tile { animation-name: splash-out; }
+}
+
+/* Top bar hall chip carrying "hall · meal · hours" (his ask 2026-11-14): always one line; the end (the hours) truncates with an
+   ellipsis before anything wraps, so it fits beside the notifications button down to 320px. */
+.tint.fit { min-width: 0; max-width: 100%; flex: 0 1 auto; }
+.tint.fit svg { flex: none; }
+.tint .clip { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* Live vote projector view (/vote/screen, src/components/screens/VoteScreen.tsx, 2026-11-14): the only screen that leaves the 440px
+   phone column, so the QR code and the tally read from the back of a room. Existing tokens and classes only; no blur. */
+.projector { position: fixed; inset: 0; z-index: 20; overflow: auto; background: var(--paper); padding: clamp(16px, 4vh, 48px) clamp(16px, 4vw, 64px); display: grid; gap: clamp(16px, 3vw, 40px); grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); align-content: start; }
+.projector .vote-blk { min-height: clamp(160px, 30vh, 340px); }
+@media (max-width: 800px) { .projector { grid-template-columns: minmax(0, 1fr); } }

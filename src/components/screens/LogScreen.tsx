@@ -1,0 +1,190 @@
+"use client";
+
+// Owner: Arshawn. Photo log: take or pick a plate photo, POST /api/log (Gemini matches it to this meal's menu), adjust servings,
+// save. Calories are private (PLAN.md design rule): saved plates stay on this device (plates.ts).
+import Link from "next/link";
+import { useRef, useState, useSyncExternalStore } from "react";
+import { Alert02Icon, ArrowLeft01Icon, Camera01Icon, FireIcon, Image01Icon, RiceBowl01Icon, Tick02Icon } from "@hugeicons/core-free-icons";
+import { Icon } from "@/components/ui/Icon";
+import { Photo } from "@/components/ui/Photo";
+import { Screen } from "@/components/ui/Screen";
+import { Swap, Appear, CountUp, GooSlider, Seg } from "@/components/ui/motion";
+import { HALLS } from "@/lib/halls";
+import type { MealName } from "@/lib/types";
+import type { LogItem, LogResponse, LogResult } from "@/app/api/log/contract";
+import { DISHES, USER, dishPhoto } from "./demo";
+import { campusNow, hoursFor, localDate, mealLabel, mealToLog, MEAL_NAMES } from "./now";
+import { savePlate } from "./plates";
+
+type Phase = "pick" | "reading" | "result" | "saved" | "error";
+const MEAL_OPTIONS = MEAL_NAMES.map(mealLabel);
+const HALL = HALLS.find((h) => h.short === USER.hall) ?? HALLS[0]; // TODO: the student's usual hall from onboarding (Ethan)
+
+// The meal a plate is from, by the campus clock; read only in the browser (never during render on the server).
+const noSubscribe = () => () => {};
+const clockMeal = () => mealToLog(hoursFor(HALL.id), campusNow(new Date()).minutes);
+
+// Phone photos are 3 to 12 MB; a 1280px JPEG reads just as well and uploads in a moment. Falls back to the original file.
+async function shrink(file: Blob): Promise<Blob> {
+  try {
+    const bmp = await createImageBitmap(file, { imageOrientation: "from-image" });
+    const k = Math.min(1, 1280 / Math.max(bmp.width, bmp.height));
+    const c = document.createElement("canvas");
+    c.width = Math.round(bmp.width * k);
+    c.height = Math.round(bmp.height * k);
+    c.getContext("2d")?.drawImage(bmp, 0, 0, c.width, c.height);
+    bmp.close();
+    const out = await new Promise<Blob | null>((ok) => c.toBlob(ok, "image/jpeg", 0.85));
+    return out ?? file;
+  } catch {
+    return file;
+  }
+}
+
+const fmt = (s: number) => String(Number(s.toFixed(2)));
+
+export function LogScreen() {
+  const [phase, setPhase] = useState<Phase>("pick");
+  const [photo, setPhoto] = useState<string>(DISHES.tikka.photo);
+  const [picked, setPicked] = useState<MealName | null>(null);
+  const auto = useSyncExternalStore(noSubscribe, clockMeal, () => null);
+  const meal: MealName = picked ?? auto ?? "Dinner";
+  const [result, setResult] = useState<LogResult | null>(null);
+  const [problem, setProblem] = useState("");
+  const [servings, setServings] = useState<Record<string, number>>({});
+  const [stored, setStored] = useState(true);
+  const file = useRef<HTMLInputElement>(null);
+  const run = useRef(0);
+
+  const send = async (blob: Blob, preview: string) => {
+    const id = ++run.current;
+    setPhoto(preview);
+    setPhase("reading");
+    try {
+      const form = new FormData();
+      form.append("photo", await shrink(blob), "plate.jpg");
+      form.append("hall", HALL.id);
+      form.append("meal", meal);
+      form.append("date", localDate(new Date()));
+      const res: LogResponse = await (await fetch("/api/log", { method: "POST", body: form })).json();
+      if (id !== run.current) return; // the student started over meanwhile
+      if (!res.ok) { setProblem(res.message); setPhase("error"); return; }
+      setResult(res);
+      setServings(Object.fromEntries(res.items.map((i) => [i.recipeId, i.servings])));
+      setPhase("result");
+    } catch {
+      if (id !== run.current) return;
+      setProblem("Couldn't reach SlugGrub. Check your connection and try again.");
+      setPhase("error");
+    }
+  };
+  const fromCamera = (f: File) => send(f, URL.createObjectURL(f));
+  const fromDemo = async () => {
+    try { send(await (await fetch(DISHES.tikka.photo)).blob(), DISHES.tikka.photo); }
+    catch { setProblem("Couldn't load the demo plate."); setPhase("error"); }
+  };
+  const again = () => { run.current++; setResult(null); setPhase("pick"); };
+
+  const items = (result?.items ?? []).map((it) => ({ it, s: servings[it.recipeId] ?? it.servings }));
+  const cal = Math.round(items.reduce((n, x) => n + x.it.per.calories * x.s, 0));
+  const mac = (k: "proteinG" | "carbsG" | "fatG") => Math.round(items.reduce((n, x) => n + x.it.per[k] * x.s, 0));
+
+  const save = () => {
+    if (!result) return;
+    const plate = items.map(({ it, s }) => ({ recipeId: it.recipeId, name: it.name, servings: s, calories: Math.round(it.per.calories * s) }));
+    const at = new Date().toISOString();
+    setStored(savePlate({ id: `${at}-${Math.random().toString(36).slice(2, 7)}`, at, hallId: result.hallId, meal: result.meal, items: plate, totalCalories: cal }));
+    setPhase("saved");
+  };
+
+  return (
+    <Screen top={<div className="topbar">
+        <Link href="/" className="iconbtn" aria-label="Back"><Icon icon={ArrowLeft01Icon} size={18} /></Link>
+        <span className="center">Log a plate</span>
+        <span style={{ width: 44 }} />
+      </div>}>
+
+      {phase === "pick" && (
+        <Appear style={{ display: "grid", gap: 14 }}>
+          <div className="card" style={{ display: "grid", gap: 14, justifyItems: "center", textAlign: "center", padding: "28px 18px" }}>
+            <span className="iconbtn" style={{ width: 64, height: 64, background: "var(--p3)", color: "var(--p9)" }}><Icon icon={Camera01Icon} size={28} sw={1.9} /></span>
+            <div className="title-lg">Snap your tray</div>
+            <p className="body" style={{ maxWidth: 280 }}>We match it to the {mealLabel(meal).toLowerCase()} menu at {HALL.short} and use UCSC&apos;s own nutrition labels. Only you see your calories.</p>
+          </div>
+          <Seg options={MEAL_OPTIONS} value={mealLabel(meal)} onChange={(v) => setPicked(MEAL_NAMES[MEAL_OPTIONS.indexOf(v)])} label="Meal" />
+          <input ref={file} type="file" accept="image/*" capture="environment" hidden onChange={(e) => { const f = e.target.files?.[0]; e.target.value = ""; if (f) fromCamera(f); }} />
+          <button type="button" className="btn btn-primary btn-block" onClick={() => file.current?.click()}><Icon icon={Camera01Icon} size={19} sw={2} /> Take a photo</button>
+          <button type="button" className="btn btn-secondary btn-block" onClick={fromDemo}><Icon icon={Image01Icon} size={19} /> Use a demo plate</button>
+        </Appear>
+      )}
+
+      {phase !== "pick" && (
+        <Photo src={photo} h={200} r={24} eager>
+          <span className="on-photo"><Swap id={phase === "reading" ? "r" : "d"}>{phase === "reading" ? "Reading your plate" : `${mealLabel(result?.meal ?? meal)} · ${result?.hallShort ?? HALL.short}`}</Swap></span>
+        </Photo>
+      )}
+
+      {phase === "reading" && (
+        <Appear className="card" style={{ display: "flex", gap: 12, alignItems: "center" }}>
+          <span className="iconbtn" style={{ width: 44, height: 44, background: "var(--paper-2)" }}><Icon icon={FireIcon} size={20} sw={2} /></span>
+          <div><b>Matching to the {mealLabel(meal).toLowerCase()} menu</b><div className="label" style={{ fontSize: 12 }}>Using the plate as a size guide</div></div>
+        </Appear>
+      )}
+
+      {phase === "error" && (
+        <Appear id="error" style={{ display: "grid", gap: 12 }}>
+          <div className="card" style={{ display: "flex", gap: 12, alignItems: "center" }}>
+            <span className="iconbtn" style={{ width: 44, height: 44, background: "var(--paper-2)" }}><Icon icon={Alert02Icon} size={20} sw={2} /></span>
+            <div style={{ flex: 1, minWidth: 0 }}><b>Couldn&apos;t log this plate</b><div className="label" style={{ fontSize: 13 }}>{problem}</div></div>
+          </div>
+          <button type="button" className="btn btn-primary btn-block" onClick={again}><Icon icon={Camera01Icon} size={19} sw={2} /> Try another photo</button>
+        </Appear>
+      )}
+
+      {(phase === "result" || phase === "saved") && result && (
+        <Appear id="result" style={{ display: "grid", gap: 12 }}>
+          <div className="card" style={{ display: "flex", alignItems: "center", gap: 12 }}>
+            <span className="iconbtn" style={{ width: 44, height: 44, background: "var(--paper-2)" }}><Icon icon={FireIcon} size={20} sw={2} /></span>
+            <div style={{ flex: 1 }}><div className="label">Calories · only you see this</div><div className="hero-num" style={{ fontSize: 38 }}><CountUp to={cal} /></div></div>
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 8 }}>
+            {([["Protein", "proteinG", "var(--protein)"], ["Carbs", "carbsG", "var(--carbs)"], ["Fat", "fatG", "var(--fat)"]] as const).map(([n, k, c]) => (
+              <div className="card tight" key={k}>
+                <div className="label" style={{ fontSize: 12, display: "flex", alignItems: "center", gap: 5 }}><span style={{ width: 7, height: 7, borderRadius: 9, background: c }} />{n}</div>
+                <div className="num" style={{ fontSize: 18, fontWeight: 700, letterSpacing: "-0.03em", marginTop: 2 }}><Swap id={String(mac(k))}>{mac(k)}g</Swap></div>
+              </div>
+            ))}
+          </div>
+          {items.map(({ it, s }) => <ItemCard key={it.recipeId} it={it} s={s} locked={phase === "saved"} onChange={(v) => setServings((m) => ({ ...m, [it.recipeId]: v }))} />)}
+          {result.notOnMenu.length > 0 && (
+            <div className="label" style={{ fontSize: 13 }}>Not on the {mealLabel(result.meal).toLowerCase()} menu, so not counted: {result.notOnMenu.join(", ")}</div>
+          )}
+          <div className="label" style={{ fontSize: 13 }}>Something look off? <button type="button" className="textbtn" style={{ color: "var(--p9)", padding: 0 }} onClick={again}>Retake</button></div>
+          <button type="button" className="btn btn-primary btn-block" onClick={save} disabled={phase === "saved"}>
+            <Swap id={phase}>{phase === "saved" ? <span style={{ display: "inline-flex", gap: 8, alignItems: "center" }}><Icon icon={Tick02Icon} size={18} sw={2.4} /> {stored ? "Saved to today" : "Couldn't save on this device"}</span> : <span>Save to today</span>}</Swap>
+          </button>
+        </Appear>
+      )}
+    </Screen>
+  );
+}
+
+function ItemCard({ it, s, locked, onChange }: { it: LogItem; s: number; locked: boolean; onChange: (v: number) => void }) {
+  const src = dishPhoto(it.name);
+  return (
+    <div className="card" style={{ display: "grid", gap: 4 }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+        {src ? <Photo src={src} w={44} h={44} r={12} />
+          : <span className="iconbtn" style={{ width: 44, height: 44, borderRadius: 12, background: "var(--paper-2)" }}><Icon icon={RiceBowl01Icon} size={20} /></span>}
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <div style={{ fontWeight: 700, fontSize: 15 }}>{it.name}</div>
+          <div className="num label" style={{ fontSize: 12 }}>
+            <span style={{ color: "var(--p9)", fontWeight: 700 }}><Swap id={fmt(s)}>{fmt(s)}</Swap> × {it.portion ?? "serving"}</span>
+            {" · "}{it.noLabel ? "no label yet" : `${Math.round(it.per.calories * s)} cal`}{it.confidence === "low" ? " · rough guess" : ""}
+          </div>
+        </div>
+      </div>
+      {!locked && <GooSlider value={s} min={0.25} max={4} step={0.25} onChange={onChange} label={`${it.name} servings`} />}
+    </div>
+  );
+}

@@ -1,0 +1,548 @@
+/* SlugGrub brand kit preview. DRAFT tokens (docs/DESIGN.md, # draft until Arshawn approves).
+   Layout concept: a clean product specimen sheet in the Cal AI / Chalk style. Near-white cool
+   canvas, white cards with faint borders and soft shadows, UCSC blue (#003C6C) for the brand, actions and
+   the camera button, UCSC gold (#FDC700) only for #1 and highlights, the system sans everywhere, sentence
+   case only (no all-caps), one hero number per screen. */
+
+.sg {
+  /* cool neutrals (Cal AI / Chalk: near-white canvas, white cards, faint borders) */
+  --paper: oklch(0.977 0.003 250);
+  --paper-2: oklch(0.948 0.005 250);
+  --card: oklch(1 0 0);
+  --line: oklch(0.928 0.005 250);
+  --ink: oklch(0.18 0.015 255);
+  --ink-2: oklch(0.42 0.012 255);
+  --ink-3: oklch(0.6 0.01 255);
+
+  /* SlugGrub blue (primary): brightened from UCSC #003C6C at his ask 2026-11-14 ("make the blue primary brighter quite a bit"); generated 12-step scale */
+  --p1: oklch(0.99 0.005 252);
+  --p2: oklch(0.97 0.015 252);
+  --p3: oklch(0.95 0.025 252);
+  --p4: oklch(0.92 0.04 252);
+  --p5: oklch(0.88 0.061 252);
+  --p6: oklch(0.83 0.088 252);
+  --p7: oklch(0.75 0.124 252);
+  --p8: oklch(0.66 0.149 252);
+  --p9: oklch(0.52 0.156 252);
+  --p10: oklch(0.46 0.138 252);
+  --p11: oklch(0.38 0.091 252);
+  --p12: oklch(0.22 0.05 252);
+
+  /* UCSC gold (accent, sparing; #FDC700) */
+  --y3: oklch(0.97 0.06 95);
+  --y6: oklch(0.92 0.12 93);
+  --y9: oklch(0.85 0.17 90);
+  --y11: oklch(0.5 0.11 85);
+
+  /* semantic */
+  --ok: oklch(0.55 0.13 145);
+  --ok-bg: oklch(0.95 0.035 145);
+  --warn: oklch(0.7 0.15 65);
+  --warn-bg: oklch(0.95 0.045 75);
+  --bad: oklch(0.57 0.18 27);
+  --bad-bg: oklch(0.95 0.03 27);
+
+  /* macros */
+  --protein: oklch(0.64 0.16 25);
+  --carbs: oklch(0.74 0.15 65);
+  --fat: oklch(0.64 0.12 250);
+
+  /* college colors (rivalry board only) */
+  --c-jrl: oklch(0.55 0.15 275);
+  --c-cowell: oklch(0.7 0.14 70);
+  --c-crown: oklch(0.6 0.11 200);
+  --c-porter: oklch(0.58 0.17 345);
+  --c-oakes: oklch(0.66 0.16 45);
+
+  /* type */
+  --display: -apple-system, BlinkMacSystemFont, "SF Pro Display", system-ui, "Segoe UI", Roboto, var(--font-geist-sans), sans-serif;
+  --sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, "Segoe UI", Roboto, var(--font-geist-sans), sans-serif;
+  --mono: var(--font-geist-mono), ui-monospace, monospace;
+
+  /* radius, shadow, space */
+  --r-sm: 12px;
+  --r-md: 22px;
+  --r-lg: 28px;
+  --r-pill: 999px;
+  --shadow-1: 0 1px 2px oklch(0.2 0.02 255 / 0.04), 0 6px 20px oklch(0.2 0.02 255 / 0.05);
+  --shadow-2: 0 2px 8px oklch(0.2 0.02 255 / 0.06), 0 18px 44px oklch(0.2 0.02 255 / 0.12);
+
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+.sg * { box-sizing: border-box; }
+.sg .wrap {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding-block: 84px 120px;
+  padding-left: max(20px, env(safe-area-inset-left, 0px));
+  padding-right: max(20px, env(safe-area-inset-right, 0px));
+}
+.sg .num { font-variant-numeric: tabular-nums; }
+.sg .display { font-family: var(--display); font-weight: 700; letter-spacing: -0.035em; }
+.sg .display em, .sg .wordmark em { font-style: normal; color: var(--p9); }
+.sg .eyebrow { font-size: 13px; font-weight: 500; color: var(--ink-3); } /* sentence case only: no all-caps text anywhere (his rule) */
+
+/* page sections */
+.sg .hero { display: grid; gap: 14px; margin-bottom: 56px; }
+.sg .wordmark { font-family: var(--display); font-weight: 800; font-size: clamp(56px, 10vw, 112px); line-height: 0.92; letter-spacing: -0.05em; }
+.sg .lede { font-size: 18px; color: var(--ink-2); max-width: 56ch; line-height: 1.5; }
+.sg .draft-tag { justify-self: start; display: inline-flex; gap: 8px; align-items: center; font-size: 12px; font-weight: 600; padding: 6px 12px; border-radius: var(--r-pill); background: var(--y3); color: var(--y11); }
+
+.sg section { margin-top: 72px; }
+.sg h2.sec { font-family: var(--display); font-size: 36px; font-weight: 700; letter-spacing: -0.03em; margin: 6px 0 24px; text-wrap: balance; }
+.sg .note { color: var(--ink-2); font-size: 14px; line-height: 1.5; max-width: 60ch; margin-top: -12px; margin-bottom: 24px; }
+
+/* phone mockups */
+.sg .phones { display: flex; gap: 28px; overflow-x: auto; padding: 8px 4px 28px; scroll-snap-type: x mandatory; }
+.sg .phone-col { display: grid; gap: 12px; justify-items: center; flex: 0 0 auto; scroll-snap-align: start; }
+.sg .phone-label { font-size: 13px; color: var(--ink-2); font-weight: 500; }
+.sg .phone {
+  width: 300px; height: 630px; border-radius: 44px; background: var(--paper);
+  border: 8px solid oklch(0.2 0.01 60); box-shadow: var(--shadow-2);
+  position: relative; overflow: hidden; display: flex; flex-direction: column;
+}
+.sg .phone .status { height: 34px; display: flex; justify-content: space-between; align-items: center; padding: 0 22px; font-size: 12px; font-weight: 600; flex: 0 0 auto; }
+.sg .phone .screen { flex: 1; overflow: hidden; padding: 6px 16px 96px; display: flex; flex-direction: column; gap: 12px; }
+
+/* cards */
+.sg .card { background: var(--card); border-radius: var(--r-md); box-shadow: var(--shadow-1); border: 1px solid var(--line); padding: 14px; }
+.sg .card.flat { box-shadow: none; border: 1px solid var(--line); }
+.sg .card.green { background: var(--p9); color: var(--p1); box-shadow: none; border-color: transparent; }
+
+/* hero numbers */
+.sg .hero-num { font-size: 56px; font-weight: 700; letter-spacing: -0.045em; line-height: 1; font-variant-numeric: tabular-nums; }
+.sg .hero-num small { font-size: 0.42em; font-weight: 500; color: var(--ink-3); letter-spacing: 0; margin-left: 4px; }
+
+/* buttons */
+.sg .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 48px; padding: 0 22px; border-radius: var(--r-pill); font-weight: 600; font-size: 15px; border: 0; cursor: pointer; font-family: var(--sans); transition: transform 0.15s ease, background 0.15s ease; }
+.sg .btn:active { transform: scale(0.97); }
+.sg .btn:focus-visible { outline: 3px solid var(--y9); outline-offset: 2px; }
+.sg .btn-primary { background: var(--p9); color: var(--p1); }
+.sg .btn-primary:hover { background: var(--p10); }
+.sg .btn-accent { background: var(--y9); color: var(--ink); }
+.sg .btn-secondary { background: var(--card); color: var(--ink); box-shadow: inset 0 0 0 1px var(--line); }
+.sg .btn-ghost { background: transparent; color: var(--p9); }
+.sg .btn-sm { height: 36px; padding: 0 14px; font-size: 13px; }
+.sg .btn-block { width: 100%; }
+
+/* pills and chips */
+.sg .pill { display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: var(--r-pill); font-size: 12px; font-weight: 600; }
+.sg .pill.ok { background: var(--ok-bg); color: var(--ok); }
+.sg .pill.warn { background: var(--warn-bg); color: oklch(0.5 0.12 60); }
+.sg .pill.bad { background: var(--bad-bg); color: var(--bad); }
+.sg .pill.neutral { background: var(--paper-2); color: var(--ink-2); }
+.sg .dot { width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+.sg .chip { display: inline-flex; align-items: center; height: 40px; padding: 0 16px; border-radius: var(--r-pill); font-size: 14px; font-weight: 500; background: var(--card); border: 1px solid var(--line); }
+.sg .chip.on { color: white; border-color: transparent; }
+
+/* score badge (Beli style) */
+.sg .score { width: 40px; height: 40px; border-radius: 50%; border: 2px solid var(--p9); color: var(--p9); display: grid; place-items: center; font-weight: 700; font-size: 14px; font-variant-numeric: tabular-nums; background: var(--card); flex: 0 0 auto; }
+.sg .score.top { border-color: var(--y9); background: var(--y9); color: var(--ink); }
+
+/* segmented control */
+.sg .seg { display: inline-flex; padding: 4px; background: var(--paper-2); border-radius: var(--r-pill); gap: 2px; }
+.sg .seg span { padding: 7px 14px; border-radius: var(--r-pill); font-size: 13px; font-weight: 500; color: var(--ink-2); }
+.sg .seg span.on { background: var(--card); color: var(--ink); font-weight: 600; box-shadow: var(--shadow-1); }
+
+/* plate illustration (stand-in for food photos) */
+.sg .plate { border-radius: 50%; position: relative; background: radial-gradient(circle at 50% 50%, oklch(0.985 0.004 85) 0 58%, oklch(0.93 0.01 85) 59% 64%, oklch(0.975 0.006 85) 65% 100%); box-shadow: 0 6px 18px oklch(0.22 0.02 60 / 0.15); flex: 0 0 auto; }
+.sg .plate::before, .sg .plate::after { content: ""; position: absolute; border-radius: 48% 52% 45% 55%; }
+.sg .plate.curry::before { inset: 22% 34% 30% 18%; background: radial-gradient(circle at 40% 40%, oklch(0.7 0.16 55), oklch(0.58 0.17 40)); }
+.sg .plate.curry::after { inset: 26% 18% 26% 50%; background: radial-gradient(circle at 50% 40%, oklch(0.98 0.01 90), oklch(0.92 0.02 85)); }
+.sg .plate.pesto::before { inset: 20% 20% 22% 20%; background: radial-gradient(circle at 45% 40%, oklch(0.78 0.13 125), oklch(0.6 0.13 135)); }
+.sg .plate.pesto::after { inset: 36% 40% 40% 36%; background: oklch(0.88 0.08 95); border-radius: 50%; }
+.sg .plate.pizza::before { inset: 18% 22% 26% 22%; border-radius: 6% 6% 50% 50%; background: radial-gradient(circle at 30% 35%, oklch(0.6 0.17 30) 0 7%, transparent 8%), radial-gradient(circle at 65% 55%, oklch(0.6 0.17 30) 0 7%, transparent 8%), linear-gradient(oklch(0.85 0.12 85), oklch(0.8 0.13 75)); }
+.sg .plate.thai::before { inset: 24% 20% 26% 22%; background: radial-gradient(circle at 40% 40%, oklch(0.82 0.11 75), oklch(0.72 0.13 60)); }
+.sg .plate.thai::after { inset: 30% 48% 50% 30%; background: oklch(0.7 0.14 140); border-radius: 50%; }
+.sg .plate.burrito::before { inset: 30% 16% 30% 16%; border-radius: 40px; background: linear-gradient(oklch(0.9 0.05 85), oklch(0.82 0.07 75)); }
+
+/* macro bar */
+.sg .macro { display: flex; height: 10px; border-radius: var(--r-pill); overflow: hidden; gap: 3px; }
+.sg .macro i { display: block; border-radius: var(--r-pill); }
+.sg .legend { display: flex; gap: 12px; font-size: 12px; color: var(--ink-2); }
+.sg .legend b { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 5px; }
+
+/* rows */
+.sg .row { display: flex; align-items: center; gap: 12px; padding: 10px 0; }
+.sg .row + .row { border-top: 1px solid var(--line); }
+.sg .row .grow { flex: 1; min-width: 0; }
+.sg .row .title { font-weight: 600; font-size: 14px; }
+.sg .row .sub { font-size: 12px; color: var(--ink-3); margin-top: 2px; }
+.sg .rank-n { width: 22px; font-weight: 700; font-variant-numeric: tabular-nums; color: var(--ink-3); }
+.sg .me { background: var(--p3); margin: 0 -10px; padding: 10px; border-radius: var(--r-sm); border: 0 !important; }
+
+/* tab bar */
+.sg .tabbar { position: absolute; left: 14px; right: 14px; bottom: 18px; display: flex; align-items: center; gap: 10px; }
+.sg .tabbar .pillbar { flex: 1; height: 60px; border-radius: var(--r-pill); border: 1px solid var(--line); background: oklch(1 0 0 / 0.86); backdrop-filter: blur(16px); box-shadow: var(--shadow-2); display: flex; justify-content: space-around; align-items: center; padding: 0 6px; }
+.sg .tabbar .tab { display: grid; justify-items: center; gap: 2px; font-size: 10px; font-weight: 600; color: var(--ink-3); padding: 6px 10px; border-radius: var(--r-pill); }
+.sg .tabbar .tab.on { color: var(--ink); background: var(--paper-2); }
+.sg .tabbar .cam { width: 60px; height: 60px; border-radius: 50%; background: var(--p9); display: grid; place-items: center; box-shadow: var(--shadow-2); flex: 0 0 auto; color: white; }
+
+/* this or that */
+.sg .duel { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; position: relative; }
+.sg .duel .opt { background: var(--card); border-radius: var(--r-lg); box-shadow: var(--shadow-1); border: 1px solid var(--line); padding: 16px 12px 14px; display: grid; justify-items: center; gap: 10px; text-align: center; }
+.sg .duel .opt.picked { box-shadow: inset 0 0 0 2.5px var(--p9), var(--shadow-1); }
+.sg .duel .or { position: absolute; left: 50%; top: 42%; transform: translate(-50%, -50%); width: 38px; height: 38px; border-radius: 50%; background: var(--ink); color: var(--paper); display: grid; place-items: center; font-family: var(--sans); font-size: 13px; font-weight: 700; }
+
+/* vote blocks */
+.sg .vote { display: grid; gap: 8px; }
+.sg .vote .blk { border-radius: var(--r-lg); padding: 18px; color: white; display: flex; justify-content: space-between; align-items: end; }
+
+/* swatches */
+.sg .scale { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); border-radius: var(--r-md); overflow: hidden; border: 1px solid var(--line); }
+.sg .scale div { aspect-ratio: 1 / 1.3; display: flex; align-items: end; padding: 6px; font-size: 10px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.sg .swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 14px; }
+.sg .sw { border-radius: var(--r-md); overflow: hidden; background: var(--card); border: 1px solid var(--line); }
+.sg .sw .chipc { height: 84px; }
+.sg .sw .meta { padding: 10px 12px; font-size: 12px; display: grid; gap: 2px; }
+.sg .sw .meta b { font-size: 13px; }
+.sg .sw .meta code { font-family: var(--mono); color: var(--ink-3); font-size: 11px; }
+
+/* type specimen */
+.sg .type-row { display: grid; grid-template-columns: 140px minmax(0, 1fr); gap: 20px; align-items: baseline; padding: 16px 0; border-top: 1px solid var(--line); }
+.sg .type-row .meta { font-size: 12px; color: var(--ink-3); font-family: var(--mono); }
+
+/* grids */
+.sg .grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+.sg .stack { display: grid; gap: 12px; align-content: start; }
+.sg .wrapflex { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.sg .spacing-bar { height: 14px; background: var(--p7); border-radius: 4px; }
+.sg .dodont { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+.sg .dodont ul { margin: 8px 0 0; padding-left: 18px; color: var(--ink-2); line-height: 1.6; font-size: 14px; }
+
+@media (max-width: 600px) {
+  .sg .type-row { grid-template-columns: 1fr; gap: 6px; }
+  .sg .scale div { font-size: 8px; padding: 3px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sg .btn { transition: none; }
+}
+
+/* ── v3: photo-led patterns from Airbnb, Copilot, Partiful and food apps ── */
+.sg .photo { display: block; width: 100%; height: 100%; object-fit: cover; }
+.sg .ph { position: relative; overflow: hidden; border-radius: var(--r-md); background: var(--paper-2); flex: 0 0 auto; }
+.sg .ph .on-photo { position: absolute; left: 10px; top: 10px; display: inline-flex; align-items: center; gap: 5px; height: 26px; padding: 0 10px; border-radius: var(--r-pill); background: oklch(1 0 0 / 0.94); color: var(--ink); font-size: 12px; font-weight: 600; box-shadow: var(--shadow-1); }
+.sg .ph .on-photo.gold { background: var(--y9); }
+.sg .ph .corner { position: absolute; right: 10px; top: 10px; }
+.sg .wash { position: absolute; inset: 0 0 auto; height: 230px; background: linear-gradient(180deg, color-mix(in oklch, var(--p9) 16%, transparent), color-mix(in oklch, var(--p9) 0%, transparent)); pointer-events: none; }
+.sg .phone .screen { position: relative; }
+.sg .topbar { display: flex; align-items: center; justify-content: space-between; position: relative; }
+.sg .iconbtn { width: 38px; height: 38px; border-radius: 50%; background: var(--card); border: 1px solid var(--line); display: grid; place-items: center; color: var(--ink); flex: 0 0 auto; }
+.sg .title-xl { font-family: var(--display); font-weight: 700; font-size: 30px; letter-spacing: -0.04em; line-height: 1.05; position: relative; }
+.sg .sechead { display: flex; justify-content: space-between; align-items: center; }
+.sg .sechead b { font-size: 17px; letter-spacing: -0.02em; }
+.sg .seeall { height: 28px; padding: 0 12px; border-radius: var(--r-pill); border: 1px solid var(--line); background: var(--card); font-size: 12px; font-weight: 600; display: inline-flex; align-items: center; }
+.sg .carousel { display: flex; gap: 10px; overflow: hidden; margin-right: -16px; }
+.sg .carousel .item { width: 150px; flex: 0 0 auto; display: grid; gap: 6px; }
+.sg .stars { font-size: 12px; color: var(--ink-2); font-variant-numeric: tabular-nums; display: inline-flex; align-items: center; gap: 4px; }
+.sg .vote .blk.photo-blk { position: relative; overflow: hidden; }
+.sg .vote .blk.photo-blk img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.sg .vote .blk.photo-blk::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, oklch(0.18 0.02 255 / 0.05) 30%, oklch(0.18 0.02 255 / 0.72)); }
+.sg .vote .blk.photo-blk > div { position: relative; z-index: 1; }
+.sg .bar { height: 6px; border-radius: var(--r-pill); background: oklch(1 0 0 / 0.3); overflow: hidden; margin-top: 8px; }
+.sg .bar i { display: block; height: 100%; background: white; border-radius: var(--r-pill); }
+/* floating primary action over a fade (Cal AI "Log", Airbnb "Check availability") */
+.sg .float-cta { position: absolute; left: 0; right: 0; bottom: 0; padding: 36px 16px 22px; background: linear-gradient(180deg, oklch(0.977 0.003 250 / 0), var(--paper) 45%); }
+.sg .btn-lg { height: 54px; font-size: 16px; }
+/* deltas and tinted chips (Copilot) */
+.sg .delta { display: inline-flex; align-items: center; gap: 3px; height: 22px; padding: 0 8px; border-radius: var(--r-pill); font-size: 12px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.sg .delta.up { background: var(--ok-bg); color: var(--ok); }
+.sg .delta.down { background: var(--bad-bg); color: var(--bad); }
+.sg .tint { display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 12px; border-radius: var(--r-pill); font-size: 13px; font-weight: 600; }
+.sg .tint.blue { background: var(--p3); color: var(--p9); }
+.sg .tint.gold { background: var(--y3); color: var(--y11); }
+.sg .q { color: var(--p9); font-weight: 600; } /* inline highlighted quantity (Crouton) */
+.sg .patterns { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
+.sg .patterns .card b { display: block; font-size: 15px; letter-spacing: -0.01em; margin-bottom: 4px; }
+.sg .patterns .card p { margin: 0; font-size: 13px; line-height: 1.5; color: var(--ink-2); }
+.sg .patterns .card span { display: block; margin-top: 8px; font-size: 12px; color: var(--ink-3); }
+
+/* ── surface style switch (brand kit only). Floating things (tab bar, camera, floating button) keep their shadow in every mode. ── */
+.sg .surface-toggle { position: fixed; top: max(14px, env(safe-area-inset-top, 0px)); left: 50%; transform: translateX(-50%); z-index: 60; display: flex; align-items: center; gap: 10px; padding: 6px 6px 6px 16px; border-radius: var(--r-pill); background: oklch(1 0 0 / 0.88); backdrop-filter: blur(16px); box-shadow: var(--shadow-2); }
+.sg .seg button { all: unset; cursor: pointer; padding: 7px 14px; border-radius: var(--r-pill); font-size: 13px; font-weight: 500; color: var(--ink-2); }
+.sg .seg button.on { background: var(--card); color: var(--ink); font-weight: 600; box-shadow: var(--shadow-1); }
+.sg .seg button:focus-visible { outline: 2px solid var(--p9); outline-offset: 2px; }
+.sg[data-surface="flat"] { --paper: oklch(0.962 0.004 250); }
+.sg[data-surface="flat"] :is(.card, .duel .opt, .chip:not(.on), .sw, .scale, .seeall, .iconbtn) { border-color: transparent; box-shadow: none; }
+.sg[data-surface="stroke"] :is(.card, .duel .opt, .chip:not(.on), .sw, .scale, .seeall, .iconbtn) { box-shadow: none; }
+.sg[data-surface="flat"] .duel .opt.picked, .sg[data-surface="stroke"] .duel .opt.picked { box-shadow: inset 0 0 0 2.5px var(--p9); }
+
+/* ── "Chalk" surface: cloned from ~/Downloads/school-app/design-tokens/tokens.css (his ask 2026-11-14: "i really like the ui of
+   the cards and interface and shadwos and stroke and everything of chalk"). White canvas, white raised cards, 0.75px hairline
+   strokes in 8% black, two-layer shadows with negative spread (elev-1 cards, elev-2 floating), radius 16 cards / 24 big
+   surfaces, concentric corners. Floating chrome uses Chalk's elev-2/elev-3. ── */
+.sg[data-surface="chalk"] {
+  --paper: oklch(0.994 0.0015 250);
+  --paper-2: oklch(0.96 0.003 250);
+  --line: oklch(0 0 0 / 0.08);
+  --r-md: 16px;
+  --r-lg: 24px;
+  --shadow-1: 0 1px 1.75px 0 oklch(0.22 0.01 255 / 0.04), 0 3.75px 12.75px -1.75px oklch(0.22 0.01 255 / 0.07);
+  --shadow-2: 0 1.75px 3.75px 0 oklch(0.22 0.01 255 / 0.05), 0 9px 25.5px -5.5px oklch(0.22 0.01 255 / 0.11);
+  --shadow-3: 0 3.75px 7.25px 0 oklch(0.22 0.01 255 / 0.06), 0 16.5px 40px -9px oklch(0.22 0.01 255 / 0.15);
+}
+.sg[data-surface="chalk"] :is(.card, .duel .opt, .chip:not(.on), .sw, .scale, .seeall, .iconbtn, .tabbar .pillbar) { border-width: 0.75px; border-color: var(--line); }
+.sg[data-surface="chalk"] :is(.tabbar .pillbar, .tabbar .cam) { box-shadow: var(--shadow-3); }
+.sg[data-surface="chalk"] .seg { box-shadow: inset 0 0 0 0.75px oklch(0 0 0 / 0.05); }
+.sg[data-surface="chalk"] .card .card { box-shadow: none; } /* nested cards: stroke only */
+.sg[data-surface="chalk"] .phone { border-color: oklch(0.2 0.01 255); }
+.sg .surface-toggle { flex-wrap: wrap; justify-content: center; max-width: calc(100vw - 24px); padding-right: 8px; }
+.sg .font-select { font: inherit; font-size: 13px; font-weight: 600; color: var(--ink); background: var(--paper-2); border: 0; border-radius: var(--r-pill); height: 34px; padding: 0 12px; }
+.sg .fonts { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 14px; }
+.sg .font-card { all: unset; box-sizing: border-box; cursor: pointer; display: grid; gap: 6px; background: var(--card); border: 0.75px solid var(--line); border-radius: var(--r-md); box-shadow: var(--shadow-1); padding: 16px; }
+.sg .font-card:hover { box-shadow: var(--shadow-2); }
+.sg .font-card:focus-visible { outline: 2px solid var(--p9); outline-offset: 2px; }
+.sg .fc-name { font-size: 13px; font-weight: 600; color: var(--p9); }
+.sg .fc-title { font-size: 26px; font-weight: 700; letter-spacing: -0.035em; line-height: 1.1; }
+.sg .fc-num { font-size: 22px; font-weight: 700; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; }
+.sg .fc-num small { font-size: 13px; font-weight: 500; color: var(--ink-3); letter-spacing: 0; }
+.sg .fc-body { font-size: 15px; color: var(--ink-2); line-height: 1.45; }
+.sg .fc-note { font-family: var(--sans); font-size: 12px; color: var(--ink-3); line-height: 1.45; }
+.sg .fc-apply { font-family: var(--sans); font-size: 12px; font-weight: 600; color: var(--p9); }
+
+/* ── "Sidestash" surface (his design, ~/Downloads/reference app/Sidestash/Sources/Sidestash/UI/Palette.swift, cooled to SlugGrub's
+   neutrals). His spec 2026-11-14: the background is not the brightest neutral and neither are the cards; cards and buttons are
+   LIGHTER than the background, with a very subtle top-to-bottom neutral gradient (lighter on top) and a pure white stroke. Shadow is
+   Sidestash's chip shadow (ink at 8%, blur 2, y 1); floating chrome adds a soft wide layer. ── */
+.sg[data-surface="sidestash"] {
+  --paper: oklch(0.955 0.004 250);   /* lighter, his ask 2026-11-14 */
+  --paper-2: oklch(0.925 0.005 250);
+  --line: oklch(0 0 0 / 0.07);
+  --raise: linear-gradient(180deg, oklch(0.993 0.002 250) 0%, oklch(0.963 0.004 250) 100%);
+  --raise-press: linear-gradient(180deg, oklch(0.97 0.003 250) 0%, oklch(0.945 0.005 250) 100%);
+  --hi: oklch(1 0 0);
+  --chip-shadow: 0 1px 2px oklch(0.22 0.01 255 / 0.08);
+  --shadow-1: var(--chip-shadow);
+  --shadow-2: 0 1px 2px oklch(0.22 0.01 255 / 0.08), 0 10px 28px -6px oklch(0.22 0.01 255 / 0.14);
+  --r-md: 18px;
+  --r-lg: 24px;
+}
+.sg[data-surface="sidestash"] :is(.card, .duel .opt, .chip:not(.on), .sw, .seeall, .iconbtn, .btn-secondary, .seg span.on, .seg button.on, .tabbar .pillbar, .font-card, .surface-toggle) {
+  background: var(--raise);
+  border: 1px solid var(--hi);
+  box-shadow: var(--chip-shadow);
+}
+.sg[data-surface="sidestash"] .card .card { box-shadow: none; }
+.sg[data-surface="sidestash"] .btn-secondary { box-shadow: var(--chip-shadow); }
+.sg[data-surface="sidestash"] .btn-secondary:active, .sg[data-surface="sidestash"] .iconbtn:active { background: var(--raise-press); }
+.sg[data-surface="sidestash"] .btn-primary { background: linear-gradient(180deg, var(--btn-top) 0%, var(--btn-bot) 100%); border: 1px solid oklch(1 0 0 / 0.22); box-shadow: var(--chip-shadow), inset 0 1px 0 oklch(1 0 0 / 0.14); }
+.sg[data-surface="sidestash"] .tabbar .cam { background: linear-gradient(180deg, var(--btn-top) 0%, var(--btn-bot) 100%); border: 1px solid oklch(1 0 0 / 0.22); }
+.sg[data-surface="sidestash"] :is(.tabbar .pillbar, .tabbar .cam, .surface-toggle) { box-shadow: var(--shadow-2); }
+.sg[data-surface="sidestash"] .tabbar .tab.on { background: var(--paper-2); }
+.sg[data-surface="sidestash"] .seg { background: var(--paper-2); }
+.sg[data-surface="sidestash"] .scale { border: 1px solid var(--hi); box-shadow: var(--chip-shadow); }
+.sg[data-surface="sidestash"] .duel .opt.picked { box-shadow: inset 0 0 0 2.5px var(--p9), var(--chip-shadow); }
+.sg[data-surface="sidestash"] .phone .screen, .sg[data-surface="sidestash"] .phone { background: var(--paper); }
+.sg[data-surface="sidestash"] .float-cta { background: linear-gradient(180deg, oklch(0.955 0.004 250 / 0), var(--paper) 45%); }
+/* his tweak 2026-11-14: cards get a much subtler gradient; buttons, chips and the bottom tab bar keep --raise as is */
+.sg[data-surface="sidestash"] { --raise-card: linear-gradient(180deg, oklch(0.988 0.002 250) 0%, oklch(0.978 0.003 250) 100%); }
+.sg.sg[data-surface="sidestash"] :is(.card, .duel .opt, .sw, .font-card) { background: var(--raise-card); } /* .sg.sg: must outrank the button rule above, whose :is() includes ".seg button.on" */
+
+/* ── blue options (his ask 2026-11-14: "i wnat to try different blue variations"); scales from generate-palette.ts ── */
+.sg, .sg[data-blue="bright"] { --p1: oklch(0.99 0.005 252); --p2: oklch(0.97 0.015 252); --p3: oklch(0.95 0.025 252); --p4: oklch(0.92 0.04 252); --p5: oklch(0.88 0.061 252); --p6: oklch(0.83 0.088 252); --p7: oklch(0.75 0.124 252); --p8: oklch(0.66 0.149 252); --p9: oklch(0.52 0.156 252); --p10: oklch(0.46 0.138 252); --p11: oklch(0.38 0.091 252); --p12: oklch(0.22 0.05 252); --btn-top: oklch(0.590 0.156 252); --btn-bot: oklch(0.500 0.156 252); }
+.sg[data-blue="navy"] { --p1: oklch(0.99 0.005 250); --p2: oklch(0.97 0.01 250); --p3: oklch(0.95 0.018 250); --p4: oklch(0.92 0.03 250); --p5: oklch(0.88 0.045 250); --p6: oklch(0.83 0.06 250); --p7: oklch(0.75 0.075 250); --p8: oklch(0.66 0.09 250); --p9: oklch(0.351 0.1 250); --p10: oklch(0.291 0.083 250); --p11: oklch(0.38 0.055 250); --p12: oklch(0.22 0.03 250); --btn-top: oklch(0.421 0.100 250); --btn-bot: oklch(0.331 0.100 250); }
+.sg[data-blue="azure"] { --p1: oklch(0.99 0.006 240); --p2: oklch(0.97 0.015 240); --p3: oklch(0.95 0.027 240); --p4: oklch(0.92 0.043 240); --p5: oklch(0.88 0.066 240); --p6: oklch(0.83 0.09 240); --p7: oklch(0.75 0.112 240); --p8: oklch(0.66 0.135 240); --p9: oklch(0.6 0.137 240); --p10: oklch(0.54 0.124 240); --p11: oklch(0.38 0.083 240); --p12: oklch(0.22 0.045 240); --btn-top: oklch(0.670 0.137 240); --btn-bot: oklch(0.580 0.137 240); }
+.sg[data-blue="ios"] { --p1: oklch(0.99 0.005 257); --p2: oklch(0.97 0.015 257); --p3: oklch(0.95 0.024 257); --p4: oklch(0.92 0.039 257); --p5: oklch(0.88 0.059 257); --p6: oklch(0.83 0.086 257); --p7: oklch(0.75 0.13 257); --p8: oklch(0.66 0.183 257); --p9: oklch(0.603 0.214 257); --p10: oklch(0.543 0.193 257); --p11: oklch(0.38 0.12 257); --p12: oklch(0.22 0.065 257); --btn-top: oklch(0.673 0.214 257); --btn-bot: oklch(0.583 0.214 257); }
+.sg[data-blue="cobalt"] { --p1: oklch(0.99 0.005 264); --p2: oklch(0.97 0.014 264); --p3: oklch(0.95 0.024 264); --p4: oklch(0.92 0.039 264); --p5: oklch(0.88 0.059 264); --p6: oklch(0.83 0.085 264); --p7: oklch(0.75 0.128 264); --p8: oklch(0.66 0.18 264); --p9: oklch(0.48 0.2 264); --p10: oklch(0.42 0.19 264); --p11: oklch(0.38 0.11 264); --p12: oklch(0.22 0.06 264); --btn-top: oklch(0.550 0.200 264); --btn-bot: oklch(0.460 0.200 264); }
+.sg[data-blue="ocean"] { --p1: oklch(0.99 0.006 230); --p2: oklch(0.97 0.012 230); --p3: oklch(0.95 0.022 230); --p4: oklch(0.92 0.036 230); --p5: oklch(0.88 0.054 230); --p6: oklch(0.83 0.072 230); --p7: oklch(0.75 0.09 230); --p8: oklch(0.66 0.108 230); --p9: oklch(0.55 0.11 230); --p10: oklch(0.49 0.098 230); --p11: oklch(0.38 0.066 230); --p12: oklch(0.22 0.036 230); --btn-top: oklch(0.620 0.110 230); --btn-bot: oklch(0.530 0.110 230); }
+
+/* ── iOS-style scroll edges: progressive blur plus a light fade at the top and bottom of each phone screen.
+   Web recreation of iOS 26's soft scroll edge: stacked backdrop-filter layers whose blur doubles each step, each masked to a band of
+   a gradient so blur ramps up toward the edge, pinned outside the scrolling content. ── */
+.sg .phone .status { position: absolute; top: 0; left: 0; right: 0; z-index: 6; }
+.sg .phone .screen { position: absolute; inset: 0; overflow-y: auto; overflow-x: hidden; scrollbar-width: none; padding: 46px 16px 112px; }
+.sg .phone .screen::-webkit-scrollbar { display: none; }
+.sg .phone .tabbar, .sg .phone .float-cta { z-index: 7; }
+.sg .edge { position: absolute; left: 0; right: 0; pointer-events: none; z-index: 5; }
+.sg .edge.top { top: 0; height: 92px; }
+.sg .edge.bottom { bottom: 0; height: 130px; }
+.sg .edge > i { position: absolute; inset: 0; }
+.sg .edge.top > i:nth-child(1) { backdrop-filter: blur(1px); mask: linear-gradient(to top, transparent 0%, #000 20%, #000 40%, transparent 60%); -webkit-mask: linear-gradient(to top, transparent 0%, #000 20%, #000 40%, transparent 60%); }
+.sg .edge.top > i:nth-child(2) { backdrop-filter: blur(2px); mask: linear-gradient(to top, transparent 20%, #000 40%, #000 60%, transparent 80%); -webkit-mask: linear-gradient(to top, transparent 20%, #000 40%, #000 60%, transparent 80%); }
+.sg .edge.top > i:nth-child(3) { backdrop-filter: blur(4px); mask: linear-gradient(to top, transparent 40%, #000 60%, #000 80%, transparent 100%); -webkit-mask: linear-gradient(to top, transparent 40%, #000 60%, #000 80%, transparent 100%); }
+.sg .edge.top > i:nth-child(4) { backdrop-filter: blur(8px); mask: linear-gradient(to top, transparent 60%, #000 80%); -webkit-mask: linear-gradient(to top, transparent 60%, #000 80%); }
+.sg .edge.top > i:nth-child(5) { backdrop-filter: blur(16px); mask: linear-gradient(to top, transparent 80%, #000 100%); -webkit-mask: linear-gradient(to top, transparent 80%, #000 100%); }
+.sg .edge.top > b { position: absolute; inset: 0; background: linear-gradient(to bottom, color-mix(in oklch, var(--paper) 88%, transparent) 0%, color-mix(in oklch, var(--paper) 55%, transparent) 45%, color-mix(in oklch, var(--paper) 0%, transparent) 100%); }
+.sg .edge.bottom > i:nth-child(1) { backdrop-filter: blur(1px); mask: linear-gradient(to bottom, transparent 0%, #000 20%, #000 40%, transparent 60%); -webkit-mask: linear-gradient(to bottom, transparent 0%, #000 20%, #000 40%, transparent 60%); }
+.sg .edge.bottom > i:nth-child(2) { backdrop-filter: blur(2px); mask: linear-gradient(to bottom, transparent 20%, #000 40%, #000 60%, transparent 80%); -webkit-mask: linear-gradient(to bottom, transparent 20%, #000 40%, #000 60%, transparent 80%); }
+.sg .edge.bottom > i:nth-child(3) { backdrop-filter: blur(4px); mask: linear-gradient(to bottom, transparent 40%, #000 60%, #000 80%, transparent 100%); -webkit-mask: linear-gradient(to bottom, transparent 40%, #000 60%, #000 80%, transparent 100%); }
+.sg .edge.bottom > i:nth-child(4) { backdrop-filter: blur(8px); mask: linear-gradient(to bottom, transparent 60%, #000 80%); -webkit-mask: linear-gradient(to bottom, transparent 60%, #000 80%); }
+.sg .edge.bottom > i:nth-child(5) { backdrop-filter: blur(16px); mask: linear-gradient(to bottom, transparent 80%, #000 100%); -webkit-mask: linear-gradient(to bottom, transparent 80%, #000 100%); }
+.sg .edge.bottom > b { position: absolute; inset: 0; background: linear-gradient(to top, color-mix(in oklch, var(--paper) 92%, transparent) 0%, color-mix(in oklch, var(--paper) 60%, transparent) 40%, color-mix(in oklch, var(--paper) 0%, transparent) 100%); }
+@media (prefers-reduced-transparency: reduce) { .sg .edge > i { display: none; } }
+.sg .scroll-hint { position: absolute; left: 0; right: 0; bottom: -26px; text-align: center; font-size: 12px; color: var(--ink-3); }
+
+/* ── his tweaks 2026-11-14: background a bit darker, card gradient even subtler ── */
+.sg[data-surface="sidestash"] { --paper: oklch(0.944 0.005 250); --paper-2: oklch(0.912 0.006 250); --raise-card: linear-gradient(180deg, oklch(0.986 0.002 250) 0%, oklch(0.98 0.0025 250) 100%); }
+.sg[data-surface="sidestash"] .float-cta { background: linear-gradient(180deg, oklch(0.944 0.005 250 / 0), var(--paper) 45%); }
+
+/* ── motion system (his ask: smooth, premium, polished, lots of micro-interactions, never gimmicky).
+   One easing and one spring for everything; press feedback on anything tappable; hover lift only where a pointer exists. ── */
+.sg { --ease: cubic-bezier(0.22, 1, 0.36, 1); --dur-press: 140ms; --dur-ui: 220ms; }
+.sg :is(.btn, .iconbtn, .chip, .seeall, .tint, .textbtn, .press, .font-card, .tab, .seg-m button, .cam-main, .drop) { transition: transform var(--dur-press) var(--ease), box-shadow var(--dur-ui) var(--ease), background-color var(--dur-ui) var(--ease), opacity var(--dur-ui) var(--ease); -webkit-tap-highlight-color: transparent; }
+.sg :is(.btn, .chip, .seeall, .tint, .textbtn):active { transform: scale(0.97); }
+.sg :is(.iconbtn, .drop):active { transform: scale(0.9); }
+.sg .tab:active { transform: scale(0.94); }
+.sg .card.press:active { transform: scale(0.985); }
+@media (hover: hover) {
+  .sg :is(.card.press, .font-card):hover { box-shadow: var(--shadow-2); }
+  .sg .btn-primary:hover { filter: brightness(1.05); }
+}
+@media (prefers-reduced-motion: reduce) { .sg * { transition-duration: 0ms !important; } }
+
+/* tab bar with sliding capsule */
+.sg .tabbar .tab { all: unset; box-sizing: border-box; cursor: pointer; position: relative; display: grid; justify-items: center; padding: 6px 10px; border-radius: var(--r-pill); font-size: 10px; font-weight: 600; color: var(--ink-3); }
+.sg .tabbar .tab.on { color: var(--ink); background: transparent !important; }
+.sg .tab-cap { position: absolute; inset: 0; border-radius: var(--r-pill); background: var(--paper-2); }
+.sg .tab-ink { position: relative; display: grid; justify-items: center; gap: 2px; }
+.sg .tab:focus-visible { outline: 2px solid var(--p9); outline-offset: 2px; }
+
+/* segmented control with sliding pill */
+.sg .seg-m { display: inline-flex; padding: 4px; gap: 2px; }
+.sg .seg-m button { all: unset; box-sizing: border-box; cursor: pointer; position: relative; padding: 7px 14px; border-radius: var(--r-pill); font-size: 13px; font-weight: 500; color: var(--ink-2); }
+.sg .seg-m button.is-on { color: var(--ink); font-weight: 600; }
+.sg .seg-m span { padding: 0; }
+.sg .seg-pill { position: absolute; inset: 0; border-radius: var(--r-pill); background: var(--card); box-shadow: var(--shadow-1); }
+.sg[data-surface="sidestash"] .seg-pill { background: var(--raise); border: 1px solid var(--hi); box-shadow: var(--chip-shadow); }
+.sg .seg-ink { position: relative; }
+.sg .seg-m button:focus-visible { outline: 2px solid var(--p9); outline-offset: 2px; }
+
+/* gooey camera menu */
+.sg .cam-wrap { position: relative; width: 60px; height: 60px; flex: 0 0 auto; }
+.sg .cam-main { all: unset; box-sizing: border-box; cursor: pointer; width: 60px; height: 60px; border-radius: 50%; display: grid; place-items: center; color: white; }
+.sg .drop { all: unset; box-sizing: border-box; cursor: pointer; width: 46px; height: 46px; border-radius: 50%; display: grid; place-items: center; color: white; }
+.sg :is(.cam-main, .drop):focus-visible { outline: 2px solid var(--p9); outline-offset: 3px; }
+
+/* rank duel */
+.sg .duel .opt { cursor: pointer; font: inherit; color: inherit; text-align: center; }
+.sg .duel .opt.press { border-style: solid; }
+.sg .pick-check { position: absolute; right: 8px; top: 8px; width: 28px; height: 28px; border-radius: 50%; background: var(--card); color: var(--p9); display: grid; place-items: center; box-shadow: var(--shadow-1); }
+.sg .textbtn { all: unset; cursor: pointer; display: inline-flex; gap: 5px; align-items: center; padding: 4px 6px; border-radius: 8px; }
+.sg .textbtn:focus-visible { outline: 2px solid var(--p9); }
+
+/* his ask 2026-11-14: "make the hairlines just look like normal hairlines". Every stroke and divider is a true hairline: 0.5px
+   (one device pixel on a retina phone), the white card and button strokes included. */
+.sg .row + .row { border-top-width: 0.5px; }
+.sg.sg[data-surface="sidestash"] :is(.card, .duel .opt, .chip:not(.on), .sw, .seeall, .iconbtn, .btn-secondary, .tabbar .pillbar, .font-card, .surface-toggle, .scale, .seg-pill) { border-width: 0.5px; } /* .sg.sg: outranks the 1px border rule */
+.sg[data-surface="sidestash"] :is(.btn-primary, .tabbar .cam) { border-width: 0.5px; }
+.sg[data-surface="chalk"] :is(.card, .duel .opt, .chip:not(.on), .sw, .scale, .seeall, .iconbtn, .tabbar .pillbar) { border-width: 0.5px; }
+.sg :is(.card, .chip, .seeall, .iconbtn, .sw, .scale) { border-width: 0.5px; }
+
+/* ── "Flat + Sidestash" (his ask 2026-11-14: "lets try flat but sidestach for the top buttons and the navigation bar").
+   Cards are flat: a solid fill lighter than the page, no stroke, no shadow. The round top buttons, "See all" pills, segmented
+   pills and the bottom navigation bar keep the Sidestash treatment: raised gradient, white hairline, chip shadow. ── */
+.sg[data-surface="hybrid"] {
+  --paper: oklch(0.944 0.005 250);
+  --paper-2: oklch(0.912 0.006 250);
+  --card: oklch(0.984 0.002 250);
+  --line: oklch(0 0 0 / 0.07);
+  --raise: linear-gradient(180deg, oklch(0.993 0.002 250) 0%, oklch(0.963 0.004 250) 100%);
+  --hi: oklch(1 0 0);
+  --chip-shadow: 0 1px 2px oklch(0.22 0.01 255 / 0.08);
+  --shadow-1: var(--chip-shadow);
+  --shadow-2: 0 1px 2px oklch(0.22 0.01 255 / 0.08), 0 10px 28px -6px oklch(0.22 0.01 255 / 0.14);
+  --r-md: 18px;
+  --r-lg: 24px;
+}
+.sg[data-surface="hybrid"] :is(.card, .duel .opt, .chip:not(.on), .sw, .scale, .font-card) { background: var(--card); border-color: transparent; box-shadow: none; }
+.sg[data-surface="hybrid"] .duel .opt.picked { box-shadow: inset 0 0 0 2.5px var(--p9); }
+.sg[data-surface="hybrid"] :is(.iconbtn, .seeall, .seg-pill, .btn-secondary) { background: var(--raise); border: 0.5px solid var(--hi); box-shadow: var(--chip-shadow); }
+.sg[data-surface="hybrid"] :is(.tabbar .pillbar, .surface-toggle) { background: var(--raise); border: 0.5px solid var(--hi); box-shadow: var(--shadow-2); }
+.sg[data-surface="hybrid"] .seg { background: var(--paper-2); }
+.sg[data-surface="hybrid"] .phone, .sg[data-surface="hybrid"] .phone .screen { background: var(--paper); }
+.sg[data-surface="hybrid"] .float-cta { background: linear-gradient(180deg, oklch(0.944 0.005 250 / 0), var(--paper) 45%); }
+@media (hover: hover) { .sg[data-surface="hybrid"] :is(.card.press, .font-card):hover { box-shadow: none; background: oklch(0.99 0.002 250); } }
+
+/* "Sidestash, solid cards" (his ask 2026-11-14: "lets try sidestash but for the cards no gradient"): everything Sidestash, but the
+   cards use one solid fill (still lighter than the page, white hairline and chip shadow kept). Buttons and the nav bar keep the gradient. */
+.sg.sg.sg[data-cards="solid"] :is(.card, .duel .opt, .sw, .font-card) { background: oklch(0.984 0.002 250); }
+
+/* his asks 2026-11-14: (1) the default (Sidestash, solid cards) takes the Flat option's background color; (2) the plain Sidestash
+   option gets a visible card gradient back (the earlier "subtler" values only rendered after the specificity fix and read as none). */
+.sg.sg.sg[data-cards="solid"] { --paper: oklch(0.962 0.004 250); --paper-2: oklch(0.93 0.005 250); }
+.sg.sg.sg[data-cards="solid"] .float-cta { background: linear-gradient(180deg, oklch(0.962 0.004 250 / 0), var(--paper) 45%); }
+.sg.sg[data-surface="sidestash"]:not([data-cards]) { --raise-card: linear-gradient(180deg, oklch(0.99 0.002 250) 0%, oklch(0.972 0.0035 250) 100%); }
+/* the floating button's fade always matches the chosen background */
+.sg.sg.sg.sg .float-cta { background: linear-gradient(180deg, color-mix(in oklch, var(--paper) 0%, transparent), var(--paper) 45%); }
+
+/* fixes found by screenshot 2026-11-14: (1) the scrolling screen is a flex column, so children with overflow hidden (the Halls
+   carousel) shrank to zero height; (2) the "or" disc sat under the animated rank cards; (3) the control bar covered the phones. */
+.sg .phone .screen > * { flex-shrink: 0; }
+.sg .duel .or { z-index: 2; }
+.sg .surface-toggle { top: auto; bottom: max(14px, env(safe-area-inset-bottom, 0px)); }
+
+/* ── Flat + Sidestash, his spec 2026-11-14: "make the nav bar button and the top bar buttons and the camera button sidestash style
+   but everything else is flat, like every other button and element is flat." Specificity is raised on purpose so no earlier
+   rule (Sidestash lists, generic borders) can leak in. ── */
+.sg.sg.sg[data-surface="hybrid"] :is(.card, .duel .opt, .chip:not(.on), .sw, .scale, .font-card, .seeall, .seg-pill, .btn-secondary, .iconbtn) { background: var(--card); border-color: transparent; box-shadow: none; }
+.sg.sg.sg[data-surface="hybrid"] .duel .opt.picked { box-shadow: inset 0 0 0 2.5px var(--p9); }
+.sg.sg.sg[data-surface="hybrid"] .btn-primary { background: var(--p9); border: 0; box-shadow: none; filter: none; }
+/* Sidestash only here: top bar round buttons, the bottom nav bar, the camera button */
+.sg.sg.sg.sg[data-surface="hybrid"] .topbar .iconbtn { background: var(--raise); border: 0.5px solid var(--hi); box-shadow: var(--chip-shadow); }
+.sg.sg.sg.sg[data-surface="hybrid"] .tabbar .pillbar { background: var(--raise); border: 0.5px solid var(--hi); box-shadow: var(--shadow-2); }
+.sg.sg.sg[data-surface="hybrid"] :is(.cam-main, .drop) { background: linear-gradient(180deg, oklch(1 0 0 / 0.18) 0%, oklch(1 0 0 / 0) 62%); box-shadow: inset 0 0 0 0.5px oklch(1 0 0 / 0.5); }
+/* kit control bar: a slim sticky strip at the top of the page instead of a floating pill over the phones */
+.sg.sg.sg .surface-toggle { position: sticky; top: 0; left: auto; bottom: auto; transform: none; max-width: none; width: 100%; border-radius: 0; z-index: 60; justify-content: center; gap: 8px 10px; padding: 10px max(16px, env(safe-area-inset-left, 0px)); background: color-mix(in oklch, var(--paper) 86%, transparent); backdrop-filter: blur(18px); border: 0; border-bottom: 0.5px solid var(--line); box-shadow: none; }
+.sg.sg.sg .surface-toggle .seg button { padding: 6px 11px; font-size: 12px; }
+.sg.sg.sg .surface-toggle .font-select { height: 30px; font-size: 12px; }
+.sg .wrap { padding-block: 40px 120px; }
+/* camera fixes 2026-11-14 (his screenshot): the closed droplets' icons showed through the main icon, and the sheen/hairline sat on
+   the button, which is smaller than the gooey blob, so it drew an inner ring. Droplet icons now fade in only when open; the sheen
+   and hairline live on the blob's own edge (Liquid shadow). */
+.sg.sg.sg.sg :is(.cam-main, .drop) { background: none; box-shadow: none; }
+.sg .drop { opacity: 0; transition: opacity 180ms var(--ease); }
+.sg .drop.on { opacity: 1; transition-delay: 90ms; }
+
+/* ── THE spring and THE goo, applied consistently (his ask 2026-11-14). --spring is THE spring (stiffness 280, damping 22) sampled
+   into a CSS easing, so CSS-only presses release on the same curve as every JS animation. ── */
+.sg { --spring: linear(0, 0.047, 0.157, 0.302, 0.456, 0.604, 0.730, 0.838, 0.922, 0.984, 1.024, 1.049, 1.061, 1.064, 1.060, 1.052, 1.043, 1.033, 1.024, 1.016, 1.009, 1.004, 1.001, 0.998, 0.997, 0.996, 0.996, 0.996, 0.997, 0.997, 0.998, 0.999, 1); --dur-spring: 620ms; }
+.sg :is(.btn, .iconbtn, .chip, .seeall, .tint, .textbtn, .press, .font-card, .tab, .seg-m button, .drop) { transition: transform var(--dur-spring) var(--spring), box-shadow var(--dur-ui) var(--ease), background-color var(--dur-ui) var(--ease), opacity var(--dur-ui) var(--ease); }
+.sg :is(.btn, .iconbtn, .chip, .seeall, .tint, .textbtn, .press, .tab, .seg-m button, .drop):active { transition-duration: 90ms; transition-timing-function: var(--ease); }
+/* GooTrack: the liquid thumb under tabs and segmented controls */
+.sg .track { position: relative; display: flex; align-items: center; }
+.sg .pillbar > .track { width: 100%; justify-content: space-around; }
+.sg .goo-thumb { position: absolute; left: 0; border-radius: 999px; }
+.sg .track > button { position: relative; z-index: 1; }
+.sg .tab-cap, .sg .seg-pill { display: none; }
+/* GooSlider */
+.sg .goo-slider { display: grid; gap: 10px; }
+.sg .gs-head { display: flex; justify-content: space-between; align-items: baseline; }
+.sg .gs-head b { font-size: 15px; }
+.sg .gs-track { position: relative; height: 8px; border-radius: 999px; background: var(--paper-2); cursor: pointer; touch-action: none; margin: 10px 0; }
+.sg .gs-track:focus-visible { outline: 2px solid var(--p9); outline-offset: 6px; }
+.sg .gs-fill { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 999px; background: var(--p7); }
+.sg .gs-thumb { position: absolute; top: 14px; width: 26px; height: 26px; border-radius: 50%; margin-top: -9px; }
+
+/* droplet icons use the state change too: blur + fade in when the menu opens */
+.sg .drop { filter: blur(5px); transform: scale(0.86); transition: opacity 220ms var(--ease), filter 220ms var(--ease), transform var(--dur-spring) var(--spring); }
+.sg .drop.on { filter: blur(0); transform: scale(1); }
+
+/* ── BLUR BUDGET (his rule 2026-11-14, a MUST: "make sure any blur you use is cheap and not performance heavy").
+   Scroll edges: 2 backdrop-filter layers per edge (was 5), small radii, never animated. Opaque surfaces never carry a backdrop
+   blur (it is pure cost). State-change blur is a short filter on small elements only and is removed at rest. ── */
+.sg .edge > i:nth-child(n+3) { display: none; }
+.sg .edge.top > i:nth-child(1) { backdrop-filter: blur(3px); mask: linear-gradient(to top, transparent 0%, #000 55%); -webkit-mask: linear-gradient(to top, transparent 0%, #000 55%); }
+.sg .edge.top > i:nth-child(2) { backdrop-filter: blur(10px); mask: linear-gradient(to top, transparent 45%, #000 100%); -webkit-mask: linear-gradient(to top, transparent 45%, #000 100%); }
+.sg .edge.bottom > i:nth-child(1) { backdrop-filter: blur(3px); mask: linear-gradient(to bottom, transparent 0%, #000 55%); -webkit-mask: linear-gradient(to bottom, transparent 0%, #000 55%); }
+.sg .edge.bottom > i:nth-child(2) { backdrop-filter: blur(10px); mask: linear-gradient(to bottom, transparent 45%, #000 100%); -webkit-mask: linear-gradient(to bottom, transparent 45%, #000 100%); }
+.sg .tabbar .pillbar { backdrop-filter: none; }
+.sg .drop.on { filter: none; }
+
+/* subtler spring and goo (his ask 2026-11-14): THE spring is now stiffness 300, damping 28 (~1.3% overshoot), 500ms in CSS */
+.sg { --spring: linear(0, 0.042, 0.138, 0.262, 0.393, 0.518, 0.627, 0.723, 0.802, 0.863, 0.911, 0.947, 0.973, 0.990, 1.001, 1.008, 1.012, 1.013, 1.013, 1.011, 1.010, 1.008, 1.007, 1.005, 1.004, 1.003, 1.002, 1.001, 1); --dur-spring: 500ms; }
+.sg .drop { filter: blur(4px); transform: scale(0.92); }
+.sg .drop.on { filter: none; transform: scale(1); }
+
+/* nav bar selection: wide, full-height capsule, 5px inset, concentric with the bar (same rule as the app) */
+.sg .tabbar .pillbar { padding: 5px; }
+.sg .pillbar > .track { width: 100%; height: 100%; justify-content: stretch; }
+.sg .tabbar .tab { flex: 1 1 0; height: 100%; padding: 0; display: grid; place-content: center; justify-items: center; border-radius: 999px; }

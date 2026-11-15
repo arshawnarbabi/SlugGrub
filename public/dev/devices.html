@@ -1,0 +1,8 @@
+<!doctype html><meta charset="utf-8"><title>Phone sizes</title>
+<style>body{margin:0;padding:16px;font:13px system-ui;background:#ddd;display:flex;flex-wrap:wrap;gap:16px;align-items:flex-start}figure{margin:0}iframe{border:0;background:#fff;border-radius:18px;box-shadow:0 4px 18px #0002}figcaption{margin-top:6px;text-align:center}</style>
+<script>
+// Dev-only check page (not linked anywhere): shows a route at common phone viewports. ?p=/halls
+const p=new URLSearchParams(location.search).get('p')||'/';
+const sizes=[[320,568,'SE 1st'],[360,740,'Android S'],[375,667,'SE 2/3'],[393,852,'iPhone 16'],[412,915,'Pixel'],[440,956,'Pro Max'],[852,393,'landscape']];
+addEventListener('DOMContentLoaded',()=>{for(const [w,h,n] of sizes){const f=document.createElement('figure');f.innerHTML=`<iframe src="${p}" width="${w}" height="${h}"></iframe><figcaption>${n} ${w}x${h}</figcaption>`;document.body.append(f);}});
+</script>
