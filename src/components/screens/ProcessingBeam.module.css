@@ -1,0 +1,39 @@
+/* Owner: Arshawn. The processing beam (ProcessingBeam.tsx, docs/DESIGN.md effects.registry processing-beam, 2026-11-15).
+   The frame: the whole app column (.app), rounded like a phone's display corners (about 50px on modern iPhones).
+   The mask is drawn once per size: a thin ring (2.5px visible) plus a soft glow about 15px deep inside it, both clipped to the
+   rounded frame. Only the canvas under it moves, by transform. */
+.beam {
+  position: absolute;
+  inset: 0;
+  z-index: 9; /* above the top bar (6) and the nav bar (8), under the launch splash (100) */
+  pointer-events: none;
+  overflow: hidden;
+  border-radius: 50px;
+  --beam-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3CclipPath id='c'%3E%3Crect width='100%25' height='100%25' rx='50'/%3E%3C/clipPath%3E%3Cfilter id='b' x='-10%25' y='-10%25' width='120%25' height='120%25'%3E%3CfeGaussianBlur stdDeviation='7'/%3E%3C/filter%3E%3C/defs%3E%3Cg clip-path='url(%23c)' fill='none' stroke='%23000'%3E%3Crect width='100%25' height='100%25' rx='50' stroke-width='26' stroke-opacity='0.5' filter='url(%23b)'/%3E%3Crect width='100%25' height='100%25' rx='50' stroke-width='5'/%3E%3C/g%3E%3C/svg%3E");
+  -webkit-mask-image: var(--beam-mask);
+  mask-image: var(--beam-mask);
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+}
+
+/* A 256px canvas shown at 150vmax (always wider than the frame's diagonal), so its texture stays 256 x 256 at any size. */
+.spin {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 150vmax;
+  height: 150vmax;
+  margin: -75vmax 0 0 -75vmax;
+  will-change: transform;
+  animation: beam-spin 3.6s linear infinite;
+}
+
+@keyframes beam-spin {
+  to { transform: rotate(1turn); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spin { animation: none; }
+}

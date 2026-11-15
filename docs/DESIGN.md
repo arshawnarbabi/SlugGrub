@@ -752,6 +752,14 @@ effects:
       fallback: "plain spring move without goo"
       reduced: "prefers-reduced-motion: instant, no goo travel"
       measured: "not yet (QA Gate B2 before ship)"
+    - id: processing-beam
+      what: "a rainbow glow riding the edge of the app frame (rounded 50px, like a phone's display corners) while Log reads a plate photo; fades out when the answer or an error arrives"   # his ask 2026-11-15, after libraries.dev/beam
+      tier: 1
+      color_exception: "the one place the app uses more than its blues, because it signals AI is working (2026-11-15, # draft): a full OKLCH rainbow at L 0.7 C 0.2, two brighter beams opposite each other"
+      how: "own build, not the border-beam package (1.4.1, MIT, ~14 KB gzip; it runs a 30 fps rAF loop and animates conic gradients and blur filters, so a screen-sized ring repaints every frame): the colors are drawn once into a 256px canvas shown at 150vmax and rotated by a CSS transform animation (3.6 s a turn, compositor only); a static SVG mask drawn once per size cuts it to a 2.5px ring plus a soft glow about 15px deep (the glow's blur is inside the mask image, never animated); opacity fade in and out (0.45 s); removed from the DOM after. src/components/screens/ProcessingBeam.tsx"
+      fallback: "no beam; the status card still says what is happening"
+      reduced: "prefers-reduced-motion: the same glow, still"
+      measured: "2026-11-15, dev server, 393x852 @3x: Chromium and Playwright WebKit both 0 frames over 20 ms while it runs (p95 16.7 / 18 ms); on a real iPhone not yet"
   # Example entry (copy into the list above; values are illustrative):
   # registry:
   #   - name: "hero-water-ripple"                 # SPEC.md references the effect by this name
@@ -3278,3 +3286,4 @@ down the thumb and fill follow it 1:1 with no spring (THE spring stays for keybo
 row the hit area. The goo stays: its blob is drawn from the thumb in the same frame (0 to 1px off, step rounding). The ring still
 updates live on every step. -->
 
+<!-- 2026-11-15 Log processing moment (his ask: "when you first scan a food or do the demo im thinkign we add this border beam around the border of the phone and we have the image and then under it we have \"Processing the food...\" ... and then when its fully processed it morphs into the the stats for it"). While the photo is read (camera or demo plate), the processing beam (effects.registry processing-beam) rides the edge of the app frame, and under the photo one status card says what is happening: "Reading your plate…", then "Matching it to the dinner menu…", then "Sizing up the portions…", each blur-fading into the next on a timer (no shimmer, so the beam stays the one running loop on screen), over "Using the plate as a size guide". When the answer comes the same card morphs into the calorie card on THE spring (framer layout, only when the phase changes): its icon chip stays put, the text blur-fades into the calorie number, and the macros, dishes and buttons fade in under it in place (opacity, 0.24 s); an error morphs the same way into the error card with "Try another photo" under it. The photo's pill now always reads meal · hall (it said "Reading your plate" while reading, which the card now says). Color exception: the beam is the one place the app uses more than its blues, because it signals AI is working (# draft). -->
