@@ -268,8 +268,7 @@ function Board({ catalog, state }: { catalog: CatalogDish[]; state: RankState | 
               const rated = dishes.filter((d) => d.hallId === h.hallId && d.votes > 0).length;
               return (
                 <div className="row" key={h.hallId}>
-                  <span className="num" style={{ width: 18, fontWeight: 700, color: n === 0 ? "var(--y11)" : "var(--ink-3)" }}>{n + 1}</span>
-                  <span style={{ width: 8, height: 28, borderRadius: 9, background: hallColor(h.hallId) }} />
+                  <RankBadge rank={n + 1} color={hallColor(h.hallId)} />
                   <div className="grow"><div className="title">{hallShort(h.hallId)}</div><div className="sub num">{h.score.toLocaleString()} pts · {rated === 1 ? "1 dish ranked" : `${rated} dishes ranked`}</div></div>
                   <Change standing={h} />
                 </div>
@@ -279,8 +278,7 @@ function Board({ catalog, state }: { catalog: CatalogDish[]; state: RankState | 
               const me = c.college === college;
               return (
                 <div className="row" key={c.college} style={me ? { background: "var(--p3)", margin: "0 -10px", padding: "10px", borderRadius: 12, borderTop: 0 } : undefined}>
-                  <span className="num" style={{ width: 18, fontWeight: 700, color: c.rank === 1 && c.votesCast > 0 ? "var(--y11)" : "var(--ink-3)" }}>{c.rank}</span>
-                  <span style={{ width: 8, height: 28, borderRadius: 9, background: hallColor(c.hallId) }} />
+                  <RankBadge rank={c.rank} color={hallColor(c.hallId)} />
                   <div className="grow"><div className="title">{c.college}</div><div className="sub num"><Swap id={String(c.votesCast)}>{c.votesCast === 1 ? "1 vote" : `${c.votesCast} votes`}</Swap> this week</div></div>
                 </div>
               );
@@ -289,6 +287,13 @@ function Board({ catalog, state }: { catalog: CatalogDish[]; state: RankState | 
       <Link href="/vote" className="btn btn-secondary btn-block"><Icon icon={QrCodeIcon} size={18} /> Open the live vote</Link>
     </div>
   );
+}
+
+/** The place number in a soft disc of the hall's color (his review 2026-11-14: "i dont like how each college has this weird vertical
+ *  strip of color. but i still think color coding would work, figure out a differnet way"): the hall color tints the disc and the
+ *  number, so every row is still color coded without a bar. */
+function RankBadge({ rank, color }: { rank: number; color: string }) {
+  return <span className="rank-badge num" style={{ "--hc": color } as React.CSSProperties}>{rank}</span>;
 }
 
 function Change({ standing }: { standing: { change: number; openingRank?: number } }) {

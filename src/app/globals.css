@@ -451,3 +451,8 @@ input, textarea, select { font-size: 17px !important; }     /* 16px or more also
    spare room across every option instead of leaving it after the last one; a content-width switch is unchanged. */
 .seg > .track { flex: 1 1 auto; }
 .seg button { flex: 1 1 auto; text-align: center; }
+
+/* Leaderboard place badge (his review 2026-11-14, S05: replaces the vertical color strip): a 32px disc tinted with the hall's color
+   (--c-jrl ... via --hc), the place number in a deeper shade of the same color. Flat, no shadow. */
+.rank-badge { flex: 0 0 auto; width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center; font-size: 14px; font-weight: 700;
+  background: color-mix(in oklch, var(--hc, var(--ink-3)) 15%, var(--card)); color: color-mix(in oklch, var(--hc, var(--ink-3)) 82%, var(--ink)); }
