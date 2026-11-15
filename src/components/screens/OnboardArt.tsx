@@ -5,7 +5,7 @@
 // blue for what the student picked, ink tokens for everything else. Each one answers its question visually and follows the choice:
 //   plan:    three plan cards fanned out, the chosen plan in front with its points per quarter
 //   points:  the Budget ring, filled to the points they enter
-//   college: a campus map with every college; theirs is the blue pin with its name
+//   college: a campus map (contour lines of the hill) with every college; theirs is the blue pin with its name
 //   hall:    the same map with the five dining halls; their usual hall is the blue pin
 // State changes blur-fade (DESIGN motion.state_change); nothing slides in when a step opens.
 import { motion, useReducedMotion } from "framer-motion";
@@ -86,11 +86,10 @@ function Map({ pins, picked, label }: { pins: [string, [number, number]][]; pick
     <Frame>
       <div className="art-map" aria-hidden>
         <svg viewBox="0 0 100 100" preserveAspectRatio="none" style={{ position: "absolute", inset: 0, width: "100%", height: "100%" }}>
-          {/* the hill: soft contour lines and the road loop, all in the page tone */}
+          {/* the hill: soft contour lines in the page tone */}
           {[0, 1, 2, 3].map((k) => (
             <ellipse key={k} cx="52" cy="44" rx={44 - k * 9} ry={34 - k * 7} fill="none" stroke="var(--paper)" strokeWidth="1.2" vectorEffect="non-scaling-stroke" />
           ))}
-          <path d="M50 96 C 30 86, 14 70, 16 52 S 32 14, 52 12 S 90 26, 88 50 S 70 86, 50 96" fill="none" stroke="var(--card)" strokeWidth="4" strokeLinecap="round" vectorEffect="non-scaling-stroke" />
         </svg>
         {pins.map(([k, [x, y]]) => (
           <span key={k} className={`art-pin ${k === picked ? "on" : ""}`} style={{ left: `${x}%`, top: `${y}%` }} />
