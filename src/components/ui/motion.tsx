@@ -90,7 +90,7 @@ export function CountUp({ to, decimals = 0 }: { to: number; decimals?: number })
 }
 
 /** GooTrack: the one liquid thumb that slides under a row of options (tab bar, segmented controls). */
-export function GooTrack({ index, refs, fill, deps = 0 }: { index: number; refs: React.RefObject<(HTMLElement | null)[]>; fill: string; deps?: number }) {
+export function GooTrack({ index, refs, fill, deps = 0, inset = false }: { index: number; refs: React.RefObject<(HTMLElement | null)[]>; fill: string; deps?: number; inset?: boolean }) {
   const [box, setBox] = useState<{ x: number; w: number; h: number } | null>(null);
   const reduce = useReducedMotion();
   useLayoutEffect(() => {
@@ -104,22 +104,29 @@ export function GooTrack({ index, refs, fill, deps = 0 }: { index: number; refs:
     return () => { cancelAnimationFrame(raf); window.removeEventListener("resize", measure); };
   }, [index, refs, deps]);
   if (!box || index < 0) return null;
+  const move = { x: box.x, width: box.w };
+  const tr = reduce ? { duration: 0 } : SPRING;
   return (
-    <Liquid style={{ position: "absolute", inset: 0, pointerEvents: "none", zIndex: 0 }} {...GOO} fill={fill}>
-      <Liquid.Item observe>
-        <motion.div className="goo-thumb" initial={false} animate={{ x: box.x, width: box.w }} transition={reduce ? { duration: 0 } : SPRING} style={{ height: box.h, top: 0 }} />
-      </Liquid.Item>
-    </Liquid>
+    <>
+      <Liquid style={{ position: "absolute", inset: 0, pointerEvents: "none", zIndex: 0 }} {...GOO} fill={fill}>
+        <Liquid.Item observe>
+          <motion.div className="goo-thumb" initial={false} animate={move} transition={tr} style={{ height: box.h, top: 0 }} />
+        </Liquid.Item>
+      </Liquid>
+      {/* inset (trial): a pressed-in finish drawn over the goo thumb, outside the goo filter so its shading stays crisp; same spring */}
+      {inset && <motion.div className="goo-inset" aria-hidden initial={false} animate={move} transition={tr} style={{ height: box.h }} />}
+    </>
   );
 }
 
 /** Segmented control on the goo thumb. */
 export function Seg<T extends string>({ options, value, onChange, label, className, render }: { options: readonly T[]; value: T; onChange: (v: T) => void; label: string; className?: string; render?: (o: T) => React.ReactNode }) {
   const refs = useRef<(HTMLElement | null)[]>([]);
+  const raised = !!className?.split(" ").includes("raised"); // Sidestash segmented control: its thumb reads as pressed in
   return (
     <div className={className ? `seg ${className}` : "seg"} role="radiogroup" aria-label={label}>
       <div className="track">
-        <GooTrack index={options.indexOf(value)} refs={refs} fill="var(--card)" />
+        <GooTrack index={options.indexOf(value)} refs={refs} fill={raised ? "var(--inset-mid)" : "var(--card)"} inset={raised} />
         {options.map((o, i) => (
           <button key={o} ref={(el) => { refs.current[i] = el; }} type="button" role="radio" aria-checked={value === o} className={value === o ? "on" : ""} onClick={() => onChange(o)}>
             {render ? render(o) : o}

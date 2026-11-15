@@ -3,10 +3,11 @@
 // Owner: Arshawn. Budget's "points left over the quarter" chart (his ask 2026-11-14: "make this graph actualy have axis and mean
 // something. its easy to visually skim which i want to keep but axis will explain better ... and also i feel like its too short").
 // One measure (Slug Points left) on one axis over the quarter's dates:
+// Lines are labeled on the chart (no legend row); a touch or hover shows that day's values inside the plot. (2026-11-14 revision)
 //   - you: from the plan total on day one to your points today (solid primary); SlugGrub only knows those two points, so it's a line
 //   - your pace ahead: today's rate carried to the end of the quarter, or to zero if you run out (dashed primary)
 //   - even pace: plan total to zero on the last day (dashed ink-3)
-// Recessive grid and axis labels in ink tokens; a legend names the lines (never color alone). Touch or hover shows the day's values.
+// Recessive grid and axis labels in ink tokens; each line carries its own label (never color alone).
 import { useRef, useState } from "react";
 import { QUARTER_START } from "@/lib/budgetCalc";
 
@@ -38,14 +39,6 @@ export function PaceChart({ planTotal, pointsLeft, elapsedDays, totalDays, spent
   const h = hover ?? elapsedDays;
   return (
     <div style={{ display: "grid", gap: 8 }}>
-      <div style={{ display: "flex", flexWrap: "wrap", gap: "4px 14px", fontSize: 12, color: "var(--ink-2)" }}>
-        <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}><svg width="18" height="6" aria-hidden><line x1="1" y1="3" x2="17" y2="3" stroke="var(--p9)" strokeWidth="2.5" strokeLinecap="round" /></svg>You</span>
-        <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}><svg width="18" height="6" aria-hidden><line x1="1" y1="3" x2="17" y2="3" stroke="var(--p9)" strokeWidth="2" strokeDasharray="3 3" strokeLinecap="round" opacity="0.55" /></svg>Your pace ahead</span>
-        <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}><svg width="18" height="6" aria-hidden><line x1="1" y1="3" x2="17" y2="3" stroke="var(--ink-3)" strokeWidth="1.5" strokeDasharray="3 4" /></svg>Even pace</span>
-      </div>
-      <div className="num" style={{ fontSize: 12, color: "var(--ink-2)", minHeight: 16 }}>
-        {label(dateAt(h))}{h === elapsedDays ? " (today)" : ""} · you {Math.round(yours(h)).toLocaleString()} · even pace {Math.round(even(h)).toLocaleString()}
-      </div>
       <svg ref={svg} viewBox={`0 0 ${W} ${H}`} width="100%" role="img" aria-label={`Slug Points left: ${pointsLeft} today, ${Math.round(even(elapsedDays))} at an even pace`}
         onPointerMove={onMove} onPointerDown={onMove} onPointerLeave={() => setHover(null)} style={{ display: "block", touchAction: "pan-y" }}>
         {ticks.map((t) => (
@@ -64,6 +57,13 @@ export function PaceChart({ planTotal, pointsLeft, elapsedDays, totalDays, spent
         {hover !== null && hover !== elapsedDays && <line x1={x(h)} x2={x(h)} y1={T} y2={T + PH} stroke="var(--ink-3)" strokeWidth="1" />}
         <circle cx={x(elapsedDays)} cy={y(pointsLeft)} r="5" fill="var(--p9)" stroke="var(--card)" strokeWidth="2" />
         {hover !== null && <circle cx={x(h)} cy={y(yours(h))} r="4" fill="var(--card)" stroke="var(--p9)" strokeWidth="2" />}
+        {/* line labels on the lines themselves (his ask 2026-11-14), so the chart reads without a legend */}
+        <text x={x(elapsedDays) - 8} y={y(pointsLeft) - 10} textAnchor="end" fontSize="11" fontWeight="700" fill="var(--ink)">You</text>
+        <text x={x(endDay) - 2} y={y(endPts) - 8} textAnchor="end" fontSize="11" fill="var(--ink-2)">Your pace</text>
+        <text x={x(totalDays * 0.82)} y={y(even(totalDays * 0.82)) + 16} textAnchor="end" fontSize="11" fill="var(--ink-3)">Even pace</text>
+        {hover !== null && (
+          <text x={L + 4} y={T + 12} fontSize="11" fill="var(--ink-2)" className="num">{label(dateAt(h))}: you {Math.round(yours(h)).toLocaleString()}, even pace {Math.round(even(h)).toLocaleString()}</text>
+        )}
       </svg>
     </div>
   );

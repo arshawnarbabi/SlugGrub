@@ -144,6 +144,11 @@ Most entries use the plain format above. Two kinds of decision come up on every 
 - **Rationale:** one design system across every tab (docs/DESIGN.md); the data layer stays with its owners' functions and names.
 - **Status:** approved
 
+## 2026-11-14 — Sidestash segmented controls
+- **Choice:** the Halls meal switch and the Rank view switch sit in one row with their Sidestash round button (search, live-vote QR). Track: the flat --paper-2 gray with the Sidestash chip shadow; selected thumb: the Sidestash finish (raise gradient, white hairline, chip shadow) over the goo thumb. His words: "dont do the indent. make the slider area like flat how its that darker gray but with the sidestash style shadwo, and then for the selected make it sidestash style". A pressed-in thumb was tried and dropped the same evening.
+- **Also:** top bar status chips (Today's hall/meal/hours, Budget's plan) are Sidestash and not pressable ("dont make it clicable and make it sidestash stye").
+- **Status:** approved
+
 # AI Agent Contract (decisions)
 1. **Read before proposing or changing.** Consult `DECISIONS.md` before suggesting OR making any change to something it covers.
 2. **A request that touches a locked decision is NOT itself authorization to reopen it** — even when phrased as a direct instruction (e.g. "switch the cards to borders," "make it green"). A stakeholder asking for the *change* is not the same as the human explicitly asking to *reopen the locked decision*. Before modifying any file, you MUST: **(a)** surface the locked entry, **(b)** quote its documented rationale, **(c)** ask the human to confirm they intend to supersede it. Implement only after that explicit confirmation — then append a new superseding entry. Do **not** implement in the same turn as the request. (This is the analog of the QA gate: locked decisions are a gate you don't silently pass.)
