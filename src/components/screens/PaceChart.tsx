@@ -27,7 +27,8 @@ export function PaceChart({ planTotal, pointsLeft, elapsedDays, totalDays, spent
   const endPts = Math.max(0, pointsLeft - spentPerDay * (endDay - elapsedDays));
   const yours = (day: number) => (day <= elapsedDays ? planTotal - (planTotal - pointsLeft) * (day / Math.max(1, elapsedDays)) : Math.max(0, pointsLeft - spentPerDay * (day - elapsedDays)));
   const even = (day: number) => planTotal * (1 - day / totalDays);
-  const ticks = [0, planTotal / 2, planTotal];
+  const step = planTotal > 1600 ? 500 : planTotal > 400 ? 250 : 50; // round-number gridlines up to the plan total
+  const ticks = Array.from({ length: Math.floor(planTotal / step) + 1 }, (_, k) => k * step);
   const onMove = (e: React.PointerEvent<SVGSVGElement>) => {
     const box = svg.current?.getBoundingClientRect();
     if (!box) return;
@@ -43,7 +44,7 @@ export function PaceChart({ planTotal, pointsLeft, elapsedDays, totalDays, spent
         <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}><svg width="18" height="6" aria-hidden><line x1="1" y1="3" x2="17" y2="3" stroke="var(--ink-3)" strokeWidth="1.5" strokeDasharray="3 4" /></svg>Even pace</span>
       </div>
       <div className="num" style={{ fontSize: 12, color: "var(--ink-2)", minHeight: 16 }}>
-        {label(dateAt(h))}{h === elapsedDays ? " (today)" : ""} · you {round(yours(h))} · even pace {round(even(h))}
+        {label(dateAt(h))}{h === elapsedDays ? " (today)" : ""} · you {Math.round(yours(h)).toLocaleString()} · even pace {Math.round(even(h)).toLocaleString()}
       </div>
       <svg ref={svg} viewBox={`0 0 ${W} ${H}`} width="100%" role="img" aria-label={`Slug Points left: ${pointsLeft} today, ${Math.round(even(elapsedDays))} at an even pace`}
         onPointerMove={onMove} onPointerDown={onMove} onPointerLeave={() => setHover(null)} style={{ display: "block", touchAction: "pan-y" }}>
