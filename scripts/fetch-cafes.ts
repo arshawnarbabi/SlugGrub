@@ -1,77 +1,29 @@
-// Owner: Ethan. Cafe board data: reads each campus cafe's menu from the FoodPro site (https://nutrition.sa.ucsc.edu) and writes
-// data/cafes.json. Cafe menus don't rotate, so one served day per cafe is enough (cafes close on weekends, so the script walks
-// the dates the site offers until each cafe has one). Markets are left out. Location and description lines are hand-written
-// and kept from the existing file.
+// Owner: Ethan. Cafe and market board data: reads each campus cafe's and market's menu from the FoodPro site
+// (https://nutrition.sa.ucsc.edu) and writes data/cafes.json. The parsing is src/lib/foodpro.ts (fetchCafes), the same code the
+// server's live refresh runs (src/lib/menuLive.ts): each location gets the menu the site lists today, or on the next day it lists
+// one (cafes and markets close on weekends). Items are the site's short menu lines with their prices. The location list, where
+// each one is and its description are SITE_CAFES in src/lib/foodpro.ts; hours are src/lib/cafeHours.ts.
 //
 //   npm run cafes
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { addDays, campusToday, datesOffered, ensureCa, get, longMenuUrl, mealsOffered, parseLongMenu, shortMenuUrl } from "./foodpro.ts";
+import { addDays, campusToday, ensureCa, fetchCafes, get } from "./foodpro.ts";
 
 const SCRIPT = fileURLToPath(import.meta.url);
 ensureCa(SCRIPT);
 
 const OUT = path.join(path.dirname(SCRIPT), "..", "data", "cafes.json");
 
-const CAFES: { id: string; name: string; location: string }[] = [
-  { id: "21", name: "Banana Joe's", location: "Crown College" },
-  { id: "23", name: "Oakes Cafe", location: "Oakes College" },
-  { id: "46", name: "Global Village Cafe", location: "McHenry Library" },
-  { id: "24", name: "Owl's Nest Cafe", location: "Kresge College" },
-  { id: "45", name: "UCen Coffee Bar", location: "Quarry Plaza" },
-  { id: "26", name: "Stevenson Coffee House", location: "Stevenson College" },
-  { id: "22", name: "Perk Coffee Bar", location: "Baskin Engineering" },
-];
-
-type Item = { recipeId: string; name: string; portion?: string; tags?: string[] };
-type Category = { name: string; items: Item[] };
-
-const old = (() => {
-  try {
-    return (JSON.parse(fs.readFileSync(OUT, "utf8")).cafes ?? []) as { id: string; description?: string; location?: string }[];
-  } catch {
-    return [];
-  }
-})();
-
-// Category names on the site sometimes carry notices ("Coffee & Tea Now City of Santa Cruz Cup Fee of $.025 ..."); keep the name.
-const cleanCategory = (c: string) => c.replace(/\s+Now City of Santa Cruz.*$/i, "").trim();
-
 async function main() {
   const today = campusToday();
-  const first = await get(shortMenuUrl(CAFES[0].id, CAFES[0].name, today));
-  const dates = [...new Set([...(first ? datesOffered(first) : [today]), addDays(today, -1)])].sort();
-  const out = [];
-  for (const cafe of CAFES) {
-    let found: { date: string; categories: Category[] } | null = null;
-    for (const date of dates) {
-      const short = await get(shortMenuUrl(cafe.id, cafe.name, date));
-      if (!short || !/shortmenurecipes/.test(short)) continue; // closed that day
-      const cats = new Map<string, Category>();
-      for (const meal of mealsOffered(short)) {
-        const html = await get(longMenuUrl(cafe.id, cafe.name, date, meal));
-        for (const it of html ? parseLongMenu(html) : []) {
-          const name = cleanCategory(it.category);
-          const cat = cats.get(name) ?? { name, items: [] };
-          if (!cat.items.some((x) => x.recipeId === it.recipeId)) {
-            cat.items.push({ recipeId: it.recipeId, name: it.name, ...(it.portion ? { portion: it.portion } : {}), ...(it.tags.length ? { tags: it.tags } : {}) });
-          }
-          cats.set(name, cat);
-        }
-      }
-      if (cats.size) { found = { date, categories: [...cats.values()] }; break; }
-    }
-    const prev = old.find((c) => c.id === cafe.id);
-    const itemCount = found ? found.categories.reduce((n, c) => n + c.items.length, 0) : 0;
-    console.log(`[${cafe.id}] ${cafe.name}: ${found ? `${itemCount} items from ${found.date}` : "no menu on any offered day"}`);
-    out.push({
-      id: cafe.id, name: cafe.name, short: cafe.name, location: prev?.location ?? cafe.location, description: prev?.description ?? "",
-      itemCount, menuDate: found?.date, categories: found?.categories ?? [],
-    });
-  }
-  const note = "Owner: Ethan. Campus cafe menus (not dining halls or markets), read from https://nutrition.sa.ucsc.edu/ by scripts/fetch-cafes.ts (npm run cafes). Location and description are hand-written.";
-  fs.writeFileSync(OUT, JSON.stringify({ _note: note, fetchedOn: today, cafes: out }, null, 1) + "\n", "utf8");
+  const dates = Array.from({ length: 8 }, (_, i) => addDays(today, i)); // the site shows about a week ahead
+  const cafes = await fetchCafes(get, dates, (c) =>
+    console.log(`[${c.id}] ${c.name}: ${c.menuDate ? `${c.itemCount} items from ${c.menuDate}` : "no menu on any offered day"}`));
+  if (!cafes.some((c) => c.itemCount)) throw new Error("the site lists no cafe or market menus this week: kept the saved file");
+  const note = "Owner: Ethan. Campus cafe and market menus (not dining halls), read from https://nutrition.sa.ucsc.edu/ by scripts/fetch-cafes.ts (npm run cafes). fetchedOn is the campus date the menus were picked for; each location's menuDate is the day its items come from.";
+  // fetchedAt tells the server how old the file is: older than a few hours (or from another day) it reads the site itself.
+  fs.writeFileSync(OUT, JSON.stringify({ _note: note, fetchedAt: new Date().toISOString(), fetchedOn: today, cafes }, null, 1) + "\n", "utf8");
   console.log(`saved data/cafes.json`);
 }
 

@@ -8,14 +8,14 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useReducedMotion } from "framer-motion";
 import Link from "next/link";
-import { Search01Icon, Cancel01Icon, CrownIcon, ArrowRight01Icon, Coffee02Icon, RiceBowl01Icon } from "@hugeicons/core-free-icons";
+import { Search01Icon, Cancel01Icon, CrownIcon, ArrowRight01Icon, Coffee02Icon, RiceBowl01Icon, ShoppingBasket01Icon } from "@hugeicons/core-free-icons";
 import { Icon } from "@/components/ui/Icon";
 import { Photo } from "@/components/ui/Photo";
 import { Pager } from "@/components/ui/Pager";
 import { Screen } from "@/components/ui/Screen";
 import { Seg, Appear, GooTrack } from "@/components/ui/motion";
 import { useProfile } from "@/lib/profile";
-import type { HallsData, HallView } from "@/lib/hallsView";
+import type { CafeView, HallsData, HallView } from "@/lib/hallsView";
 import type { HallId, MealName } from "@/lib/types";
 import { MEAL_LABELS as MEALS, type MealLabel as Meal } from "./now";
 import { dishPhoto } from "./dishPhoto";
@@ -131,19 +131,38 @@ export function HallsScreen({ data, best }: { data: HallsData; best: BestDish[] 
         {data.halls.map((x) => <HallPage key={x.id} h={x} meal={meals[x.id] ?? "Dinner"} data={data} />)}
       </Pager>
 
-      <div className="sechead" style={{ marginTop: 6 }}><h2>Cafe board</h2><span className="label" style={{ fontSize: 12 }}>Same menu every day</span></div>
-      <div className="card" style={{ padding: "2px 14px" }}>
-        {data.cafes.map((c) => (
-          <div className="row" key={c.id}>
-            <span className="iconbtn" style={{ width: 36, height: 36, background: "var(--paper-2)" }}><Icon icon={Coffee02Icon} size={17} /></span>
-            <div className="grow"><div className="title">{c.name}</div><div className="sub">{[c.location, ...c.highlights].join(" · ")}</div></div>
-            <span className="num label" style={{ fontSize: 12 }}>{c.itemCount} items</span>
-          </div>
-        ))}
-      </div>
+      <div className="sechead" style={{ marginTop: 6 }}><h2>Cafe board</h2><span className="label" style={{ fontSize: 12 }}>{menusNote(data.cafes, data.date)}</span></div>
+      <CafeRows list={data.cafes} icon={Coffee02Icon} />
+      {(data.markets?.length ?? 0) > 0 && <>
+      <div className="sechead" style={{ marginTop: 6 }}><h2>Markets</h2><span className="label" style={{ fontSize: 12 }}>{menusNote(data.markets!, data.date)}</span></div>
+      <CafeRows list={data.markets!} icon={ShoppingBasket01Icon} />
+      </>}
       </>}
       </Appear>
     </Screen>
+  );
+}
+
+/** Which day the board's menus are from: today, or the day they open next (cafes and markets close on weekends). */
+function menusNote(list: CafeView[], today: string): string {
+  const dates = [...new Set(list.map((c) => c.menuDate).filter(Boolean))] as string[];
+  const first = dates.sort()[0];
+  if (!first || first === today) return "Today's menus";
+  return `Menus from ${new Date(`${first}T12:00:00Z`).toLocaleDateString("en-US", { weekday: "long", timeZone: "UTC" })}`;
+}
+
+/** Cafe or market rows: name; where it is, whether it is open now (posted hours only) and up to three things to eat; item count. */
+function CafeRows({ list, icon }: { list: CafeView[]; icon: typeof Coffee02Icon }) {
+  return (
+    <div className="card" style={{ padding: "2px 14px" }}>
+      {list.map((c) => (
+        <div className="row" key={c.id}>
+          <span className="iconbtn" style={{ width: 36, height: 36, background: "var(--paper-2)" }}><Icon icon={icon} size={17} /></span>
+          <div className="grow"><div className="title">{c.name}</div><div className="sub">{[c.location, c.status ? cap(c.status) : null, ...c.highlights].filter(Boolean).join(" · ")}</div></div>
+          <span className="num label" style={{ fontSize: 12 }}>{c.itemCount} items</span>
+        </div>
+      ))}
+    </div>
   );
 }
 

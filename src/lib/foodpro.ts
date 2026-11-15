@@ -92,6 +92,8 @@ export interface LongItem {
   labelKey: string;
   name: string;
   portion?: string;
+  /** "$4.85" at cafes and markets (the long menu's price column); halls list no prices. */
+  price?: string;
   tags: string[];
 }
 
@@ -103,21 +105,27 @@ export function parseLongMenu(html: string): LongItem[] {
   const items: LongItem[] = [];
   let category = "General";
   const re =
-    /<div class=['"]longmenucolmenucat['"]>--\s*(.+?)\s*--<\/div>|<a href=['"]label\.aspx\?[^'"]*RecNumAndPort=(([^*&'"]+)\*[^&'"]+)[^'"]*['"][^>]*>([\s\S]*?)<\/a>|LegendImages\/([a-z0-9_]+)\.gif|class=['"]longmenucolportions['"]>([^<]*)<\/div>/g;
+    /<div class=['"]longmenucolmenucat['"]>--\s*(.+?)\s*--<\/div>|<a href=['"]label\.aspx\?[^'"]*RecNumAndPort=(([^*&'"]+)\*[^&'"]+)[^'"]*['"][^>]*>([\s\S]*?)<\/a>|LegendImages\/([a-z0-9_]+)\.gif|class=['"]longmenucolportions['"]>([^<]*)<\/div>|class=['"]longmenucolprice['"]>([^<]*)<\/div>/g;
   let cur: LongItem | null = null; // the item whose row we are in (its legend icons and portion cell follow its link)
+  let priced: LongItem | null = null; // the item whose portion was just read: a cafe's price cell comes right after it
   for (const m of html.matchAll(re)) {
     if (m[1]) {
       category = decodeText(m[1]);
-      cur = null; // a category row has its own (empty) portion cell
+      cur = priced = null; // a category row has its own (empty) portion and price cells
     } else if (m[2]) {
       cur = { category, labelKey: m[2], recipeId: m[3], name: decodeText(m[4].replace(/<[^>]+>/g, "")), tags: [] };
+      priced = null;
       items.push(cur);
     } else if (m[5] && cur) {
       const t = TAGS[m[5]];
       if (t && !cur.tags.includes(t)) cur.tags.push(t);
     } else if (m[6] !== undefined && cur) {
       cur.portion = decodeText(m[6]) || undefined;
-      cur = null; // the row's portion cell closes the row
+      priced = cur;
+      cur = null; // the row's portion cell closes the row (the legend key at the page foot must not tag the last item)
+    } else if (m[7] !== undefined && priced) {
+      priced.price = price(m[7]);
+      priced = null;
     }
   }
   return items;
@@ -212,4 +220,143 @@ export async function fetchDay(o: DayOptions, iso: string): Promise<DayMenu[]> {
     o.onHall?.(hall.id, counts);
   }
   return menus;
+}
+
+// ─── Cafes and markets ───────────────────────────────────────────────────────────────────────────────────────────────────
+// Same site, same pages. The short menu is what the site lists for a day (with prices); the long menu adds each line's recipe
+// id, portion and diet icons, and also lists modifiers ("Add Caramel Sauce", milks) under "All Day" that the short menu leaves
+// out, so a location's items are the short menu's lines, matched to the long menu for the extra fields.
+
+/** "$4.85" as the site writes it; a blank or "$0.00" cell (a placeholder on the site) is no price. */
+function price(raw: string): string | undefined {
+  const p = decodeText(raw);
+  return /^\$\d/.test(p) && !/^\$0+(\.0+)?$/.test(p) ? p : undefined;
+}
+
+export interface ShortItem {
+  meal: string;
+  category: string;
+  name: string;
+  price?: string;
+}
+
+/** Every line on a short menu page, in page order, with its meal, category and price. */
+export function parseShortMenu(html: string): ShortItem[] {
+  const items: ShortItem[] = [];
+  let meal = "", category = "General";
+  const re =
+    /class=['"]shortmenumeals['"]>([^<]+)|class=['"]shortmenucats['"]><span[^>]*>([^<]*)|class=['"]shortmenurecipes['"]><span[^>]*>([^<]*)|class=['"]shortmenuprices['"]><span[^>]*>([^<]*)/g;
+  for (const m of html.matchAll(re)) {
+    if (m[1]) meal = decodeText(m[1]);
+    else if (m[2] !== undefined) category = decodeText(m[2]).replace(/^--\s*|\s*--$/g, "");
+    else if (m[3] !== undefined) items.push({ meal, category, name: decodeText(m[3]) });
+    else if (m[4] !== undefined && items.length) items[items.length - 1].price = price(m[4]);
+  }
+  return items;
+}
+
+export interface CafeItem {
+  /** The site's recipe number; "" for a line the site lists without a label link. */
+  recipeId: string;
+  name: string;
+  portion?: string;
+  price?: string;
+  tags?: string[];
+}
+
+export interface CafeCategory {
+  name: string;
+  items: CafeItem[];
+}
+
+export interface Cafe {
+  id: string;
+  name: string;
+  short: string;
+  location: string;
+  description: string;
+  /** Lines the site lists for menuDate (its short menu), each size and price counted once. */
+  itemCount: number;
+  categories: CafeCategory[];
+  menuDate?: string; // the day the items were read from the site
+  kind?: "cafe" | "market";
+}
+
+/** The cafes and markets on the site's home page (locationNum, locationName). Location and description: each location's page
+ *  on dining.ucsc.edu/locations-hours (checked 2026-11-14), descriptions shortened from it. One "Perk Coffee Bar" menu serves the three Perk bars. */
+export const SITE_CAFES: { id: string; name: string; kind: "cafe" | "market"; location: string; description: string }[] = [
+  { id: "21", name: "Banana Joe's", kind: "cafe", location: "Crown College", description: "Late night cafe with student favorites like burgers, fries and pizza." },
+  { id: "23", name: "Oakes Cafe", kind: "cafe", location: "Oakes College", description: "Breakfast, lunch and dinner." },
+  { id: "46", name: "Global Village Cafe", kind: "cafe", location: "McHenry Library", description: "In the McHenry Library lobby: menu items plus 100% organic coffee and teas." },
+  { id: "24", name: "Owl's Nest Cafe", kind: "cafe", location: "Kresge College", description: "Grab-and-go sushi, sandwiches, salads, wraps, bagels and pastries, with espresso, smoothies and boba." },
+  { id: "45", name: "UCen Coffee Bar", kind: "cafe", location: "University Center, above College Nine/JRL Dining Hall", description: "Grab-and-go meals, snacks, bottled drinks, smoothies and organic espresso drinks." },
+  { id: "26", name: "Stevenson Coffee House", kind: "cafe", location: "Stevenson College", description: "Since 1975: espresso drinks, salads, sandwiches, fudgies and more." },
+  { id: "22", name: "Perk Coffee Bar", kind: "cafe", location: "Baskin Engineering, Earth & Marine Sciences and Physical Sciences", description: "100% organic coffee, muffins, Bagelry bagels and pastries, salads and sandwiches." },
+  { id: "50", name: "Porter Market", kind: "market", location: "Porter College, next to Porter/Kresge Dining Hall", description: "Grab-and-go meals, snacks, bottled drinks, smoothies and espresso, plus grocery and convenience items." },
+  { id: "47", name: "Merrill Market", kind: "market", location: "Merrill College", description: "Grab-and-go meals, snacks, bottled drinks, smoothies and organic coffee, plus grocery and convenience items." },
+];
+
+/** Category names sometimes carry a notice ("Coffee & Tea -- New City of Santa Cruz Cup Fee of $.025 ..."): keep the name. */
+export const cleanCategory = (c: string) => c.replace(/\s*(--\s*)?(New|Now) City of Santa Cruz.*$/i, "").trim();
+
+/** A modifier rather than something to order on its own ("Add Bacon", the "All Day" and "Add Ons" lists). */
+export const isAddOn = (category: string, name: string) => /^(all day|add ons?)$/i.test(category) || /^add\b/i.test(name);
+
+/** One location's menu on one date: its categories and line count, or null when the site lists nothing for it that day (closed)
+ *  or only modifiers. Throws when a page can't be reached, so a failed request never passes for a closed day. */
+export async function fetchCafeDay(get: GetPage, loc: { id: string; name: string }, iso: string): Promise<{ categories: CafeCategory[]; itemCount: number } | null> {
+  const short = await get(shortMenuUrl(loc.id, loc.name, iso));
+  if (short === null) throw new Error(`short menu unreachable: ${loc.name} ${iso}`);
+  const listed = parseShortMenu(short);
+  if (!listed.some((it) => !isAddOn(it.category, it.name))) return null;
+  // the long menu's lines per meal, category and name, in page order (the same name twice is two sizes, matched in order)
+  const extra = new Map<string, LongItem[]>();
+  for (const meal of [...new Set(listed.map((it) => it.meal))]) {
+    const html = await get(longMenuUrl(loc.id, loc.name, iso, meal));
+    if (html === null) throw new Error(`long menu unreachable: ${loc.name} ${meal} ${iso}`);
+    for (const it of parseLongMenu(html)) {
+      const key = `${meal}|${cleanCategory(it.category)}|${it.name}`;
+      extra.set(key, [...(extra.get(key) ?? []), it]);
+    }
+  }
+  const cats = new Map<string, CafeCategory>();
+  const seen = new Set<string>();
+  for (const it of listed) {
+    const category = cleanCategory(it.category);
+    const long = extra.get(`${it.meal}|${category}|${it.name}`)?.shift();
+    const item: CafeItem = {
+      recipeId: long?.recipeId ?? "", name: it.name,
+      ...(long?.portion ? { portion: long.portion } : {}),
+      ...(it.price ?? long?.price ? { price: it.price ?? long?.price } : {}),
+      ...(long?.tags.length ? { tags: long.tags } : {}),
+    };
+    const key = `${category}|${item.name}|${item.portion ?? ""}|${item.price ?? ""}`; // the same line under two meals is one item
+    if (seen.has(key)) continue;
+    seen.add(key);
+    const cat = cats.get(category) ?? { name: category, items: [] };
+    cat.items.push(item);
+    cats.set(category, cat);
+  }
+  const categories = [...cats.values()];
+  return { categories, itemCount: categories.reduce((n, c) => n + c.items.length, 0) };
+}
+
+/** Every cafe and market, each with the menu the site lists for the first of `dates` it has one (today, then the next days:
+ *  cafes close on weekends). A location with no menu on any of them keeps its place with no items. */
+export async function fetchCafes(get: GetPage, dates: string[], onCafe?: (c: Cafe) => void): Promise<Cafe[]> {
+  const out: Cafe[] = [];
+  for (const loc of SITE_CAFES) {
+    let found: { date: string; categories: CafeCategory[]; itemCount: number } | null = null;
+    for (const date of dates) {
+      const day = await fetchCafeDay(get, loc, date);
+      if (day) { found = { date, ...day }; break; }
+    }
+    const cafe: Cafe = {
+      id: loc.id, name: loc.name, short: loc.name, kind: loc.kind, location: loc.location, description: loc.description,
+      itemCount: found?.itemCount ?? 0, categories: found?.categories ?? [], ...(found ? { menuDate: found.date } : {}),
+    };
+    out.push(cafe);
+    onCafe?.(cafe);
+  }
+  return out;
 }

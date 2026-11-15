@@ -1,7 +1,9 @@
 // Owner: Ethan. What the Halls tab shows, trimmed on the server so the phone gets only that (a day's full menu file is a few
 // hundred KB; this is a few dozen): each hall's real dishes per meal today (no salad bar, condiments, drinks, sauces or bars),
-// its hours and what it is doing now, and the cafe board.
+// its hours and what it is doing now, and the cafe and market board.
 import { getAllMenus, getCafes, type Cafe } from "./menus";
+import { cafeNow } from "./cafeHours";
+import { isAddOn } from "./foodpro";
 import { HALLS, hallHoursOn, mealNow, type MealNow } from "./halls";
 import { isRealDish } from "./dishKinds";
 import type { CampusNow } from "./campusTime";
@@ -31,7 +33,11 @@ export interface CafeView {
   name: string;
   location: string;
   itemCount: number;
-  highlights: string[]; // a few food items (not coffee or drinks)
+  highlights: string[]; // up to three things to eat from its menu (not drinks, add-ons or bowl parts)
+  kind: "cafe" | "market";
+  menuDate?: string; // the day its items come from (the next day it lists a menu when it is closed today)
+  status?: string; // "open till 6 PM", "closed today"...; absent when it has no posted hours
+  open?: boolean;
 }
 
 export interface HallsData {
@@ -40,19 +46,33 @@ export interface HallsData {
   mock: boolean;
   halls: HallView[];
   cafes: CafeView[];
+  markets?: CafeView[];
 }
 
 const DRINKY = /coffee|tea|boba|drink|beverage|espresso|smoothie/i;
+const PARTS = /\b(base|protein|finish|topping|sauce)\b/i; // build-your-own bowl parts (Owl's Nest)
+const SIDE = /bakery|bagel|side/i; // real food, shown after the mains
 
-function cafeView(c: Cafe): CafeView {
-  const food = c.categories.filter((k) => !DRINKY.test(k.name)).flatMap((k) => k.items);
+/** Up to three things to eat, mains before bakery and sides: real lines from its menu, never drinks, add-ons, bowl parts or
+ *  spreads ("Cream Cheese pck"). */
+function highlights(c: Cafe): string[] {
+  const food = c.categories.filter((k) => !DRINKY.test(k.name) && !PARTS.test(k.name));
+  const ordered = [...food.filter((k) => !SIDE.test(k.name)), ...food.filter((k) => SIDE.test(k.name))];
   const seen = new Set<string>();
-  const highlights = food.map((i) => i.name).filter((n) => !seen.has(n) && seen.add(n)).slice(0, 3);
-  return { id: c.id, name: c.name, location: c.location, itemCount: c.itemCount, highlights };
+  return ordered.flatMap((k) => k.items.filter((i) => !isAddOn(k.name, i.name) && !/\bpck\b/i.test(i.name)).map((i) => i.name))
+    .filter((n) => !seen.has(n) && seen.add(n)).slice(0, 3);
+}
+
+function cafeView(c: Cafe, now: CampusNow): CafeView {
+  const status = cafeNow(c.id, now.date, now.minutes);
+  return {
+    id: c.id, name: c.name, location: c.location, itemCount: c.itemCount, highlights: highlights(c), kind: c.kind ?? "cafe",
+    ...(c.menuDate ? { menuDate: c.menuDate } : {}), ...(status ? { status: status.text, open: status.open } : {}),
+  };
 }
 
 export async function getHallsData(now: CampusNow): Promise<HallsData> {
-  const [menus, cafes] = await Promise.all([getAllMenus(now.date), getCafes()]);
+  const [menus, cafes] = await Promise.all([getAllMenus(now.date), getCafes(now.date)]);
   const halls = HALLS.map((h): HallView => {
     const day = menus.find((m) => m.hallId === h.id);
     const meals: HallView["meals"] = {};
@@ -77,6 +97,7 @@ export async function getHallsData(now: CampusNow): Promise<HallsData> {
     menuDate: first?.date ?? now.date,
     mock: !!first?.mock,
     halls,
-    cafes: cafes.filter((c) => c.itemCount > 0).map(cafeView),
+    cafes: cafes.filter((c) => c.itemCount > 0 && c.kind !== "market").map((c) => cafeView(c, now)),
+    markets: cafes.filter((c) => c.itemCount > 0 && c.kind === "market").map((c) => cafeView(c, now)),
   };
 }

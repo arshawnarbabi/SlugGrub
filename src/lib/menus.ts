@@ -7,7 +7,7 @@
 //      a slower read keeps going and serves the next caller;
 //   3. otherwise the saved file even if older, else the nearest real day marked with `fallbackFor` (the date asked for), never
 //      the mock silently. The mock (data/mock/menu.json, marked `mock: true`) is used only when there are no real files at all.
-// Committed files stay the fallback. Deployed builds include data/menus, data/cafes.json and data/nutrition-cache.json through
+// Cafes and markets follow the same steps (getCafes, at the end). Committed files stay the fallback. Deployed builds include data/menus, data/cafes.json and data/nutrition-cache.json through
 // outputFileTracingIncludes in next.config.ts. Every caller runs inside a "use cache" scope or a route handler, so reading the
 // clock here is allowed (cacheComponents).
 
@@ -16,33 +16,15 @@ import path from "node:path";
 import { cacheLife } from "next/cache";
 import type { DayMenu, HallId } from "./types";
 import { campusClock, daysBetween } from "./campusTime";
-import { fetchLiveDay, type LiveDay } from "./menuLive";
+import { fetchLiveCafes, fetchLiveDay, type LiveCafes, type LiveDay } from "./menuLive";
+import type { Cafe } from "./foodpro";
 import mock from "../../data/mock/menu.json";
 
 const MENU_DIR = path.join(process.cwd(), "data", "menus");
 const CAFES_FILE = path.join(process.cwd(), "data", "cafes.json");
 
-export interface CafeItem {
-  recipeId: string;
-  name: string;
-  portion?: string;
-}
-
-export interface CafeCategory {
-  name: string;
-  items: CafeItem[];
-}
-
-export interface Cafe {
-  id: string;
-  name: string;
-  short: string;
-  location: string;
-  description: string;
-  itemCount: number;
-  categories: CafeCategory[];
-  menuDate?: string; // the day the items were read from the site
-}
+// Cafe types live with the parser (src/lib/foodpro.ts) so the fetcher script and the server share them.
+export type { Cafe, CafeCategory, CafeItem } from "./foodpro";
 
 const FRESH_MS = 3 * 60 * 60_000; // a saved file younger than this is used as is
 const LIVE_WAIT_MS = 3_500; // the longest a page or route waits for the site before using the saved menus
@@ -89,22 +71,27 @@ async function liveDay(date: string): Promise<LiveDay> {
 
 const building = () => process.env.NEXT_PHASE === "phase-production-build"; // builds use the committed files only
 
+/** `read`'s result, or null if it fails or takes longer than LIVE_WAIT_MS (a slower read keeps going and serves the next caller). */
+async function within<T>(read: Promise<T>, what: string): Promise<T | null> {
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  const late = new Promise<null>((resolve) => { timer = setTimeout(() => resolve(null), LIVE_WAIT_MS); });
+  const done = read.then((v) => v, (err) => {
+    console.warn(`[menus] live read of ${what} failed, using the saved data:`, (err as Error).message);
+    return null;
+  });
+  try {
+    return await Promise.race([done, late]);
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
 /** The site's own menus for `date`, or null if it can't answer within LIVE_WAIT_MS (or the date is outside its window). */
 async function live(date: string): Promise<DayMenu[] | null> {
   if (building()) return null;
   const ahead = daysBetween(campusClock(new Date()).date, date);
   if (ahead < -1 || ahead > 10) return null;
-  let timer: ReturnType<typeof setTimeout> | undefined;
-  const late = new Promise<null>((resolve) => { timer = setTimeout(() => resolve(null), LIVE_WAIT_MS); });
-  const read = liveDay(date).then((d) => d.menus, (err) => {
-    console.warn(`[menus] live read of ${date} failed, using the saved menus:`, (err as Error).message);
-    return null;
-  });
-  try {
-    return await Promise.race([read, late]);
-  } finally {
-    clearTimeout(timer);
-  }
+  return (await within(liveDay(date), date))?.menus ?? null;
 }
 
 /** The real day to serve for `date`: itself if it has a file, else the nearest date that does (ties go to the earlier one). */
@@ -138,15 +125,35 @@ export async function getAllMenus(date: string): Promise<DayMenu[]> {
   return dayFor(date);
 }
 
-let cafes: Cafe[] | null = null;
-export async function getCafes(): Promise<Cafe[]> {
-  if (cafes) return cafes;
+// Cafes and markets: the same order as the halls. data/cafes.json (npm run cafes) when it was fetched less than FRESH_MS ago for
+// today's campus date; otherwise the site itself (each location's menu today, or the next day it lists one: cafes close on
+// weekends), through Next's cache; otherwise the saved file whatever its age.
+interface SavedCafes { fetchedAt?: string; fetchedOn?: string; cafes: Cafe[] }
+let savedCafes: SavedCafes | null | undefined;
+function readCafes(): SavedCafes | null {
+  if (savedCafes !== undefined) return savedCafes;
   try {
-    const parsed = JSON.parse(fs.readFileSync(CAFES_FILE, "utf8")) as { cafes?: Cafe[] };
-    cafes = parsed.cafes ?? [];
+    const parsed = JSON.parse(fs.readFileSync(CAFES_FILE, "utf8")) as Partial<SavedCafes>;
+    savedCafes = { fetchedAt: parsed.fetchedAt, fetchedOn: parsed.fetchedOn, cafes: parsed.cafes ?? [] };
   } catch (err) {
     console.warn("[menus] Could not read data/cafes.json:", err);
-    cafes = [];
+    savedCafes = null;
   }
-  return cafes;
+  return savedCafes;
+}
+
+async function liveCafes(date: string): Promise<LiveCafes> {
+  "use cache";
+  cacheLife("hours");
+  return fetchLiveCafes(date);
+}
+
+/** Every cafe and market (kind "cafe" or "market"), each with the menu the site lists for its menuDate. `date` is the campus
+ *  date to pick menus for (default today). */
+export async function getCafes(date?: string): Promise<Cafe[]> {
+  const today = date ?? campusClock(new Date()).date;
+  const saved = readCafes();
+  if (saved?.fetchedAt && saved.fetchedOn === today && Date.now() - Date.parse(saved.fetchedAt) < FRESH_MS) return saved.cafes;
+  const fresh = building() ? null : await within(liveCafes(today), `cafes for ${today}`);
+  return fresh?.cafes ?? saved?.cafes ?? [];
 }
