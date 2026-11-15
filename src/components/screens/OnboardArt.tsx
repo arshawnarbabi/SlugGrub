@@ -22,8 +22,8 @@ import { campusNow } from "./now";
 
 const ART_H = 236;
 
-function Frame({ children }: { children: React.ReactNode }) {
-  return <div style={{ height: ART_H, display: "grid", placeItems: "center", position: "relative" }}>{children}</div>;
+function Frame({ children, h = ART_H }: { children: React.ReactNode; h?: number }) {
+  return <div style={{ height: h, display: "grid", placeItems: "center", position: "relative" }}>{children}</div>;
 }
 
 // Every graphic follows its question's answer on THE spring (his ask 2026-11-15: "make all the onbaording graphics animated as you
@@ -98,6 +98,35 @@ export function PointsArt({ points, total }: { points: number; total: number }) 
           <div>
             <div className="hero-num" style={{ fontSize: 40 }}>{points.toLocaleString()}</div>
             <div className="label" style={{ fontSize: 12 }}>of {total.toLocaleString()} points</div>
+          </div>
+        </div>
+      </div>
+    </Frame>
+  );
+}
+
+/** Calorie goal step (2026-11-15): the same ring as the points step, smaller (the step has more to fill in), filled to the goal on a
+ *  0 to 4,000 scale and following every input on THE spring; the goal in the middle blur-morphs. No goal yet: an empty ring and a dash. */
+export function GoalArt({ goal }: { goal: number | null }) {
+  const r = 58, c = 2 * Math.PI * r, SWEEP = 250, arc = c * (SWEEP / 360);
+  const share = goal ? Math.max(0.04, Math.min(1, goal / 4000)) : 0;
+  const reduce = useReducedMotion();
+  const fill = useSpring(share, SPRING_CFG);
+  useEffect(() => { if (reduce) fill.jump(share); else fill.set(share); }, [share, reduce, fill]);
+  const dash = useTransform(fill, (v) => `${arc * Math.max(0, v)} ${c}`);
+  const shows = useTransform(fill, (v) => (v > 0.004 ? 1 : 0)); // a round cap draws a dot at zero length: hide it
+  const text = goal ? goal.toLocaleString("en-US") : "–";
+  return (
+    <Frame h={150}>
+      <div style={{ position: "relative", width: 144, height: 144 }}>
+        <svg width="144" height="144" viewBox="0 0 144 144" style={{ transform: `rotate(${90 + (360 - SWEEP) / 2}deg)` }} aria-hidden>
+          <circle cx="72" cy="72" r={r} fill="none" stroke="var(--paper-2)" strokeWidth="12" strokeDasharray={`${arc} ${c}`} strokeLinecap="round" />
+          <motion.circle cx="72" cy="72" r={r} fill="none" stroke="var(--p9)" strokeWidth="12" strokeLinecap="round" style={{ strokeDasharray: dash, strokeOpacity: shows }} />
+        </svg>
+        <div style={{ position: "absolute", inset: 0, display: "grid", placeItems: "center", textAlign: "center" }}>
+          <div>
+            <div className="hero-num" style={{ fontSize: 30, color: goal ? undefined : "var(--ink-3)" }}><Swap id={text}>{text}</Swap></div>
+            <div className="label" style={{ fontSize: 12 }}>cal a day</div>
           </div>
         </div>
       </div>

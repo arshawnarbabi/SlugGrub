@@ -11,11 +11,11 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState, useSyncExternalStore } from "react";
-import { ArrowLeft01Icon, ArrowRight01Icon, PencilEdit02Icon, PlayCircleIcon, Logout03Icon, Delete02Icon } from "@hugeicons/core-free-icons";
+import { ArrowLeft01Icon, ArrowRight01Icon, PencilEdit02Icon, PlayCircleIcon, Logout03Icon, Delete02Icon, FireIcon } from "@hugeicons/core-free-icons";
 import { Icon } from "@/components/ui/Icon";
 import { Screen } from "@/components/ui/Screen";
 import { Appear, Swap } from "@/components/ui/motion";
-import { PROFILE_KEY, useProfile } from "@/lib/profile";
+import { PROFILE_KEY, goalCalories, useProfile } from "@/lib/profile";
 import { setDemo, useDemoMode } from "@/lib/demoMode";
 import { HALLS, MEAL_PLANS } from "@/lib/halls";
 import { clearPlates, DEMO_PLATE, loadPlates, removeDemoPlates } from "./plates";
@@ -57,7 +57,7 @@ export function SettingsScreen() {
     removeDemoPlates();
     setDemo(false);
   };
-  const clearsLine = [profile ? "your plan, points, college and hall" : null, plates ? `${plates} saved ${plates === 1 ? "plate" : "plates"}` : null].filter(Boolean).join(" and ");
+  const clearsLine = [profile ? (profile.goal ? "your plan, points, college, hall and calorie goal" : "your plan, points, college and hall") : null, plates ? `${plates} saved ${plates === 1 ? "plate" : "plates"}` : null].filter(Boolean).join(" and ");
 
   return (
     <Screen wash top={<div className="topbar">
@@ -74,6 +74,14 @@ export function SettingsScreen() {
             <span className="grow"><span className="title">Edit my plan, college and hall</span><span className="sub">{planLine}</span></span>
             <Icon icon={ArrowRight01Icon} size={16} sw={2} />
           </Link>
+          {/* the optional calorie goal (2026-11-15): its step alone, or the whole edit above, which ends on it */}
+          {profile && (
+            <Link href="/onboarding?step=4&goal=1" className="row st-row press">
+              <span className="st-ic"><Icon icon={FireIcon} size={18} sw={2} /></span>
+              <span className="grow"><span className="title">Calorie goal</span><span className="sub">{goalCalories(profile) ? `${goalCalories(profile)!.toLocaleString("en-US")} cal a day · only you see it` : "Not set · optional"}</span></span>
+              <Icon icon={ArrowRight01Icon} size={16} sw={2} />
+            </Link>
+          )}
         </div>
       </div>
 

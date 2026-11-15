@@ -133,4 +133,5 @@ export interface PlateLog {
   meal: MealName;
   items: PlateItem[];
   totalCalories: number;
+  proteinG?: number; // label protein x servings, for Today's calories card (2026-11-15); older plates have none
 }

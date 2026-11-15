@@ -4,6 +4,8 @@
 // save. Calories are private (PLAN.md design rule): saved plates stay on this device (plates.ts). The hall is the student's
 // usual hall from onboarding (JRL/C9 without a profile, or the first hall serving today when theirs is closed); the meal follows
 // that hall's real hours today (src/lib/halls.ts), Pacific time. The demo plate is a dish on that meal's menu (src/components/screens/demoPlates.ts).
+// Save files the plate into its dining hall visit (plates.ts logPlate, rules in src/lib/diningEntry.ts): the first plate of a visit is
+// charged at the door, later plates within 2 hours at the same hall are free, and the saved state says which in a small Sidestash chip.
 import Link from "next/link";
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
@@ -19,7 +21,8 @@ import type { LogItem, LogResponse, LogResult } from "@/app/api/log/contract";
 import { dishPhoto } from "./dishPhoto";
 import { portionText } from "./portion";
 import { campusNow, hoursFor, mealLabel, mealToLog, MEAL_NAMES } from "./now";
-import { savePlate } from "./plates";
+import { logPlate } from "./plates";
+import { pointsText, type VisitOutcome } from "@/lib/diningEntry";
 import type { DemoPlates } from "./demoPlates";
 import { ProcessingBeam } from "./ProcessingBeam";
 
@@ -72,6 +75,7 @@ export function LogScreen({ demo }: { demo: DemoPlates }) {
   const [problem, setProblem] = useState("");
   const [servings, setServings] = useState<Record<string, number>>({});
   const [stored, setStored] = useState(true);
+  const [visit, setVisit] = useState<VisitOutcome | null>(null);
   const file = useRef<HTMLInputElement>(null);
   const run = useRef(0);
   const reduce = useReducedMotion();
@@ -104,7 +108,7 @@ export function LogScreen({ demo }: { demo: DemoPlates }) {
     try { send(await (await fetch(plate.photo)).blob(), plate.photo, plate.date); }
     catch { setProblem("Couldn't load the demo plate."); setPhase("error"); }
   };
-  const again = () => { run.current++; setResult(null); setPhase("pick"); };
+  const again = () => { run.current++; setResult(null); setVisit(null); setPhase("pick"); };
 
   const items = (result?.items ?? []).map((it) => ({ it, s: servings[it.recipeId] ?? it.servings }));
   const cal = Math.round(items.reduce((n, x) => n + x.it.per.calories * x.s, 0));
@@ -114,7 +118,9 @@ export function LogScreen({ demo }: { demo: DemoPlates }) {
     if (!result) return;
     const plate = items.map(({ it, s }) => ({ recipeId: it.recipeId, name: it.name, servings: s, calories: Math.round(it.per.calories * s) }));
     const at = new Date().toISOString();
-    setStored(savePlate({ id: `${at}-${Math.random().toString(36).slice(2, 7)}`, at, hallId: result.hallId, meal: result.meal, items: plate, totalCalories: cal }));
+    const saved = logPlate({ id: `${at}-${Math.random().toString(36).slice(2, 7)}`, at, hallId: result.hallId, meal: result.meal, items: plate, totalCalories: cal, proteinG: mac("proteinG") }, profile?.plan);
+    setStored(saved.stored);
+    setVisit(saved.outcome);
     setPhase("saved");
   };
 
@@ -198,6 +204,15 @@ export function LogScreen({ demo }: { demo: DemoPlates }) {
                   <button type="button" className="btn btn-primary btn-block" onClick={save} disabled={phase === "saved"}>
                     <Swap id={phase}>{phase === "saved" ? <span style={{ display: "inline-flex", gap: 8, alignItems: "center" }}><Icon icon={Tick02Icon} size={18} sw={2.4} /> {stored ? "Saved to today" : "Couldn't save on this device"}</span> : <span>Save to today</span>}</Swap>
                   </button>
+                  {/* what the door cost (only with a plan set up, since Budget needs one): one blur-fade, like every state change */}
+                  <AnimatePresence initial={false}>
+                    {phase === "saved" && stored && visit && profile && (
+                      <motion.div key="visit" style={{ display: "flex", justifyContent: "center" }}
+                        initial={reduce ? { opacity: 0 } : STATE_OUT} animate={{ ...STATE_IN, transitionEnd: { filter: "none" } }} transition={reduce ? { duration: 0 } : STATE_FADE}>
+                        <span className="visit-chip num">{visitLine(visit)}</span>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </>}
               </motion.div>
             )}
@@ -207,6 +222,14 @@ export function LogScreen({ demo }: { demo: DemoPlates }) {
     </Screen>
     </>
   );
+}
+
+/** The saved state's chip: "−15.60 Slug Points · Dinner at JRL/C9", "Same visit, no extra charge" or "Unlimited plan, no charge". */
+function visitLine(o: VisitOutcome): string {
+  if (o.kind === "same") return "Same visit, no extra charge";
+  if (o.kind === "unlimited") return "Unlimited plan, no charge";
+  const hall = HALLS.find((h) => h.id === o.visit.hallId)?.short ?? "";
+  return `\u2212${pointsText(o.visit.charge)} Slug Points · ${mealLabel(o.visit.meal)}${hall ? ` at ${hall}` : ""}`;
 }
 
 // What the photo log is doing while Gemini reads the plate: each step blur-fades into the next (a timer, not a loop) and the last
