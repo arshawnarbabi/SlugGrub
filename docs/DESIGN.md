@@ -3134,3 +3134,18 @@ card (Alert02Icon chip, like the photo log error) for errors, the answer in body
 Gemini's reason. Onboarding and Ask moved to OnboardingScreen.tsx and AskScreen.tsx (MoreScreens re-exports them). Photo.tsx:
 sized copies of generated images now resolve to /food/gen/sm and /food/gen/md (they were 404s, so every generated photo under
 180px showed broken). -->
+<!-- 2026-11-14 ranking screens wired to real data (Claude, rankings half; for his review, # draft). Rank, Vote and Dining services
+keep their look; changes only where real data needed them. Rank: the duel label reads "<meal> at <hall>" (usual hall from the
+onboarding profile, the meal that last opened); a dish with no generated image shows the neutral dish tile (.ph, paper-2, rice bowl
+icon) as in the photo log; the result card shows the real Elo gain, or a save error with a Retry text button; Undo, Too tough and
+Skip work for real. Leaderboard: the header says "<college> is #N this week" (or who leads, or "No votes yet this week"); hall rows
+show "N pts · N dishes ranked" and an up/down chip only once a week-opening snapshot exists (no made-up "same"); the Colleges board
+lists all 10 colleges by votes this week, the student's own row on --p3 as before. Vote: the decorative QR mark is now a real QR code
+(src/lib/qr.ts, SVG, ink on white); the right top bar button opens the projector view (Tv01Icon); with no round live, a card says so.
+A vote block without an image sits on --p9. Projector view (/vote/screen, new): the only screen outside the 440px column (a small
+.projector block appended to globals.css: fixed full window, page color, two columns, one under 800px): big vote blocks, a large QR
+card, the live hall leaderboard and a Next round secondary button. Dining services: the title is "What students love" (votes are
+all time, not weekly); a row of chip-sm hall filters (All halls + 5) above a "From N matchups and N skips" label; empty states say
+so. Photo.tsx: generated images (/food/gen/) have no sized copies, so Photo serves the original for them (it was requesting
+/food/sm/gen/..., which 404s; this also fixes the photo log thumbnails). All state changes use Appear and Swap; no new blur,
+colors or one-off styles beyond the projector block. # draft -->
