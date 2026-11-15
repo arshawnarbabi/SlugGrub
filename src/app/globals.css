@@ -441,10 +441,6 @@ input, textarea, select { font-size: 17px !important; }     /* 16px or more also
 .art-card { border-radius: var(--r-lg); background: var(--card); box-shadow: var(--chip-shadow); }
 .art-card.raised { background: var(--raise); border: 0.5px solid var(--hi); box-shadow: var(--float-shadow, var(--chip-shadow)); }
 .art-chip { display: inline-flex; align-items: center; gap: 5px; height: 26px; padding: 0 10px; border-radius: var(--r-pill); background: var(--raise); border: 0.5px solid var(--hi); box-shadow: var(--chip-shadow); font-size: 12px; font-weight: 600; color: var(--ink-2); white-space: nowrap; }
-.art-map { position: relative; width: min(100%, 320px); height: 210px; border-radius: var(--r-lg); background: var(--paper-2); overflow: hidden; }
-.art-pin { position: absolute; width: 10px; height: 10px; margin: -5px 0 0 -5px; border-radius: 50%; background: var(--ink-3); box-shadow: 0 0 0 2px var(--card); transition: background-color var(--dur-ui) var(--ease), box-shadow var(--dur-ui) var(--ease); }
-.art-pin.on { background: var(--p9); box-shadow: 0 0 0 2px var(--card), 0 0 0 8px color-mix(in oklch, var(--p9) 18%, transparent); }
-.art-tag { position: absolute; transform: translate(-50%, calc(-100% - 12px)); color: var(--p9); }
 
 /* Segmented controls share their width evenly (his catch 2026-11-14 on Log: "the late night seems to have extra space on the right,
    just space them out enough"). A switch stretched to the row's width (Log's meals, the leaderboard's Halls / Colleges) spreads the
@@ -464,3 +460,9 @@ input, textarea, select { font-size: 17px !important; }     /* 16px or more also
 .btn-primary.raised { background: linear-gradient(180deg, color-mix(in oklch, var(--p9) 86%, white) 0%, var(--p9) 100%);
   box-shadow: inset 0 1px 0 oklch(1 0 0 / 0.3), 0 1px 2px oklch(0.22 0.01 255 / 0.12), 0 8px 18px -8px oklch(0.22 0.01 255 / 0.32); }
 .btn-secondary.raised { background: var(--raise); border: 0.5px solid var(--hi); box-shadow: var(--chip-shadow); }
+
+/* Onboarding college and hall cards (his review 2026-11-14, S12/S13, replacing the campus maps: "i dont like this ggraphic"): the
+   college's seal is the one blue thing on its card (the pick); a one-line clamp for the hall card's status and dish line. */
+.art-seal { min-width: 40px; height: 40px; padding: 0 8px; border-radius: var(--r-pill); display: grid; place-items: center; background: var(--p9); color: white; font-size: 14px; font-weight: 700; letter-spacing: -0.01em;
+  box-shadow: inset 0 1px 0 oklch(1 0 0 / 0.3), var(--chip-shadow); }
+.clamp1 { display: block; min-width: 0; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }

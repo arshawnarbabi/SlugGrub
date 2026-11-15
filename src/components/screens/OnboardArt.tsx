@@ -5,25 +5,22 @@
 // blue for what the student picked, ink tokens for everything else. Each one answers its question visually and follows the choice:
 //   plan:    three plan cards fanned out, the chosen plan in front with its points per quarter
 //   points:  the Budget ring, filled to the points they enter
-//   college: a campus map (contour lines of the hill) with every college; theirs is the blue pin with its name
-//   hall:    the same map with the five dining halls; their usual hall is the blue pin
+//   college: a raised college card (fanned like the plan cards) with the college's name, its blue seal and its dining hall
+//   hall:    a raised card previewing their usual hall now: one of today's dishes with its photo, the hall's open status
+// (the campus maps were dropped at his review 2026-11-14, S12/S13: "i dont like this ggraphic")
 // State changes blur-fade (DESIGN motion.state_change); nothing slides in when a step opens.
+import { useEffect, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
-import { RiceBowl01Icon, Location01Icon } from "@hugeicons/core-free-icons";
+import { RiceBowl01Icon, Mortarboard01Icon } from "@hugeicons/core-free-icons";
 import { Icon } from "@/components/ui/Icon";
+import { Photo } from "@/components/ui/Photo";
 import { Swap } from "@/components/ui/motion";
-import type { College, HallId, MealPlanId } from "@/lib/types";
-import { HALLS, MEAL_PLANS } from "@/lib/halls";
+import type { College, HallId, MealName, MealPlanId } from "@/lib/types";
+import { HALLS, MEAL_PLANS, mealNow } from "@/lib/halls";
+import type { DemoPlates } from "./demoPlates";
+import { campusNow, mealLabel } from "./now";
 
 const ART_H = 236;
-
-/** Campus, roughly as it sits on the hill (north up), on a 100 x 100 grid. */
-const COLLEGE_AT: Record<College, [number, number]> = {
-  "College Nine": [43, 20], "John R. Lewis": [53, 24], Crown: [67, 18], Merrill: [74, 30],
-  Stevenson: [82, 46], Cowell: [76, 58], Kresge: [33, 40], Porter: [22, 47],
-  Oakes: [34, 66], "Rachel Carson": [22, 62],
-};
-const HALL_AT: Record<HallId, [number, number]> = { "40": [48, 22], "20": [71, 24], "05": [79, 52], "25": [27, 44], "30": [28, 64] };
 
 function Frame({ children }: { children: React.ReactNode }) {
   return <div style={{ height: ART_H, display: "grid", placeItems: "center", position: "relative" }}>{children}</div>;
@@ -80,33 +77,74 @@ export function PointsArt({ points, total }: { points: number; total: number }) 
   );
 }
 
-function Map({ pins, picked, label }: { pins: [string, [number, number]][]; picked: string; label: string }) {
-  const at = pins.find(([k]) => k === picked)?.[1] ?? [50, 50];
+/** The two faded cards behind a raised front card, as on the meal plan step. */
+function BackCards() {
+  return (
+    <>
+      {[0, 1].map((k) => (
+        <div key={k} className="art-card" style={{ position: "absolute", inset: 0, transform: `rotate(${k === 0 ? -9 : 8}deg) translate(${k === 0 ? -18 : 18}px, ${k === 0 ? 6 : 10}px)`, opacity: 0.7 }} />
+      ))}
+    </>
+  );
+}
+
+const INITIALS: Partial<Record<College, string>> = { "College Nine": "C9", "John R. Lewis": "JRL", "Rachel Carson": "RC" };
+
+export function CollegeArt({ college }: { college: College }) {
+  const hall = HALLS.find((h) => h.colleges.includes(college));
   return (
     <Frame>
-      <div className="art-map" aria-hidden>
-        <svg viewBox="0 0 100 100" preserveAspectRatio="none" style={{ position: "absolute", inset: 0, width: "100%", height: "100%" }}>
-          {/* the hill: soft contour lines in the page tone */}
-          {[0, 1, 2, 3].map((k) => (
-            <ellipse key={k} cx="52" cy="44" rx={44 - k * 9} ry={34 - k * 7} fill="none" stroke="var(--paper)" strokeWidth="1.2" vectorEffect="non-scaling-stroke" />
-          ))}
-        </svg>
-        {pins.map(([k, [x, y]]) => (
-          <span key={k} className={`art-pin ${k === picked ? "on" : ""}`} style={{ left: `${x}%`, top: `${y}%` }} />
-        ))}
-        <motion.span className="art-chip art-tag" initial={false} animate={{ left: `${at[0]}%`, top: `${at[1]}%` }} transition={{ duration: 0 }}>
-          <Swap id={picked}><><Icon icon={Location01Icon} size={13} sw={2} /> {label}</></Swap>
-        </motion.span>
+      <div style={{ position: "relative", width: 240, height: 158 }}>
+        <BackCards />
+        <div className="art-card raised" style={{ position: "absolute", inset: 0, padding: 18, display: "grid", alignContent: "space-between" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+            <span className="art-chip"><Icon icon={Mortarboard01Icon} size={14} sw={2} /> Your college</span>
+            <span className="art-seal num"><Swap id={college}>{INITIALS[college] ?? college[0]}</Swap></span>
+          </div>
+          <div>
+            <div style={{ fontSize: 26, fontWeight: 700, letterSpacing: "-0.03em", lineHeight: 1.15 }}><Swap id={college}>{college}</Swap></div>
+            <div className="label" style={{ fontSize: 12, display: "flex", alignItems: "center", gap: 5, marginTop: 2 }}>
+              <Icon icon={RiceBowl01Icon} size={13} sw={2} /><Swap id={hall?.id ?? "none"}>{hall ? `Dining hall: ${hall.short}` : "Pick your college"}</Swap>
+            </div>
+          </div>
+        </div>
       </div>
     </Frame>
   );
 }
 
-export function CollegeArt({ college }: { college: College }) {
-  return <Map pins={Object.entries(COLLEGE_AT) as [string, [number, number]][]} picked={college} label={college} />;
-}
-
-export function HallArt({ hall }: { hall: HallId }) {
-  const short = HALLS.find((h) => h.id === hall)?.short ?? "";
-  return <Map pins={Object.entries(HALL_AT) as [string, [number, number]][]} picked={hall} label={short} />;
+/** Their usual hall as it is right now: open status from today's real hours, and one of today's dishes with its photo, so the step
+ *  previews what Today will show them. The clock is read after mount (never during render). */
+export function HallArt({ hall, dishes }: { hall: HallId; dishes: DemoPlates }) {
+  const [now, setNow] = useState<{ date: string; minutes: number } | null>(null);
+  useEffect(() => { setNow(campusNow(new Date())); }, []);
+  const info = HALLS.find((h) => h.id === hall);
+  const status = now ? mealNow(hall, now.date, now.minutes) : null;
+  const menu = dishes[hall] ?? {};
+  const meal: MealName | undefined = (status?.meal && menu[status.meal] ? status.meal : undefined) ?? (Object.keys(menu) as MealName[]).at(-1);
+  const dish = meal ? menu[meal] : undefined;
+  const statusText = status ? status.text[0].toUpperCase() + status.text.slice(1) : " ";
+  return (
+    <Frame>
+      <div style={{ position: "relative", width: 240, height: 216 }}>
+        <BackCards />
+        <div className="art-card raised" style={{ position: "absolute", inset: 0, padding: 8, display: "grid", gridTemplateRows: "auto 1fr" }}>
+          <Swap id={hall + (dish?.name ?? "")} style={{ display: "block" }}>
+            {dish ? <Photo src={dish.photo} h={112} r={16} eager />
+              : <div className="ph" style={{ width: "100%", height: 112, borderRadius: 16, display: "grid", placeItems: "center", color: "var(--ink-3)" }}><Icon icon={RiceBowl01Icon} size={28} /></div>}
+          </Swap>
+          <div style={{ padding: "10px 8px 2px", display: "grid", alignContent: "center", gap: 2, minWidth: 0 }}>
+            <div style={{ fontSize: 17, fontWeight: 700, letterSpacing: "-0.02em" }}><Swap id={hall}>{info?.short ?? ""}</Swap></div>
+            <div className="label" style={{ fontSize: 12, display: "flex", alignItems: "center", gap: 6, minWidth: 0 }}>
+              <span style={{ width: 7, height: 7, borderRadius: 9, flex: "none", background: status?.open ? "var(--ok)" : "var(--ink-3)" }} />
+              <Swap id={hall + statusText}>{statusText}</Swap>
+            </div>
+            <Swap id={hall + (dish?.name ?? "")} style={{ display: "block", minWidth: 0 }}>
+              <span className="clamp1 label" style={{ fontSize: 12 }}>{dish && meal ? `${mealLabel(meal)}: ${dish.name}` : " "}</span>
+            </Swap>
+          </div>
+        </div>
+      </div>
+    </Frame>
+  );
 }

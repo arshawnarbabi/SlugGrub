@@ -232,3 +232,9 @@ ADR (Architecture Decision Record) practice, adapted as an append-only log for a
 - **Proof (production build, throwaway worktree, port 3401):** with the saved file marked stale, the first read served the saved file at 3.5 s and about 25 s later the site's own read came back identical (same hash) to the file `npm run cafes` had just written; with the intermediate left out of the agent, the read failed ("unable to verify the first certificate") in under 50 ms and the saved file was served. The build traces `data/cafes.json` into every route.
 - **Consequences:** a cafe read is up to about 40 pages on a weekend (closed days are walked), queued behind any hall read on the same server. Owl's Nest's bowl parts (base, protein, toppings, sauces) count as items because the site lists them.
 - **Status:** draft
+
+## 2026-11-14 — Onboarding: cards instead of campus maps for college and hall
+- **Context:** his review of S12 and S13: "i dont like this ggraphic" (the campus maps).
+- **Choice:** both steps use the plan step's card fan. The hall step previews the real hall: today's dish photo and open status, so the student sees what Today will show them. The onboarding page reads the same per-hall dish picks as Log's demo plate (`demoPlates`, moved from `src/app/log/page.tsx` to `src/components/screens/demoPlates.ts` so both pages share one pick; Log's behavior is unchanged).
+- **Consequences:** `/onboarding` now reads today's menus through the one-minute cache, like `/log`. A hall closed today (two close on weekends) shows the neutral dish tile.
+- **Status:** draft

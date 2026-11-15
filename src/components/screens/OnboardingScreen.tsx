@@ -6,6 +6,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { PlanArt, PointsArt, CollegeArt, HallArt } from "./OnboardArt";
+import type { DemoPlates } from "./demoPlates";
 import { motion } from "framer-motion";
 import { ArrowLeft01Icon, ArrowRight01Icon, Tick02Icon, GoogleIcon } from "@hugeicons/core-free-icons";
 import { Icon } from "@/components/ui/Icon";
@@ -19,7 +20,7 @@ import type { College, HallId, MealPlanId } from "@/lib/types";
 const COLLEGES: College[] = ["Cowell", "Stevenson", "Crown", "Merrill", "Porter", "Kresge", "Oakes", "Rachel Carson", "College Nine", "John R. Lewis"];
 const hallOf = (c: College): HallId => HALLS.find((h) => h.colleges.includes(c))?.id ?? "40";
 
-export function OnboardingScreen() {
+export function OnboardingScreen({ dishes }: { dishes: DemoPlates }) {
   const [step, setStep] = useState(0);
   const [plan, setPlan] = useState<MealPlanId>("gold");
   const [points, setPoints] = useState(1200);
@@ -52,7 +53,7 @@ export function OnboardingScreen() {
       </div>
     ) },
     { art: <CollegeArt college={college} />, q: "Which college are you in?", body: <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>{COLLEGES.map((c) => <button key={c} type="button" className={`chip ${college === c ? "on" : ""}`} onClick={() => { setCollege(c); if (!hallPicked) setHall(hallOf(c)); }}>{c}</button>)}</div> },
-    { art: <HallArt hall={hall} />, q: "Where do you usually eat?", body: <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>{HALLS.map((h) => <button key={h.id} type="button" className={`chip ${hall === h.id ? "on" : ""}`} onClick={() => { setHall(h.id); setHallPicked(true); }}>{h.short}</button>)}</div> },
+    { art: <HallArt hall={hall} dishes={dishes} />, q: "Where do you usually eat?", body: <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>{HALLS.map((h) => <button key={h.id} type="button" className={`chip ${hall === h.id ? "on" : ""}`} onClick={() => { setHall(h.id); setHallPicked(true); }}>{h.short}</button>)}</div> },
   ];
   const done = step >= steps.length;
   const save = (extra: { name?: string; uid?: string } = who) => saveProfile({ plan, pointsNow: points, college, usualHall: hall, ...extra });
