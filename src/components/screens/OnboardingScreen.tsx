@@ -5,6 +5,7 @@
 // and the screen works signed out.
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { PlanArt, PointsArt, CollegeArt, HallArt } from "./OnboardArt";
 import { motion } from "framer-motion";
 import { ArrowLeft01Icon, ArrowRight01Icon, Tick02Icon, GoogleIcon } from "@hugeicons/core-free-icons";
 import { Icon } from "@/components/ui/Icon";
@@ -43,16 +44,15 @@ export function OnboardingScreen() {
   const max = Math.ceil(Math.max(total, points) / 50) * 50;
   const planLabel = MEAL_PLANS.find((p) => p.id === plan)?.label ?? "Gold";
   const steps = [
-    { q: "Which meal plan are you on?", body: <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>{MEAL_PLANS.map((p) => <button key={p.id} type="button" className={`chip ${plan === p.id ? "on" : ""}`} onClick={() => { setPlan(p.id); setPoints((v) => Math.min(v, p.pointsPerQuarter)); }}>{p.label}</button>)}</div> },
-    { q: "How many Slug Points do you have?", body: (
+    { art: <PlanArt plan={plan} />, q: "Which meal plan are you on?", body: <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>{MEAL_PLANS.map((p) => <button key={p.id} type="button" className={`chip ${plan === p.id ? "on" : ""}`} onClick={() => { setPlan(p.id); setPoints((v) => Math.min(v, p.pointsPerQuarter)); }}>{p.label}</button>)}</div> },
+    { art: <PointsArt points={points} total={total} />, q: "How many Slug Points do you have?", body: (
       <div className="card" style={{ display: "grid", gap: 6 }}>
-        <div className="hero-num" style={{ fontSize: 40 }}><Swap id={String(points)}>{points.toLocaleString()}</Swap><small>pts</small></div>
         <GooSlider value={points} onChange={setPoints} min={0} max={max} step={plan === "unlimited" ? 5 : 10} label="Slug Points" />
         <div className="label" style={{ fontSize: 12 }}>{planLabel} starts each quarter with {total.toLocaleString()}. Check the GET app if you&apos;re not sure.</div>
       </div>
     ) },
-    { q: "Which college are you in?", body: <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>{COLLEGES.map((c) => <button key={c} type="button" className={`chip ${college === c ? "on" : ""}`} onClick={() => { setCollege(c); if (!hallPicked) setHall(hallOf(c)); }}>{c}</button>)}</div> },
-    { q: "Where do you usually eat?", body: <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>{HALLS.map((h) => <button key={h.id} type="button" className={`chip ${hall === h.id ? "on" : ""}`} onClick={() => { setHall(h.id); setHallPicked(true); }}>{h.short}</button>)}</div> },
+    { art: <CollegeArt college={college} />, q: "Which college are you in?", body: <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>{COLLEGES.map((c) => <button key={c} type="button" className={`chip ${college === c ? "on" : ""}`} onClick={() => { setCollege(c); if (!hallPicked) setHall(hallOf(c)); }}>{c}</button>)}</div> },
+    { art: <HallArt hall={hall} />, q: "Where do you usually eat?", body: <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>{HALLS.map((h) => <button key={h.id} type="button" className={`chip ${hall === h.id ? "on" : ""}`} onClick={() => { setHall(h.id); setHallPicked(true); }}>{h.short}</button>)}</div> },
   ];
   const done = step >= steps.length;
   const save = (extra: { name?: string; uid?: string } = who) => saveProfile({ plan, pointsNow: points, college, usualHall: hall, ...extra });
@@ -75,12 +75,14 @@ export function OnboardingScreen() {
         <Link href="/" replace className="textbtn" style={{ fontSize: 13 }}>Skip</Link>
       </div>}>
 {!done ? (
-        <Appear id={step} style={{ display: "grid", gap: 18, marginTop: 24 }}>
+        // the step fills the screen: illustration, question and answers spread down it instead of stacking at the top
+        <Appear id={step} style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center", gap: 18, paddingTop: 8 }}>
+          {steps[step].art}
           <h1 className="title-xl">{steps[step].q}</h1>
           {steps[step].body}
         </Appear>
       ) : (
-        <Appear id="done" style={{ display: "grid", gap: 14, marginTop: 40, justifyItems: "center", textAlign: "center" }}>
+        <Appear id="done" style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", gap: 14, textAlign: "center" }}>
           <span className="iconbtn" style={{ width: 72, height: 72, background: "var(--p9)", color: "white" }}><Icon icon={Tick02Icon} size={30} sw={2.4} /></span>
           <h1 className="title-xl">{who.name ? `You're set, ${who.name.split(" ")[0]}` : "You're set"}</h1>
           <p className="body">{planLabel} plan · {points.toLocaleString()} points · {college}</p>

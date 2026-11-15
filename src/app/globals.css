@@ -435,3 +435,13 @@ input, textarea, select { font-size: 17px !important; }     /* 16px or more also
 
 /* Search field in the Sidestash row (his ask 2026-11-14: "when searching make sure hte search bar is sidestash style") */
 .input.raised { background: var(--raise); border: 0.5px solid var(--hi); box-shadow: var(--chip-shadow); }
+
+/* Onboarding illustrations (src/components/screens/OnboardArt.tsx; his ask 2026-11-14: "really nice and polished graphics"). Built
+   from the system: card fills, the Sidestash raise and chip shadow, primary blue only for what the student picked. */
+.art-card { border-radius: var(--r-lg); background: var(--card); box-shadow: var(--chip-shadow); }
+.art-card.raised { background: var(--raise); border: 0.5px solid var(--hi); box-shadow: var(--float-shadow, var(--chip-shadow)); }
+.art-chip { display: inline-flex; align-items: center; gap: 5px; height: 26px; padding: 0 10px; border-radius: var(--r-pill); background: var(--raise); border: 0.5px solid var(--hi); box-shadow: var(--chip-shadow); font-size: 12px; font-weight: 600; color: var(--ink-2); white-space: nowrap; }
+.art-map { position: relative; width: min(100%, 320px); height: 210px; border-radius: var(--r-lg); background: var(--paper-2); overflow: hidden; }
+.art-pin { position: absolute; width: 10px; height: 10px; margin: -5px 0 0 -5px; border-radius: 50%; background: var(--ink-3); box-shadow: 0 0 0 2px var(--card); transition: background-color var(--dur-ui) var(--ease), box-shadow var(--dur-ui) var(--ease); }
+.art-pin.on { background: var(--p9); box-shadow: 0 0 0 2px var(--card), 0 0 0 8px color-mix(in oklch, var(--p9) 18%, transparent); }
+.art-tag { position: absolute; transform: translate(-50%, calc(-100% - 12px)); color: var(--p9); }
