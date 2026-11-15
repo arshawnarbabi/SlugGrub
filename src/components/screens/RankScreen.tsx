@@ -199,7 +199,7 @@ function Duels({ catalog, state }: { catalog: CatalogDish[]; state: RankState | 
         <button type="button" className="textbtn" onClick={tough}>Too tough</button>
         <button type="button" className="textbtn" onClick={skip}>Skip</button>
       </div>
-      <div className="card" style={{ minHeight: 50, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8, fontSize: 14, color: "var(--ink-2)" }}>
+      <div style={{ minHeight: 50, padding: "0 4px", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8, fontSize: 14, color: "var(--ink-2)" }}>
         {last && (last.status === "error" || last.status === "already") ? (
           <Swap id={"e" + last.matchId + last.status} style={{ display: "flex", gap: 8, alignItems: "center", width: "100%", justifyContent: "space-between" }}>
             <span>{last.message}</span>
@@ -210,7 +210,7 @@ function Duels({ catalog, state }: { catalog: CatalogDish[]; state: RankState | 
             <span className="delta up"><Icon icon={ArrowUp01Icon} size={12} sw={2.4} />{last.delta}</span> {winner.name} moved up at {hallShort(winner.hallId)}
           </Swap>
         ) : (
-          <Swap id={"prompt" + ranked + (note ?? "")}><span>{note ?? (ranked === 0 ? "Tap the one you liked more" : `${ranked} ranked today. Keep going?`)}</span></Swap>
+          (note || ranked > 0) && <Swap id={"prompt" + ranked + (note ?? "")}><span>{note ?? `${ranked} ranked today. Keep going?`}</span></Swap>
         )}
       </div>
     </div>
