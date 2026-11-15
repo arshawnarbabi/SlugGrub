@@ -166,3 +166,22 @@ ADR (Architecture Decision Record) practice, adapted as an append-only log for a
 ## 2026-11-14 — Today reads through a one-minute cache
 - **Choice:** Today's data (top dish, leaderboard, budget, the hall's menu, the campus clock for meal and hours) is read in one `"use cache"` function with `cacheLife("minutes")` in TodayScreen, so the page still opens static (no loading state) while meal and hours stay within about a minute of the campus clock (Pacific time). Revisit when rankings or budget become per-student (cookies or sign-in cannot be read inside a cache).
 - **Status:** draft
+
+## 2026-11-14 — Menu data: every offered day, unknown labels, nearest-day fallback
+- **Context:** PLAN.md "Menu data" and the menus checklist; a review found 0-calorie fractional portions, 0 stored for missing labels, one saved day, a silent fall back to the 2-hall mock, and menu files missing from deployed builds.
+- **Choice:** `npm run menus` saves every date the site offers (yesterday through about a week ahead), one request at a time, TLS fixed with NODE_EXTRA_CA_CERTS (checks stay on). The label key goes into the URL exactly as the site writes it (it is already URL-encoded). A missing label is stored as no nutrition (unknown), never 0. A meal whose long menu has only standing items (salad bar, condiments, drinks...) is treated as not served, which matches the site's short menu and the posted hours. `getMenu`/`getAllMenus` serve the nearest real day with `fallbackFor` set when a date has no file; the mock is used only when no real files exist, marked `mock: true`. Files are compact JSON and included in every server route's trace (`outputFileTracingIncludes`). Diet icons on the menu become `Dish.tags` (vegan, vegetarian, halal).
+- **Consequences:** someone runs `npm run menus` daily (the site shows only about a week); new halls or meal names need the fetcher's lists updated.
+- **Status:** draft
+
+## 2026-11-14 — Hall hours, meal plans and the campus clock
+- **Choice:** hours typed from dining.ucsc.edu/locations-hours (regular schedule, checked 2026-11-14) per day of week into `src/lib/halls.ts` (`hallHoursOn`, `mealNow`); Crown/Merrill and Porter/Kresge close on weekends; weekend brunch (9 to 2) shows the Breakfast menu until 11 and Lunch after, since the site lists brunch as both. `HALL_HOURS` stays a flat list (a Tuesday) for older callers. Meal plans updated to 2026-27 (Blue 1452, Gold 2037, Banana Slug 2772, Unlimited 100). Every date, meal and days-left number uses America/Los_Angeles.
+- **Status:** draft
+
+## 2026-11-14 — Profile on the device; budget pace from it
+- **Choice:** onboarding answers live in localStorage (`sluggrub.profile`, `src/lib/profile.ts`) with `savedAt`; Google sign-in is optional and the app works signed out. Points entered on an earlier day are aged to today at the student's own average so far, and the Budget screen says so. The hall / cafe / market split is not shown: SlugGrub can't see card purchases, so any split would be invented.
+- **Consequences:** Today's server-cached budget card can't read the phone's profile; `getBudgetSnapshot(profile?)` returns example numbers marked `source: "demo"` without one.
+- **Status:** draft
+
+## 2026-11-14 — Ask SlugGrub method and limits
+- **Choice:** `/api/ask` sends Gemini (gemini-3.8-flash) only the meal each hall is serving now or next today (tomorrow's first meal after the last one closes), real dishes only (no condiments, drinks, sauces, buns or bars), with hall names and the colleges each serves. Picks are an enum of those dish ids (so Gemini can't invent one) and the calories and protein shown come from the UCSC labels. Questions are capped at 200 characters; 8 questions per 10 minutes per address and 120 an hour per server instance.
+- **Status:** draft
