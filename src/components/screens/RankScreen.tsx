@@ -33,9 +33,11 @@ export function RankScreen({ catalog }: { catalog: CatalogDish[] }) {
   return (
     <Screen top={<div className="topbar">
         <h1 className="title-xl">Rank</h1>
-        <Link href="/vote" className="iconbtn" aria-label="Live vote"><Icon icon={QrCodeIcon} size={18} /></Link>
       </div>}>
-<Seg options={VIEWS} value={view} onChange={setView} label="Rank view" />
+      <div style={{ display: "flex", gap: 8 }}>
+        <Seg options={VIEWS} value={view} onChange={setView} label="Rank view" className="raised" />
+        <Link href="/vote" className="iconbtn raised" style={{ marginLeft: "auto" }} aria-label="Live vote"><Icon icon={QrCodeIcon} size={20} /></Link>
+      </div>
       {view === "This or that" ? <Appear id="duel"><Duels catalog={catalog} state={state} /></Appear> : <Appear id="board"><Board catalog={catalog} state={state} /></Appear>}
       {error && <Appear id="err"><div className="label" style={{ fontSize: 12, textAlign: "center" }}>{error}</div></Appear>}
     </Screen>
@@ -208,7 +210,7 @@ function Duels({ catalog, state }: { catalog: CatalogDish[]; state: RankState | 
                     </motion.span>
                   )}
                 </div>
-                <span style={{ fontSize: 15, fontWeight: 700, letterSpacing: "-0.01em", lineHeight: 1.2, minHeight: 36, display: "grid", alignItems: "center" }}>{d?.name ?? " "}</span>
+                <span style={{ height: 36, display: "grid", alignItems: "center" }}><span className="clamp2" title={d?.name} style={{ fontSize: 15, fontWeight: 700, letterSpacing: "-0.01em", lineHeight: 1.2 }}>{d?.name ?? " "}</span></span>
                 <span className="num label" style={{ fontSize: 12, marginTop: -6 }}>{d ? [d.calories !== undefined && `${d.calories} cal`, hallShort(d.hallId)].filter(Boolean).join(" · ") : " "}</span>
               </motion.button>
             ))}

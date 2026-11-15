@@ -62,9 +62,9 @@ export function TodayView({ data }: { data: TodayData }) {
       <h1 className="title-xl">{data.hello}{profile?.name ? `, ${profile.name.split(" ")[0]}` : ""}</h1>
 
       {profile === null && (
-        <Link href="/onboarding" className="card tight press link" style={{ display: "flex", alignItems: "center", gap: 10, paddingRight: 32 }}>
+        <Link href="/onboarding" className="card tight press link" style={{ display: "flex", alignItems: "center", gap: 10, paddingRight: 36, borderRadius: "var(--r-pill)", padding: "8px 36px 8px 8px" }}>
           <span className="card-chev" aria-hidden><Icon icon={ArrowRight01Icon} size={16} sw={2} /></span>
-          <span className="iconbtn" style={{ width: 44, height: 44, borderRadius: 12, background: "var(--p3)", color: "var(--p9)" }}><Icon icon={UserAdd01Icon} size={20} sw={2} /></span>
+          <span className="iconbtn" style={{ width: 44, height: 44, borderRadius: "50%", background: "var(--paper-2)", color: "var(--ink-2)" }}><Icon icon={UserAdd01Icon} size={20} sw={2} /></span>
           <div style={{ flex: 1, minWidth: 0 }}>
             <b style={{ fontSize: 14 }}>Set up SlugGrub</b>
             <div className="label" style={{ fontSize: 12 }}>Your hall, plan and college · 4 quick questions</div>

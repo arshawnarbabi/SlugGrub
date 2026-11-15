@@ -33,7 +33,9 @@ function BudgetBody({ profile, range, setRange }: { profile: SavedProfile | null
   const enteredOn = mine ? campusClock(new Date(mine.savedAt)).date : undefined;
   const p = computePace(src.pointsNow, src.plan, now, enteredOn);
   const planLabel = MEAL_PLANS.find((x) => x.id === src.plan)?.label ?? "Gold";
-  const r = 84, c = 2 * Math.PI * r, arc = c * 0.75;
+  // ring: 250 degrees, opening at the bottom where the pace pill sits (his ask 2026-11-14: "put it in that disconnect at the bottom so
+  // you might have to shorten the ring to fit it")
+  const SWEEP = 250, r = 84, c = 2 * Math.PI * r, arc = c * (SWEEP / 360);
   const leftShare = Math.min(1, p.pointsLeft / p.planTotal);
   const [pillTone, pillText] = PACE[p.pace];
   // days left this week, today through Sunday
@@ -47,15 +49,15 @@ function BudgetBody({ profile, range, setRange }: { profile: SavedProfile | null
         <span className="tint blue">{planLabel} plan</span>
       </div>}>
 <div className="card" style={{ position: "relative", height: 226, display: "grid", placeItems: "center" }}>
-        <svg width="200" height="200" viewBox="0 0 200 200" style={{ position: "absolute", top: 16, transform: "rotate(135deg)" }} aria-hidden>
+        <svg width="200" height="200" viewBox="0 0 200 200" style={{ position: "absolute", top: 16, transform: `rotate(${90 + (360 - SWEEP) / 2}deg)` }} aria-hidden>
           <circle cx="100" cy="100" r={r} fill="none" stroke="var(--paper-2)" strokeWidth="12" strokeDasharray={`${arc} ${c}`} strokeLinecap="round" />
           <circle cx="100" cy="100" r={r} fill="none" stroke="var(--p9)" strokeWidth="12" strokeDasharray={`${arc * leftShare} ${c}`} strokeLinecap="round" />
         </svg>
         <div style={{ textAlign: "center", marginTop: 8 }}>
           <div className="label">{p.estimated ? "Points left, about" : "Points left"}</div>
           <div className="hero-num" style={{ fontSize: 46 }}><CountUp to={p.pointsLeft} /></div>
-          <span className={`pill ${pillTone}`} style={{ marginTop: 6 }}><span className="dot" />{pillText}</span>
         </div>
+        <span className={`pill ${pillTone}`} style={{ position: "absolute", top: 184, left: "50%", transform: "translateX(-50%)" }}><span className="dot" />{pillText}</span>
       </div>
       {(
         <p className="label" style={{ fontSize: 12, margin: "0 4px" }}>

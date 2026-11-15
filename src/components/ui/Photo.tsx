@@ -14,7 +14,7 @@ function sized(src: string, w: number | string, h: number) {
 
 export function Photo({ src, w = "100%", h, r, alt = "", eager, children }: { src: string; w?: number | string; h: number; r?: number; alt?: string; eager?: boolean; children?: React.ReactNode }) {
   return (
-    <div className="ph" style={{ width: w, height: h, borderRadius: r }}>
+    <div className="ph" style={{ width: w, height: h, borderRadius: r, ["--ph-r" as string]: `${r ?? 18}px` }}>
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img src={sized(src, w, h)} alt={alt} decoding="async" loading={eager ? "eager" : "lazy"} width={typeof w === "number" ? w : undefined} height={h} />
       {children}
