@@ -287,3 +287,5 @@ ADR (Architecture Decision Record) practice, adapted as an append-only log for a
 - **Consequences:** the beam sits over the nav bar's edge while it runs (z 9) and is removed when processing ends. Smooth in Chromium and Playwright WebKit on the dev server; not yet checked on a real iPhone.
 - **Status:** draft
 
+
+- 2026-11-15: Grill patties are named and pictured as burgers, his ask ("for the patty dishes its usualy hte entire burger with condoments studnets can choose, not just hte patty"). One rule in src/lib/dishNames.ts (a name ending "Patty" becomes "Burger", except sausage and hash brown patties) applied to every menu the app reads (src/lib/menus.ts), and the same rule in scripts/food-images.mjs, which now draws them as whole burgers (bun, cheese unless vegan, lettuce, tomato, onion, pickles, ketchup and mustard cups). New photos: Halal Blended Beef, Halal Chicken, Portobello Mushroom and Sustainable Salmon burgers (about $0.13). Calories stay the patty's UCSC label; the bun and toppings are their own menu items. The black bean patty is not on the current 9-day menus, so it has no photo yet.

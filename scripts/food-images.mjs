@@ -62,6 +62,15 @@ function decode(s) {
   return s.replace(/&nbsp;/g, " ").replace(/&amp;/g, "&").replace(/&#39;|&#039;/g, "'").replace(/&quot;/g, '"').replace(/\s+/g, " ").trim();
 }
 
+// The app's display names (src/lib/dishNames.ts, same rule): a grill patty is served as the whole burger, so it is named and
+// drawn as one. The description pins what the plate shows, so the text model can't draw a bare patty.
+const PATTY = /\bPatty$/;
+function displayName(name) { return PATTY.test(name) && !/sausage|hash brown/i.test(name) ? name.replace(PATTY, "Burger") : name; }
+function burgerDesc(name) {
+  const filling = name.replace(/^(Halal|Vegan|Sustainable)\s+/i, "").replace(/ Burger$/, "").replace(/^Actual Veggies /, "").replace(/Blended Beef/, "beef").toLowerCase();
+  return { description: `A whole ${filling} burger on a toasted bun with ${/vegan/i.test(name) ? "" : "melted cheese, "}crisp lettuce, sliced tomato, red onion and pickles, with small cups of ketchup and mustard beside it`, vessel: "plate", skip: false };
+}
+
 async function menus() {
   const jar = path.join(ROOT, "scripts/.ucsc-cookies.txt");
   const curl = (url) => execFileSync("curl", ["-s", "-b", jar, "-c", jar, url], { encoding: "utf8", maxBuffer: 20e6 });
@@ -85,7 +94,8 @@ async function menus() {
         saveCache();
         await sleep(400);
       }
-      for (const [name, meal] of list) {
+      for (const [raw, meal] of list) {
+        const name = displayName(raw);
         if (!names.has(name)) names.set(name, []);
         names.get(name).push({ hall: num, meal, date: day.toISOString().slice(0, 10) });
       }
@@ -100,6 +110,7 @@ function outOfCredits(e) {
 }
 
 async function describe(ai, names) {
+  for (const n of names) if (/ Burger$/.test(n) && !cache.desc[n]) cache.desc[n] = burgerDesc(n);
   const todo = names.filter((n) => !cache.desc[n]);
   for (let i = 0; i < todo.length; i += 40) {
     const batch = todo.slice(i, i + 40);
