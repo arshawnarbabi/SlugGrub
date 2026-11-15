@@ -9,6 +9,7 @@ import { CountUp, Seg, Appear } from "@/components/ui/motion";
 import { useProfile, type SavedProfile } from "@/lib/profile";
 import { computePace, weekOf } from "@/lib/budgetCalc";
 import { MEAL_PLANS } from "@/lib/halls";
+import { PaceChart } from "./PaceChart";
 import { campusClock, weekdayOf } from "@/lib/campusTime";
 
 const RANGES = ["This quarter", "This week"] as const;
@@ -37,9 +38,6 @@ function BudgetBody({ profile, range, setRange }: { profile: SavedProfile | null
   const [pillTone, pillText] = PACE[p.pace];
   // days left this week, today through Sunday
   const weekDays = Math.min(p.daysLeft, 7 - ((weekdayOf(p.today) + 6) % 7));
-  // chart: points used so far vs an even pace, start of quarter to today
-  const x = 4 + 232 * (p.elapsedDays / p.totalDays);
-  const y = 60 - 54 * Math.min(1, (p.planTotal - p.pointsLeft) / p.planTotal);
   const outlook = p.runOutDate
     ? `At this pace you run out the week of ${short(weekOf(p.runOutDate))}.`
     : `At this pace you finish the quarter with about ${(p.leftoverAtQuarterEnd ?? 0).toLocaleString()} points left.`;
@@ -81,12 +79,8 @@ function BudgetBody({ profile, range, setRange }: { profile: SavedProfile | null
           )}
         </div>
         <div className="card">
-          <div className="label">Spending vs ideal pace</div>
-          <svg viewBox="0 0 240 64" width="100%" height="64" aria-hidden style={{ marginTop: 8 }}>
-            <line x1="4" y1="60" x2="236" y2="6" stroke="var(--ink-3)" strokeDasharray="3 4" strokeWidth="1.5" />
-            <polyline points={`4,60 ${x.toFixed(1)},${y.toFixed(1)}`} fill="none" stroke="var(--p9)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-            <circle cx={x.toFixed(1)} cy={y.toFixed(1)} r="4.5" fill="var(--p9)" />
-          </svg>
+          <div className="label" style={{ marginBottom: 8 }}>Slug Points left this quarter</div>
+          <PaceChart planTotal={p.planTotal} pointsLeft={p.pointsLeft} elapsedDays={p.elapsedDays} totalDays={p.totalDays} spentPerDay={p.spentPerDay} />
           <div className="label" style={{ fontSize: 12, marginTop: 6 }}>{outlook} An even pace leaves you {p.idealLeft.toLocaleString()} today.</div>
         </div>
         <p className="label" style={{ fontSize: 12, margin: "0 4px" }}>SlugGrub can&apos;t see your card, so it doesn&apos;t split spending between dining halls, cafes and markets. The GET app lists every purchase.</p>
