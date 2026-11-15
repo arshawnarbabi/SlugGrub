@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SlugGrub screen review</title>
+<style>
+  :root { --paper: #eceef0; --card: #f9fafb; --ink: #111418; --ink-2: #4b5260; --ink-3: #6f7684; --p9: #0069bf; --line: #dde1e6; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--paper); color: var(--ink); font: 15px/1.45 -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", sans-serif; }
+  header, footer { max-width: 1100px; margin: 0 auto; padding: 24px 16px 8px; }
+  h1 { font-size: 28px; letter-spacing: -0.02em; margin: 0 0 4px; }
+  .sub { color: var(--ink-2); margin: 0; }
+  main { max-width: 1100px; margin: 0 auto; padding: 8px 16px 24px; display: grid; gap: 20px; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); }
+  .shot { background: var(--card); border-radius: 24px; padding: 12px; display: grid; gap: 10px; align-content: start; }
+  .shot.wide { grid-column: 1 / -1; }
+  .head { display: flex; align-items: baseline; gap: 8px; padding: 2px 4px; }
+  .id { font-weight: 700; color: var(--p9); font-variant-numeric: tabular-nums; }
+  .title { font-weight: 700; flex: 1; }
+  .route { color: var(--ink-3); font-size: 13px; }
+  .frame { border-radius: 16px; overflow: hidden; background: var(--paper); max-height: 760px; overflow-y: auto; }
+  .frame img { display: block; width: 100%; height: auto; }
+  textarea { width: 100%; min-height: 72px; resize: vertical; border: 0; border-radius: 14px; background: var(--paper); padding: 10px 12px; font: inherit; color: var(--ink); }
+  textarea:focus { outline: 2px solid var(--p9); }
+  .row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+  button { all: unset; cursor: pointer; height: 40px; padding: 0 16px; border-radius: 999px; background: #fff; box-shadow: 0 1px 2px rgba(20,30,50,.12); font-weight: 600; font-size: 14px; display: inline-flex; align-items: center; }
+  button.primary { background: var(--p9); color: #fff; }
+  button:active { opacity: .6; }
+  .status { color: var(--ink-2); font-size: 13px; }
+  footer { padding-bottom: 48px; display: grid; gap: 12px; }
+  .count { color: var(--ink-2); }
+</style>
+</head>
+<body>
+<header>
+  <h1>SlugGrub screen review</h1>
+  <p class="sub" id="meta">Loading screens...</p>
+  <p class="sub">Write a note under any screen (saved in this browser as you type). At the end, "Copy all" puts every noted screen on the clipboard as one labeled sheet image plus the notes as text, each tagged with its screen ID, so nothing mixes up.</p>
+</header>
+<main id="list"></main>
+<footer>
+  <div class="count" id="count"></div>
+  <div class="row">
+    <button class="primary" id="copyAll">Copy all (sheet image + notes)</button>
+    <button id="copyText">Copy notes only</button>
+    <button id="copySheet">Copy sheet image only</button>
+    <button id="clear">Clear notes</button>
+    <span class="status" id="status"></span>
+  </div>
+</footer>
+<script>
+const KEY = (id) => `sg-review:${id}`;
+const store = { get: (k) => { try { return localStorage.getItem(k) ?? ""; } catch { return ""; } }, set: (k, v) => { try { v ? localStorage.setItem(k, v) : localStorage.removeItem(k); } catch {} } };
+let shots = [];
+const imgs = {};
+const status = (t) => { document.getElementById("status").textContent = t; };
+
+async function pngBlob(src) {
+  const r = await fetch(src, { cache: "no-store" });
+  return r.blob();
+}
+async function copyItem(data) {
+  await navigator.clipboard.write([new ClipboardItem(data)]);
+}
+function noted() { return shots.filter((s) => store.get(KEY(s.id)).trim()); }
+function notesText(list) {
+  const lines = [`SlugGrub screen review notes (${list.length} screen${list.length === 1 ? "" : "s"}; screenshots ${new Date(window.__taken).toLocaleString()})`, ""];
+  for (const s of list) lines.push(`[${s.id}] ${s.title} (${s.route})`, `Note: ${store.get(KEY(s.id)).trim()}`, "");
+  return lines.join("\n");
+}
+function wrap(ctx, text, width) {
+  const out = [];
+  for (const para of text.split("\n")) {
+    let line = "";
+    for (const word of para.split(/\s+/)) {
+      const t = line ? line + " " + word : word;
+      if (ctx.measureText(t).width > width && line) { out.push(line); line = word; } else line = t;
+    }
+    out.push(line);
+  }
+  return out;
+}
+async function sheetBlob(list) {
+  // one column per screen: "S01 · title" on top, the screenshot scaled to 360 wide, the note wrapped below
+  const W = 360, PAD = 24, GAP = 28, COLS = Math.min(4, list.length);
+  const cells = await Promise.all(list.map(async (s) => {
+    const img = imgs[s.id];
+    const scale = (s.w > 600 ? W * 2 : W) / img.naturalWidth;
+    return { s, img, iw: img.naturalWidth * scale, ih: img.naturalHeight * scale };
+  }));
+  const probe = document.createElement("canvas").getContext("2d");
+  probe.font = "500 18px -apple-system, sans-serif";
+  for (const c of cells) c.lines = wrap(probe, "Note: " + store.get(KEY(c.s.id)).trim(), c.iw);
+  const colW = Math.max(...cells.map((c) => c.iw));
+  const rows = [];
+  for (let i = 0; i < cells.length; i += COLS) rows.push(cells.slice(i, i + COLS));
+  const rowH = rows.map((r) => Math.max(...r.map((c) => 44 + c.ih + 14 + c.lines.length * 24)));
+  const width = PAD * 2 + COLS * colW + (COLS - 1) * GAP;
+  const height = PAD * 2 + rowH.reduce((a, b) => a + b, 0) + (rows.length - 1) * GAP;
+  const cv = document.createElement("canvas");
+  cv.width = width; cv.height = height;
+  const ctx = cv.getContext("2d");
+  ctx.fillStyle = "#eceef0"; ctx.fillRect(0, 0, width, height);
+  let y = PAD;
+  rows.forEach((r, ri) => {
+    r.forEach((c, ci) => {
+      const x = PAD + ci * (colW + GAP);
+      ctx.fillStyle = "#0069bf"; ctx.font = "700 22px -apple-system, sans-serif"; ctx.fillText(c.s.id, x, y + 26);
+      const idw = ctx.measureText(c.s.id + "  ").width;
+      ctx.fillStyle = "#111418"; ctx.font = "700 18px -apple-system, sans-serif";
+      ctx.fillText(wrap(ctx, c.s.title, c.iw - idw)[0], x + idw, y + 26);
+      ctx.drawImage(c.img, x, y + 44, c.iw, c.ih);
+      ctx.strokeStyle = "#0069bf"; ctx.lineWidth = 3; ctx.strokeRect(x, y + 44, c.iw, c.ih);
+      ctx.fillStyle = "#111418"; ctx.font = "500 18px -apple-system, sans-serif";
+      c.lines.forEach((l, li) => ctx.fillText(l, x, y + 44 + c.ih + 30 + li * 24));
+    });
+    y += rowH[ri] + GAP;
+  });
+  return new Promise((res) => cv.toBlob(res, "image/png"));
+}
+function refreshCount() {
+  const n = noted().length;
+  document.getElementById("count").textContent = n ? `${n} screen${n === 1 ? "" : "s"} with notes: ${noted().map((s) => s.id).join(", ")}` : "No notes yet.";
+}
+
+async function init() {
+  const r = await fetch("review/index.json", { cache: "no-store" });
+  const data = await r.json();
+  shots = data.shots; window.__taken = data.takenAt;
+  document.getElementById("meta").textContent = `${shots.length} screens, taken ${new Date(data.takenAt).toLocaleString()} from ${data.base}`;
+  const list = document.getElementById("list");
+  for (const s of shots) {
+    const el = document.createElement("section");
+    el.className = "shot" + (s.w > 600 ? " wide" : "");
+    el.id = s.id;
+    el.innerHTML = `<div class="head"><span class="id">${s.id}</span><span class="title"></span><span class="route"></span></div>
+      <div class="frame"><img alt="" loading="lazy"></div>
+      <textarea placeholder="Notes on ${s.id}"></textarea>
+      <div class="row"><button class="copy">Copy image</button><button class="copyBoth">Copy image + note</button><span class="status"></span></div>`;
+    el.querySelector(".title").textContent = s.title;
+    el.querySelector(".route").textContent = s.route;
+    const img = el.querySelector("img");
+    img.src = `review/${s.file}?t=${encodeURIComponent(data.takenAt)}`;
+    img.alt = `${s.id} ${s.title}`;
+    imgs[s.id] = img;
+    const ta = el.querySelector("textarea");
+    ta.value = store.get(KEY(s.id));
+    ta.addEventListener("input", () => { store.set(KEY(s.id), ta.value); refreshCount(); });
+    const st = el.querySelector(".row .status");
+    el.querySelector(".copy").onclick = async () => {
+      try { await copyItem({ "image/png": pngBlob(img.src) }); st.textContent = "Copied image"; } catch (e) { st.textContent = "Copy failed: " + e.message; }
+    };
+    el.querySelector(".copyBoth").onclick = async () => {
+      try {
+        await img.decode();
+        const blob = await sheetBlob([s].map((x) => x));
+        await copyItem({ "image/png": blob, "text/plain": new Blob([notesText([s])], { type: "text/plain" }) });
+        st.textContent = "Copied image with its note";
+      } catch (e) { st.textContent = "Copy failed: " + e.message; }
+    };
+    list.appendChild(el);
+  }
+  refreshCount();
+}
+
+document.getElementById("copyAll").onclick = async () => {
+  const list = noted();
+  if (!list.length) return status("Write a note on at least one screen first.");
+  try {
+    await Promise.all(list.map((s) => imgs[s.id].decode()));
+    await copyItem({ "image/png": sheetBlob(list), "text/plain": new Blob([notesText(list)], { type: "text/plain" }) });
+    status(`Copied ${list.length} screens with notes (image + text)`);
+  } catch (e) { status("Copy failed: " + e.message); }
+};
+document.getElementById("copyText").onclick = async () => {
+  const list = noted();
+  if (!list.length) return status("No notes yet.");
+  try { await navigator.clipboard.writeText(notesText(list)); status("Copied notes"); } catch (e) { status("Copy failed: " + e.message); }
+};
+document.getElementById("copySheet").onclick = async () => {
+  const list = noted();
+  if (!list.length) return status("No notes yet.");
+  try { await Promise.all(list.map((s) => imgs[s.id].decode())); await copyItem({ "image/png": sheetBlob(list) }); status("Copied sheet image"); } catch (e) { status("Copy failed: " + e.message); }
+};
+document.getElementById("clear").onclick = () => {
+  if (!confirm("Clear every note on this page?")) return;
+  for (const s of shots) store.set(KEY(s.id), "");
+  document.querySelectorAll("textarea").forEach((t) => (t.value = ""));
+  refreshCount(); status("Notes cleared");
+};
+init();
+</script>
+</body>
+</html>

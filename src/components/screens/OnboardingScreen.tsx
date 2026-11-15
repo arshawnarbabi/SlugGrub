@@ -34,6 +34,11 @@ export function OnboardingScreen() {
     setPlan(p.plan); setPoints(p.pointsNow); setCollege(p.college); setHall(p.usualHall); setHallPicked(true);
     if (p.uid) { setWho({ name: p.name, uid: p.uid }); setGoogle("done"); }
   }, []);
+  // review page only (public/dev/review.html): ?step=N opens on that question so every step can be screenshotted
+  useEffect(() => {
+    const n = Number(new URLSearchParams(window.location.search).get("step"));
+    if (Number.isInteger(n) && n > 0) setStep(n);
+  }, []);
   const total = MEAL_PLANS.find((p) => p.id === plan)?.pointsPerQuarter ?? 2037;
   const max = Math.ceil(Math.max(total, points) / 50) * 50;
   const planLabel = MEAL_PLANS.find((p) => p.id === plan)?.label ?? "Gold";

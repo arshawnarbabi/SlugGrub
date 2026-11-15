@@ -1,0 +1,8 @@
+<!doctype html><meta charset="utf-8"><title>Seed profile</title>
+<script>
+// Review screenshots only: saves an example onboarding profile on this device, then opens ?to= (default Today).
+try {
+  localStorage.setItem("sluggrub.profile", JSON.stringify({ plan: "gold", pointsNow: 1120, college: "College Nine", usualHall: "40", savedAt: new Date().toISOString() }));
+} catch (e) {}
+location.replace(new URLSearchParams(location.search).get("to") || "/");
+</script>
