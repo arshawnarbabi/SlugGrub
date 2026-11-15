@@ -39,7 +39,7 @@ const statOf = (m: Mem, ref: DishRef, catalog: CatalogDish[]) => {
 export function memState(catalog: CatalogDish[], week: string, voter?: string): RankState {
   const m = mem();
   const dishes = Object.fromEntries(m.dishes);
-  if (!m.boards.has(week)) m.boards.set(week, ranksOf(hallStandings(mergeDishes(catalog, dishes), null)));
+  if (!m.boards.has(week)) { const all = mergeDishes(catalog, dishes); m.boards.set(week, ranksOf(hallStandings(all, null), all)); }
   const round = m.round;
   const mine = round && voter ? m.votes.get(voteDocId(voter, liveMatchId(round.roundId))) : undefined;
   return {

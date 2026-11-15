@@ -349,3 +349,9 @@ input, textarea, select { font-size: 17px !important; }     /* 16px or more also
 .tint.fit { min-width: 0; max-width: 100%; flex: 0 1 auto; }
 .tint.fit svg { flex: none; }
 .tint .clip { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* Live vote projector view (/vote/screen, src/components/screens/VoteScreen.tsx, 2026-11-14): the only screen that leaves the 440px
+   phone column, so the QR code and the tally read from the back of a room. Existing tokens and classes only; no blur. */
+.projector { position: fixed; inset: 0; z-index: 20; overflow: auto; background: var(--paper); padding: clamp(16px, 4vh, 48px) clamp(16px, 4vw, 64px); display: grid; gap: clamp(16px, 3vw, 40px); grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); align-content: start; }
+.projector .vote-blk { min-height: clamp(160px, 30vh, 340px); }
+@media (max-width: 800px) { .projector { grid-template-columns: minmax(0, 1fr); } }

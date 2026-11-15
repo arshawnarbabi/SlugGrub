@@ -11,57 +11,8 @@ import { Screen } from "@/components/ui/Screen";
 import { Swap, Appear, GooSlider, SPRING } from "@/components/ui/motion";
 import { DISHES, HALLS } from "./demo";
 
-/* ── Live QR vote (judges vote, bars move) ── */
-export function VoteScreen() {
-  const [votes, setVotes] = useState({ a: 132, b: 82 });
-  const [mine, setMine] = useState<"a" | "b" | null>(null);
-  const reduce = useReducedMotion();
-  const total = votes.a + votes.b;
-  const pa = Math.round((votes.a / total) * 100);
-  const vote = (k: "a" | "b") => { if (mine) return; setMine(k); setVotes((v) => ({ ...v, [k]: v[k] + 1 })); };
-  const blk = (k: "a" | "b", id: string, p: number, tall: boolean) => {
-    const d = DISHES[id];
-    return (
-      <button type="button" className="vote-blk press" style={{ minHeight: tall ? 210 : 160 }} onClick={() => vote(k)} aria-pressed={mine === k}>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={d.photo} alt="" />
-        <div>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "end", gap: 8 }}>
-            <div><div style={{ fontSize: 20, fontWeight: 700, letterSpacing: "-0.03em" }}>{d.name}</div><div style={{ fontSize: 12, opacity: 0.85 }}>{d.hall}{mine === k ? " · your vote" : ""}</div></div>
-            <div className="num" style={{ fontSize: tall ? 40 : 32, fontWeight: 700, letterSpacing: "-0.04em" }}><Swap id={String(p)}>{p}%</Swap></div>
-          </div>
-          <div className="bar"><motion.i initial={false} animate={{ width: `${p}%` }} transition={reduce ? { duration: 0 } : SPRING} /></div>
-        </div>
-      </button>
-    );
-  };
-  return (
-    <Screen noTabBar top={<div className="topbar">
-        <Link href="/rank" className="iconbtn" aria-label="Back"><Icon icon={ArrowLeft01Icon} size={18} /></Link>
-        <span className="tint gold"><span className="dot" style={{ background: "var(--bad)" }} /> Live · <Swap id={String(total)}>{total}</Swap> votes</span>
-        <span className="iconbtn" aria-hidden><Icon icon={QrCodeIcon} size={18} /></span>
-      </div>}>
-<h1 className="title-xl">Dish of the week</h1>
-      <p className="body" style={{ marginTop: -6 }}>Final round. Tap the one you&apos;d rather eat.</p>
-      {blk("a", "penne", pa, true)}
-      {blk("b", "padthai", 100 - pa, false)}
-      <div className="card" style={{ display: "flex", gap: 14, alignItems: "center" }}>
-        <QrMark />
-        <div><b>Scan to vote</b><div className="label" style={{ fontSize: 12 }}>Point your camera at the code on screen. No app to install.</div></div>
-      </div>
-    </Screen>
-  );
-}
-
-function QrMark() {
-  // decorative QR-style mark for the mock; the real code comes from the deployed /vote URL
-  const cells = [1,1,1,0,1,0,1,1,1, 1,0,1,0,0,1,1,0,1, 1,1,1,0,1,0,1,1,1, 0,0,0,1,0,1,0,0,0, 1,0,1,1,1,0,1,1,0, 0,1,0,0,1,1,0,1,0, 1,1,1,0,0,1,1,0,1, 1,0,1,1,0,0,0,1,1, 1,1,1,0,1,1,1,0,1];
-  return (
-    <svg width="64" height="64" viewBox="0 0 9 9" aria-hidden style={{ flex: "0 0 auto", borderRadius: 8, background: "white", padding: 4 }}>
-      {cells.map((c, i) => c ? <rect key={i} x={i % 9} y={Math.floor(i / 9)} width="1" height="1" fill="var(--ink)" /> : null)}
-    </svg>
-  );
-}
+/* ── Live QR vote: moved to ./VoteScreen.tsx (real rounds, QR and live tallies) ── */
+export { VoteScreen } from "./VoteScreen";
 
 /* ── Onboarding: 4 questions ── */
 const PLANS = ["Blue", "Gold", "Banana Slug", "Unlimited"];
@@ -154,36 +105,5 @@ export function AskScreen() {
   );
 }
 
-/* ── Dining services view (startup pitch) ── */
-export function DiningServicesScreen() {
-  const loved = ["tikka", "poke", "penne"].map((id) => DISHES[id]);
-  const skipped = [{ name: "Tofu Scramble", hall: "Carson/Oakes", n: 41 }, { name: "Beet Salad", hall: "Crown/Merrill", n: 33 }];
-  return (
-    <Screen noTabBar top={<div className="topbar">
-        <Link href="/" className="iconbtn" aria-label="Back"><Icon icon={ArrowLeft01Icon} size={18} /></Link>
-        <span className="center">Dining services</span>
-        <span style={{ width: 38 }} />
-      </div>}>
-<h1 className="title-xl">What students loved this week</h1>
-      <div className="card" style={{ padding: "2px 14px" }}>
-        {loved.map((d, i) => (
-          <div className="row" key={d.id}>
-            <span className="num" style={{ width: 16, fontWeight: 700, color: i === 0 ? "var(--y11)" : "var(--ink-3)" }}>{i + 1}</span>
-            <Photo src={d.photo} w={44} h={44} r={12} />
-            <div className="grow"><div className="title">{d.name}</div><div className="sub">{d.hall}</div></div>
-            <span className="num" style={{ fontWeight: 700 }}>{d.score}</span>
-          </div>
-        ))}
-      </div>
-      <div className="sechead"><h2>Most skipped</h2></div>
-      <div className="card" style={{ padding: "2px 14px" }}>
-        {skipped.map((s) => (
-          <div className="row" key={s.name}>
-            <div className="grow"><div className="title">{s.name}</div><div className="sub">{s.hall}</div></div>
-            <span className="label num" style={{ fontSize: 12 }}>lost {s.n} matchups</span>
-          </div>
-        ))}
-      </div>
-    </Screen>
-  );
-}
+/* ── Dining services view: moved to ./DiningServicesScreen.tsx (stored votes and skips) ── */
+export { DiningServicesScreen } from "./DiningServicesScreen";

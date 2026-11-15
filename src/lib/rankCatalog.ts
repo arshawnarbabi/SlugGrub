@@ -1,5 +1,6 @@
 // Owner: Karen. Server only: the rankable dishes on today's real UCSC menus (Ethan's getAllMenus), by hall and recipe id.
 // Falls back to the seed list when no real menu is saved for the day (getAllMenus then returns the mock menu, ids "mock-...").
+import { cacheLife } from "next/cache";
 import { getAllMenus } from "./menus";
 import { catalogFromMenus, SEED_CATALOG, type CatalogDish } from "./rankCore";
 
@@ -15,6 +16,13 @@ export function campusDate(d = new Date()): string {
 }
 
 const cache = new Map<string, Promise<Catalog>>();
+
+/** For pages: today's catalog through a one-minute cache, so a screen still opens static (same pattern as Today). */
+export async function cachedCatalog(): Promise<Catalog> {
+  "use cache";
+  cacheLife("minutes");
+  return getCatalog(campusDate());
+}
 
 export function getCatalog(date = campusDate()): Promise<Catalog> {
   let hit = cache.get(date);

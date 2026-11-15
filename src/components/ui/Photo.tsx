@@ -3,7 +3,8 @@
 // public/food/sm = 160px, md = 360px, full = 720px. Decoding is async and off-screen photos load lazily.
 function sized(src: string, w: number | string, h: number) {
   const px = Math.max(typeof w === "number" ? w : 0, h);
-  if (!src.startsWith("/food/")) return src;
+  // generated dish images (/food/gen/) have no sized copies yet: serve the original rather than a missing file
+  if (!src.startsWith("/food/") || src.startsWith("/food/gen/")) return src;
   const name = src.slice("/food/".length);
   if (typeof w === "number" && px <= 80) return `/food/sm/${name}`;
   if (typeof w === "number" && px <= 180) return `/food/md/${name}`;

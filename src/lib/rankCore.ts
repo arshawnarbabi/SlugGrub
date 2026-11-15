@@ -118,7 +118,9 @@ export function hallStandings(dishes: DishRank[], opening: Partial<Record<HallId
   });
 }
 
-export const ranksOf = (standings: HallStanding[]): Partial<Record<HallId, number>> => Object.fromEntries(standings.map((s) => [s.hallId, s.rank]));
+/** The ranks to keep as a week's opening board: only halls with a rated dish (a tie at the default rating is not a standing). */
+export const ranksOf = (standings: HallStanding[], dishes: DishRank[]): Partial<Record<HallId, number>> =>
+  Object.fromEntries(standings.filter((s) => dishes.some((d) => d.hallId === s.hallId && rated(d))).map((s) => [s.hallId, s.rank]));
 
 export interface CollegeStanding {
   college: College;
@@ -174,7 +176,11 @@ export function diningInsights(dishes: DishRank[], hallId?: HallId): DiningServi
   const averageElo = voted.length ? Math.round(voted.reduce((s, d) => s + d.elo, 0) / voted.length) : DEFAULT_ELO;
   const recommendations: string[] = [];
   if (lovedDishes[0]) recommendations.push(`Keep ${lovedDishes[0].name} on rotation: it won ${lovedDishes[0].winRate}% of its matchups.`);
-  if (skippedDishes[0]) recommendations.push(`Look at ${skippedDishes[0].name}: skipped ${skippedDishes[0].skips} times, lost ${skippedDishes[0].losses} matchups.`);
+  const s = skippedDishes[0];
+  if (s) {
+    const why = [s.skips > 0 && `skipped ${s.skips === 1 ? "once" : `${s.skips} times`}`, s.losses > 0 && `lost ${s.losses} ${s.losses === 1 ? "matchup" : "matchups"}`].filter(Boolean).join(", ");
+    recommendations.push(`Look at ${s.name}: ${why}.`);
+  }
   return {
     hallId,
     averageElo,
