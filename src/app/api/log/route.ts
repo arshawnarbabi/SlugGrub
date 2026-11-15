@@ -57,7 +57,7 @@ ${lines}
 Work in this order:
 1. Container. UCSC dining halls serve on a round plate about 9 inches across whose food well is about 6 inches across and about 1 inch deep, a bowl about 5 inches across and about 3 inches deep, a flat plate (pizza), or a to-go box. Tell them apart by shape (a bowl shows its outside wall; a plate has a wide rim sloping into the well; a flat plate has a thin raised edge), never by color.
 2. Foods. List each separate food you can see. Sauce on a dish is part of that dish, not its own item.
-3. Match. Match each food to the one menu dish it most plausibly is. If nothing on the menu fits, put it in not_on_menu in a few words and do NOT force a match. Never return the same id twice.
+3. Match. Match each food to the one menu dish it most plausibly is. Menu names are often a dish's proper or regional name rather than a description (for example "Harira" is a lentil and chickpea soup, "Chana Masala" is a chickpea curry, "Bibimbap" is a rice bowl with vegetables), so think about what each menu dish actually looks like and what it is made of, and match what you see to it even when the words differ. Only if no menu dish could plausibly be this food, put it in not_on_menu in a few words and do NOT force a match. Never return the same id twice.
 4. Servings. Use the container as the ruler: the plate's well filled level is about 1.5 cups, a bowl at a normal fill is about 1 cup, a slice or a piece counts as itself. Estimate the amount of each food, then divide by that dish's official portion (for example 1.5 cups of a "1 cup" dish is 1.5 servings; 3 slices of a "1 slice" dish is 3). Round to the nearest quarter.
 5. Confidence: high if the dish and amount are clear, low if the food is hidden, mixed, or the match is a stretch.
 
