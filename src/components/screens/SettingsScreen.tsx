@@ -5,7 +5,8 @@
 // cards, one page (DESIGN options.settings_ia single-page). Everything here lives on this device only:
 //   Edit my plan, college and hall: onboarding with the saved answers filled in.
 //   Start demo: a second tap confirms, then the profile and every saved plate on this phone are cleared, demo mode turns on and
-//     onboarding starts at the first question. Finishing it seeds today's example plates (demoSeed.ts).
+//     onboarding starts at the first question. Nothing is logged for them (his ask 2026-11-15): Today opens with an empty calorie
+//     ring showing the goal, and the demo plate on Log fills it.
 //   Leave demo: demo mode off, the example plates removed; anything the student logged stays.
 // Read after mount only (profile, plates and the demo switch live in localStorage; pages open static).
 import Link from "next/link";
@@ -19,6 +20,7 @@ import { PROFILE_KEY, goalCalories, useProfile } from "@/lib/profile";
 import { setDemo, useDemoMode } from "@/lib/demoMode";
 import { HALLS, MEAL_PLANS } from "@/lib/halls";
 import { clearPlates, DEMO_PLATE, loadPlates, removeDemoPlates } from "./plates";
+import { forgetSettled } from "./settle";
 import "./settings.css";
 
 const noSubscribe = () => () => {};
@@ -50,6 +52,7 @@ export function SettingsScreen() {
   const startDemo = () => {
     clearProfile();
     clearPlates();
+    forgetSettled();
     setDemo(true);
     router.push("/onboarding");
   };
@@ -95,7 +98,7 @@ export function SettingsScreen() {
             {!confirm ? (
               <button type="button" className="row st-row press" onClick={() => setConfirm(true)}>
                 <span className="st-ic blue"><Icon icon={PlayCircleIcon} size={18} sw={2} /></span>
-                <span className="grow"><span className="title">Start demo</span><span className="sub">Starts over from the first question, with mock rankings and example plates</span></span>
+                <span className="grow"><span className="title">Start demo</span><span className="sub">Starts over from the first question, with mock rankings</span></span>
                 <Icon icon={ArrowRight01Icon} size={16} sw={2} />
               </button>
             ) : (
@@ -115,7 +118,7 @@ export function SettingsScreen() {
           {demo && (
             <button type="button" className="row st-row press" onClick={leaveDemo}>
               <span className="st-ic"><Icon icon={Logout03Icon} size={18} sw={2} /></span>
-              <span className="grow"><span className="title">Leave demo</span><span className="sub">Back to real votes; example plates are removed</span></span>
+              <span className="grow"><span className="title">Leave demo</span><span className="sub">Back to real votes</span></span>
             </button>
           )}
         </div>

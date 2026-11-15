@@ -328,3 +328,5 @@ ADR (Architecture Decision Record) practice, adapted as an append-only log for a
 - **Status:** draft
 
 - 2026-11-15: The calories card on Today is a full, prominent card right under the #1 dish (was a small row lower down), his ask ("make the calries a bigger more prominent card on today tab"): a 132px ring with the calories left at 26px, calories eaten at 24px, protein beside it; with no goal, a 28px calories-eaten number and the Set a goal link.
+
+- 2026-11-15: Finishing onboarding never logs a plate, demo or not (the example plates from demo mode are gone; demoSeed.ts removed), and Start demo also forgets the numbers Today last showed, so Today opens with an empty calorie ring showing the goal (0 eaten, the full goal left). His ask: "have it not log a plate as soon as onboarding is finished ... the ring and total should be empty and reflect the calorie goal. not fill to show the goal". The Log demo plate is how the ring fills in a demo.

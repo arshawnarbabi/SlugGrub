@@ -20,6 +20,12 @@ function writeSeen(key: string, value: number) {
   try { window.sessionStorage.setItem(KEY, JSON.stringify({ ...readAll(), [key]: value })); } catch { /* blocked storage: memory holds it */ }
 }
 
+/** Forget what Today last showed (Start demo: the fresh start draws an empty ring and the real totals, never the old numbers). */
+export function forgetSettled() {
+  for (const k of Object.keys(memory)) delete memory[k];
+  try { window.sessionStorage.removeItem(KEY); } catch { /* blocked storage: memory is cleared */ }
+}
+
 /** The value to draw: what Today last showed for `key`, then (a moment after opening) the current value. Null while `value` is. */
 export function useSettle(key: string, value: number | null): number | null {
   const [shown, setShown] = useState<number | null>(null);
