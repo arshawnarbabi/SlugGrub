@@ -246,8 +246,8 @@ export function Duel({ a, b }: { a: Choice; b: Choice }) {
       </div>
       <div style={{ display: "flex", justifyContent: "space-between", marginTop: 4, fontSize: 14, color: "var(--ink-2)", fontWeight: 500, padding: "0 6px" }}>
         <button type="button" className="textbtn" onClick={() => setPick(null)}><I icon={Undo02Icon} size={15} /> Undo</button>
-        <button type="button" className="textbtn">Too tough</button>
-        <button type="button" className="textbtn">Skip</button>
+        <button type="button" className="textbtn">Can&apos;t decide</button>
+        <button type="button" className="textbtn">Haven&apos;t tried these</button>
       </div>
       <div className="card" style={{ fontSize: 13, color: "var(--ink-2)", display: "flex", gap: 8, alignItems: "center", padding: 12, minHeight: 46 }}>
         {winner ? (
