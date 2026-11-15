@@ -3149,3 +3149,10 @@ all time, not weekly); a row of chip-sm hall filters (All halls + 5) above a "Fr
 so. Photo.tsx: generated images (/food/gen/) have no sized copies, so Photo serves the original for them (it was requesting
 /food/sm/gen/..., which 404s; this also fixes the photo log thumbnails). All state changes use Appear and Swap; no new blur,
 colors or one-off styles beyond the projector block. # draft -->
+
+<!-- 2026-11-14 Today on real data (TodayScreen server loader + TodayView client): hall, college, plan and points come from the
+profile saved on the device (src/lib/profile.ts); the chip reads "<hall> · <meal> · <hours>" from mealNow (weekend hours, "closed
+today"); when the usual hall is closed the hero shows the best dish at an open hall, tagged "#1 at <hall>"; with no profile the
+Slug Points and college cards say "Add your plan" / "Pick your college" and link to onboarding (no made-up numbers); "Rank today's
+food" pairs two real dishes from the hall; "Best on campus today" lists the top 4 by rating; a dish with no image shows the neutral
+rice-bowl tile (paper-2, ink-3 icon). # draft -->
