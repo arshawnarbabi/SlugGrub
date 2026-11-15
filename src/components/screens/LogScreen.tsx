@@ -3,7 +3,7 @@
 // Owner: Arshawn. Photo log: take or pick a plate photo, POST /api/log (Gemini matches it to this meal's menu), adjust servings,
 // save. Calories are private (PLAN.md design rule): saved plates stay on this device (plates.ts). The hall is the student's
 // usual hall from onboarding (JRL/C9 without a profile, or the first hall serving today when theirs is closed); the meal follows
-// that hall's real hours today (src/lib/halls.ts), Pacific time. The demo plate is a dish on that meal's menu (src/app/log/page.tsx).
+// that hall's real hours today (src/lib/halls.ts), Pacific time. The demo plate is a dish on that meal's menu (src/components/screens/demoPlates.ts).
 import Link from "next/link";
 import { useRef, useState, useSyncExternalStore } from "react";
 import { Alert02Icon, ArrowLeft01Icon, Camera01Icon, FireIcon, Image01Icon, RiceBowl01Icon, Tick02Icon } from "@hugeicons/core-free-icons";
@@ -16,15 +16,16 @@ import { useProfile } from "@/lib/profile";
 import type { HallId, MealName } from "@/lib/types";
 import type { LogItem, LogResponse, LogResult } from "@/app/api/log/contract";
 import { dishPhoto } from "./dishPhoto";
+import { portionText } from "./portion";
 import { campusNow, hoursFor, mealLabel, mealToLog, MEAL_NAMES } from "./now";
 import { savePlate } from "./plates";
+import type { DemoPlates } from "./demoPlates";
 
 type Phase = "pick" | "reading" | "result" | "saved" | "error";
 const MEAL_OPTIONS = MEAL_NAMES.map(mealLabel);
 const DEFAULT_HALL: HallId = "40";
 
-/** Each hall's demo plate per meal today: a dish on that menu with a generated image. */
-export type DemoPlates = Partial<Record<HallId, Partial<Record<MealName, { name: string; photo: string }>>>>;
+export type { DemoPlates } from "./demoPlates";
 
 // The hall and meal by the campus clock; read only in the browser (never during render on the server). The snapshot is one
 // string so React can compare it between renders.
@@ -196,7 +197,7 @@ function ItemCard({ it, s, locked, onChange }: { it: LogItem; s: number; locked:
         <div style={{ flex: 1, minWidth: 0 }}>
           <div style={{ fontWeight: 700, fontSize: 15 }}>{it.name}</div>
           <div className="num label" style={{ fontSize: 12 }}>
-            <span style={{ color: "var(--p9)", fontWeight: 700 }}><Swap id={fmt(s)}>{fmt(s)}</Swap> × {it.portion ?? "serving"}</span>
+            <span style={{ color: "var(--p9)", fontWeight: 700 }}><Swap id={fmt(s)}>{fmt(s)}</Swap> × {portionText(it.portion) ?? "serving"}</span>
             {" · "}{it.noLabel ? "no label yet" : `${Math.round(it.per.calories * s)} cal`}{it.confidence === "low" ? " · rough guess" : ""}
           </div>
         </div>

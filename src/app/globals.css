@@ -432,3 +432,72 @@ input, textarea, select { font-size: 17px !important; }     /* 16px or more also
 .ph > .on-photo { --badge-h: 24px; height: var(--badge-h); top: max(4px, calc(var(--ph-r, 18px) - var(--badge-h) / 2)); left: max(4px, calc(var(--ph-r, 18px) - var(--badge-h) / 2)); }
 /* the hero's chevron chip (26px, radius 13) in the inset photo's corner: 8px card padding + (16 - 13) */
 .card.inset > .card-chev.on-img { top: 11px; right: 11px; }
+
+/* Search field in the Sidestash row (his ask 2026-11-14: "when searching make sure hte search bar is sidestash style") */
+.input.raised { background: var(--raise); border: 0.5px solid var(--hi); box-shadow: var(--chip-shadow); }
+
+/* Onboarding illustrations (src/components/screens/OnboardArt.tsx; his ask 2026-11-14: "really nice and polished graphics"). Built
+   from the system: card fills, the Sidestash raise and chip shadow, primary blue only for what the student picked. */
+.art-card { border-radius: var(--r-lg); background: var(--card); box-shadow: var(--chip-shadow); }
+.art-card.raised { background: var(--raise); border: 0.5px solid var(--hi); box-shadow: var(--float-shadow, var(--chip-shadow)); }
+.art-chip { display: inline-flex; align-items: center; gap: 5px; height: 26px; padding: 0 10px; border-radius: var(--r-pill); background: var(--raise); border: 0.5px solid var(--hi); box-shadow: var(--chip-shadow); font-size: 12px; font-weight: 600; color: var(--ink-2); white-space: nowrap; }
+
+/* Segmented controls share their width evenly (his catch 2026-11-14 on Log: "the late night seems to have extra space on the right,
+   just space them out enough"). A switch stretched to the row's width (Log's meals, the leaderboard's Halls / Colleges) spreads the
+   spare room across every option instead of leaving it after the last one; a content-width switch is unchanged. */
+.seg > .track { flex: 1 1 auto; }
+.seg button { flex: 1 1 auto; text-align: center; }
+
+/* Leaderboard place badge (his review 2026-11-14, S05: replaces the vertical color strip): a 32px disc tinted with the hall's color
+   (--c-jrl ... via --hc), the place number in a deeper shade of the same color. Flat, no shadow. */
+.rank-badge { flex: 0 0 auto; width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center; font-size: 14px; font-weight: 700;
+  background: color-mix(in oklch, var(--hc, var(--ink-3)) 15%, var(--card)); color: color-mix(in oklch, var(--hc, var(--ink-3)) 82%, var(--ink)); }
+
+/* Sidestash buttons (his review 2026-11-14, S10: "make all the continue buttons in onbaording sidestash style"). The blue button keeps
+   its blue, raised the way the food button is: a lighter-topped blue gradient, a soft white inner top highlight and the food
+   button's shadow, the same way the top bar chips kept their own color in the Sidestash finish. The white button takes the plain
+   finish (raise, white hairline, chip shadow). Presses still only dim. */
+:root { --raise-blue: linear-gradient(180deg, color-mix(in oklch, var(--p9) 86%, white) 0%, var(--p9) 100%);
+  --raise-blue-shadow: inset 0 1px 0 oklch(1 0 0 / 0.3), 0 1px 2px oklch(0.22 0.01 255 / 0.12), 0 8px 18px -8px oklch(0.22 0.01 255 / 0.32); }
+.btn-primary.raised { background: var(--raise-blue); box-shadow: var(--raise-blue-shadow); }
+.btn-secondary.raised { background: var(--raise); border: 0.5px solid var(--hi); box-shadow: var(--chip-shadow); }
+
+/* Onboarding campus map (his review 2026-11-14, S12: "i liked the map more, just make it look better and not sloppy"): a --paper-2
+   tile inside a raised card, 8px in, so its corners are concentric (24 = 16 + 8); the box keeps the map's aspect ratio (set
+   inline) so nothing stretches. Other colleges are 8px ink pins drawn in the SVG; the pick is a 12px blue pin with a 14px halo and
+   its name chip on the side or corner that fits (OnboardArt.tsx tagSide), blur-fading between picks. */
+.art-map { position: relative; width: 100%; border-radius: 16px; background: var(--paper-2); overflow: hidden; }
+.art-pick { position: absolute; width: 0; height: 0; }
+.art-pin { position: absolute; width: 12px; height: 12px; margin: -6px 0 0 -6px; border-radius: 50%; background: var(--p9); box-shadow: 0 0 0 2px var(--card), 0 0 0 8px color-mix(in oklch, var(--p9) 18%, transparent); }
+.art-tag { position: absolute; left: 0; top: 0; color: var(--ink); }
+.art-tag svg { color: var(--p9); }
+.art-tag.right { transform: translate(18px, -50%); }
+.art-tag.left { transform: translate(calc(-100% - 18px), -50%); }
+.art-tag.above { transform: translate(-50%, calc(-100% - 18px)); }
+.art-tag.below { transform: translate(-50%, 18px); }
+.art-tag.above-right { transform: translate(8px, calc(-100% - 14px)); }
+.art-tag.above-left { transform: translate(calc(-100% - 8px), calc(-100% - 14px)); }
+.art-tag.below-right { transform: translate(8px, 14px); }
+.art-tag.below-left { transform: translate(calc(-100% - 8px), 14px); }
+
+/* Ask's prompt bar (his review 2026-11-14, S09: "put the prompt bar near the bottom with the suggestions above it. make the prompt bar
+   and the prompt send button sidestash style"). The bar sticks to the bottom of the scroller, above the nav bar; its shelf is the
+   page color, running down under the nav bar (the negative margin takes back the scroller's bottom padding), so answers scroll away
+   behind it instead of showing between the bar and the nav bar. The field is .input.raised; the send button is the blue raise. */
+/* position: sticky is set inline (.scroller > :not(.wash):not(.topbar) makes every child relative); sticky offsets count from the
+   scroller's padding edge, so the negative bottom lets the shelf reach the screen's bottom edge */
+.ask-dock { bottom: calc(-1 * (env(safe-area-inset-bottom, 0px) + 116px)); z-index: 2; display: flex; gap: 8px; padding: 10px 0 calc(env(safe-area-inset-bottom, 0px) + 116px);
+  margin-bottom: calc(-1 * (env(safe-area-inset-bottom, 0px) + 116px)); background: linear-gradient(to bottom, color-mix(in oklch, var(--paper) 0%, transparent), var(--paper) 10px); }
+.iconbtn.send { width: 50px; height: 50px; color: white; background: var(--raise-blue); box-shadow: var(--raise-blue-shadow); }
+
+/* Onboarding step dots (his review 2026-11-14, S13: the dots were missing). Plain CSS so they paint in place on the first frame; the
+   current step stretches to 22px on THE spring (--spring), filled steps turn --p9. */
+.step-dot { display: block; flex: none; width: 7px; height: 7px; border-radius: 9px; background: var(--paper-2); transition: width var(--dur-spring) var(--spring), background-color var(--dur-ui) var(--ease); }
+.step-dot.done { background: var(--p9); }
+.step-dot.now { width: 22px; }
+
+/* A switch that shares its row with a button (Halls: meals + search) fills the space the button leaves (found 2026-11-14 driving the
+   build at 393px: the switch's natural width pushed the search button and everything below 8px past the screen's right edge). The
+   options share the width; the side padding comes from that share, so the row fits from 320px up. */
+.seg.fill { flex: 1 1 0; min-width: 0; }
+.seg.fill button { padding-left: 2px; padding-right: 2px; }

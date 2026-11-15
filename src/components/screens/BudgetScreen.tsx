@@ -7,7 +7,7 @@ import Link from "next/link";
 import { Screen } from "@/components/ui/Screen";
 import { CountUp, Seg, Appear } from "@/components/ui/motion";
 import { useProfile, type SavedProfile } from "@/lib/profile";
-import { computePace, weekOf } from "@/lib/budgetCalc";
+import { computePace } from "@/lib/budgetCalc";
 import { MEAL_PLANS } from "@/lib/halls";
 import { PaceChart } from "./PaceChart";
 import { campusClock, weekdayOf } from "@/lib/campusTime";
@@ -40,9 +40,12 @@ function BudgetBody({ profile, range, setRange }: { profile: SavedProfile | null
   const [pillTone, pillText] = PACE[p.pace];
   // days left this week, today through Sunday
   const weekDays = Math.min(p.daysLeft, 7 - ((weekdayOf(p.today) + 6) % 7));
+  // One line under the chart, from the same pace the chart draws (computePace: today's average a day carried forward), so the
+  // sentence and the line's end always agree (his review 2026-11-14: "one line of bigger text that says at this pace you will run
+  // out by so and so date ... but make it actually match the pace").
   const outlook = p.runOutDate
-    ? `At this pace you run out the week of ${short(weekOf(p.runOutDate))}.`
-    : `At this pace you finish the quarter with about ${(p.leftoverAtQuarterEnd ?? 0).toLocaleString()} points left.`;
+    ? <>At this pace you run out <b>{short(p.runOutDate)}</b></>
+    : <>At this pace you finish with <b className="num">{(p.leftoverAtQuarterEnd ?? 0).toLocaleString()}</b> left</>;
   return (
     <Screen top={<div className="topbar">
         <h1 className="title-xl">Budget</h1>
@@ -62,7 +65,7 @@ function BudgetBody({ profile, range, setRange }: { profile: SavedProfile | null
       {(
         <p className="label" style={{ fontSize: 12, margin: "0 4px" }}>
           {!mine ? "Example numbers. " : p.estimated ? `Estimated from the ${p.enteredPoints.toLocaleString()} you entered ${short(p.enteredOn)}, at your pace so far. ` : ""}
-          <Link href="/onboarding" className="seeall" style={{ display: "inline" }}>{mine ? "Update points" : "Set up your plan"}</Link>
+          <Link href={mine ? "/onboarding?step=1" : "/onboarding"} className="seeall" style={{ display: "inline" }}>{mine ? "Update points" : "Set up your plan"}</Link>
         </p>
       )}
       <Seg options={RANGES} value={range} onChange={setRange} label="Range" />
@@ -83,7 +86,9 @@ function BudgetBody({ profile, range, setRange }: { profile: SavedProfile | null
         <div className="card">
           <div className="label" style={{ marginBottom: 8 }}>Slug Points left this quarter</div>
           <PaceChart planTotal={p.planTotal} pointsLeft={p.pointsLeft} elapsedDays={p.elapsedDays} totalDays={p.totalDays} spentPerDay={p.spentPerDay} />
-          <div className="label" style={{ fontSize: 12, marginTop: 6 }}>{outlook} An even pace leaves you {p.idealLeft.toLocaleString()} today.</div>
+          {/* centered under the chart, 16px (spacing.scale.4) clear of the date labels (his review 2026-11-14, S06: "center the at this
+              pace text and increase padding from it and the graph") */}
+          <div style={{ fontSize: 16, fontWeight: 600, letterSpacing: "-0.01em", color: "var(--ink)", marginTop: 16, textAlign: "center", textWrap: "balance" }}>{outlook}</div>
         </div>
         <p className="label" style={{ fontSize: 12, margin: "0 4px" }}>SlugGrub can&apos;t see your card, so it doesn&apos;t split spending between dining halls, cafes and markets. The GET app lists every purchase.</p>
         <p className="label" style={{ fontSize: 12, margin: "0 4px" }}>A dining hall meal costs the same at every hall. Cafes and markets take 10% off with Slug Points.</p>

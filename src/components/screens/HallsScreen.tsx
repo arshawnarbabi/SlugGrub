@@ -19,6 +19,7 @@ import type { CafeView, HallsData, HallView } from "@/lib/hallsView";
 import type { HallId, MealName } from "@/lib/types";
 import { MEAL_LABELS as MEALS, type MealLabel as Meal } from "./now";
 import { dishPhoto } from "./dishPhoto";
+import { portionText } from "./portion";
 
 const toMeal = (m: Meal): MealName => (m === "Late night" ? "Late Night" : m);
 const toLabel = (m: MealName): Meal => (m === "Late Night" ? "Late night" : m);
@@ -38,7 +39,7 @@ export function HallsScreen({ data, best }: { data: HallsData; best: BestDish[] 
   // every dish on today's menus, for search: name, hall, meal
   const results = useMemo(() => {
     const needle = q.trim().toLowerCase();
-    if (needle.length < 2) return [];
+    if (needle.length < 1) return []; // results update with every letter typed
     return data.halls.flatMap((x) => Object.entries(x.meals).flatMap(([m, list]) => (list ?? [])
       .filter((d) => d.name.toLowerCase().includes(needle))
       .map((d) => ({ d, hall: x, meal: toLabel(m as MealName) })))).slice(0, 30);
@@ -51,9 +52,14 @@ export function HallsScreen({ data, best }: { data: HallsData; best: BestDish[] 
   const meal = meals[hall] ?? "Dinner";
   const setMeal = (m: Meal) => setMeals((ms) => ({ ...ms, [hall]: m }));
   const pick = (id: HallId) => { if (data.halls.some((x) => x.id === id)) setHall(id); };
-  // open on the student's usual hall once their profile is read (it lives on the phone, so only after the page loads)
+  // open on the hall a link asked for (?hall=, from Today's top dish card), else the student's usual hall once their profile is read
+  // (both live on the phone, so only after the page loads)
   const usual = profile?.usualHall;
-  useEffect(() => { if (usual) pick(usual); }, [usual]); // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    const asked = new URLSearchParams(window.location.search).get("hall");
+    if (asked && data.halls.some((x) => x.id === asked)) pick(asked as HallId);
+    else if (usual) pick(usual);
+  }, [usual]); // eslint-disable-line react-hooks/exhaustive-deps
   // keep the selected chip in view when a swipe changes the hall
   const chips = useRef<HTMLDivElement>(null);
   const chipRefs = useRef<(HTMLElement | null)[]>([]);
@@ -75,10 +81,10 @@ export function HallsScreen({ data, best }: { data: HallsData; best: BestDish[] 
       <Appear id={searching ? "search" : "browse"} style={{ display: "grid", gap: 10 }}>
       {searching ? <>
         <div style={{ display: "flex", gap: 8 }}>
-          <input ref={input} autoFocus className="input" type="search" value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search today's menus" aria-label="Search today's menus" />
+          <input ref={input} autoFocus className="input raised" type="search" value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search today's menus" aria-label="Search today's menus" />
           <button type="button" className="iconbtn raised" aria-label="Close search" onClick={toggleSearch}><Icon icon={Cancel01Icon} size={20} /></button>
         </div>
-        {q.trim().length >= 2 && results.length === 0 && <div className="card"><div className="label">Nothing called that on today&apos;s menus.</div></div>}
+        {q.trim().length >= 1 && results.length === 0 && <div className="card"><div className="label">Nothing called that on today&apos;s menus.</div></div>}
         {results.map(({ d, hall: x, meal: m }) => {
           const photo = dishPhoto(d.name);
           return (
@@ -95,7 +101,7 @@ export function HallsScreen({ data, best }: { data: HallsData; best: BestDish[] 
         })}
       </> : <>
       <div style={{ display: "flex", gap: 8 }}>
-        <Seg options={MEALS} value={meal} onChange={setMeal} label="Meal" className="raised"
+        <Seg options={MEALS} value={meal} onChange={setMeal} label="Meal" className="raised fill"
           render={(o) => (o === "Late night" ? <><span className="seg-long">Late night</span><span className="seg-short">Late</span></> : o)} />
         <button type="button" className="iconbtn raised" style={{ marginLeft: "auto" }} aria-label="Search dishes" onClick={toggleSearch}><Icon icon={Search01Icon} size={20} /></button>
       </div>
@@ -116,7 +122,7 @@ export function HallsScreen({ data, best }: { data: HallsData; best: BestDish[] 
       </div>
       </>}
 
-      <div ref={chips} className="carousel" style={{ marginTop: 4, scrollSnapType: "none" }}>
+      <div ref={chips} className="carousel" style={{ marginTop: -4, marginBottom: -8, paddingBlock: 8, scrollSnapType: "none" }}>
         <div className="chip-goo">
           <GooTrack index={chipAt} refs={chipRefs} fill="var(--p9)" />
           {data.halls.map((x, n) => (
@@ -184,7 +190,7 @@ function HallPage({ h, meal, data }: { h: HallView; meal: Meal; data: HallsData 
           <div className="card tight" key={d.recipeId + d.name} style={{ display: "flex", gap: 12, alignItems: "center" }}>
             <div style={{ flex: 1, minWidth: 0, paddingLeft: 4 }}>
               <div style={{ fontWeight: 700, fontSize: 15, letterSpacing: "-0.01em" }}>{d.name}</div>
-              <div className="num label" style={{ fontSize: 12, marginTop: 2 }}>{[d.calories !== undefined ? `${d.calories} cal` : "No label", d.portion].filter(Boolean).join(" · ")}</div>
+              <div className="num label" style={{ fontSize: 12, marginTop: 2 }}>{[d.calories !== undefined ? `${d.calories} cal` : "No label", portionText(d.portion)].filter(Boolean).join(" · ")}</div>
             </div>
             {photo
               ? <Photo src={photo} w={64} h={64} r={12} />

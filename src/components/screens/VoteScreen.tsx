@@ -25,18 +25,24 @@ function useVoteUrl() {
 /** One live round: the tally, this device's ballot (optimistic until the store answers), and the vote action. */
 function useRound(state: RankState | null) {
   const round = state?.round ?? null;
-  const [pending, setPending] = useState<{ roundId: string; side: "a" | "b" } | null>(null);
+  // base: the side's count when this phone voted. The live tally includes the vote once it passes base; until then it is added here.
+  const [pending, setPending] = useState<{ roundId: string; side: "a" | "b"; base: number } | null>(null);
   const [note, setNote] = useState<string | null>(null);
   const mine = round ? (state?.myBallot ?? (pending?.roundId === round.roundId ? pending.side : null)) : null;
-  const counted = !!state?.myBallot;
-  const a = (round?.aVotes ?? 0) + (pending && !counted && pending.roundId === round?.roundId && pending.side === "a" ? 1 : 0);
-  const b = (round?.bVotes ?? 0) + (pending && !counted && pending.roundId === round?.roundId && pending.side === "b" ? 1 : 0);
+  const sideVotes = (s: "a" | "b") => (s === "a" ? round?.aVotes ?? 0 : round?.bVotes ?? 0);
+  // Firebase reads this phone's ballot once per round, so myBallot stays empty after voting here; without the base check the vote was
+  // counted twice on this phone (found 2026-11-14: the phone showed 3 votes while the projector showed the true 2)
+  const counted = !!state?.myBallot || (!!pending && sideVotes(pending.side) > pending.base);
+  const extra = (s: "a" | "b") => (pending && !counted && pending.roundId === round?.roundId && pending.side === s ? 1 : 0);
+  const a = (round?.aVotes ?? 0) + extra("a");
+  const b = (round?.bVotes ?? 0) + extra("b");
   const vote = (side: "a" | "b") => {
     if (!round || mine) return;
-    setPending({ roundId: round.roundId, side });
+    setPending({ roundId: round.roundId, side, base: side === "a" ? round.aVotes : round.bVotes });
     setNote(null);
     rankBackend().ballot(round.roundId, side, readProfile().college).then((o) => {
-      if (o.ok || o.error === "already") return;
+      if (o.ok) return;
+      if (o.error === "already") { setPending((p) => p && { ...p, base: -1 }); return; } // already in the tally: add nothing
       setPending(null);
       setNote(o.message);
     });

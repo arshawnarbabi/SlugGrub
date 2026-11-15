@@ -17,6 +17,7 @@ import type { HallId } from "@/lib/types";
 import type { MealNow } from "@/lib/halls";
 import { mealLabel } from "./now";
 import { CaloriesToday } from "./CaloriesToday";
+import { portionText } from "./portion";
 
 export interface TodayHall {
   short: string;
@@ -44,8 +45,12 @@ export function TodayView({ data }: { data: TodayData }) {
   const hallId = profile?.usualHall ?? DEFAULT_HALL;
   const hall = data.halls[hallId] ?? data.halls[DEFAULT_HALL];
   // usual hall closed or empty today (two halls close on weekends): show the best dish at a hall that's open instead
-  const alt = hall.top ? null : Object.values(data.halls).find((h) => h.status.open && h.top) ?? Object.values(data.halls).find((h) => h.top) ?? null;
+  const halls = Object.entries(data.halls) as [HallId, TodayHall][];
+  const altAt = hall.top ? undefined : halls.find(([, h]) => h.status.open && h.top) ?? halls.find(([, h]) => h.top);
+  const alt = altAt?.[1] ?? null;
   const top = hall.top ?? alt?.top ?? null;
+  // the top dish card opens Halls on the hall it names (his usual hall, or the open one shown instead)
+  const topHall: HallId = altAt?.[0] ?? (data.halls[hallId] ? hallId : DEFAULT_HALL);
   const topTag = alt ? `#1 at ${alt.short}` : "#1 at your hall";
   const budget = profile ? computeBudgetSnapshot(profile.pointsNow, profile.plan, new Date(), profile.savedAt.slice(0, 10)) : null;
   const pct = budget ? Math.max(0, Math.min(100, Math.round((budget.pointsLeft / (budget.planTotal ?? budget.pointsLeft)) * 100))) : 0;
@@ -73,14 +78,14 @@ export function TodayView({ data }: { data: TodayData }) {
       )}
 
       {top && (
-        <Link href="/halls" className={`card press link ${top.photo ? "inset" : ""}`}>
+        <Link href={`/halls?hall=${topHall}`} className={`card press link ${top.photo ? "inset" : ""}`}>
           <span className={`card-chev ${top.photo ? "on-img" : ""}`} aria-hidden><Icon icon={ArrowRight01Icon} size={top.photo ? 15 : 16} sw={2} /></span>
           {top.photo
             ? <Photo src={top.photo} h={170} r={16} eager><span className="on-photo gold"><Icon icon={CrownIcon} size={13} sw={2} /> {topTag}</span></Photo>
             : <span className="tint gold" style={{ marginBottom: 8 }}><Icon icon={CrownIcon} size={13} sw={2} /> {topTag}</span>}
           <div style={{ padding: top.photo ? "12px 6px 6px" : 0, display: "grid", gap: 4 }}>
             <b style={{ fontSize: 17, letterSpacing: "-0.02em" }}>{top.name}</b>
-            <div className="num label">{[top.cal !== undefined && `${top.cal} cal`, top.portion, top.votes > 0 ? `ranked by ${top.votes} ${top.votes === 1 ? "vote" : "votes"}` : "be the first to rank it"].filter(Boolean).join(" · ")}</div>
+            <div className="num label">{[top.cal !== undefined && `${top.cal} cal`, portionText(top.portion), top.votes > 0 ? `ranked by ${top.votes} ${top.votes === 1 ? "vote" : "votes"}` : "be the first to rank it"].filter(Boolean).join(" · ")}</div>
           </div>
         </Link>
       )}
