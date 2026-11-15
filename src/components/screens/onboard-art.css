@@ -1,0 +1,18 @@
+/* Onboarding art in motion (src/components/screens/OnboardArt.tsx; his ask 2026-11-15, docs/DESIGN.md note of the same date). Component
+   CSS: the shared look (.art-card, .art-chip, .art-map, .art-pin) stays in globals.css; these are only the pieces that move. */
+
+/* Plan deck: every card is the plain art card; the Sidestash raise is a layer that fades in on the front card, so a card turning
+   front or back changes finish smoothly instead of swapping class. */
+.oa-plan { position: absolute; inset: 0; will-change: transform; }
+.oa-raise { position: absolute; inset: 0; border-radius: inherit; background: var(--raise); border: 0.5px solid var(--hi);
+  box-shadow: var(--float-shadow, var(--chip-shadow)); pointer-events: none; }
+.oa-face { position: absolute; inset: 0; padding: 18px; display: grid; align-content: space-between; }
+
+/* College map: the tag hangs off the moving pin. .oa-tag-at carries the px gap, .oa-tag its own % shift and its width. */
+.oa-tag-at { position: absolute; left: 0; top: 0; width: 0; height: 0; }
+.oa-tag { position: absolute; left: 0; top: 0; box-sizing: border-box; overflow: hidden; color: var(--ink); }
+.oa-tag svg { color: var(--p9); flex: none; }
+.oa-measure { position: absolute; left: 0; top: 0; visibility: hidden; pointer-events: none; box-sizing: border-box; }
+/* the blue pin stays on top: when the tag flips sides it slides under the pin, never over it */
+.art-pick > .art-pin { z-index: 2; }
+.art-pick > .oa-tag-at { z-index: 1; }
