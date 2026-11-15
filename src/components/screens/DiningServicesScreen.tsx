@@ -6,6 +6,7 @@ import { useMemo, useState } from "react";
 import { ArrowLeft01Icon } from "@hugeicons/core-free-icons";
 import { Icon } from "@/components/ui/Icon";
 import { Screen } from "@/components/ui/Screen";
+import { DemoChip } from "@/components/ui/DemoChip";
 import { Appear } from "@/components/ui/motion";
 import { HALLS } from "@/lib/halls";
 import type { HallId } from "@/lib/types";
@@ -33,7 +34,7 @@ export function DiningServicesScreen({ catalog }: { catalog: CatalogDish[] }) {
         ))}
       </div>
       <Appear id={id} style={{ display: "grid", gap: 14 }}>
-        <div className="label">{state ? `From ${report.totalVotes.toLocaleString()} ${report.totalVotes === 1 ? "matchup" : "matchups"} and ${report.totalSkips.toLocaleString()} ${report.totalSkips === 1 ? "skip" : "skips"}` : " "}</div>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8 }}><div className="label">{state ? `From ${report.totalVotes.toLocaleString()} ${report.totalVotes === 1 ? "matchup" : "matchups"} and ${report.totalSkips.toLocaleString()} ${report.totalSkips === 1 ? "skip" : "skips"}` : " "}</div><DemoChip /></div>
         <div className="card" style={{ padding: "2px 14px" }}>
           {loved.length === 0 && <div className="row"><div className="grow"><div className="sub">{state ? "No clear favorites yet. Votes show up here as students rank." : " "}</div></div></div>}
           {loved.map((d, i) => (

@@ -1,8 +1,13 @@
 <!doctype html><meta charset="utf-8"><title>Seed profile</title>
 <script>
 // Review screenshots only: saves an example onboarding profile on this device, then opens ?to= (default Today).
+// &demo=1 also turns demo mode on (mock rankings, src/lib/demoMode.ts); &demo=0 turns it off.
+const q = new URLSearchParams(location.search);
+try {
+  if (q.get("demo") === "1" || q.get("demo") === "0") localStorage.setItem("sluggrub.demo", q.get("demo"));
+} catch (e) {}
 try {
   localStorage.setItem("sluggrub.profile", JSON.stringify({ plan: "gold", pointsNow: 1120, college: "College Nine", usualHall: "40", savedAt: new Date().toISOString() }));
 } catch (e) {}
-location.replace(new URLSearchParams(location.search).get("to") || "/");
+location.replace(q.get("to") || "/");
 </script>

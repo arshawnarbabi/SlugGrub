@@ -18,6 +18,8 @@ import {
   type CatalogDish, type DishRef, type DishStat, type LiveRound, type RankState,
 } from "./rankCore";
 import { campusNow } from "@/components/screens/now";
+import { demoOn } from "./demoMode";
+import { demoBackend } from "./rankDemo";
 
 export type RankMode = "firebase" | "local";
 export const rankMode: RankMode = firebaseConfigured ? "firebase" : "local";
@@ -274,6 +276,8 @@ function firebaseBackend(db: Firestore): Backend {
 
 let backend: Backend | null = null;
 export function rankBackend(): Backend {
+  // demo mode (?demo=1, src/lib/demoMode.ts): mock state in this browser only; nothing is read from or written to Firebase
+  if (demoOn()) return demoBackend;
   if (!backend) {
     const db = rankMode === "firebase" ? getDb() : null;
     backend = db ? firebaseBackend(db) : local;
@@ -295,7 +299,7 @@ export function useRankState(catalog: CatalogDish[]): { state: RankState | null;
       (s) => {
         setState(s);
         setError(null);
-        if (rankMode === "firebase" && s.opening === null && opened.current !== week) {
+        if (rankMode === "firebase" && !demoOn() && s.opening === null && opened.current !== week) {
           opened.current = week;
           const all = mergeDishes(catalogRef.current, s.dishes);
           rankBackend().openWeek(week, ranksOf(hallStandings(all, null), all));
