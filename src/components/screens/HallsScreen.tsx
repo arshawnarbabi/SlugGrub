@@ -95,7 +95,7 @@ export function HallsScreen({ data, best }: { data: HallsData; best: BestDish[] 
         })}
       </> : <>
       <div style={{ display: "flex", gap: 8 }}>
-        <Seg options={MEALS} value={meal} onChange={setMeal} label="Meal" className="raised"
+        <Seg options={MEALS} value={meal} onChange={setMeal} label="Meal" className="raised fill"
           render={(o) => (o === "Late night" ? <><span className="seg-long">Late night</span><span className="seg-short">Late</span></> : o)} />
         <button type="button" className="iconbtn raised" style={{ marginLeft: "auto" }} aria-label="Search dishes" onClick={toggleSearch}><Icon icon={Search01Icon} size={20} /></button>
       </div>

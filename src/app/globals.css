@@ -495,3 +495,9 @@ input, textarea, select { font-size: 17px !important; }     /* 16px or more also
 .step-dot { display: block; flex: none; width: 7px; height: 7px; border-radius: 9px; background: var(--paper-2); transition: width var(--dur-spring) var(--spring), background-color var(--dur-ui) var(--ease); }
 .step-dot.done { background: var(--p9); }
 .step-dot.now { width: 22px; }
+
+/* A switch that shares its row with a button (Halls: meals + search) fills the space the button leaves (found 2026-11-14 driving the
+   build at 393px: the switch's natural width pushed the search button and everything below 8px past the screen's right edge). The
+   options share the width; the side padding comes from that share, so the row fits from 320px up. */
+.seg.fill { flex: 1 1 0; min-width: 0; }
+.seg.fill button { padding-left: 2px; padding-right: 2px; }
