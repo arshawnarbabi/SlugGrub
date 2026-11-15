@@ -3211,3 +3211,5 @@ One page margin: .carousel rows scroll edge to edge but rest their first item on
 <!-- 2026-11-14 Rank card names clamp to two lines in a fixed 36px box (same .clamp2 as Halls), so both cards keep one height. -->
 
 <!-- 2026-11-14 Top bar status chips keep their tint color (blue: --p3 fill, --p9 text) with the Sidestash finish: a top-to-bottom raise of their own color (lighter at the top), white hairline, chip shadow (his ask: "they should still be the color they were before, just sidestash style"). -->
+
+<!-- 2026-11-14 Concentric corner badges: a pill in a photo corner sits at offset = photo radius - pill radius (24px pills: 4px in a 16px-radius photo, 6px in 18px; at least 8px when the photo has no rounding); the Today hero chevron chip (26px) sits 8 + 3 = 11px in. Card 24 = photo 16 + 8 padding (his ask: "corner rounding ... cohesive with outer inner and ... the pill, pixel width formula"). -->

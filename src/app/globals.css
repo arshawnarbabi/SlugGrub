@@ -425,3 +425,10 @@ input, textarea, select { font-size: 17px !important; }     /* 16px or more also
    still be the color they were before, just sidestash style") */
 .topbar .tint.blue { background: linear-gradient(180deg, color-mix(in oklch, var(--p3) 55%, white) 0%, var(--p3) 100%); color: var(--p9); }
 .topbar .tint:active { opacity: 1; }
+
+/* Concentric badges (his ask 2026-11-14: "fit this number one so the corner rounding is all cohesive with outer inner and the corner
+   rounding of the pill, pixel width formula"). A pill in a photo's corner shares the photo corner's center: offset = corner radius -
+   pill radius. Card 24 = photo 16 + 8 padding; photo 16 = pill 12 (a 24px pill) + 4 offset. Photos with no rounding keep 8px. */
+.ph > .on-photo { --badge-h: 24px; height: var(--badge-h); top: max(8px, calc(var(--ph-r, 18px) - var(--badge-h) / 2)); left: max(8px, calc(var(--ph-r, 18px) - var(--badge-h) / 2)); }
+/* the hero's chevron chip (26px, radius 13) in the inset photo's corner: 8px card padding + (16 - 13) */
+.card.inset > .card-chev.on-img { top: 11px; right: 11px; }
