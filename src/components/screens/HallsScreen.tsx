@@ -19,6 +19,7 @@ import type { CafeView, HallsData, HallView } from "@/lib/hallsView";
 import type { HallId, MealName } from "@/lib/types";
 import { MEAL_LABELS as MEALS, type MealLabel as Meal } from "./now";
 import { dishPhoto } from "./dishPhoto";
+import { portionText } from "./portion";
 
 const toMeal = (m: Meal): MealName => (m === "Late night" ? "Late Night" : m);
 const toLabel = (m: MealName): Meal => (m === "Late Night" ? "Late night" : m);
@@ -189,7 +190,7 @@ function HallPage({ h, meal, data }: { h: HallView; meal: Meal; data: HallsData 
           <div className="card tight" key={d.recipeId + d.name} style={{ display: "flex", gap: 12, alignItems: "center" }}>
             <div style={{ flex: 1, minWidth: 0, paddingLeft: 4 }}>
               <div style={{ fontWeight: 700, fontSize: 15, letterSpacing: "-0.01em" }}>{d.name}</div>
-              <div className="num label" style={{ fontSize: 12, marginTop: 2 }}>{[d.calories !== undefined ? `${d.calories} cal` : "No label", d.portion].filter(Boolean).join(" · ")}</div>
+              <div className="num label" style={{ fontSize: 12, marginTop: 2 }}>{[d.calories !== undefined ? `${d.calories} cal` : "No label", portionText(d.portion)].filter(Boolean).join(" · ")}</div>
             </div>
             {photo
               ? <Photo src={photo} w={64} h={64} r={12} />

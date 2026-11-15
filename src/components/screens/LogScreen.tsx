@@ -16,6 +16,7 @@ import { useProfile } from "@/lib/profile";
 import type { HallId, MealName } from "@/lib/types";
 import type { LogItem, LogResponse, LogResult } from "@/app/api/log/contract";
 import { dishPhoto } from "./dishPhoto";
+import { portionText } from "./portion";
 import { campusNow, hoursFor, mealLabel, mealToLog, MEAL_NAMES } from "./now";
 import { savePlate } from "./plates";
 import type { DemoPlates } from "./demoPlates";
@@ -196,7 +197,7 @@ function ItemCard({ it, s, locked, onChange }: { it: LogItem; s: number; locked:
         <div style={{ flex: 1, minWidth: 0 }}>
           <div style={{ fontWeight: 700, fontSize: 15 }}>{it.name}</div>
           <div className="num label" style={{ fontSize: 12 }}>
-            <span style={{ color: "var(--p9)", fontWeight: 700 }}><Swap id={fmt(s)}>{fmt(s)}</Swap> × {it.portion ?? "serving"}</span>
+            <span style={{ color: "var(--p9)", fontWeight: 700 }}><Swap id={fmt(s)}>{fmt(s)}</Swap> × {portionText(it.portion) ?? "serving"}</span>
             {" · "}{it.noLabel ? "no label yet" : `${Math.round(it.per.calories * s)} cal`}{it.confidence === "low" ? " · rough guess" : ""}
           </div>
         </div>

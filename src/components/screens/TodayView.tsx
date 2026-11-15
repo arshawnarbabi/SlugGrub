@@ -17,6 +17,7 @@ import type { HallId } from "@/lib/types";
 import type { MealNow } from "@/lib/halls";
 import { mealLabel } from "./now";
 import { CaloriesToday } from "./CaloriesToday";
+import { portionText } from "./portion";
 
 export interface TodayHall {
   short: string;
@@ -84,7 +85,7 @@ export function TodayView({ data }: { data: TodayData }) {
             : <span className="tint gold" style={{ marginBottom: 8 }}><Icon icon={CrownIcon} size={13} sw={2} /> {topTag}</span>}
           <div style={{ padding: top.photo ? "12px 6px 6px" : 0, display: "grid", gap: 4 }}>
             <b style={{ fontSize: 17, letterSpacing: "-0.02em" }}>{top.name}</b>
-            <div className="num label">{[top.cal !== undefined && `${top.cal} cal`, top.portion, top.votes > 0 ? `ranked by ${top.votes} ${top.votes === 1 ? "vote" : "votes"}` : "be the first to rank it"].filter(Boolean).join(" · ")}</div>
+            <div className="num label">{[top.cal !== undefined && `${top.cal} cal`, portionText(top.portion), top.votes > 0 ? `ranked by ${top.votes} ${top.votes === 1 ? "vote" : "votes"}` : "be the first to rank it"].filter(Boolean).join(" · ")}</div>
           </div>
         </Link>
       )}

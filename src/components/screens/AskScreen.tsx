@@ -12,6 +12,7 @@ import { Screen } from "@/components/ui/Screen";
 import { Appear } from "@/components/ui/motion";
 import { ASK_MAX_CHARS, type AskResponse } from "@/app/api/ask/contract";
 import { dishPhoto } from "./dishPhoto";
+import { portionText } from "./portion";
 
 const SUGGESTIONS = ["High protein under 700 cal", "Best vegetarian right now", "Something warm near Porter"];
 
@@ -62,7 +63,7 @@ export function AskScreen() {
                       : <span className="iconbtn" aria-hidden style={{ width: 56, height: 56, borderRadius: 12, background: "var(--paper-2)" }}><Icon icon={RiceBowl01Icon} size={20} /></span>}
                     <div style={{ flex: 1, minWidth: 0 }}>
                       <div style={{ fontWeight: 700 }}>{d.name}</div>
-                      <div className="num label" style={{ fontSize: 12 }}>{[d.hallShort, d.calories !== undefined ? `${d.calories} cal` : "no label", d.proteinG !== undefined ? `${d.proteinG}g protein` : "", d.portion].filter(Boolean).join(" · ")}</div>
+                      <div className="num label" style={{ fontSize: 12 }}>{[d.hallShort, d.calories !== undefined ? `${d.calories} cal` : "no label", d.proteinG !== undefined ? `${d.proteinG}g protein` : "", portionText(d.portion)].filter(Boolean).join(" · ")}</div>
                       <div className="label" style={{ fontSize: 12 }}>{d.open ? d.reason : `${d.reason} · ${d.when}`}</div>
                     </div>
                   </div>
