@@ -445,3 +445,9 @@ input, textarea, select { font-size: 17px !important; }     /* 16px or more also
 .art-pin { position: absolute; width: 10px; height: 10px; margin: -5px 0 0 -5px; border-radius: 50%; background: var(--ink-3); box-shadow: 0 0 0 2px var(--card); transition: background-color var(--dur-ui) var(--ease), box-shadow var(--dur-ui) var(--ease); }
 .art-pin.on { background: var(--p9); box-shadow: 0 0 0 2px var(--card), 0 0 0 8px color-mix(in oklch, var(--p9) 18%, transparent); }
 .art-tag { position: absolute; transform: translate(-50%, calc(-100% - 12px)); color: var(--p9); }
+
+/* Segmented controls share their width evenly (his catch 2026-11-14 on Log: "the late night seems to have extra space on the right,
+   just space them out enough"). A switch stretched to the row's width (Log's meals, the leaderboard's Halls / Colleges) spreads the
+   spare room across every option instead of leaving it after the last one; a content-width switch is unchanged. */
+.seg > .track { flex: 1 1 auto; }
+.seg button { flex: 1 1 auto; text-align: center; }

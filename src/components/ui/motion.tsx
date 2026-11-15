@@ -39,7 +39,8 @@ export function Swap({ id, children, rotate = 0, className, style }: { id: strin
 
 /** Pages open static (his rule 2026-11-14: "dont animate the ui coming in on page selection, everything should be static").
  *  ScreenClock marks when a screen mounted; anything that would animate in within that first moment renders in place instead. */
-const ScreenReady = createContext<boolean>(false);
+// null outside any Screen (the tab bar): nothing there is "opening"
+const ScreenReady = createContext<boolean | null>(null);
 export function ScreenClock({ children }: { children: React.ReactNode }) {
   // false while the screen opens, true a moment after it has mounted (no clock read during render)
   const [ready, setReady] = useState(false);
@@ -48,11 +49,11 @@ export function ScreenClock({ children }: { children: React.ReactNode }) {
 }
 /** True once the screen has finished opening (400 ms after mount); for code that must not move anything while a page opens. */
 export function useScreenReady() {
-  return useContext(ScreenReady);
+  return useContext(ScreenReady) ?? false;
 }
 
 function useOpeningScreen() {
-  const ready = useContext(ScreenReady);
+  const ready = useContext(ScreenReady) ?? false;
   const [opening] = useState(() => !ready); // captured once, when this block mounts
   return opening;
 }
@@ -93,6 +94,12 @@ export function CountUp({ to, decimals = 0 }: { to: number; decimals?: number })
 export function GooTrack({ index, refs, fill, deps = 0, inset = false }: { index: number; refs: React.RefObject<(HTMLElement | null)[]>; fill: string; deps?: number; inset?: boolean }) {
   const [box, setBox] = useState<{ x: number; w: number; h: number } | null>(null);
   const reduce = useReducedMotion();
+  // Pages open static, and the thumb always sits under the selected option (his catch 2026-11-14 on Log: "the one bolded should be
+  // the one with the highlight on it"). A control's value often settles a moment after the page opens (Log's meal comes from the
+  // clock, Rank's view from the URL), so the first value drawn is not the real one. While the screen is opening the thumb jumps
+  // straight to the current option and the goo layer is redrawn there (keyed on the index) instead of sliding over from the
+  // placeholder; after that it moves on THE spring as before. Outside a Screen (the tab bar) it is always live.
+  const live = useContext(ScreenReady) ?? true;
   useLayoutEffect(() => {
     const measure = () => {
       const el = refs.current?.[index];
@@ -105,10 +112,10 @@ export function GooTrack({ index, refs, fill, deps = 0, inset = false }: { index
   }, [index, refs, deps]);
   if (!box || index < 0) return null;
   const move = { x: box.x, width: box.w };
-  const tr = reduce ? { duration: 0 } : SPRING;
+  const tr = reduce || !live ? { duration: 0 } : SPRING;
   return (
     <>
-      <Liquid style={{ position: "absolute", inset: 0, pointerEvents: "none", zIndex: 0 }} {...GOO} fill={fill}>
+      <Liquid key={live ? "live" : `open-${index}`} style={{ position: "absolute", inset: 0, pointerEvents: "none", zIndex: 0 }} {...GOO} fill={fill}>
         <Liquid.Item observe>
           <motion.div className="goo-thumb" initial={false} animate={move} transition={tr} style={{ height: box.h, top: 0 }} />
         </Liquid.Item>
