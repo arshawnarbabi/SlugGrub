@@ -39,3 +39,24 @@ export interface AskError {
 }
 
 export type AskResponse = AskResult | AskError;
+
+// ── Streaming (2026-11-15): POST with `Accept: application/x-ndjson` and the answer comes back as one JSON event per line while
+// it is worked out; without that header the route returns one AskResponse as before. Checks that fail before any work starts
+// (bad_request, too_long, rate_limited, no_key) still come back as a plain JSON AskError with its status, in both modes.
+export const ASK_STREAM_TYPE = "application/x-ndjson";
+
+/** What the server is doing right now; each is a real step, sent when it starts (the Ask screen's action line shows `text`). */
+export type AskStepKind =
+  | "menus" // reading today's menus
+  | "halls" // which halls and meals are open now, by name
+  | "asking" // the Gemini call has started
+  | "thinking" // one of Gemini's own thought summaries (its heading)
+  | "writing" // the answer text is streaming
+  | "matching"; // matching the picks to the UCSC labels
+
+export type AskEvent =
+  | { type: "step"; step: AskStepKind; text: string }
+  | { type: "delta"; text: string } // the next piece of the answer; the pieces join into AskResult.answer
+  | { type: "picks"; picks: AskPick[] }
+  | { type: "done"; result: AskResult } // always last on success; result.answer is the full answer
+  | { type: "error"; error: AskErrorCode; message: string }; // always last on failure
