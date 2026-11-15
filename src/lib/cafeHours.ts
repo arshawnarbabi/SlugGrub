@@ -36,3 +36,26 @@ export function cafeNow(id: string, date: string, minutes: number): CafeNow | nu
   if (minutes >= toMinutes(close)) return { open: false, text: "closed for the day" };
   return { open: true, text: `open till ${clockLabel(close)}` };
 }
+
+const DAY_NAMES = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+/** A location's posted week, days with the same hours grouped, Monday first: [{ days: "Mon to Thu", hours: "8 AM to 6 PM" },
+ *  { days: "Fri", hours: "8 AM to 5 PM" }, { days: "Sat, Sun", hours: "Closed" }]. Empty when it has no posted hours. */
+export function cafeWeek(id: string): { days: string; hours: string }[] {
+  const week = HOURS[id];
+  if (!week) return [];
+  const order = [1, 2, 3, 4, 5, 6, 0];
+  const text = (o: Open) => (o ? `${clockLabel(o[0])} to ${clockLabel(o[1])}` : "Closed");
+  const groups: { from: number; to: number; hours: string }[] = [];
+  for (const d of order) {
+    const hours = text(week[d]);
+    const last = groups[groups.length - 1];
+    if (last && last.hours === hours) last.to = d;
+    else groups.push({ from: d, to: d, hours });
+  }
+  return groups.map((g) => {
+    const span = order.indexOf(g.to) - order.indexOf(g.from);
+    const days = span === 0 ? DAY_NAMES[g.from] : span === 1 ? `${DAY_NAMES[g.from]}, ${DAY_NAMES[g.to]}` : `${DAY_NAMES[g.from]} to ${DAY_NAMES[g.to]}`;
+    return { days, hours: g.hours };
+  });
+}
