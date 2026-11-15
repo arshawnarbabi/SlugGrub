@@ -4,9 +4,11 @@
 function sized(src: string, w: number | string, h: number) {
   const px = Math.max(typeof w === "number" ? w : 0, h);
   if (!src.startsWith("/food/")) return src;
-  const name = src.slice("/food/".length);
-  if (typeof w === "number" && px <= 80) return `/food/sm/${name}`;
-  if (typeof w === "number" && px <= 180) return `/food/md/${name}`;
+  // the sm/ and md/ copies sit next to the full photo: /food/x.jpg -> /food/sm/x.jpg, /food/gen/x.jpg -> /food/gen/sm/x.jpg
+  const cut = src.lastIndexOf("/") + 1;
+  const dir = src.slice(0, cut), name = src.slice(cut);
+  if (typeof w === "number" && px <= 80) return `${dir}sm/${name}`;
+  if (typeof w === "number" && px <= 180) return `${dir}md/${name}`;
   return src;
 }
 
