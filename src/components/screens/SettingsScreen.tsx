@@ -16,7 +16,10 @@ import { ArrowLeft01Icon, ArrowRight01Icon, PencilEdit02Icon, PlayCircleIcon, Lo
 import { Icon } from "@/components/ui/Icon";
 import { Screen } from "@/components/ui/Screen";
 import { Appear, Swap } from "@/components/ui/motion";
-import { PROFILE_KEY, goalCalories, useProfile } from "@/lib/profile";
+import { PROFILE_KEY, goalCalories, saveProfile, useProfile } from "@/lib/profile";
+import { goalFromBody } from "@/lib/calorieGoal";
+import { campusNow, hoursFor } from "./now";
+import type { HallId } from "@/lib/types";
 import { setDemo, useDemoMode } from "@/lib/demoMode";
 import { HALLS, MEAL_PLANS } from "@/lib/halls";
 import { clearPlates, DEMO_PLATE, loadPlates, removeDemoPlates } from "./plates";
@@ -25,6 +28,16 @@ import "./settings.css";
 
 const noSubscribe = () => () => {};
 
+// Start demo with "Skip setup" on (his ask 2026-11-15: "make the demo mode button have a toggle to skip or not skip onboarding. if
+// skipped have preloaded onboarding stuff"): the same answers onboarding prefills in demo mode, a hall that is open today (Porter/Kresge
+// when it is, else the first open one), and the example calorie goal (5'10", 160 lb, 19, male, moderate, maintain).
+const DEMO_GOAL = { heightIn: 70, weightLb: 160, age: 19, sex: "male" as const, activity: "moderate" as const, direction: "maintain" as const };
+function demoHall(): HallId {
+  const today = campusNow(new Date()).date;
+  const open = (id: HallId) => hoursFor(id, today).length > 0;
+  return open("25") ? "25" : HALLS.find((h) => open(h.id))?.id ?? "40";
+}
+
 function clearProfile() {
   try { window.localStorage.removeItem(PROFILE_KEY); } catch { /* blocked storage: nothing was saved */ }
   // useProfile listens for "storage"; a same-tab removal fires none, so send one
@@ -32,6 +45,7 @@ function clearProfile() {
 }
 
 export function SettingsScreen() {
+  const [skipSetup, setSkipSetup] = useState(true);
   const router = useRouter();
   const profile = useProfile();
   const demo = useDemoMode();
@@ -54,7 +68,10 @@ export function SettingsScreen() {
     clearPlates();
     forgetSettled();
     setDemo(true);
-    router.push("/onboarding");
+    if (skipSetup) {
+      saveProfile({ plan: "gold", pointsNow: 1200, college: "Porter", usualHall: demoHall(), goal: { calories: goalFromBody(DEMO_GOAL) ?? 2710, ...DEMO_GOAL } });
+      router.push("/");
+    } else router.push("/onboarding");
   };
   const leaveDemo = () => {
     removeDemoPlates();
@@ -98,7 +115,7 @@ export function SettingsScreen() {
             {!confirm ? (
               <button type="button" className="row st-row press" onClick={() => setConfirm(true)}>
                 <span className="st-ic blue"><Icon icon={PlayCircleIcon} size={18} sw={2} /></span>
-                <span className="grow"><span className="title">Start demo</span><span className="sub">Starts over from the first question, with mock rankings</span></span>
+                <span className="grow"><span className="title">Start demo</span><span className="sub">{skipSetup ? "Opens Today with an example setup and mock rankings" : "Starts over from the first question, with mock rankings"}</span></span>
                 <Icon icon={ArrowRight01Icon} size={16} sw={2} />
               </button>
             ) : (
@@ -115,6 +132,10 @@ export function SettingsScreen() {
               </div>
             )}
           </Appear>
+          <button type="button" role="switch" aria-checked={skipSetup} className="row st-row press" onClick={() => setSkipSetup((v) => !v)}>
+            <span className="grow"><span className="title">Skip setup</span><span className="sub">{skipSetup ? "Uses an example plan, college, hall and calorie goal" : "Walks through onboarding first"}</span></span>
+            <span className={`st-switch ${skipSetup ? "on" : ""}`} aria-hidden><span /></span>
+          </button>
           {demo && (
             <button type="button" className="row st-row press" onClick={leaveDemo}>
               <span className="st-ic"><Icon icon={Logout03Icon} size={18} sw={2} /></span>
