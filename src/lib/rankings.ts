@@ -14,7 +14,7 @@ import {
   collegeStandings, diningInsights, emptyState, hallStandings, matchIdFor, mergeDishes, weekOf, dishKey,
   type CollegeStanding, type DiningServicesReport, type DishInsight, type RankState,
 } from "./rankCore";
-import { campusNow, hoursFor, mealToLog } from "@/components/screens/now";
+import { campusNow, hoursFor, mealStatus } from "@/components/screens/now";
 import { dishPhoto } from "@/components/screens/dishPhoto";
 
 export type { CollegeStanding, DiningServicesReport, DishInsight };
@@ -31,11 +31,11 @@ export async function getAllDishes(): Promise<DishRank[]> {
   return (await load()).dishes;
 }
 
-/** Best dish at a hall right now: from the meal being served (or the last one that opened), else today's menu, else anything
+/** Best dish at a hall right now: from the meal being served (or the next one), else today's menu, else anything
  *  ranked there. Equal ratings prefer a dish with a photo, then more votes. */
 export async function getTopDishNow(hallId: HallId): Promise<DishRank | null> {
   const { catalog, dishes } = await load();
-  const meal = mealToLog(hoursFor(hallId), campusNow(new Date()).minutes);
+  const meal = mealStatus(hoursFor(hallId), campusNow(new Date()).minutes).meal; // the meal Today's header shows (open now, else next)
   const today = catalog.dishes.filter((c) => c.hallId === hallId);
   const inMeal = new Set(today.filter((c) => c.meals.includes(meal)).map((c) => c.key));
   const onToday = new Set(today.map((c) => c.key));
