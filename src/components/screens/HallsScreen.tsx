@@ -104,7 +104,7 @@ export function HallsScreen({ data, best }: { data: HallsData; best: BestDish[] 
             <Photo src={d.photo} w={156} h={156} r={16}>
               {i === 0 && <span className="on-photo gold"><Icon icon={CrownIcon} size={12} sw={2.2} /> #1</span>}
             </Photo>
-            <div style={{ fontSize: 14, fontWeight: 700, letterSpacing: "-0.01em", lineHeight: 1.2, padding: "0 4px" }}>{d.name}</div>
+            <div className="clamp2" title={d.name} style={{ fontSize: 14, fontWeight: 700, letterSpacing: "-0.01em", lineHeight: 1.2, height: "2.4em", padding: "0 4px" }}>{d.name}</div>
             <div className="label" style={{ fontSize: 12, marginTop: -3, padding: "0 4px" }}>{[d.hallShort, d.votes > 0 ? `${d.votes} ${d.votes === 1 ? "vote" : "votes"}` : null].filter(Boolean).join(" · ")}</div>
           </button>
         ))}
