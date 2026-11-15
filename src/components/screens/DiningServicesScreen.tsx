@@ -45,9 +45,9 @@ export function DiningServicesScreen({ catalog }: { catalog: CatalogDish[] }) {
             </div>
           ))}
         </div>
-        <div className="sechead"><h2>Most skipped</h2></div>
+        <div className="sechead"><h2>Least picked</h2></div>
         <div className="card" style={{ padding: "2px 14px" }}>
-          {skipped.length === 0 && <div className="row"><div className="grow"><div className="sub">{state ? "Nothing skipped yet." : " "}</div></div></div>}
+          {skipped.length === 0 && <div className="row"><div className="grow"><div className="sub">{state ? "No dish is losing yet." : " "}</div></div></div>}
           {skipped.map((s) => (
             <div className="row" key={`${s.hallId}_${s.recipeId}`}>
               <div className="grow"><div className="title">{s.name}</div><div className="sub">{hallShort(s.hallId)}</div></div>

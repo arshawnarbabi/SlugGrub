@@ -252,3 +252,5 @@ ADR (Architecture Decision Record) practice, adapted as an append-only log for a
 - **Live vote: the voting phone no longer counts its own vote twice.** With Firebase the phone reads its ballot once per round, so after voting it kept adding its optimistic +1 on top of a tally that already held the vote: one phone showed "3 votes, 33% / 67%" while /vote/screen showed the true "2 votes, 50% / 50%". The phone now remembers the side's count when it voted and stops adding once the live count passes it (or at once when the store answers "already").
 - **Budget's "Update points" opens the points question** (`/onboarding?step=1`) instead of the meal plan question. Onboarding reads `step` on every arrival, so a visit without it starts at the first question even though Next keeps the route's state.
 - **Status:** draft
+
+- 2026-11-14: Dining services list "Most skipped" renamed "Least picked" (empty state "No dish is losing yet."). The list ranks skips and lost matchups together, so "skipped" misread when only losses existed. His yes to the rename.
