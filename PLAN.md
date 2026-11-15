@@ -37,9 +37,9 @@ Tick a box when it's merged to `main`. Put your name on anything you pick up tha
 ### Setup (Arshawn + Claude)
 - [x] Next.js app, packages, README
 - [x] Shared plan, AI rules, types, fake data, empty pages, tab bar
-- [ ] Gemini API key in everyone's `.env.local` (who: ?)
-- [ ] Firebase project created, config in everyone's `.env.local` (Karen)
-- [ ] Repo connected to Vercel for preview links (who: ?)
+- [x] Gemini API key on Vercel (server only)
+- [x] Firebase project created (sluggrub-c547d), config in `.env.local` and on Vercel
+- [x] Repo connected to Vercel: live at https://sluggrub.vercel.app (deploys from `main`)
 
 ### Arshawn
 - [x] Visual design: colors, type, spacing, components in `src/components/ui/` (docs/DESIGN.md, /brand)
