@@ -3161,3 +3161,10 @@ rice-bowl tile (paper-2, ink-3 icon). # draft -->
 through 12% at 45% to clear at 240px (was 15% to clear), so it reads as the primary blue instead of a grey-blue tint. # draft values -->
 
 <!-- 2026-11-14 Row cards (.card.tight, e.g. Rank today's food, Calories today): the chevron sits centered vertically at the right, 12px in (his ask: "for hte cards for the smaller ones make hte chevron centered vertically"); taller cards keep it at the top right. -->
+
+<!-- 2026-11-14 Every control does something (his ask: "make all the buttons clickable and do/connect with what they should"):
+Halls search (top bar) swaps the screen for a pill search field (.input, same as Ask's) and searches every hall's dishes today by
+name; a result is a row card with a chevron and opens that hall and meal. "Best on campus" on Halls is real: the top 6 rated dishes
+with photos, one card per dish name, gold "#1" on the first; a card opens its hall; "See all" opens the leaderboard. Today's bell
+(no notifications exist) became a profile button (UserCircleIcon) that opens onboarding to edit plan, points, college and hall.
+One page margin: .carousel rows scroll edge to edge but rest their first item on the 16px gutter (scroll-padding-inline). # draft -->

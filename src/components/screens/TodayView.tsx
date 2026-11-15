@@ -4,7 +4,7 @@
 // this device (src/lib/profile.ts). Before a profile exists the plan and college cards point to onboarding instead of showing
 // made-up numbers. While the page renders on the server (no profile yet) those two cards keep their shape with no values.
 import Link from "next/link";
-import { Location01Icon, Notification01Icon, CrownIcon, ArrowRight01Icon, RiceBowl01Icon } from "@hugeicons/core-free-icons";
+import { Location01Icon, UserCircleIcon, CrownIcon, ArrowRight01Icon, RiceBowl01Icon } from "@hugeicons/core-free-icons";
 import { Icon } from "@/components/ui/Icon";
 import { Photo } from "@/components/ui/Photo";
 import { Screen } from "@/components/ui/Screen";
@@ -54,7 +54,7 @@ export function TodayView({ data }: { data: TodayData }) {
   return (
     <Screen wash top={<div className="topbar">
         <span className="tint blue fit"><Icon icon={Location01Icon} size={14} sw={2} /><span className="clip">{hall.short} · {statusText}</span></span>
-        <button type="button" className="iconbtn" aria-label="Notifications"><Icon icon={Notification01Icon} size={18} /></button>
+        <Link href="/onboarding" className="iconbtn" aria-label="Your profile"><Icon icon={UserCircleIcon} size={18} /></Link>
       </div>}>
 
       <h1 className="title-xl">{data.hello}{profile?.name ? `, ${profile.name.split(" ")[0]}` : ""}</h1>

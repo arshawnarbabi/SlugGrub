@@ -2,16 +2,17 @@
 
 // Owner: Arshawn (UI). Real menus wired in by the menus code (PLAN.md, Halls tab and cafe board): src/app/halls/page.tsx passes
 // today's trimmed menus (src/lib/hallsView.ts); it opens on the student's usual hall from onboarding (src/lib/profile.ts).
-import { useEffect, useState } from "react";
-import { Search01Icon, StarIcon, Coffee02Icon, RiceBowl01Icon } from "@hugeicons/core-free-icons";
+import { useEffect, useMemo, useRef, useState } from "react";
+import Link from "next/link";
+import { Search01Icon, Cancel01Icon, CrownIcon, ArrowRight01Icon, Coffee02Icon, RiceBowl01Icon } from "@hugeicons/core-free-icons";
 import { Icon } from "@/components/ui/Icon";
 import { Photo } from "@/components/ui/Photo";
 import { Screen } from "@/components/ui/Screen";
-import { Seg, Appear } from "@/components/ui/motion";
+import { Seg, Appear, Swap } from "@/components/ui/motion";
 import { useProfile } from "@/lib/profile";
 import type { HallsData, HallView } from "@/lib/hallsView";
 import type { HallId, MealName } from "@/lib/types";
-import { DISHES, BEST_TONIGHT, MEALS, type Meal } from "./demo";
+import { MEALS, type Meal } from "./demo";
 import { dishPhoto } from "./dishPhoto";
 
 const toMeal = (m: Meal): MealName => (m === "Late night" ? "Late Night" : m);
@@ -21,7 +22,22 @@ const day = (iso: string) => new Date(`${iso}T12:00:00Z`).toLocaleDateString("en
 /** The meal to open on: the one being served now (or next), else the first one on today's menu. */
 const mealFor = (h: HallView): Meal => toLabel(h.status.meal ?? (Object.keys(h.meals)[0] as MealName | undefined) ?? "Dinner");
 
-export function HallsScreen({ data }: { data: HallsData }) {
+export interface BestDish { name: string; hallId: HallId; hallShort: string; photo: string; votes: number }
+
+export function HallsScreen({ data, best }: { data: HallsData; best: BestDish[] }) {
+  const [searching, setSearching] = useState(false);
+  const [q, setQ] = useState("");
+  const input = useRef<HTMLInputElement>(null);
+  const toggleSearch = () => { setSearching((s) => !s); setQ(""); };
+  useEffect(() => { if (searching) input.current?.focus(); }, [searching]);
+  // every dish on today's menus, for search: name, hall, meal
+  const results = useMemo(() => {
+    const needle = q.trim().toLowerCase();
+    if (needle.length < 2) return [];
+    return data.halls.flatMap((x) => Object.entries(x.meals).flatMap(([m, list]) => (list ?? [])
+      .filter((d) => d.name.toLowerCase().includes(needle))
+      .map((d) => ({ d, hall: x, meal: toLabel(m as MealName) })))).slice(0, 30);
+  }, [q, data.halls]);
   const profile = useProfile();
   const [hall, setHall] = useState<HallId>(data.halls[0].id);
   const h = data.halls.find((x) => x.id === hall) ?? data.halls[0];
@@ -39,25 +55,46 @@ export function HallsScreen({ data }: { data: HallsData }) {
   return (
     <Screen top={<div className="topbar">
         <h1 className="title-xl">Halls</h1>
-        <button type="button" className="iconbtn" aria-label="Search dishes"><Icon icon={Search01Icon} size={18} /></button>
+        <button type="button" className="iconbtn" aria-label={searching ? "Close search" : "Search dishes"} aria-expanded={searching} onClick={toggleSearch}>
+          <Swap id={searching ? "x" : "s"}><Icon icon={searching ? Cancel01Icon : Search01Icon} size={18} /></Swap>
+        </button>
       </div>}>
-<Seg options={MEALS} value={meal} onChange={setMeal} label="Meal" />
-
-      <div className="sechead"><h2>Best on campus</h2><span className="seeall">See all</span></div>
-      <div className="carousel">
-        {BEST_TONIGHT.map((id) => {
-          const d = DISHES[id];
+      <Appear id={searching ? "search" : "browse"} style={{ display: "grid", gap: 10 }}>
+      {searching ? <>
+        <input ref={input} autoFocus className="input" type="search" value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search today's menus" aria-label="Search today's menus" />
+        {q.trim().length >= 2 && results.length === 0 && <div className="card"><div className="label">Nothing called that on today&apos;s menus.</div></div>}
+        {results.map(({ d, hall: x, meal: m }) => {
+          const photo = dishPhoto(d.name);
           return (
-            <div key={id} className="press" style={{ width: 156, display: "grid", gap: 6 }}>
-              <Photo src={d.photo} w={156} h={156}>
-                <span className="on-photo"><Icon icon={StarIcon} size={12} sw={2.2} color="var(--y11)" />{d.score}</span>
-              </Photo>
-              <div style={{ fontSize: 14, fontWeight: 700, letterSpacing: "-0.01em", lineHeight: 1.2 }}>{d.name}</div>
-              <div className="label" style={{ fontSize: 12, marginTop: -3 }}>{d.hall}</div>
-            </div>
+            <button type="button" className="card tight press link" key={`${x.id}-${m}-${d.recipeId}`} onClick={() => { setHall(x.id); setMeal(m); setSearching(false); setQ(""); }}
+              style={{ display: "flex", gap: 12, alignItems: "center", textAlign: "left", width: "100%", font: "inherit", color: "inherit", border: 0, paddingRight: 32 }}>
+              <span className="card-chev" aria-hidden><Icon icon={ArrowRight01Icon} size={16} sw={2} /></span>
+              {photo ? <Photo src={photo} w={48} h={48} r={12} /> : <span className="iconbtn" aria-hidden style={{ width: 48, height: 48, borderRadius: 12, background: "var(--paper-2)" }}><Icon icon={RiceBowl01Icon} size={20} /></span>}
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <div style={{ fontWeight: 700, fontSize: 15, letterSpacing: "-0.01em" }}>{d.name}</div>
+                <div className="num label" style={{ fontSize: 12, marginTop: 2 }}>{[x.short, m, d.calories !== undefined ? `${d.calories} cal` : null].filter(Boolean).join(" · ")}</div>
+              </div>
+            </button>
           );
         })}
+      </> : <>
+<Seg options={MEALS} value={meal} onChange={setMeal} label="Meal" />
+
+      {best.length > 0 && <>
+      <div className="sechead"><h2>Best on campus</h2><Link href="/rank?view=Leaderboard" className="seeall">See all</Link></div>
+      <div className="carousel">
+        {best.map((d, i) => (
+          <button type="button" key={`${d.hallId}-${d.name}`} className="press" onClick={() => pick(d.hallId)}
+            style={{ width: 156, display: "grid", gap: 6, textAlign: "left", background: "none", border: 0, padding: 0, font: "inherit", color: "inherit" }}>
+            <Photo src={d.photo} w={156} h={156}>
+              {i === 0 && <span className="on-photo gold"><Icon icon={CrownIcon} size={12} sw={2.2} /> #1</span>}
+            </Photo>
+            <div style={{ fontSize: 14, fontWeight: 700, letterSpacing: "-0.01em", lineHeight: 1.2 }}>{d.name}</div>
+            <div className="label" style={{ fontSize: 12, marginTop: -3 }}>{[d.hallShort, d.votes > 0 ? `${d.votes} ${d.votes === 1 ? "vote" : "votes"}` : null].filter(Boolean).join(" · ")}</div>
+          </button>
+        ))}
       </div>
+      </>}
 
       <div className="carousel" style={{ marginTop: 4 }}>
         {data.halls.map((x) => (
@@ -102,6 +139,8 @@ export function HallsScreen({ data }: { data: HallsData }) {
           </div>
         ))}
       </div>
+      </>}
+      </Appear>
     </Screen>
   );
 }
