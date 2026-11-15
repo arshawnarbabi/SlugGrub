@@ -144,6 +144,7 @@ export function LogScreen({ demo }: { demo: DemoPlates }) {
 
       {phase !== "pick" && (
         <Photo src={photo} h={200} r={24} eager>
+          <AnimatePresence>{phase === "reading" && <ProcessingBeam key="beam" radius={24} />}</AnimatePresence>
           <span className="on-photo"><Swap id={`${result?.meal ?? meal}${result?.hallShort ?? HALL.short}`}>{mealLabel(result?.meal ?? meal)} · {result?.hallShort ?? HALL.short}</Swap></span>
         </Photo>
       )}
@@ -204,7 +205,6 @@ export function LogScreen({ demo }: { demo: DemoPlates }) {
         </div>
       )}
     </Screen>
-    <AnimatePresence>{phase === "reading" && <ProcessingBeam key="beam" />}</AnimatePresence>
     </>
   );
 }

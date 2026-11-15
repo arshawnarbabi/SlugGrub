@@ -310,3 +310,5 @@ ADR (Architecture Decision Record) practice, adapted as an append-only log for a
 - **Consequences:** MEDIUM thinking makes answers slower: first words after about 5.5 s in testing (2 s at LOW), and one JSON-path question took 15 s; the 30 s timeout and the error messages are unchanged. Vercel runs route handlers on Node by default; no segment config was added (cacheComponents rejects "runtime" and "dynamic"). The stream sends Cache-Control no-transform so nothing gzips (and buffers) it. Checked on the dev server in Playwright WebKit and Chromium; not yet on a real iPhone or on Vercel.
 - **Status:** draft
 
+
+- 2026-11-15: The processing beam rides the edge of the plate photo, not the whole screen, and is blue (hue 215 to 265 around the primary) instead of rainbow, his ask ("put the border beam just around the image when processing the food including the demo, also make it blue themed colors"). The rainbow color exception in DESIGN.md is withdrawn.

@@ -1,14 +1,15 @@
 "use client";
 
-// Owner: Arshawn. The processing beam (his ask 2026-11-15: "this border beam around the border of the phone" while a plate photo
-// is read). A rainbow glow rides the edge of the app frame, rounded like a phone's display corners. It is the one place the app
-// uses more than its blues, because it signals AI is working (docs/DESIGN.md, effects.registry processing-beam).
+// Owner: Arshawn. The processing beam: a blue glow that rides the edge of the plate photo while it is read (his asks 2026-11-15:
+// first "this border beam around the border of the phone", then "put the border beam just around the image when processing the
+// food including the demo, also make it blue themed colors"). Blues only, so it stays inside the app's palette (docs/DESIGN.md,
+// effects.registry processing-beam).
 //
 // Built cheap for iPhone Safari instead of using the border-beam package (that one runs a 30 fps requestAnimationFrame loop and
-// animates conic gradients and blur filters, so every frame repaints a screen-sized layer):
-//   - the colors are drawn ONCE into a small canvas (256 x 256), so its texture is tiny however large it is shown;
+// animates conic gradients and blur filters):
+//   - the colors are drawn ONCE into a small canvas (256 x 256);
 //   - the canvas only rotates (a CSS transform animation, run by the compositor; no per-frame JS, no repaint);
-//   - a static mask (an SVG drawn once per size) cuts it to a thin ring plus a soft inner glow; no animated blur anywhere;
+//   - a static mask (an SVG built once per radius) cuts it to a thin ring plus a soft inner glow; no animated blur anywhere;
 //   - it fades in and out on opacity, and is removed from the page when processing ends.
 // Reduced motion: the same glow, still.
 import { useEffect, useRef } from "react";
@@ -35,20 +36,20 @@ function oklchToRgb(L: number, C: number, hDeg: number): [number, number, number
   }) as [number, number, number];
 }
 
-// One full rainbow around the ring (even lightness, so no hue looks brighter than another), with two brighter beams opposite each
-// other, so both long edges of a tall phone always carry one.
+// Blues around the ring, with two brighter beams opposite each other, so both long edges of the photo always carry one.
 function paint(cv: HTMLCanvasElement) {
   const ctx = cv.getContext("2d");
   if (!ctx) return;
   const img = ctx.createImageData(SIZE, SIZE);
-  const lut = Array.from({ length: 360 }, (_, h) => oklchToRgb(0.7, 0.2, h));
+  // the app's blues: hue sweeps 215 (sky) to 265 (indigo) and back twice around the ring, around the primary --p9 (about 250)
+  const lut = Array.from({ length: 360 }, (_, d) => oklchToRgb(0.66, 0.17, 240 + 25 * Math.cos((2 * d * Math.PI) / 180)));
   const c = SIZE / 2;
   for (let y = 0; y < SIZE; y++) {
     for (let x = 0; x < SIZE; x++) {
       const deg = ((Math.atan2(y + 0.5 - c, x + 0.5 - c) * 180) / Math.PI + 360) % 360;
       const fromBeam = Math.min(deg % 180, 180 - (deg % 180)); // 0 at a beam's head, 90 halfway between the two
       const lift = Math.max(0, Math.cos((Math.min(fromBeam, 70) / 70) * (Math.PI / 2))) ** 2;
-      const [r, g, b] = lut[Math.floor(deg)];
+      const [r, g, b] = lut[Math.floor(deg)].map((v, k) => Math.round(v + (255 - v) * 0.35 * lift * (k === 2 ? 0.4 : 1))) as [number, number, number];
       const i = (y * SIZE + x) * 4;
       img.data[i] = r; img.data[i + 1] = g; img.data[i + 2] = b;
       img.data[i + 3] = Math.round(255 * (0.32 + 0.68 * lift));
@@ -57,13 +58,22 @@ function paint(cv: HTMLCanvasElement) {
   ctx.putImageData(img, 0, 0);
 }
 
-export function ProcessingBeam() {
+/** The ring mask for a frame with corner radius r: a 2.5px line on the edge plus a soft glow about 12px deep inside it. */
+function maskFor(r: number) {
+  const svg = `<svg xmlns='http://www.w3.org/2000/svg'><defs><clipPath id='c'><rect width='100%' height='100%' rx='${r}'/></clipPath><filter id='b' x='-10%' y='-10%' width='120%' height='120%'><feGaussianBlur stdDeviation='5'/></filter></defs><g clip-path='url(#c)' fill='none' stroke='#000'><rect width='100%' height='100%' rx='${r}' stroke-width='20' stroke-opacity='0.5' filter='url(#b)'/><rect width='100%' height='100%' rx='${r}' stroke-width='5'/></g></svg>`;
+  return `url("data:image/svg+xml,${encodeURIComponent(svg)}")`;
+}
+
+/** Sits inside the photo frame (position: relative, overflow hidden); `radius` matches the frame's corners. */
+export function ProcessingBeam({ radius = 24 }: { radius?: number }) {
   const ref = useRef<HTMLCanvasElement>(null);
+  const mask = maskFor(radius);
   const reduce = useReducedMotion();
   useEffect(() => { if (ref.current) paint(ref.current); }, []);
   return (
     <motion.div
       className={css.beam}
+      style={{ borderRadius: radius, WebkitMaskImage: mask, maskImage: mask }}
       aria-hidden
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
