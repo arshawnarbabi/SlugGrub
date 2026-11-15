@@ -1,6 +1,7 @@
 // The five dining halls. Shared file (ask before changing).
 // Hours are not on the menu site; typed by hand from dining.ucsc.edu/locations-hours (regular serving schedule, checked
-// 2026-11-14). Special-day hours (holidays, finals) are not included.
+// 2026-11-14). Between meals each hall stays open with "continuous dining" (limited entrees) until its last meal ends.
+// Special-day hours (holidays, finals) are not included.
 
 import type { Hall, HallHours, HallId, MealName, MealPlan } from "./types";
 import { clockLabel, toMinutes, weekdayOf } from "./campusTime";
@@ -66,24 +67,23 @@ export const HALL_HOURS: HallHours[] = HALLS.flatMap((h) => toHours(h.id, WEEK[h
 export interface MealNow {
   meal: MealName | null; // the meal being served now, else the next one today, else null (done for the day / closed)
   open: boolean; // serving right now
-  text: string; // "open till 8 PM", "opens at 5 PM", "closed today", "closed for the day"
+  text: string; // "open till 10 PM" (when the hall closes), "light menu till 5 PM" (continuous dining), "opens at 8 AM", "closed today", "closed for the day"
 }
 
 /** What a hall is doing at `minutes` past midnight on `date` (both campus time). */
 export function mealNow(hallId: HallId, date: string, minutes: number): MealNow {
   const hours = hallHoursOn(hallId, date);
   if (!hours.length) return { meal: null, open: false, text: "closed today" };
-  const now = hours.find((h) => minutes >= toMinutes(h.open) && minutes < toMinutes(h.close));
-  if (now) {
-    // the hall stays open while one meal hands straight over to the next (brunch into lunch, dinner into late night), so say
-    // when the hall actually closes, not when this meal ends (his catch 2026-11-14: JRL/C9 on a Saturday is open till 10 PM)
-    let close = now.close;
-    for (let next = hours.find((h) => h.open === close); next; next = hours.find((h) => h.open === close)) close = next.close;
-    return { meal: now.meal, open: true, text: `open till ${clockLabel(close)}` };
-  }
+  const firstOpen = toMinutes(hours[0].open), lastClose = hours[hours.length - 1].close;
   const next = hours.find((h) => toMinutes(h.open) > minutes);
-  if (next) return { meal: next.meal, open: false, text: `opens at ${clockLabel(next.open)}` };
-  return { meal: null, open: false, text: "closed for the day" };
+  if (minutes < firstOpen) return { meal: hours[0].meal, open: false, text: `opens at ${clockLabel(hours[0].open)}` };
+  if (minutes >= toMinutes(lastClose)) return { meal: null, open: false, text: "closed for the day" };
+  // Open from the first meal to the last without closing: between meals every hall runs "continuous dining" (a lighter menu),
+  // 11 to 11:30 and 2 to 5 (dining.ucsc.edu/locations-hours, checked 2026-11-14). So "open till" is when the hall closes
+  // (his catch 2026-11-14: JRL/C9 on a Saturday is open till 10 PM, not 8).
+  const now = hours.find((h) => minutes >= toMinutes(h.open) && minutes < toMinutes(h.close));
+  if (now) return { meal: now.meal, open: true, text: `open till ${clockLabel(lastClose)}` };
+  return { meal: next?.meal ?? null, open: true, text: `light menu till ${clockLabel(next?.open ?? lastClose)}` };
 }
 
 export const MEAL_PLANS: MealPlan[] = [
