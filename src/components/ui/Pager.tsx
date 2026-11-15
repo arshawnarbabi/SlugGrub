@@ -8,10 +8,13 @@
 // page it shows, so a short page doesn't leave the tallest page's gap under it.
 import { Children, useEffect, useLayoutEffect, useRef, useState, type ReactNode } from "react";
 import { useReducedMotion } from "framer-motion";
+import { useScreenReady } from "./motion";
 
-export function Pager({ index, onIndex, children, label, fitHeight = false }: {
+export function Pager({ index, onIndex, onLive, children, label, fitHeight = false }: {
   index: number;
   onIndex: (n: number) => void;
+  /** the page nearest the middle while the student is still scrolling, every frame (for a chip that follows along) */
+  onLive?: (n: number) => void;
   children: ReactNode;
   label: string;
   fitHeight?: boolean;
@@ -19,7 +22,8 @@ export function Pager({ index, onIndex, children, label, fitHeight = false }: {
   const el = useRef<HTMLDivElement>(null);
   const reduce = useReducedMotion();
   const settle = useRef<number | undefined>(undefined);
-  const painted = useRef(false);
+  const ready = useScreenReady(); // a page that opens on a saved hall jumps there; it never slides while the screen opens
+  const frame = useRef(0);
   const [height, setHeight] = useState<number | undefined>(undefined);
   const pages = Children.toArray(children);
 
@@ -38,9 +42,8 @@ export function Pager({ index, onIndex, children, label, fitHeight = false }: {
     const box = el.current, left = offsetOf(index);
     if (!box || left === null) return;
     if (shown() !== index || Math.abs(box.scrollLeft - left) > 1) {
-      box.scrollTo({ left, behavior: reduce || !painted.current ? "instant" : "smooth" });
+      box.scrollTo({ left, behavior: reduce || !ready ? "instant" : "smooth" });
     }
-    painted.current = true;
   }, [index, pages.length]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // fitHeight: follow the shown page's height, including when its content changes (a meal switch)
@@ -54,8 +57,9 @@ export function Pager({ index, onIndex, children, label, fitHeight = false }: {
     return () => ro.disconnect();
   }, [fitHeight, index, pages.length]);
 
-  useEffect(() => () => window.clearTimeout(settle.current), []);
+  useEffect(() => () => { window.clearTimeout(settle.current); cancelAnimationFrame(frame.current); }, []);
   const onScroll = () => {
+    if (onLive && !frame.current) frame.current = requestAnimationFrame(() => { frame.current = 0; onLive(shown()); });
     window.clearTimeout(settle.current);
     settle.current = window.setTimeout(() => { const n = shown(); if (n !== index) onIndex(n); }, 90);
   };

@@ -13,7 +13,7 @@ import { Icon } from "@/components/ui/Icon";
 import { Photo } from "@/components/ui/Photo";
 import { Pager } from "@/components/ui/Pager";
 import { Screen } from "@/components/ui/Screen";
-import { Seg, Appear } from "@/components/ui/motion";
+import { Seg, Appear, GooTrack } from "@/components/ui/motion";
 import { useProfile } from "@/lib/profile";
 import type { HallsData, HallView } from "@/lib/hallsView";
 import type { HallId, MealName } from "@/lib/types";
@@ -56,13 +56,18 @@ export function HallsScreen({ data, best }: { data: HallsData; best: BestDish[] 
   useEffect(() => { if (usual) pick(usual); }, [usual]); // eslint-disable-line react-hooks/exhaustive-deps
   // keep the selected chip in view when a swipe changes the hall
   const chips = useRef<HTMLDivElement>(null);
+  const chipRefs = useRef<(HTMLElement | null)[]>([]);
+  // the chip follows the swipe as it happens (his ask 2026-11-14: "i dont want the chip to change at the end but while its going"),
+  // on the goo thumb with the one spring (DESIGN motion.goo, motion.spring)
+  const [live, setLive] = useState<number | null>(null);
+  const chipAt = live ?? at;
   const reduce = useReducedMotion();
   useEffect(() => {
-    const row = chips.current, chip = row?.children[at] as HTMLElement | undefined;
+    const row = chips.current, chip = chipRefs.current[chipAt];
     if (!row || !chip) return;
-    const left = chip.offsetLeft - (row.children[0] as HTMLElement).offsetLeft;
+    const left = chip.offsetLeft - (chipRefs.current[0]?.offsetLeft ?? 0);
     if (left < row.scrollLeft || left + chip.offsetWidth > row.scrollLeft + row.clientWidth - 32) row.scrollTo({ left: Math.max(0, left - 16), behavior: reduce ? "instant" : "smooth" });
-  }, [at, reduce]);
+  }, [chipAt, reduce]);
   return (
     <Screen top={<div className="topbar">
         <h1 className="title-xl">Halls</h1>
@@ -111,15 +116,18 @@ export function HallsScreen({ data, best }: { data: HallsData; best: BestDish[] 
       </div>
       </>}
 
-      <div ref={chips} className="carousel" style={{ marginTop: 4 }}>
-        {data.halls.map((x) => (
-          <button key={x.id} type="button" className={`chip chip-sm ${hall === x.id ? "on" : ""}`} onClick={() => pick(x.id)}>
-            {x.short}
-          </button>
-        ))}
+      <div ref={chips} className="carousel" style={{ marginTop: 4, scrollSnapType: "none" }}>
+        <div className="chip-goo">
+          <GooTrack index={chipAt} refs={chipRefs} fill="var(--p9)" />
+          {data.halls.map((x, n) => (
+            <button key={x.id} ref={(el) => { chipRefs.current[n] = el; }} type="button" className={`chip chip-sm ${chipAt === n ? "on" : ""}`} onClick={() => pick(x.id)}>
+              <span>{x.short}</span>
+            </button>
+          ))}
+        </div>
       </div>
 
-      <Pager index={at} onIndex={(n) => setHall(data.halls[n].id)} label="Hall menus" fitHeight>
+      <Pager index={at} onIndex={(n) => { setLive(null); setHall(data.halls[n].id); }} onLive={setLive} label="Hall menus" fitHeight>
         {data.halls.map((x) => <HallPage key={x.id} h={x} meal={meals[x.id] ?? "Dinner"} data={data} />)}
       </Pager>
 

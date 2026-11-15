@@ -46,6 +46,11 @@ export function ScreenClock({ children }: { children: React.ReactNode }) {
   useEffect(() => { const t = window.setTimeout(() => setReady(true), 400); return () => window.clearTimeout(t); }, []);
   return <ScreenReady.Provider value={ready}>{children}</ScreenReady.Provider>;
 }
+/** True once the screen has finished opening (400 ms after mount); for code that must not move anything while a page opens. */
+export function useScreenReady() {
+  return useContext(ScreenReady);
+}
+
 function useOpeningScreen() {
   const ready = useContext(ScreenReady);
   const [opening] = useState(() => !ready); // captured once, when this block mounts

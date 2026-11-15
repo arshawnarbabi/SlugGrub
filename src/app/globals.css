@@ -395,3 +395,11 @@ input, textarea, select { font-size: 17px !important; }     /* 16px or more also
 /* Two-line name, cut with an ellipsis, in a fixed two-line box so a row of cards stays the same height (his ask 2026-11-14:
    "truncate names if needed but i dont like how some are longer than others"). */
 .clamp2 { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; overflow: hidden; overflow-wrap: anywhere; }
+
+/* Hall chips on a goo thumb (his ask 2026-11-14: the chip follows the swipe "while its going" with "a bit of goo ... or spring", per
+   DESIGN motion.goo / motion.spring). The row is one positioned strip so the thumb (GooTrack) spans every chip, even those scrolled
+   off; white chip pills paint under the thumb and each label sits above it; the selected chip shows the blue thumb, not its own fill. */
+.chip-goo { position: relative; display: flex; gap: 10px; flex: 0 0 auto; }
+.chip-goo > .chip { position: static; } /* static so its white pill paints below the thumb; offsetLeft is measured against .chip-goo */
+.chip-goo > .chip > span { position: relative; z-index: 2; transition: color var(--dur-ui) var(--ease); }
+.chip-goo > .chip.on { background: var(--card); color: white; }
