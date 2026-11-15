@@ -16,7 +16,8 @@ import { goalCalories, useProfile } from "@/lib/profile";
 import { useCaloriesToday } from "./plates";
 import { useSettle } from "./settle";
 
-const SWEEP = 250, R = 39, C = 2 * Math.PI * R, ARC = C * (SWEEP / 360), SIZE = 92;
+// 2026-11-15 his ask: "make the calries a bigger more prominent card on today tab": a full card, a 132px ring, bigger numbers.
+const SWEEP = 250, R = 57, C = 2 * Math.PI * R, ARC = C * (SWEEP / 360), SIZE = 132;
 
 export function CaloriesToday() {
   const today = useCaloriesToday();
@@ -29,16 +30,16 @@ export function CaloriesToday() {
   const none = today !== null && today.plates === 0;
   // no goal: the card opens Log; "Set a goal" sits beside it as its own link (a link can't hold a link)
   return (
-    <div className="card tight" style={{ display: "flex", alignItems: "center", gap: 10 }}>
-      <Link href="/log" className="press link" style={{ display: "flex", alignItems: "center", gap: 10, flex: 1, minWidth: 0, color: "inherit", textDecoration: "none" }}>
-        <span className="iconbtn" style={{ width: 44, height: 44, borderRadius: 12, background: "var(--paper-2)" }}><Icon icon={FireIcon} size={20} sw={2} /></span>
+    <div className="card" style={{ display: "flex", alignItems: "center", gap: 14 }}>
+      <Link href="/log" className="press link" style={{ display: "flex", alignItems: "center", gap: 14, flex: 1, minWidth: 0, color: "inherit", textDecoration: "none" }}>
+        <span className="iconbtn" style={{ width: 56, height: 56, borderRadius: 16, background: "var(--paper-2)" }}><Icon icon={FireIcon} size={24} sw={2} /></span>
         <div style={{ flex: 1, minWidth: 0 }}>
-          <b style={{ fontSize: 14 }}>Calories today</b>
+          <div className="label">Calories today</div>
+          <div className="num" style={{ fontSize: 28, fontWeight: 700, letterSpacing: "-0.04em", lineHeight: 1.15 }}>{today !== null && !none && eaten !== null ? <CountUp to={eaten} /> : "0"}</div>
           <div className="label num" style={{ fontSize: 12 }}>
-            {none ? "Log a plate to start · only you see this" : today === null ? " " : `${protein}g protein · private`}
+            {none ? "Log a plate to start · only you see this" : today === null ? " " : `${protein}g protein · only you see this`}
           </div>
         </div>
-        {today !== null && !none && eaten !== null && <span className="num" style={{ fontSize: 17, fontWeight: 700, letterSpacing: "-0.03em" }}><CountUp to={eaten} /></span>}
       </Link>
       {profile !== undefined && (
         <Link href={profile ? "/onboarding?step=4&goal=1" : "/onboarding"} className="textbtn" style={{ fontSize: 13, color: "var(--p9)", flex: "none" }}>Set a goal</Link>
@@ -58,30 +59,31 @@ function GoalRing({ eaten, goal, protein, plates }: { eaten: number; goal: numbe
   const left = Math.max(0, goal - eaten);
   const reached = eaten >= goal;
   return (
-    <Link href="/log" className="card tight press link" style={{ display: "flex", alignItems: "center", gap: 14, paddingRight: 32 }} aria-label={`Calories today: ${eaten} of ${goal}${reached ? ", goal reached" : `, ${left} left`}. Only you see this.`}>
+    <Link href="/log" className="card press link" style={{ display: "flex", alignItems: "center", gap: 18, paddingRight: 32 }} aria-label={`Calories today: ${eaten} of ${goal}${reached ? ", goal reached" : `, ${left} left`}. Only you see this.`}>
       <span className="card-chev" aria-hidden><Icon icon={ArrowRight01Icon} size={16} sw={2} /></span>
       <div style={{ position: "relative", width: SIZE, height: SIZE, flex: "none" }} aria-hidden>
         <svg width={SIZE} height={SIZE} viewBox={`0 0 ${SIZE} ${SIZE}`} style={{ transform: `rotate(${90 + (360 - SWEEP) / 2}deg)` }}>
-          <circle cx={SIZE / 2} cy={SIZE / 2} r={R} fill="none" stroke="var(--paper-2)" strokeWidth="8" strokeDasharray={`${ARC} ${C}`} strokeLinecap="round" />
-          <motion.circle cx={SIZE / 2} cy={SIZE / 2} r={R} fill="none" stroke="var(--p9)" strokeWidth="8" strokeLinecap="round" style={{ strokeDasharray: dash, strokeOpacity: shows }} />
+          <circle cx={SIZE / 2} cy={SIZE / 2} r={R} fill="none" stroke="var(--paper-2)" strokeWidth="11" strokeDasharray={`${ARC} ${C}`} strokeLinecap="round" />
+          <motion.circle cx={SIZE / 2} cy={SIZE / 2} r={R} fill="none" stroke="var(--p9)" strokeWidth="11" strokeLinecap="round" style={{ strokeDasharray: dash, strokeOpacity: shows }} />
         </svg>
         <div style={{ position: "absolute", inset: 0, display: "grid", placeItems: "center", textAlign: "center", lineHeight: 1.1 }}>
           <Swap id={reached ? "reached" : "left"}>
             {reached
-              ? <span style={{ fontSize: 12, fontWeight: 700, color: "var(--p9)" }}>Goal<br />reached</span>
-              : <span><span className="num" style={{ display: "block", fontSize: 16, fontWeight: 700, letterSpacing: "-0.03em" }}><CountUp to={left} /></span><span className="label" style={{ fontSize: 11 }}>left</span></span>}
+              ? <span style={{ fontSize: 15, fontWeight: 700, color: "var(--p9)" }}>Goal<br />reached</span>
+              : <span><span className="num" style={{ display: "block", fontSize: 26, fontWeight: 700, letterSpacing: "-0.04em" }}><CountUp to={left} /></span><span className="label" style={{ fontSize: 12 }}>left</span></span>}
           </Swap>
         </div>
       </div>
-      <div style={{ flex: 1, minWidth: 0, display: "grid", gap: 6 }}>
+      <div style={{ flex: 1, minWidth: 0, display: "grid", gap: 8 }}>
         <div>
-          <b style={{ fontSize: 14 }}>Calories today</b>
-          <div className="label num" style={{ fontSize: 12 }}><CountUp to={eaten} /> of {goal.toLocaleString("en-US")} eaten</div>
+          <div className="label">Calories today</div>
+          <div className="num" style={{ fontSize: 24, fontWeight: 700, letterSpacing: "-0.04em", lineHeight: 1.15 }}><CountUp to={eaten} /></div>
+          <div className="label num" style={{ fontSize: 12 }}>of {goal.toLocaleString("en-US")} eaten</div>
         </div>
         <div style={{ display: "flex", alignItems: "baseline", gap: 6 }}>
           <span style={{ width: 7, height: 7, borderRadius: 9, background: "var(--protein)", alignSelf: "center" }} />
           <span className="label" style={{ fontSize: 12 }}>Protein</span>
-          <span className="num" style={{ fontSize: 15, fontWeight: 700, letterSpacing: "-0.02em" }}>{protein}g</span>
+          <span className="num" style={{ fontSize: 16, fontWeight: 700, letterSpacing: "-0.02em" }}>{protein}g</span>
         </div>
         <div className="label" style={{ fontSize: 11 }}>{plates === 0 ? "Log a plate to start · only you see this" : "Only you see this"}</div>
       </div>

@@ -104,6 +104,9 @@ export function TodayView({ data: served }: { data: TodayData }) {
         </Link>
       )}
 
+      {/* calories sit right under the #1 dish, a full card (his ask 2026-11-15: "a bigger more prominent card on today tab") */}
+      <CaloriesToday />
+
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
         <Link href={profile === null ? "/onboarding" : "/budget"} className="card press link">
           <span className="card-chev" aria-hidden><Icon icon={ArrowRight01Icon} size={16} sw={2} /></span>
@@ -136,8 +139,6 @@ export function TodayView({ data: served }: { data: TodayData }) {
           </div>
         </Link>
       )}
-
-      <CaloriesToday />
 
       {data.best.length > 0 && <>
         <div className="sechead" style={{ marginTop: 6 }}><h2>Best on campus today</h2><Link href="/rank?view=Leaderboard" className="seeall">See all</Link></div>
