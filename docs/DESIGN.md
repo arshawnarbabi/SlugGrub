@@ -753,9 +753,9 @@ effects:
       reduced: "prefers-reduced-motion: instant, no goo travel"
       measured: "not yet (QA Gate B2 before ship)"
     - id: processing-beam
-      what: "a rainbow glow riding the edge of the app frame (rounded 50px, like a phone's display corners) while Log reads a plate photo; fades out when the answer or an error arrives"   # his ask 2026-11-15, after libraries.dev/beam
+      what: "a blue glow riding the edge of the plate photo (its own 24px corners) while Log reads it, camera or demo plate; fades out when the answer or an error arrives"   # his asks 2026-11-15: after libraries.dev/beam, then "put the border beam just around the image ... also make it blue themed colors" (was the whole app frame, rainbow)
       tier: 1
-      color_exception: "the one place the app uses more than its blues, because it signals AI is working (2026-11-15, # draft): a full OKLCH rainbow at L 0.7 C 0.2, two brighter beams opposite each other"
+      color: "the app's blues only (2026-11-15, his ask): OKLCH L 0.66 C 0.17, hue sweeping 215 to 265 around the primary, two brighter beams opposite each other. The earlier rainbow color exception is withdrawn."
       how: "own build, not the border-beam package (1.4.1, MIT, ~14 KB gzip; it runs a 30 fps rAF loop and animates conic gradients and blur filters, so a screen-sized ring repaints every frame): the colors are drawn once into a 256px canvas shown at 150vmax and rotated by a CSS transform animation (3.6 s a turn, compositor only); a static SVG mask drawn once per size cuts it to a 2.5px ring plus a soft glow about 15px deep (the glow's blur is inside the mask image, never animated); opacity fade in and out (0.45 s); removed from the DOM after. src/components/screens/ProcessingBeam.tsx"
       fallback: "no beam; the status card still says what is happening"
       reduced: "prefers-reduced-motion: the same glow, still"
