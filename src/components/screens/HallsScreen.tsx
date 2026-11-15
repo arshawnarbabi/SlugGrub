@@ -15,6 +15,9 @@ import { Pager } from "@/components/ui/Pager";
 import { Screen } from "@/components/ui/Screen";
 import { Seg, Appear, GooTrack } from "@/components/ui/motion";
 import { useProfile } from "@/lib/profile";
+import { useDemoMode } from "@/lib/demoMode";
+import { useDemoRank } from "@/lib/rankDemo";
+import { demoBest } from "./demoViews";
 import type { CafeView, HallsData, HallView } from "@/lib/hallsView";
 import type { HallId, MealName } from "@/lib/types";
 import { MEAL_LABELS as MEALS, type MealLabel as Meal } from "./now";
@@ -30,7 +33,10 @@ const mealFor = (h: HallView): Meal => toLabel(h.status.meal ?? (Object.keys(h.m
 
 export interface BestDish { name: string; hallId: HallId; hallShort: string; photo: string; votes: number }
 
-export function HallsScreen({ data, best }: { data: HallsData; best: BestDish[] }) {
+export function HallsScreen({ data, best: served }: { data: HallsData; best: BestDish[] }) {
+  // demo mode (?demo=1): best on campus from the mock rankings, so it agrees with the leaderboard
+  const demo = useDemoRank(useDemoMode());
+  const best = useMemo(() => (demo ? demoBest(demo) : served), [demo, served]);
   const [searching, setSearching] = useState(false);
   const [q, setQ] = useState("");
   const input = useRef<HTMLInputElement>(null);

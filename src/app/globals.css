@@ -501,3 +501,7 @@ input, textarea, select { font-size: 17px !important; }     /* 16px or more also
    options share the width; the side padding comes from that share, so the row fits from 320px up. */
 .seg.fill { flex: 1 1 0; min-width: 0; }
 .seg.fill button { padding-left: 2px; padding-right: 2px; }
+
+/* ── Demo data chip (docs/DESIGN.md, "Demo data chip"): the small Sidestash chip (raise, white hairline, chip shadow), ink-2 text,
+   information only. Shown only in demo mode, in the header of each ranking screen. ── */
+.demo-chip { display: inline-flex; align-items: center; height: 26px; padding: 0 10px; border-radius: var(--r-pill); background: var(--raise); border: 0.5px solid var(--hi); box-shadow: var(--chip-shadow); font-size: 12px; font-weight: 600; color: var(--ink-2); white-space: nowrap; flex: none; cursor: default; }

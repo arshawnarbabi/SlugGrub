@@ -6,12 +6,16 @@
 // First open (no profile saved on this device): a "Set up SlugGrub" row card under the greeting opens onboarding, which returns
 // here when done. Never a redirect, so a judge opening /vote from a QR code is never sent to onboarding.
 import Link from "next/link";
+import { useMemo } from "react";
 import { Location01Icon, UserCircleIcon, CrownIcon, ArrowRight01Icon, RiceBowl01Icon, UserAdd01Icon } from "@hugeicons/core-free-icons";
 import { Icon } from "@/components/ui/Icon";
 import { Photo } from "@/components/ui/Photo";
 import { Screen } from "@/components/ui/Screen";
 import { CountUp } from "@/components/ui/motion";
 import { useProfile } from "@/lib/profile";
+import { useDemoMode } from "@/lib/demoMode";
+import { useDemoRank } from "@/lib/rankDemo";
+import { demoToday } from "./demoViews";
 import { computeBudgetSnapshot } from "@/lib/budgetCalc";
 import type { HallId } from "@/lib/types";
 import type { MealNow } from "@/lib/halls";
@@ -40,7 +44,10 @@ function DishTile({ size, r = 12 }: { size: number; r?: number }) {
   return <span style={{ width: size, height: size, borderRadius: r, background: "var(--paper-2)", display: "grid", placeItems: "center", color: "var(--ink-3)", flex: "none" }}><Icon icon={RiceBowl01Icon} size={Math.round(size * 0.45)} /></span>;
 }
 
-export function TodayView({ data }: { data: TodayData }) {
+export function TodayView({ data: served }: { data: TodayData }) {
+  // demo mode (?demo=1): the same cards over the mock rankings, so Today agrees with the leaderboard
+  const demo = useDemoRank(useDemoMode());
+  const data = useMemo(() => (demo ? demoToday(served, demo) : served), [served, demo]);
   const profile = useProfile(); // undefined on the server, null when none is saved
   const hallId = profile?.usualHall ?? DEFAULT_HALL;
   const hall = data.halls[hallId] ?? data.halls[DEFAULT_HALL];

@@ -1,6 +1,6 @@
 {
  "base": "http://localhost:3001",
- "takenAt": "2026-11-15T06:36:25.928Z",
+ "takenAt": "2026-11-15T07:17:25.491Z",
  "shots": [
   {
    "id": "S01",
@@ -129,6 +129,14 @@
    "file": "S16.png",
    "w": 393,
    "h": 1900
+  },
+  {
+   "id": "S17",
+   "title": "Rank, leaderboard, demo data",
+   "route": "/rank?view=Leaderboard",
+   "file": "S17.png",
+   "w": 393,
+   "h": 1700
   }
  ]
 }
