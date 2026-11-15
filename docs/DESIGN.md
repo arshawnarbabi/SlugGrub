@@ -3113,3 +3113,24 @@ last one that opened (you log after eating); new "error" phase (alert icon chip 
 "servings × official portion · cal", "rough guess" when Gemini is unsure, a rice bowl icon chip when the dish has no photo; servings
 slider 0.25 to 4 in quarter steps (was 0.5 to 3 by halves) because label portions are small (a 1/2 cup side); a line lists food
 not on the menu ("not counted"); "Fix it" became "Retake"; sliders hide once saved. All state changes use Appear and Swap. # draft -->
+
+<!-- 2026-11-14 Halls, Budget, Onboarding and Ask wired to real data (menus code, for his review; no new colors, classes or blur;
+values # draft). Halls: dish rows drop the demo star score (no ranking data per dish yet) and read "cal · portion" from the UCSC
+label ("No label" when the label is missing); a dish with no generated image gets the neutral tile used in the photo log (64px
+paper-2 rounded square, RiceBowl01Icon), never a wrong photo; the hall tag reads the hall's real status ("Open till 8 PM",
+"Opens at 5 PM", "Closed today"); a closed hall or meal shows one plain card ("Porter/Kresge is closed today."); one label line
+under the list: "Plus the salad bar, deli bar, cereal, fruit and drinks." (sauces, buns, bars and standing items are hidden, the
+same way the image script skips them); a label line explains when a day's menu isn't posted and the nearest day is shown. Opens
+on the usual hall from onboarding. Cafe board rows: cafe name, sub-line "location · three food items", right side "N items" (label
+style) in place of the demo score. Budget: the pace pill follows the real pace (ok "On track", warn "Spending fast", neutral
+"Spending slow"); a label line under the ring says "Example numbers" (no profile) or "Estimated from the N you entered Nov 14"
+with a See all style link to onboarding; cards: "Per day to last" / "Days left" (quarter), "Your average a day" / "To spend this
+week" (week); the chart's line runs from the quarter start to today on the real numbers; the invented hall / cafe / market rows
+became one label line saying SlugGrub can't see card purchases. Until the profile is read on the phone the screen shows only its
+title, so numbers appear once, in place. Onboarding: plans from MEAL_PLANS (2026-27 amounts), slider max follows the plan, the hall
+follows the college until picked; the done step adds a btn-secondary "Continue with Google" (GoogleIcon, Hugeicons) above the
+primary button and a label line ("Saved on this phone only." + sign-in state, Swap). Ask: a label line while waiting, an alert
+card (Alert02Icon chip, like the photo log error) for errors, the answer in body text, pick cards as before plus a label line with
+Gemini's reason. Onboarding and Ask moved to OnboardingScreen.tsx and AskScreen.tsx (MoreScreens re-exports them). Photo.tsx:
+sized copies of generated images now resolve to /food/gen/sm and /food/gen/md (they were 404s, so every generated photo under
+180px showed broken). -->
