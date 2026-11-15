@@ -414,7 +414,7 @@ input, textarea, select { font-size: 17px !important; }     /* 16px or more also
 /* "or" notch, painted (2026-11-14): the card masks stopped rendering once the duel moved inside the side-scrolling pager, so the
    notch is drawn instead: a page-colored (#eceef0, --paper) shape behind the badge with the same 4px gap and 5px rounded fillets
    where it meets each card's edge. The gap between the cards is the flat page color, so it reads exactly like a cutout. */
-.duel > .or::before { content: ""; position: absolute; left: 50%; top: 50%; width: 46px; height: 52.307px; transform: translate(-50%, -50%); z-index: -1; pointer-events: none;
+.duel::before { content: ""; position: absolute; left: 50%; top: 50%; width: 46px; height: 52.307px; transform: translate(-50%, -50%); z-index: 1; pointer-events: none;
   background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-23 -26.153 46 52.307'%3E%3Cpath fill='%23eceef0' d='M-5 -26.153A5 5 0 0 1 -8.214 -21.483A23 23 0 0 0 -8.214 21.483A5 5 0 0 1 -5 26.153ZM5 -26.153A5 5 0 0 0 8.214 -21.483A23 23 0 0 1 8.214 21.483A5 5 0 0 0 5 26.153ZM-5 -26.153H5V26.153H-5Z'/%3E%3C/svg%3E") center / 100% 100% no-repeat; }
 
 /* Top bar status chips (his ask 2026-11-14: "for this chip dont make it clicable and make it sidestash stye"): the hall / meal / hours
