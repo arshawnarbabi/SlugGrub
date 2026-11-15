@@ -55,7 +55,7 @@ export function PaceChart({ planTotal, pointsLeft, elapsedDays, totalDays, spent
           </g>
         ))}
         {[0, elapsedDays, totalDays].map((d, k) => (
-          <text key={k} x={x(d)} y={H - 6} textAnchor={k === 0 ? "start" : k === 2 ? "end" : "middle"} fontSize="11" fill={k === 1 ? "var(--ink-2)" : "var(--ink-3)"} fontWeight={k === 1 ? 700 : 400}>{k === 1 ? "Today" : label(dateAt(d))}</text>
+          <text key={k} x={x(d)} y={H - 6} textAnchor={k === 0 ? "start" : k === 2 ? "end" : "middle"} fontSize="11" fill={k === 1 ? "var(--ink-2)" : "var(--ink-3)"} fontWeight={k === 1 ? 700 : 400}>{k === 1 ? "Today" : label(dateAt(k === 2 ? d - 1 : d))}</text>
         ))}
         <line x1={x(elapsedDays)} x2={x(elapsedDays)} y1={T} y2={T + PH} stroke="var(--paper-2)" strokeWidth="1.5" />
         <line x1={x(0)} y1={y(planTotal)} x2={x(totalDays)} y2={y(0)} stroke="var(--ink-3)" strokeWidth="1.5" strokeDasharray="3 4" />
