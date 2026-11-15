@@ -26,7 +26,7 @@ Each person owns their folders. **Don't edit files you don't own.** Ask in the g
 | **Starting branches** | `arshawn-design`, `karen-firebase`, `ethan-menus` (already on GitHub). After each is merged, make a new branch per feature: `<name>-<feature>`. | |
 | **Shared (ask first)** | Data types, fake data, this plan | `src/lib/types.ts`, `data/mock/`, `PLAN.md`, `AGENTS.md`, `package.json` |
 
-**Screens:** every screen's UI lives in `src/components/screens/` (Arshawn) and reads demo content from `src/components/screens/demo.ts`. Your page file (`src/app/<your route>/page.tsx`) just renders that screen. To make a screen real, replace the demo import in it with your data function, or pass props from your page; ask Arshawn before changing how a screen looks. Design rules: `docs/DESIGN.md`.
+**Screens:** every screen's UI lives in `src/components/screens/` (Arshawn) and reads real data: props from its page file (`src/app/<your route>/page.tsx`) or the data functions in `src/lib/`. The demo data file was removed on 2026-11-14 once every screen was wired. Ask Arshawn before changing how a screen looks. Design rules: `docs/DESIGN.md`.
 
 **How the pieces connect:** everyone codes against the types in `src/lib/types.ts`. Each owner's `src/lib/*.ts` file exports functions the others call (for example Today calls `getTopDishNow()` from Karen's `rankings.ts` and `getBudgetSnapshot()` from Ethan's `budget.ts`). Those functions return fake data from `data/mock/` until the real version is ready, so nobody waits on anyone. **Keep each function's name and return type stable**; change what's inside freely.
 

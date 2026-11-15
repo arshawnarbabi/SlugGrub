@@ -1,12 +1,14 @@
 // Owner: Arshawn. The campus clock: which meal it is and what to say about the hours. Pure functions; callers pass the time in
 // (never read the clock during render: cacheComponents). UCSC runs on Pacific time wherever the server is.
-import { HALL_HOURS } from "@/lib/halls";
+import { HALL_HOURS, hallHoursOn } from "@/lib/halls";
 import type { HallHours, HallId, MealName } from "@/lib/types";
-import { DEMO_HOURS } from "./demo";
 
 export const MEAL_NAMES: MealName[] = ["Breakfast", "Lunch", "Dinner", "Late Night"];
 /** Sentence case for the screen (his rule: no title case or caps). */
 export const mealLabel = (m: MealName) => (m === "Late Night" ? "Late night" : m);
+/** The meals as the screen writes them, for meal pickers. */
+export const MEAL_LABELS = ["Breakfast", "Lunch", "Dinner", "Late night"] as const;
+export type MealLabel = (typeof MEAL_LABELS)[number];
 
 /** Campus date (YYYY-MM-DD) and minutes since midnight, in Pacific time. */
 export function campusNow(d: Date) {
@@ -22,10 +24,10 @@ export function localDate(d: Date) {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
 }
 
-/** Hall hours from Ethan's HALL_HOURS; demo hours until he fills them in. */
-export function hoursFor(hallId: HallId): HallHours[] {
-  const real = HALL_HOURS.filter((h) => h.hallId === hallId);
-  const list = real.length ? real : DEMO_HOURS.map((h) => ({ ...h, hallId }));
+/** A hall's hours on a campus date (src/lib/halls.ts hallHoursOn: hours differ by weekday, two halls close on weekends).
+ *  Without a date, a typical weekday (HALL_HOURS), for older callers. */
+export function hoursFor(hallId: HallId, date?: string): HallHours[] {
+  const list = date ? hallHoursOn(hallId, date) : HALL_HOURS.filter((h) => h.hallId === hallId);
   return [...list].sort((a, b) => mins(a.open) - mins(b.open));
 }
 

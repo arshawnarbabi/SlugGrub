@@ -12,7 +12,7 @@ import { Seg, Appear, Swap } from "@/components/ui/motion";
 import { useProfile } from "@/lib/profile";
 import type { HallsData, HallView } from "@/lib/hallsView";
 import type { HallId, MealName } from "@/lib/types";
-import { MEALS, type Meal } from "./demo";
+import { MEAL_LABELS as MEALS, type MealLabel as Meal } from "./now";
 import { dishPhoto } from "./dishPhoto";
 
 const toMeal = (m: Meal): MealName => (m === "Late night" ? "Late Night" : m);

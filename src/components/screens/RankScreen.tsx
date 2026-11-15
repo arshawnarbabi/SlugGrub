@@ -9,14 +9,12 @@ import { Icon } from "@/components/ui/Icon";
 import { Screen } from "@/components/ui/Screen";
 import { Seg, Swap, Appear, SPRING, STATE_IN, STATE_OUT, STATE_FADE } from "@/components/ui/motion";
 import { calculateElo, getSmartMatchup } from "@/lib/elo";
-import { HALLS as HALL_LIST } from "@/lib/halls";
 import type { College, DishRank, HallId, MealName } from "@/lib/types";
 import {
   baseStat, collegeStandings, hallStandings, matchIdFor, mergeDishes,
   type CatalogDish, type DishStat, type RankState,
 } from "@/lib/rankCore";
 import { rankBackend, readProfile, useRankState } from "@/lib/rankClient";
-import { USER } from "./demo";
 import { dishPhoto } from "./dishPhoto";
 import { campusNow, hoursFor, mealLabel, mealToLog } from "./now";
 import { DishThumb, hallColor, hallShort, shortDate } from "./rankBits";
@@ -52,9 +50,9 @@ const statFor = (state: RankState | null, d: CatalogDish): DishStat => state?.di
 /** Who and when: the student's usual hall and college (onboarding), and the meal that last opened there (you rank after eating). */
 function readCtx(): Ctx {
   const p = readProfile();
-  const hallId = p.usualHall ?? HALL_LIST.find((h) => h.short === USER.hall)?.id ?? "40";
+  const hallId = p.usualHall ?? "40"; // no profile yet: JRL/C9
   const now = campusNow(new Date());
-  return { hallId, meal: mealToLog(hoursFor(hallId), now.minutes), date: now.date, college: p.college };
+  return { hallId, meal: mealToLog(hoursFor(hallId, now.date), now.minutes), date: now.date, college: p.college };
 }
 
 /** Dishes to pair: this meal at your hall (ones with photos first), widening to your hall today, then campus. */
