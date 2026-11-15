@@ -18,10 +18,15 @@ async function loadToday(): Promise<TodayData> {
   const halls = await Promise.all(HALLS.map(async (h): Promise<[HallId, TodayHall]> => {
     const [top, menu] = await Promise.all([getTopDishNow(h.id), getMenu(now.date, h.id)]);
     const dish = top ? Object.values(menu?.meals ?? {}).flat().find((d) => d?.recipeId === top.recipeId) : undefined;
-    const pair = all.filter((d) => d.hallId === h.id && dishPhoto(d.name)).slice(0, 2).map((d) => ({ name: d.name, photo: dishPhoto(d.name) }));
+    const status = mealNow(h.id, now.date, now.minutes);
+    // two dishes from the meal the hall is serving now (or next), so the pair is never lunch at dinner time
+    const inMeal = new Set((status.meal ? menu?.meals?.[status.meal] ?? [] : []).map((d) => d.name));
+    const ranked = all.filter((d) => d.hallId === h.id && dishPhoto(d.name));
+    const pair = (ranked.filter((d) => inMeal.has(d.name)).length >= 2 ? ranked.filter((d) => inMeal.has(d.name)) : ranked)
+      .slice(0, 2).map((d) => ({ name: d.name, photo: dishPhoto(d.name) }));
     return [h.id, {
       short: h.short,
-      status: mealNow(h.id, now.date, now.minutes),
+      status,
       top: top && { name: top.name, votes: top.votes, photo: dishPhoto(top.name), cal: dish?.nutrition?.calories ?? top.calories, portion: dish?.portion ?? undefined },
       pair,
     }];
