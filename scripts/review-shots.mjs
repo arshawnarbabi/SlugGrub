@@ -35,15 +35,22 @@ const SHOTS = [
 fs.mkdirSync(OUT, { recursive: true });
 const manifest = [];
 for (const [id, title, route, [w, h], seed] of SHOTS) {
-  const url = seed ? `${BASE}/dev/seed.html?to=${encodeURIComponent(route)}` : `${BASE}${route}`;
+  const inner = seed ? `/dev/seed.html?to=${encodeURIComponent(route)}` : route;
+  // a phone-size frame page (headless Chrome won't go narrower than ~500px); the shot is cropped back to the frame afterwards
+  const url = `${BASE}/dev/frame.html?w=${w}&h=${h}&p=${encodeURIComponent(inner)}`;
   const profile = fs.mkdtempSync(path.join(os.tmpdir(), "sg-shot-"));
   const file = path.join(OUT, `${id}.png`);
   try {
     execFileSync(CHROME, [
       "--headless=new", "--disable-gpu", "--hide-scrollbars", "--force-device-scale-factor=2",
-      `--user-data-dir=${profile}`, `--window-size=${w},${h}`, "--virtual-time-budget=6000",
+      `--user-data-dir=${profile}`, `--window-size=${Math.max(w, 520)},${h}`, "--virtual-time-budget=9000", "--force-prefers-reduced-motion",
       `--screenshot=${file}`, url,
     ], { stdio: "ignore", timeout: 60_000 });
+    if (w < 520) { // crop the 2x shot to the frame's width
+      const sharp = (await import("sharp")).default;
+      const buf = await sharp(file).extract({ left: 0, top: 0, width: w * 2, height: h * 2 }).png().toBuffer();
+      fs.writeFileSync(file, buf);
+    }
     manifest.push({ id, title, route, file: `${id}.png`, w, h });
     console.log(`${id} ${title}`);
   } catch (e) {
