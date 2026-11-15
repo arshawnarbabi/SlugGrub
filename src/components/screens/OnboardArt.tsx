@@ -5,20 +5,19 @@
 // blue for what the student picked, ink tokens for everything else. Each one answers its question visually and follows the choice:
 //   plan:    three plan cards fanned out, the chosen plan in front with its points per quarter
 //   points:  the Budget ring, filled to the points they enter
-//   college: a raised college card (fanned like the plan cards) with the college's name, its blue seal and its dining hall
-//   hall:    a raised card previewing their usual hall now: one of today's dishes with its photo, the hall's open status
-// (the campus maps were dropped at his review 2026-11-14, S12/S13: "i dont like this ggraphic")
+//   college: a campus map, north up, every college a pin where it really sits; theirs is the blue pin with its name
+//   hall:    a raised card previewing their usual hall: a photo of its building, its name and its open status now
+// (review 2026-11-14: the maps went for cards at S12/S13, then the college map came back, polished, at his "i liked the map more")
 // State changes blur-fade (DESIGN motion.state_change); nothing slides in when a step opens.
 import { useEffect, useState } from "react";
-import { motion, useReducedMotion } from "framer-motion";
-import { RiceBowl01Icon, Mortarboard01Icon } from "@hugeicons/core-free-icons";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { RiceBowl01Icon, Location01Icon } from "@hugeicons/core-free-icons";
 import { Icon } from "@/components/ui/Icon";
 import { Photo } from "@/components/ui/Photo";
-import { Swap } from "@/components/ui/motion";
-import type { College, HallId, MealName, MealPlanId } from "@/lib/types";
+import { Swap, STATE_IN, STATE_OUT, STATE_FADE } from "@/components/ui/motion";
+import type { College, HallId, MealPlanId } from "@/lib/types";
 import { HALLS, MEAL_PLANS, mealNow } from "@/lib/halls";
-import type { DemoPlates } from "./demoPlates";
-import { campusNow, mealLabel } from "./now";
+import { campusNow } from "./now";
 
 const ART_H = 236;
 
@@ -88,60 +87,120 @@ function BackCards() {
   );
 }
 
-const INITIALS: Partial<Record<College, string>> = { "College Nine": "C9", "John R. Lewis": "JRL", "Rachel Carson": "RC" };
+// ── College step: the campus map ──────────────────────────────────────────────────────────────────────────────────────────
+// Brought back at his review 2026-11-14 (S12: "i think i liked the map more, just make it look better and not sloppy like
+// before"). What was sloppy, and the fix: the old SVG stretched to its box (preserveAspectRatio="none", so the hill's contours
+// were squashed ellipses), now the box has the map's own aspect ratio; the pins were guesses, now each college is placed from its
+// real latitude and longitude (north up) and snapped to a 4px grid; the name tag could cover other pins or run off the edge, now
+// it picks the first side (right, left, above, below, then the four corners) that stays inside the map and clear of every pin.
+const MAP_W = 304, MAP_H = 192; // drawing units = CSS px at full size (the raised card adds 8px around: 320 x 208)
+/** Each college's center, roughly (degrees). */
+const COLLEGE_GEO: Record<College, [lat: number, lon: number]> = {
+  "College Nine": [37.0017, -122.0575], "John R. Lewis": [37.0007, -122.0583], Crown: [37.0, -122.0545], Merrill: [36.9999, -122.0528],
+  Cowell: [36.9969, -122.0537], Stevenson: [36.9971, -122.0519], Kresge: [36.9972, -122.0667], Porter: [36.9945, -122.0653],
+  "Rachel Carson": [36.9912, -122.0645], Oakes: [36.9894, -122.0627],
+};
+const snap = (v: number) => Math.round(v / 4) * 4;
+/** Projected into the map, north up, at about true proportions (east-west drawn 1.09x), centered. */
+const COLLEGE_AT: Record<string, [number, number]> = (() => {
+  const geo = Object.entries(COLLEGE_GEO);
+  const lats = geo.map(([, [a]]) => a), lons = geo.map(([, [, o]]) => o);
+  const [n, s, w, e] = [Math.max(...lats), Math.min(...lats), Math.min(...lons), Math.max(...lons)];
+  return Object.fromEntries(geo.map(([k, [a, o]]) => [k, [snap(72 + ((o - w) / (e - w)) * 160), snap(28 + ((n - a) / (n - s)) * 152)]]));
+})();
+
+type Side = "right" | "left" | "above" | "below" | "above-right" | "above-left" | "below-right" | "below-left";
+const SIDES: Side[] = ["right", "left", "above", "below", "above-right", "above-left", "below-right", "below-left"];
+// chip height; pin center to the chip's near edge (clears the 14px halo); a corner tag sits 8px across and 14px up or down
+const TAG_H = 26, TAG_GAP = 18, CORNER_X = 8, CORNER_Y = 14;
+/** The tag's box for a side, in map units (width estimated from the name: 12px/600 text plus the chip's icon and padding). */
+function tagBox(side: Side, [x, y]: [number, number], name: string) {
+  const w = 38 + name.length * 7;
+  if (side === "right") return { x0: x + TAG_GAP, y0: y - TAG_H / 2, w };
+  if (side === "left") return { x0: x - TAG_GAP - w, y0: y - TAG_H / 2, w };
+  if (side === "above") return { x0: x - w / 2, y0: y - TAG_GAP - TAG_H, w };
+  if (side === "below") return { x0: x - w / 2, y0: y + TAG_GAP, w };
+  return { x0: side.endsWith("right") ? x + CORNER_X : x - CORNER_X - w, y0: side.startsWith("above") ? y - CORNER_Y - TAG_H : y + CORNER_Y, w };
+}
+function tagSide(name: string): Side {
+  const at = COLLEGE_AT[name];
+  const fits = (side: Side) => {
+    const { x0, y0, w } = tagBox(side, at, name);
+    if (x0 < 6 || y0 < 6 || x0 + w > MAP_W - 6 || y0 + TAG_H > MAP_H - 6) return false;
+    return Object.entries(COLLEGE_AT).every(([k, [px, py]]) => k === name || px < x0 - 7 || px > x0 + w + 7 || py < y0 - 7 || py > y0 + TAG_H + 7);
+  };
+  return SIDES.find(fits) ?? (at[0] > MAP_W / 2 ? "left" : "right");
+}
+
+/** The hill as soft contour lines, highest to the north (upper campus), drawn in the map's own units so nothing is stretched. */
+const CONTOURS = [0, 1, 2, 3, 4].map((k) => {
+  const cx = 168, cy = 36, rx = 46 + k * 40, ry = 30 + k * 30, pts: [number, number][] = [];
+  for (let i = 0; i < 36; i++) {
+    const t = (i / 36) * Math.PI * 2, wob = 1 + 0.045 * Math.sin(3 * t + k * 0.9) + 0.025 * Math.sin(5 * t + k * 1.7);
+    pts.push([cx + Math.cos(t) * rx * wob, cy + Math.sin(t) * ry * wob]);
+  }
+  // closed Catmull-Rom curve through the points, as cubic Beziers
+  const f = (v: number) => v.toFixed(1);
+  let d = `M${f(pts[0][0])} ${f(pts[0][1])}`;
+  for (let i = 0; i < pts.length; i++) {
+    const [p0, p1, p2, p3] = [-1, 0, 1, 2].map((o) => pts[(i + o + pts.length) % pts.length]);
+    d += `C${f(p1[0] + (p2[0] - p0[0]) / 6)} ${f(p1[1] + (p2[1] - p0[1]) / 6)} ${f(p2[0] - (p3[0] - p1[0]) / 6)} ${f(p2[1] - (p3[1] - p1[1]) / 6)} ${f(p2[0])} ${f(p2[1])}`;
+  }
+  return d + "Z";
+});
 
 export function CollegeArt({ college }: { college: College }) {
-  const hall = HALLS.find((h) => h.colleges.includes(college));
+  const reduce = useReducedMotion();
+  const at = COLLEGE_AT[college] ?? [MAP_W / 2, MAP_H / 2];
+  const side = tagSide(college);
   return (
     <Frame>
-      <div style={{ position: "relative", width: 240, height: 158 }}>
-        <BackCards />
-        <div className="art-card raised" style={{ position: "absolute", inset: 0, padding: 18, display: "grid", alignContent: "space-between" }}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-            <span className="art-chip"><Icon icon={Mortarboard01Icon} size={14} sw={2} /> Your college</span>
-            <span className="art-seal num"><Swap id={college}>{INITIALS[college] ?? college[0]}</Swap></span>
-          </div>
-          <div>
-            <div style={{ fontSize: 26, fontWeight: 700, letterSpacing: "-0.03em", lineHeight: 1.15 }}><Swap id={college}>{college}</Swap></div>
-            <div className="label" style={{ fontSize: 12, display: "flex", alignItems: "center", gap: 5, marginTop: 2 }}>
-              <Icon icon={RiceBowl01Icon} size={13} sw={2} /><Swap id={hall?.id ?? "none"}>{hall ? `Dining hall: ${hall.short}` : "Pick your college"}</Swap>
-            </div>
-          </div>
+      <div className="art-card raised" style={{ width: "min(100%, 320px)", padding: 8 }}>
+        <div className="art-map" style={{ aspectRatio: `${MAP_W} / ${MAP_H}` }} aria-hidden>
+          <svg viewBox={`0 0 ${MAP_W} ${MAP_H}`} style={{ position: "absolute", inset: 0, width: "100%", height: "100%" }}>
+            {CONTOURS.map((d, k) => <path key={k} d={d} fill="none" stroke="var(--paper)" strokeWidth="1.5" />)}
+            <text x={MAP_W - 14} y={20} textAnchor="middle" fontSize="10" fontWeight="700" fill="var(--ink-3)">N</text>
+            <path d={`M${MAP_W - 14} 24 l-3 6 h6 z`} fill="var(--ink-3)" />
+            {Object.entries(COLLEGE_AT).map(([k, [x, y]]) => <circle key={k} cx={x} cy={y} r="4" fill="var(--ink-3)" stroke="var(--card)" strokeWidth="2" />)}
+          </svg>
+          {/* the pick: blue pin and name tag, blurring out at the old college and in at the new one (nothing slides) */}
+          <AnimatePresence initial={false}>
+            <motion.div key={college} className="art-pick" style={{ left: `${(at[0] / MAP_W) * 100}%`, top: `${(at[1] / MAP_H) * 100}%` }}
+              initial={reduce ? false : STATE_OUT} animate={{ ...STATE_IN, transitionEnd: { filter: "none" } }} exit={reduce ? { opacity: 0 } : STATE_OUT}
+              transition={reduce ? { duration: 0 } : STATE_FADE}>
+              <span className="art-pin" />
+              <span className={`art-chip art-tag ${side}`}><Icon icon={Location01Icon} size={13} sw={2} />{college}</span>
+            </motion.div>
+          </AnimatePresence>
         </div>
       </div>
     </Frame>
   );
 }
 
-/** Their usual hall as it is right now: open status from today's real hours, and one of today's dishes with its photo, so the step
- *  previews what Today will show them. The clock is read after mount (never during render). */
-export function HallArt({ hall, dishes }: { hall: HallId; dishes: DemoPlates }) {
+/** Their usual hall as it is right now: a photo of the hall's building (or, where Commons has none, one of its two colleges;
+ *  public/halls/CREDITS.md), its name and its open status from today's real hours. The photo always shows, so a hall closed today
+ *  (two close on weekends) still has a picture (his review 2026-11-14, S13). The clock is read after mount (never during render). */
+export function HallArt({ hall }: { hall: HallId }) {
   const [now, setNow] = useState<{ date: string; minutes: number } | null>(null);
   useEffect(() => { setNow(campusNow(new Date())); }, []);
   const info = HALLS.find((h) => h.id === hall);
   const status = now ? mealNow(hall, now.date, now.minutes) : null;
-  const menu = dishes[hall] ?? {};
-  const meal: MealName | undefined = (status?.meal && menu[status.meal] ? status.meal : undefined) ?? (Object.keys(menu) as MealName[]).at(-1);
-  const dish = meal ? menu[meal] : undefined;
   const statusText = status ? status.text[0].toUpperCase() + status.text.slice(1) : " ";
   return (
     <Frame>
-      <div style={{ position: "relative", width: 240, height: 216 }}>
+      <div style={{ position: "relative", width: 240, height: 212 }}>
         <BackCards />
         <div className="art-card raised" style={{ position: "absolute", inset: 0, padding: 8, display: "grid", gridTemplateRows: "auto 1fr" }}>
-          <Swap id={hall + (dish?.name ?? "")} style={{ display: "block" }}>
-            {dish ? <Photo src={dish.photo} h={112} r={16} eager />
-              : <div className="ph" style={{ width: "100%", height: 112, borderRadius: 16, display: "grid", placeItems: "center", color: "var(--ink-3)" }}><Icon icon={RiceBowl01Icon} size={28} /></div>}
+          <Swap id={hall} style={{ display: "block" }}>
+            <Photo src={`/halls/${hall}.jpg`} h={140} r={16} eager alt={info ? `${info.name} area` : ""} />
           </Swap>
-          <div style={{ padding: "10px 8px 2px", display: "grid", alignContent: "center", gap: 2, minWidth: 0 }}>
+          <div style={{ padding: "0 8px", display: "grid", alignContent: "center", gap: 2, minWidth: 0 }}>
             <div style={{ fontSize: 17, fontWeight: 700, letterSpacing: "-0.02em" }}><Swap id={hall}>{info?.short ?? ""}</Swap></div>
             <div className="label" style={{ fontSize: 12, display: "flex", alignItems: "center", gap: 6, minWidth: 0 }}>
               <span style={{ width: 7, height: 7, borderRadius: 9, flex: "none", background: status?.open ? "var(--ok)" : "var(--ink-3)" }} />
               <Swap id={hall + statusText}>{statusText}</Swap>
             </div>
-            <Swap id={hall + (dish?.name ?? "")} style={{ display: "block", minWidth: 0 }}>
-              <span className="clamp1 label" style={{ fontSize: 12 }}>{dish && meal ? `${mealLabel(meal)}: ${dish.name}` : " "}</span>
-            </Swap>
           </div>
         </div>
       </div>

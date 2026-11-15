@@ -6,12 +6,10 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { PlanArt, PointsArt, CollegeArt, HallArt } from "./OnboardArt";
-import type { DemoPlates } from "./demoPlates";
-import { motion } from "framer-motion";
 import { ArrowLeft01Icon, ArrowRight01Icon, Tick02Icon, GoogleIcon } from "@hugeicons/core-free-icons";
 import { Icon } from "@/components/ui/Icon";
 import { Screen } from "@/components/ui/Screen";
-import { Swap, Appear, GooSlider, SPRING } from "@/components/ui/motion";
+import { Swap, Appear, GooSlider } from "@/components/ui/motion";
 import { HALLS, MEAL_PLANS } from "@/lib/halls";
 import { getProfile, saveProfile } from "@/lib/profile";
 import { signInWithGoogle } from "@/lib/auth";
@@ -20,7 +18,7 @@ import type { College, HallId, MealPlanId } from "@/lib/types";
 const COLLEGES: College[] = ["Cowell", "Stevenson", "Crown", "Merrill", "Porter", "Kresge", "Oakes", "Rachel Carson", "College Nine", "John R. Lewis"];
 const hallOf = (c: College): HallId => HALLS.find((h) => h.colleges.includes(c))?.id ?? "40";
 
-export function OnboardingScreen({ dishes }: { dishes: DemoPlates }) {
+export function OnboardingScreen() {
   const [step, setStep] = useState(0);
   const [plan, setPlan] = useState<MealPlanId>("gold");
   const [points, setPoints] = useState(1200);
@@ -53,7 +51,7 @@ export function OnboardingScreen({ dishes }: { dishes: DemoPlates }) {
       </div>
     ) },
     { art: <CollegeArt college={college} />, q: "Which college are you in?", body: <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>{COLLEGES.map((c) => <button key={c} type="button" className={`chip ${college === c ? "on" : ""}`} onClick={() => { setCollege(c); if (!hallPicked) setHall(hallOf(c)); }}>{c}</button>)}</div> },
-    { art: <HallArt hall={hall} dishes={dishes} />, q: "Where do you usually eat?", body: <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>{HALLS.map((h) => <button key={h.id} type="button" className={`chip ${hall === h.id ? "on" : ""}`} onClick={() => { setHall(h.id); setHallPicked(true); }}>{h.short}</button>)}</div> },
+    { art: <HallArt hall={hall} />, q: "Where do you usually eat?", body: <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>{HALLS.map((h) => <button key={h.id} type="button" className={`chip ${hall === h.id ? "on" : ""}`} onClick={() => { setHall(h.id); setHallPicked(true); }}>{h.short}</button>)}</div> },
   ];
   const done = step >= steps.length;
   const save = (extra: { name?: string; uid?: string } = who) => saveProfile({ plan, pointsNow: points, college, usualHall: hall, ...extra });
@@ -72,7 +70,9 @@ export function OnboardingScreen({ dishes }: { dishes: DemoPlates }) {
   return (
     <Screen noTabBar wash top={<div className="topbar">
         {step > 0 && !done ? <button type="button" className="iconbtn" aria-label="Back" onClick={() => setStep((s) => s - 1)}><Icon icon={ArrowLeft01Icon} size={18} /></button> : <span style={{ width: 38 }} />}
-        <div style={{ display: "flex", gap: 6 }}>{steps.map((_, i) => <motion.span key={i} animate={{ width: i === step ? 22 : 7, background: i <= step ? "var(--p9)" : "var(--paper-2)" }} transition={SPRING} style={{ height: 7, borderRadius: 9, display: "block" }} />)}</div>
+        {/* step dots, drawn at their place from the first paint with CSS (.step-dot): the framer version rendered with no width and no
+            fill until its spring ran, so a step opened by link or a frozen capture showed none or the wrong one (his review 2026-11-14, S13) */}
+        <div role="img" style={{ display: "flex", gap: 6 }} aria-label={`Step ${Math.min(step, steps.length - 1) + 1} of ${steps.length}`}>{steps.map((_, i) => <span key={i} className={`step-dot ${i === step ? "now" : ""} ${i <= step ? "done" : ""}`} />)}</div>
         <Link href="/" replace className="textbtn" style={{ fontSize: 13 }}>Skip</Link>
       </div>}>
 {!done ? (

@@ -462,11 +462,23 @@ input, textarea, select { font-size: 17px !important; }     /* 16px or more also
 .btn-primary.raised { background: var(--raise-blue); box-shadow: var(--raise-blue-shadow); }
 .btn-secondary.raised { background: var(--raise); border: 0.5px solid var(--hi); box-shadow: var(--chip-shadow); }
 
-/* Onboarding college and hall cards (his review 2026-11-14, S12/S13, replacing the campus maps: "i dont like this ggraphic"): the
-   college's seal is the one blue thing on its card (the pick); a one-line clamp for the hall card's status and dish line. */
-.art-seal { min-width: 40px; height: 40px; padding: 0 8px; border-radius: var(--r-pill); display: grid; place-items: center; background: var(--p9); color: white; font-size: 14px; font-weight: 700; letter-spacing: -0.01em;
-  box-shadow: inset 0 1px 0 oklch(1 0 0 / 0.3), var(--chip-shadow); }
-.clamp1 { display: block; min-width: 0; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+/* Onboarding campus map (his review 2026-11-14, S12: "i liked the map more, just make it look better and not sloppy"): a --paper-2
+   tile inside a raised card, 8px in, so its corners are concentric (24 = 16 + 8); the box keeps the map's aspect ratio (set
+   inline) so nothing stretches. Other colleges are 8px ink pins drawn in the SVG; the pick is a 12px blue pin with a 14px halo and
+   its name chip on the side or corner that fits (OnboardArt.tsx tagSide), blur-fading between picks. */
+.art-map { position: relative; width: 100%; border-radius: 16px; background: var(--paper-2); overflow: hidden; }
+.art-pick { position: absolute; width: 0; height: 0; }
+.art-pin { position: absolute; width: 12px; height: 12px; margin: -6px 0 0 -6px; border-radius: 50%; background: var(--p9); box-shadow: 0 0 0 2px var(--card), 0 0 0 8px color-mix(in oklch, var(--p9) 18%, transparent); }
+.art-tag { position: absolute; left: 0; top: 0; color: var(--ink); }
+.art-tag svg { color: var(--p9); }
+.art-tag.right { transform: translate(18px, -50%); }
+.art-tag.left { transform: translate(calc(-100% - 18px), -50%); }
+.art-tag.above { transform: translate(-50%, calc(-100% - 18px)); }
+.art-tag.below { transform: translate(-50%, 18px); }
+.art-tag.above-right { transform: translate(8px, calc(-100% - 14px)); }
+.art-tag.above-left { transform: translate(calc(-100% - 8px), calc(-100% - 14px)); }
+.art-tag.below-right { transform: translate(8px, 14px); }
+.art-tag.below-left { transform: translate(calc(-100% - 8px), 14px); }
 
 /* Ask's prompt bar (his review 2026-11-14, S09: "put the prompt bar near the bottom with the suggestions above it. make the prompt bar
    and the prompt send button sidestash style"). The bar sticks to the bottom of the scroller, above the nav bar; its shelf is the
@@ -477,3 +489,9 @@ input, textarea, select { font-size: 17px !important; }     /* 16px or more also
 .ask-dock { bottom: calc(-1 * (env(safe-area-inset-bottom, 0px) + 116px)); z-index: 2; display: flex; gap: 8px; padding: 10px 0 calc(env(safe-area-inset-bottom, 0px) + 116px);
   margin-bottom: calc(-1 * (env(safe-area-inset-bottom, 0px) + 116px)); background: linear-gradient(to bottom, color-mix(in oklch, var(--paper) 0%, transparent), var(--paper) 10px); }
 .iconbtn.send { width: 50px; height: 50px; color: white; background: var(--raise-blue); box-shadow: var(--raise-blue-shadow); }
+
+/* Onboarding step dots (his review 2026-11-14, S13: the dots were missing). Plain CSS so they paint in place on the first frame; the
+   current step stretches to 22px on THE spring (--spring), filled steps turn --p9. */
+.step-dot { display: block; flex: none; width: 7px; height: 7px; border-radius: 9px; background: var(--paper-2); transition: width var(--dur-spring) var(--spring), background-color var(--dur-ui) var(--ease); }
+.step-dot.done { background: var(--p9); }
+.step-dot.now { width: 22px; }
