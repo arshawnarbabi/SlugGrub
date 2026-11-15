@@ -60,12 +60,12 @@ export function TodayView({ data }: { data: TodayData }) {
       <h1 className="title-xl">{data.hello}{profile?.name ? `, ${profile.name.split(" ")[0]}` : ""}</h1>
 
       {top && (
-        <Link href="/halls" className={`card press link ${top.photo ? "flush" : ""}`}>
+        <Link href="/halls" className={`card press link ${top.photo ? "inset" : ""}`}>
           <span className={`card-chev ${top.photo ? "on-img" : ""}`} aria-hidden><Icon icon={ArrowRight01Icon} size={top.photo ? 15 : 16} sw={2} /></span>
           {top.photo
-            ? <Photo src={top.photo} h={170} r={0} eager><span className="on-photo gold"><Icon icon={CrownIcon} size={13} sw={2} /> {topTag}</span></Photo>
+            ? <Photo src={top.photo} h={170} r={16} eager><span className="on-photo gold"><Icon icon={CrownIcon} size={13} sw={2} /> {topTag}</span></Photo>
             : <span className="tint gold" style={{ marginBottom: 8 }}><Icon icon={CrownIcon} size={13} sw={2} /> {topTag}</span>}
-          <div style={{ padding: top.photo ? "12px 14px 14px" : 0, display: "grid", gap: 4 }}>
+          <div style={{ padding: top.photo ? "12px 6px 6px" : 0, display: "grid", gap: 4 }}>
             <b style={{ fontSize: 17, letterSpacing: "-0.02em" }}>{top.name}</b>
             <div className="num label">{[top.cal !== undefined && `${top.cal} cal`, top.portion, top.votes > 0 ? `ranked by ${top.votes} ${top.votes === 1 ? "vote" : "votes"}` : "be the first to rank it"].filter(Boolean).join(" · ")}</div>
           </div>

@@ -3168,3 +3168,5 @@ name; a result is a row card with a chevron and opens that hall and meal. "Best 
 with photos, one card per dish name, gold "#1" on the first; a card opens its hall; "See all" opens the leaderboard. Today's bell
 (no notifications exist) became a profile button (UserCircleIcon) that opens onboarding to edit plan, points, college and hall.
 One page margin: .carousel rows scroll edge to edge but rest their first item on the 16px gutter (scroll-padding-inline). # draft -->
+
+<!-- 2026-11-14 Today hero, trial (his words: "i might revert but i want to try like for this allergen free card ... like one of these rank cards ... how the image isnt edge to edge but rounded in this container"): .card.inset, the photo 16px radius inside 8px card padding, card radius --r-lg (24), concentric like .duel-opt; was .card.flush edge to edge. -->

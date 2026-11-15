@@ -362,3 +362,8 @@ input, textarea, select { font-size: 17px !important; }     /* 16px or more also
 .carousel::after { content: ""; flex: 0 0 1px; } /* keeps the right gutter when scrolled to the end */
 /* Text field: the same pill as Ask's question box */
 .input { width: 100%; height: 50px; border-radius: var(--r-pill); border: 0; background: var(--card); padding: 0 18px; font: inherit; color: var(--ink); outline-color: var(--p8); box-sizing: border-box; }
+
+/* Inset photo card (trial, his ask 2026-11-14 for Today's "#1 at your hall", like the rank cards): the photo sits inside the card's
+   8px padding with concentric corners (card 24 = photo 16 + 8), instead of running edge to edge. */
+.card.inset { padding: 8px 8px 8px; border-radius: var(--r-lg); }
+.card.inset > .card-chev.on-img { top: 18px; right: 18px; }
