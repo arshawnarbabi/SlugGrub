@@ -56,21 +56,25 @@ export function Swap({ id, children, rotate = 0, className, style }: { id: strin
 }
 
 /* ── gooey camera menu: the only gooey moment, so it reads as special ── */
+const CAM = { left: 69, top: 87, right: 12, bottom: 14 };
+const CAM_DROP = { position: "absolute", left: CAM.left + 7, top: CAM.top + 7 } as const;
 export function CameraMenu() {
   const [open, setOpen] = useState(false);
   const reduce = useReducedMotion();
   const t = reduce ? { duration: 0 } : SPRING_CFG;
   return (
     <div className="cam-wrap">
-      <Liquid style={{ position: "relative", width: 60, height: 60 }} filterPadding={96} {...GOO} fill="var(--p9)" shadow="0 1px 2px rgba(20,30,50,.12), 0 8px 18px -8px rgba(20,30,50,.32), inset 0 1px 0 rgba(255,255,255,.3)">
-        <Liquid.Item x={open ? -58 : 0} y={open ? -46 : 0} transition={t} style={{ position: "absolute", left: 7, top: 7 }}>
-          <button type="button" className={`drop ${open ? "on" : ""}`} aria-label="Ask SlugGrub" tabIndex={open ? 0 : -1}><I icon={SparklesIcon} size={20} sw={1.9} /></button>
+      {/* same WebKit fix as the app's FoodButton (TabBar.tsx, 2026-11-15): the Liquid box covers the whole droplet path, since WebKit
+          clips the goo layer to that box; filterPadding 0; one plain drop shadow (GPU) plus the inset sheen */}
+      <Liquid className="food-liquid" style={{ position: "absolute", left: -CAM.left, top: -CAM.top, width: CAM.left + 60 + CAM.right, height: CAM.top + 60 + CAM.bottom }} filterPadding={0} {...GOO} fill="var(--p9)" shadow="0 4px 10px rgba(20,30,50,.24), inset 0 1px 0 rgba(255,255,255,.3)">
+        <Liquid.Item x={open ? -58 : 0} y={open ? -46 : 0} transition={t} style={CAM_DROP}>
+          <button type="button" className={`drop ${open ? "on" : ""}`} style={{ pointerEvents: open ? "auto" : "none" }} aria-label="Ask SlugGrub" tabIndex={open ? 0 : -1}><I icon={SparklesIcon} size={20} sw={1.9} /></button>
         </Liquid.Item>
-        <Liquid.Item x={0} y={open ? -76 : 0} transition={t} delay={reduce ? 0 : 45} style={{ position: "absolute", left: 7, top: 7 }}>
-          <button type="button" className={`drop ${open ? "on" : ""}`} aria-label="Log a plate" tabIndex={open ? 0 : -1}><I icon={Camera01Icon} size={20} sw={1.9} /></button>
+        <Liquid.Item x={0} y={open ? -76 : 0} transition={t} delay={reduce ? 0 : 45} style={CAM_DROP}>
+          <button type="button" className={`drop ${open ? "on" : ""}`} style={{ pointerEvents: open ? "auto" : "none" }} aria-label="Log a plate" tabIndex={open ? 0 : -1}><I icon={Camera01Icon} size={20} sw={1.9} /></button>
         </Liquid.Item>
-        <Liquid.Item style={{ position: "absolute", left: 0, top: 0 }}>
-          <button type="button" className="cam-main" aria-label={open ? "Close" : "Open camera menu"} aria-expanded={open} onClick={() => setOpen((o) => !o)}>
+        <Liquid.Item style={{ position: "absolute", left: CAM.left, top: CAM.top }}>
+          <button type="button" className="cam-main" style={{ pointerEvents: "auto" }} aria-label={open ? "Close" : "Open camera menu"} aria-expanded={open} onClick={() => setOpen((o) => !o)}>
             <Swap id={open ? "close" : "food"} rotate={90}>
               <I icon={open ? Cancel01Icon : RiceBowl01Icon} size={24} sw={1.9} />
             </Swap>
@@ -100,7 +104,7 @@ function GooTrack({ count, index, refs, fill, shadow, className }: { count: numb
   }, [index, count, refs]);
   if (!box) return null;
   return (
-    <Liquid className={className} style={{ position: "absolute", inset: 0, pointerEvents: "none", zIndex: 0 }} {...GOO} fill={fill} shadow={shadow}>
+    <Liquid className={className} style={{ position: "absolute", inset: 0, pointerEvents: "none", zIndex: 0 }} filterPadding={0} {...GOO} fill={fill} shadow={shadow}>
       <Liquid.Item observe>
         <motion.div className="goo-thumb" initial={false} animate={{ x: box.x, width: box.w }} transition={reduce ? { duration: 0 } : SPRING} style={{ height: box.h, top: 0 }} />
       </Liquid.Item>
@@ -180,9 +184,9 @@ export function GooSlider({ min = 0.5, max = 3, step = 0.5, initial = 1.5, unit 
         onKeyDown={(e) => { if (e.key === "ArrowRight") setVal((v) => Math.min(max, v + step)); if (e.key === "ArrowLeft") setVal((v) => Math.max(min, v - step)); }}
       >
         <motion.div className="gs-fill" initial={false} animate={{ width: `${pct * 100}%` }} transition={reduce ? { duration: 0 } : SPRING} />
-        <Liquid style={{ position: "absolute", inset: "-14px 0", pointerEvents: "none" }} {...GOO} fill="var(--p9)" shadow="0 1px 2px rgba(20,30,50,.12), inset 0 1px 0 rgba(255,255,255,.3)">
+        <Liquid style={{ position: "absolute", inset: "-14px -16px", pointerEvents: "none" }} filterPadding={0} {...GOO} fill="var(--p9)" shadow="0 1px 2px rgba(20,30,50,.12), inset 0 1px 0 rgba(255,255,255,.3)">
           <Liquid.Item observe>
-            <motion.div className="gs-thumb" initial={false} animate={{ left: `calc(${pct * 100}% - 13px)` }} transition={reduce ? { duration: 0 } : SPRING} />
+            <motion.div className="gs-thumb" initial={false} animate={{ left: `calc(16px + (100% - 32px) * ${pct} - 13px)` }} transition={reduce ? { duration: 0 } : SPRING} />
           </Liquid.Item>
         </Liquid>
       </div>

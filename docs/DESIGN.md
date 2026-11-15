@@ -748,7 +748,7 @@ effects:
     - id: gooey-liquid
       what: "liquid-gooey 0.2.2 (MIT, no deps): pieces merge and split like liquid, text and icons stay crisp"   # his ask: subtle and consistent
       tier: 1
-      how: "SVG goo filter on a silhouette layer under live DOM; the food button splits into Log a plate and Ask SlugGrub. filterPadding must cover how far pieces travel (84px for the food button droplets): too small clips them, which looked like the button glitching on his phone (fixed 2026-11-14)"
+      how: "SVG goo filter on a silhouette layer under live DOM; the food button splits into Log a plate and Ask SlugGrub. The Liquid element's own box must hold every piece wherever it travels: WebKit (every iPhone browser) clips the goo layer to that box and ignores overflow visible, so filterPadding cannot reach outside it (2026-11-15; replaces the 2026-11-14 rule of an 84px filterPadding). filterPadding is 0 everywhere; shadows on a goo surface are plain drop shadows (no spread, composited on the GPU) plus inset sheens"
       fallback: "plain spring move without goo"
       reduced: "prefers-reduced-motion: instant, no goo travel"
       measured: "not yet (QA Gate B2 before ship)"
@@ -3247,3 +3247,34 @@ One page margin: .carousel rows scroll edge to edge but rest their first item on
 <!-- 2026-11-14 (final check) Portions: UCSC's menus write ladled portions as "ozl" (ounces by ladle: "4 ozl" Artichoke Bisque, "6 ozl" soups), which read as a typo on Halls, Today, Ask and Log. They show as fluid ounces ("4 fl oz", src/components/screens/portion.ts); every other portion stays as the site writes it ("1 ea", "1/12 pie"). -->
 
 <!-- 2026-11-14 Demo data chip (demo mode, DECISIONS.md of the same date). While demo mode is on, a small "Demo data" chip marks every screen whose rankings are mock, so they are never mistaken for real votes: right end of the Rank top bar, the Dining services "From N matchups" line, beside the /vote title, and before the Live tag on /vote/screen. It is the small Sidestash chip (.demo-chip, the same build as .art-chip: 26px pill, 0 10px padding, --raise, 0.5px --hi hairline, --chip-shadow), 12px 600 sentence-case text in --ink-2, no icon. Information only, not a button (no press dim). Hidden entirely when demo mode is off (src/components/ui/DemoChip.tsx). # draft -->
+
+<!-- 2026-11-15 Goo on WebKit (his iPhone recording of the food button, Safari: "not only very laggy on mobile but also missing like
+the fill and goo animation and also cutting off the button on the sides ... if you can keep the goo and fix it then do that", then
+"just make all the animations play and perform properly on mobile and the webapp"). What WebKit did: liquid-gooey draws the goo in
+an SVG sized to its Liquid element, promoted (will-change: filter, transform) and carrying a CSS drop-shadow. WebKit clips that layer
+to its own box and ignores overflow: visible, and the food button's Liquid was only the 62px button, so the droplets (which travel
+53px left and 71px up) lost their blue blobs, the bulge of the split was cut square at the button's top-left corner, and nothing
+merged visibly. Chrome honors overflow: visible, which is why desktop looked right. It was also slow: the 84px filterPadding made a
+330px-square filter area (about 1M device pixels at 3x) that WebKit re-rasterized on the CPU on every frame of the split, through
+the goo blur plus an erode + blur pass for the lift shadow's -8px spread. Measured in Playwright WebKit (iPhone 14 Pro profile, 3x):
+open drew 13 to 14 frames in 0.9 s (about 60ms each), close about 31ms per frame, in dev and in the production build.
+What changed: the food button's Liquid element is now a 143 x 163 box hanging off the 62px button (69px to the left, 87px above, 12
+right, 14 below; the tab bar layout is unchanged), holding the whole droplet path; it lets taps through (pointer-events none) and
+only the main button and the open droplets take them. filterPadding 0. The blob's shadow is one plain drop shadow (0 4px 10px,
+24% ink, no spread, which liquid-gooey hands to CSS and WebKit composites) plus the white inset top sheen; the 1px contact shadow and
+the -8px-spread lift shadow merged into it. The droplet icons blur-fade (opacity + 4px, 220ms, no scale): the shared press rule had
+been cutting their transition to opacity only. After: 60 frames in 0.9 s on open and close (avg 16ms), blue droplets, visible split
+and merge, nothing clipped. GooTrack (tab capsule, segmented controls, hall chips) keeps its box (the thumb never leaves it) with
+filterPadding 0, about a third of the filtered area; slider thumbs get 16px of room at each end (they overhang the track by 13px).
+The /brand camera menu and slider take the same fix. Checked, no change needed: the Rank and Halls pager (native smooth scroll),
+Swap and Appear (framer-motion runs their opacity and blur as WAAPI, which WebKit composites), the splash (fixed 12px backdrop
+blur, prefixed, only opacity animates) and the budget ring (static). -->
+
+<!-- 2026-11-15 Onboarding Slug Points slider (his report: "on the onbaording teh slugpoints gooey has some weird resistance. just
+remove gooey there or fix it"). Causes, measured in Playwright WebKit: the thumb and fill re-aimed THE spring on every pointer move,
+so during a drag the thumb trailed the finger by up to 76px; and only the 8px track took a touch (the thumb sits in the goo layer,
+which lets taps through), so a finger on the thumb's upper or lower edge missed. Fixed in GooSlider (motion.tsx): while the finger is
+down the thumb and fill follow it 1:1 with no spring (THE spring stays for keyboard steps), and .gs-track::before makes the whole 44px
+row the hit area. The goo stays: its blob is drawn from the thumb in the same frame (0 to 1px off, step rounding). The ring still
+updates live on every step. -->
+

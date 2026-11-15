@@ -265,4 +265,14 @@ ADR (Architecture Decision Record) practice, adapted as an append-only log for a
 - 2026-11-15: Log demo plate carries its menu date. At 12:01 AM a page opened before midnight sent Saturday's Red Curry Tofu with Sunday's date and failed ("nothing on JRL/C9's dinner menu"); the demo plate now sends the day it was picked from (his report, screenshot).
 - 2026-11-15: Ask send button is an up arrow (Hugeicons ArrowUp02), his ask. The button keeps focus in the field on pointer down so an iOS tap is not lost to the keyboard dropping, and the field blurs once the question is sent (his report that sending did not work on his phone; the API answered fine, so the tap was the suspect; unconfirmed on a real iPhone).
 
+## 2026-11-15 — Goo surfaces hold every piece inside their own box (WebKit)
+- **Context:** his iPhone recording of the food button in Safari: laggy, droplets with no blue blob, no visible split or merge, the button's corner cut square. WebKit clips liquid-gooey's promoted, CSS-filtered SVG layer to the Liquid element's box (overflow: visible is ignored), and the food button's box was only the 62px button; the 84px filterPadding plus a spread shadow made WebKit re-filter about 1M device pixels on the CPU every frame. His call: keep the goo if it can be made to work, remove it only if not.
+- **Choice:** the goo stays. Every Liquid element is sized to hold its pieces wherever they travel (the food button's is a 143 x 163 box hanging off the button, pointer-events none, buttons auto); filterPadding is 0 everywhere; a goo surface's outer shadow is one plain drop shadow (no spread), so WebKit composites it, plus inset sheens inside the filter. No change to node_modules. DESIGN.md note of the same date has the measurements.
+- **Consequences:** the food button's lift shadow is now one 0 4px 10px shadow instead of a 1px contact shadow plus an 8px lift with -8px spread (a small look change, his to judge on the phone). Supersedes the 2026-11-14 "filterPadding must cover how far pieces travel" rule.
+- **Status:** draft
+
+
 - 2026-11-15: Today greeting ends with a period ("Good morning." / "Good morning, Arshawn."), his ask; the brand page sample matches.
+
+- 2026-11-15: Sliders follow the finger 1:1 while dragged (no spring under the finger; THE spring only for keyboard steps), and the whole 44px row takes the touch. His report on the onboarding Slug Points slider: "weird resistance ... just remove gooey there or fix it"; fixed with the goo kept (DESIGN.md note of the same date).
+
