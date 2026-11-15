@@ -93,13 +93,13 @@ export function OnboardingScreen() {
       )}
       <div style={{ marginTop: "auto", paddingTop: 24, display: "grid", gap: 10 }}>
         {!done ? (
-          <button type="button" className="btn btn-primary btn-block" onClick={next}>Continue <Icon icon={ArrowRight01Icon} size={18} sw={2} /></button>
+          <button type="button" className="btn btn-primary btn-block raised" onClick={next}>Continue <Icon icon={ArrowRight01Icon} size={18} sw={2} /></button>
         ) : (
           <>
             {google !== "done" && google !== "off" && (
-              <button type="button" className="btn btn-secondary btn-block" onClick={withGoogle} disabled={google === "busy"}><Icon icon={GoogleIcon} size={18} sw={2} /> Continue with Google</button>
+              <button type="button" className="btn btn-secondary btn-block raised" onClick={withGoogle} disabled={google === "busy"}><Icon icon={GoogleIcon} size={18} sw={2} /> Continue with Google</button>
             )}
-            <Link href="/" replace className="btn btn-primary btn-block">See what&apos;s good tonight</Link>
+            <Link href="/" replace className="btn btn-primary btn-block raised">See what&apos;s good tonight</Link>
           </>
         )}
       </div>
