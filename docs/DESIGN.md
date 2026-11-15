@@ -3172,5 +3172,3 @@ One page margin: .carousel rows scroll edge to edge but rest their first item on
 <!-- 2026-11-14 Today hero, trial (his words: "i might revert but i want to try like for this allergen free card ... like one of these rank cards ... how the image isnt edge to edge but rounded in this container"): .card.inset, the photo 16px radius inside 8px card padding, card radius --r-lg (24), concentric like .duel-opt; was .card.flush edge to edge. -->
 
 <!-- 2026-11-14 Wash scrolls with the page (his ask: "make the blue wash not sticky but scroll with the page"): it stays outside the scroller (so the fade mask and edge blur never touch it) and follows scrollTop with a transform, once per frame (src/components/ui/Wash.tsx). -->
-
-<!-- 2026-11-14 Rank status line (his ask: "on rank remove this text and fill: Tap the one you liked more"): no card fill behind it and no idle hint; the line under Undo / Too tough / Skip shows only a result ("moved up"), a count once something is ranked, or an error with Retry. -->
