@@ -1,0 +1,134 @@
+{
+ "base": "http://localhost:3001",
+ "takenAt": "2026-11-15T04:24:20.992Z",
+ "shots": [
+  {
+   "id": "S01",
+   "title": "Today, first open (no profile yet)",
+   "route": "/",
+   "file": "S01.png",
+   "w": 393,
+   "h": 1900
+  },
+  {
+   "id": "S02",
+   "title": "Today, with a saved profile",
+   "route": "/",
+   "file": "S02.png",
+   "w": 393,
+   "h": 1900
+  },
+  {
+   "id": "S03",
+   "title": "Halls, with a saved profile",
+   "route": "/halls",
+   "file": "S03.png",
+   "w": 393,
+   "h": 2600
+  },
+  {
+   "id": "S04",
+   "title": "Rank, this or that",
+   "route": "/rank",
+   "file": "S04.png",
+   "w": 393,
+   "h": 1100
+  },
+  {
+   "id": "S05",
+   "title": "Rank, leaderboard",
+   "route": "/rank?view=Leaderboard",
+   "file": "S05.png",
+   "w": 393,
+   "h": 1700
+  },
+  {
+   "id": "S06",
+   "title": "Budget, example numbers (no profile)",
+   "route": "/budget",
+   "file": "S06.png",
+   "w": 393,
+   "h": 1500
+  },
+  {
+   "id": "S07",
+   "title": "Budget, with a saved profile",
+   "route": "/budget",
+   "file": "S07.png",
+   "w": 393,
+   "h": 1500
+  },
+  {
+   "id": "S08",
+   "title": "Log a plate",
+   "route": "/log",
+   "file": "S08.png",
+   "w": 393,
+   "h": 1100
+  },
+  {
+   "id": "S09",
+   "title": "Ask SlugGrub",
+   "route": "/ask",
+   "file": "S09.png",
+   "w": 393,
+   "h": 1100
+  },
+  {
+   "id": "S10",
+   "title": "Onboarding, step 1: meal plan",
+   "route": "/onboarding",
+   "file": "S10.png",
+   "w": 393,
+   "h": 900
+  },
+  {
+   "id": "S11",
+   "title": "Onboarding, step 2: Slug Points",
+   "route": "/onboarding?step=1",
+   "file": "S11.png",
+   "w": 393,
+   "h": 900
+  },
+  {
+   "id": "S12",
+   "title": "Onboarding, step 3: college",
+   "route": "/onboarding?step=2",
+   "file": "S12.png",
+   "w": 393,
+   "h": 1000
+  },
+  {
+   "id": "S13",
+   "title": "Onboarding, step 4: usual hall",
+   "route": "/onboarding?step=3",
+   "file": "S13.png",
+   "w": 393,
+   "h": 1000
+  },
+  {
+   "id": "S14",
+   "title": "Live vote, phone",
+   "route": "/vote",
+   "file": "S14.png",
+   "w": 393,
+   "h": 1100
+  },
+  {
+   "id": "S15",
+   "title": "Live vote, projector",
+   "route": "/vote/screen",
+   "file": "S15.png",
+   "w": 1280,
+   "h": 800
+  },
+  {
+   "id": "S16",
+   "title": "Dining services",
+   "route": "/dining-services",
+   "file": "S16.png",
+   "w": 393,
+   "h": 1900
+  }
+ ]
+}
