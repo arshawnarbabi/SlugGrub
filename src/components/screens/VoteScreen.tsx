@@ -8,7 +8,6 @@ import { motion, useReducedMotion } from "framer-motion";
 import { ArrowLeft01Icon, QrCodeIcon, Tv01Icon, ArrowUp01Icon, ArrowDown01Icon } from "@hugeicons/core-free-icons";
 import { Icon } from "@/components/ui/Icon";
 import { Screen } from "@/components/ui/Screen";
-import { DemoChip } from "@/components/ui/DemoChip";
 import { Swap, Appear, SPRING } from "@/components/ui/motion";
 import { hallStandings, mergeDishes, type CatalogDish, type LiveRound, type LiveSide, type RankState } from "@/lib/rankCore";
 import { rankBackend, readProfile, useRankState } from "@/lib/rankClient";
@@ -85,7 +84,7 @@ export function VoteScreen({ catalog }: { catalog: CatalogDish[] }) {
         <span className="tint gold"><span className="dot" style={{ background: "var(--bad)" }} /> Live · <Swap id={String(total)}>{total}</Swap> {total === 1 ? "vote" : "votes"}</span>
         <Link href="/vote/screen" className="iconbtn" aria-label="Projector view"><Icon icon={Tv01Icon} size={18} /></Link>
       </div>}>
-<div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8 }}><h1 className="title-xl">Dish of the week</h1><DemoChip /></div>
+<h1 className="title-xl">Dish of the week</h1>
       <p className="body" style={{ marginTop: -6 }}>{mine ? "Vote counted. Watch the bars move." : "Tap the one you'd rather eat. One vote per phone."}</p>
       <Appear id={round?.roundId ?? (state ? "none" : "wait")} style={{ display: "grid", gap: 14 }}>
         {round ? (
@@ -158,7 +157,6 @@ export function VoteProjector({ catalog }: { catalog: CatalogDish[] }) {
       <div style={{ display: "grid", gap: 16, alignContent: "start" }}>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12 }}>
           <Link href="/vote" className="iconbtn" aria-label="Back"><Icon icon={ArrowLeft01Icon} size={18} /></Link>
-          <DemoChip style={{ marginLeft: "auto" }} />
           <span className="tint gold"><span className="dot" style={{ background: "var(--bad)" }} /> Live · <Swap id={String(total)}>{total}</Swap> {total === 1 ? "vote" : "votes"}</span>
         </div>
         <h1 className="title-xl" style={{ fontSize: "clamp(32px, 4vw, 64px)" }}>Dish of the week</h1>

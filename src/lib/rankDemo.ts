@@ -237,7 +237,7 @@ export const demoBackend = {
   subscribe(_week: string, onState: (s: RankState) => void, onError: (msg: string) => void): () => void {
     let stop = false;
     const l = (s: Store) => { if (!stop) onState(s.state); };
-    load().then((s) => { if (stop) return; listeners.add(l); onState(s.state); }, () => { if (!stop) onError("Demo data could not load"); });
+    load().then((s) => { if (stop) return; listeners.add(l); onState(s.state); }, () => { if (!stop) onError("Rankings could not load"); });
     return () => { stop = true; listeners.delete(l); };
   },
   async vote(winner: DishRef, loser: DishRef, matchId: string, college?: College): Promise<Outcome> {

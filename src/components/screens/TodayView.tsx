@@ -12,7 +12,6 @@ import { Icon } from "@/components/ui/Icon";
 import { Photo } from "@/components/ui/Photo";
 import { Screen } from "@/components/ui/Screen";
 import { CountUp } from "@/components/ui/motion";
-import { DemoChip } from "@/components/ui/DemoChip";
 import { useProfile } from "@/lib/profile";
 import { useDemoMode } from "@/lib/demoMode";
 import { useDemoRank } from "@/lib/rankDemo";
@@ -72,11 +71,7 @@ export function TodayView({ data: served }: { data: TodayData }) {
         <Link href="/settings" className="iconbtn" aria-label="Settings"><Icon icon={UserCircleIcon} size={18} /></Link>
       </div>}>
 
-      {/* the Demo data chip sits beside the greeting while demo mode is on: Today's dishes and college rank are mock then too */}
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8 }}>
-        <h1 className="title-xl">{data.hello}{profile?.name ? `, ${profile.name.split(" ")[0]}` : ""}.</h1>
-        <DemoChip />
-      </div>
+      <h1 className="title-xl">{data.hello}{profile?.name ? `, ${profile.name.split(" ")[0]}` : ""}.</h1>
 
       {profile === null && (
         <Link href="/onboarding" className="card tight press link" style={{ display: "flex", alignItems: "center", gap: 10, paddingRight: 36, borderRadius: "var(--r-pill)", padding: "8px 36px 8px 8px" }}>

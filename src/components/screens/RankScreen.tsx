@@ -8,7 +8,6 @@ import { QrCodeIcon, Tick02Icon, Undo02Icon, ArrowUp01Icon, ArrowDown01Icon } fr
 import { Icon } from "@/components/ui/Icon";
 import { Pager } from "@/components/ui/Pager";
 import { Screen } from "@/components/ui/Screen";
-import { DemoChip } from "@/components/ui/DemoChip";
 import { Seg, Swap, Appear, SPRING, STATE_IN, STATE_OUT, STATE_FADE } from "@/components/ui/motion";
 import { calculateElo, getSmartMatchup } from "@/lib/elo";
 import type { College, DishRank, HallId, MealName } from "@/lib/types";
@@ -36,7 +35,6 @@ export function RankScreen({ catalog }: { catalog: CatalogDish[] }) {
   return (
     <Screen top={<div className="topbar">
         <h1 className="title-xl">Rank</h1>
-        <DemoChip />
       </div>}>
       <div style={{ display: "flex", gap: 8 }}>
         <Seg options={VIEWS} value={view} onChange={setView} label="Rank view" className="raised" />
