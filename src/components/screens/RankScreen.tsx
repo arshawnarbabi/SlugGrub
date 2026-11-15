@@ -192,7 +192,7 @@ function Duels({ catalog, state }: { catalog: CatalogDish[]; state: RankState | 
             <span className="num label" style={{ fontSize: 12, marginTop: -6 }}>{d ? [d.calories !== undefined && `${d.calories} cal`, hallShort(d.hallId)].filter(Boolean).join(" · ") : " "}</span>
           </motion.button>
         ))}
-        <motion.div className="or" animate={{ scale: pick !== null ? 0.6 : 1, opacity: pick !== null ? 0 : 1 }} transition={tr}>or</motion.div>
+        <motion.div className="or" aria-hidden animate={pick !== null ? STATE_OUT : STATE_IN} transition={STATE_FADE}>or</motion.div>
       </Appear>
       <div style={{ display: "flex", justifyContent: "space-between", padding: "0 4px" }}>
         <button type="button" className="textbtn" onClick={undo}><Icon icon={Undo02Icon} size={15} /> Undo</button>

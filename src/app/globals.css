@@ -369,3 +369,7 @@ input, textarea, select { font-size: 17px !important; }     /* 16px or more also
 .card.inset > .card-chev.on-img { top: 18px; right: 18px; }
 
 .wash { will-change: transform; } /* follows the scroller (Wash.tsx) */
+
+/* "or" between the rank cards (his ask 2026-11-14: "make the or centered between them and have like a cutout for the food cards
+   around that"): centered on both cards, with a ring in the page color that cuts a round notch into both cards' edges. */
+.duel > .or { top: 50%; z-index: 2; box-shadow: 0 0 0 6px var(--paper); }
