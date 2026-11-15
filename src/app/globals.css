@@ -432,3 +432,6 @@ input, textarea, select { font-size: 17px !important; }     /* 16px or more also
 .ph > .on-photo { --badge-h: 24px; height: var(--badge-h); top: max(4px, calc(var(--ph-r, 18px) - var(--badge-h) / 2)); left: max(4px, calc(var(--ph-r, 18px) - var(--badge-h) / 2)); }
 /* the hero's chevron chip (26px, radius 13) in the inset photo's corner: 8px card padding + (16 - 13) */
 .card.inset > .card-chev.on-img { top: 11px; right: 11px; }
+
+/* Search field in the Sidestash row (his ask 2026-11-14: "when searching make sure hte search bar is sidestash style") */
+.input.raised { background: var(--raise); border: 0.5px solid var(--hi); box-shadow: var(--chip-shadow); }

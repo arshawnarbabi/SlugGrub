@@ -38,7 +38,7 @@ export function HallsScreen({ data, best }: { data: HallsData; best: BestDish[] 
   // every dish on today's menus, for search: name, hall, meal
   const results = useMemo(() => {
     const needle = q.trim().toLowerCase();
-    if (needle.length < 2) return [];
+    if (needle.length < 1) return []; // results update with every letter typed
     return data.halls.flatMap((x) => Object.entries(x.meals).flatMap(([m, list]) => (list ?? [])
       .filter((d) => d.name.toLowerCase().includes(needle))
       .map((d) => ({ d, hall: x, meal: toLabel(m as MealName) })))).slice(0, 30);
@@ -75,10 +75,10 @@ export function HallsScreen({ data, best }: { data: HallsData; best: BestDish[] 
       <Appear id={searching ? "search" : "browse"} style={{ display: "grid", gap: 10 }}>
       {searching ? <>
         <div style={{ display: "flex", gap: 8 }}>
-          <input ref={input} autoFocus className="input" type="search" value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search today's menus" aria-label="Search today's menus" />
+          <input ref={input} autoFocus className="input raised" type="search" value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search today's menus" aria-label="Search today's menus" />
           <button type="button" className="iconbtn raised" aria-label="Close search" onClick={toggleSearch}><Icon icon={Cancel01Icon} size={20} /></button>
         </div>
-        {q.trim().length >= 2 && results.length === 0 && <div className="card"><div className="label">Nothing called that on today&apos;s menus.</div></div>}
+        {q.trim().length >= 1 && results.length === 0 && <div className="card"><div className="label">Nothing called that on today&apos;s menus.</div></div>}
         {results.map(({ d, hall: x, meal: m }) => {
           const photo = dishPhoto(d.name);
           return (
