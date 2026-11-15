@@ -364,6 +364,13 @@ input, textarea, select { font-size: 17px !important; }     /* 16px or more also
    next page never peeks (his trial 2026-11-14: "it scrolls to the side instead of just blurring in a new one") */
 .carousel.pager { gap: 16px; }
 .carousel.pager > .pager-page { flex: 0 0 100%; min-width: 0; }
+/* Halls meal switch + search in one row, in the Sidestash finish of the top bar buttons (his ask 2026-11-14: "combine it with the
+   search button ... give it the sidestash style too"). The search button is round and as tall as the switch. Under 360px wide
+   "Late night" reads "Late" so the row fits at 320. */
+.seg.raised, .iconbtn.raised { background: var(--raise); border: 0.5px solid var(--hi); box-shadow: var(--chip-shadow); }
+.iconbtn.raised { width: auto; height: auto; min-width: 44px; min-height: 44px; align-self: stretch; aspect-ratio: 1; }
+.seg-short { display: none; }
+@media (max-width: 359px) { .seg-long { display: none; } .seg-short { display: inline; } }
 /* Text field: the same pill as Ask's question box */
 .input { width: 100%; height: 50px; border-radius: var(--r-pill); border: 0; background: var(--card); padding: 0 18px; font: inherit; color: var(--ink); outline-color: var(--p8); box-sizing: border-box; }
 

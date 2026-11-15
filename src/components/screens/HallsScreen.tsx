@@ -13,7 +13,7 @@ import { Icon } from "@/components/ui/Icon";
 import { Photo } from "@/components/ui/Photo";
 import { Pager } from "@/components/ui/Pager";
 import { Screen } from "@/components/ui/Screen";
-import { Seg, Appear, Swap } from "@/components/ui/motion";
+import { Seg, Appear } from "@/components/ui/motion";
 import { useProfile } from "@/lib/profile";
 import type { HallsData, HallView } from "@/lib/hallsView";
 import type { HallId, MealName } from "@/lib/types";
@@ -66,13 +66,13 @@ export function HallsScreen({ data, best }: { data: HallsData; best: BestDish[] 
   return (
     <Screen top={<div className="topbar">
         <h1 className="title-xl">Halls</h1>
-        <button type="button" className="iconbtn" aria-label={searching ? "Close search" : "Search dishes"} aria-expanded={searching} onClick={toggleSearch}>
-          <Swap id={searching ? "x" : "s"}><Icon icon={searching ? Cancel01Icon : Search01Icon} size={18} /></Swap>
-        </button>
       </div>}>
       <Appear id={searching ? "search" : "browse"} style={{ display: "grid", gap: 10 }}>
       {searching ? <>
-        <input ref={input} autoFocus className="input" type="search" value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search today's menus" aria-label="Search today's menus" />
+        <div style={{ display: "flex", gap: 8 }}>
+          <input ref={input} autoFocus className="input" type="search" value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search today's menus" aria-label="Search today's menus" />
+          <button type="button" className="iconbtn raised" aria-label="Close search" onClick={toggleSearch}><Icon icon={Cancel01Icon} size={20} /></button>
+        </div>
         {q.trim().length >= 2 && results.length === 0 && <div className="card"><div className="label">Nothing called that on today&apos;s menus.</div></div>}
         {results.map(({ d, hall: x, meal: m }) => {
           const photo = dishPhoto(d.name);
@@ -89,7 +89,11 @@ export function HallsScreen({ data, best }: { data: HallsData; best: BestDish[] 
           );
         })}
       </> : <>
-<Seg options={MEALS} value={meal} onChange={setMeal} label="Meal" />
+      <div style={{ display: "flex", gap: 8 }}>
+        <Seg options={MEALS} value={meal} onChange={setMeal} label="Meal" className="raised"
+          render={(o) => (o === "Late night" ? <><span className="seg-long">Late night</span><span className="seg-short">Late</span></> : o)} />
+        <button type="button" className="iconbtn raised" style={{ marginLeft: "auto" }} aria-label="Search dishes" onClick={toggleSearch}><Icon icon={Search01Icon} size={20} /></button>
+      </div>
 
       {best.length > 0 && <>
       <div className="sechead"><h2>Best on campus</h2><Link href="/rank?view=Leaderboard" className="seeall">See all</Link></div>

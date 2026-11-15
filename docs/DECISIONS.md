@@ -215,3 +215,8 @@ ADR (Architecture Decision Record) practice, adapted as an append-only log for a
 - **Choice:** native scroll snap in one shared component (src/components/ui/Pager.tsx, .carousel.pager), so swiping by hand and the automatic move are the same scroll, and Rank and Halls behave identically. On Rank, changing an earlier answer undoes the old vote through rankBackend().undo before saving the new one (a matchup's id is the same whichever side wins). The blur-fade stays for state changes inside a page (the "or" badge, the meal switch).
 - **Consequences:** the side scroll is a movement beyond motion.state_change, accepted at his request for these two pagers only; revert by swapping Pager back for Appear.
 - **Status:** trial (# draft until he keeps it)
+
+## 2026-11-14 — Halls: meal switch and search share one Sidestash row
+- **Context:** his words: "maybe if this slider is relevant, combine it with the search button. if you do, make ti look nice and give it the sidestash style too".
+- **Choice:** the search button leaves the top bar and sits at the right end of the meal switch row; both take the Sidestash finish (.raised: --raise, --hi hairline, --chip-shadow), which until now was only on the top bar buttons and the nav bar. Seg gained optional `className` and `render` props (src/components/ui/motion.tsx); "Late night" shows as "Late" under 360px so the row fits at 320.
+- **Status:** draft
