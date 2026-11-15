@@ -7,16 +7,19 @@
 //   points:  the Budget ring, filled to the points they enter
 //   college: a campus map, north up, every college a pin where it really sits; theirs is the blue pin with its name
 //   hall:    a raised card previewing their usual hall: a photo of its building, its name and its open status now
+//   about you (goal, 1 of 2): a raised stat card (height, weight, age, sex) that fills in as they type, a bar filling with it
+//   your goal (goal, 2 of 2): the points ring, filled to the daily goal as activity and lose / maintain / gain change
 // (review 2026-11-14: the maps went for cards at S12/S13, then the college map came back, polished, at his "i liked the map more")
 // Picking an option moves the art on THE spring (2026-11-15, below); text inside still blur-fades. Nothing moves when a step opens.
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion, useSpring, useTransform } from "framer-motion";
-import { RiceBowl01Icon, Location01Icon } from "@hugeicons/core-free-icons";
+import { RiceBowl01Icon, Location01Icon, BodyWeightIcon } from "@hugeicons/core-free-icons";
 import { Icon } from "@/components/ui/Icon";
 import { Photo } from "@/components/ui/Photo";
 import { Swap, SPRING, SPRING_CFG, STATE_IN, STATE_OUT, STATE_FADE } from "@/components/ui/motion";
 import "./onboard-art.css";
 import type { College, HallId, MealPlanId } from "@/lib/types";
+import type { Sex } from "@/lib/calorieGoal";
 import { HALLS, MEAL_PLANS, mealNow } from "@/lib/halls";
 import { campusNow } from "./now";
 
@@ -105,27 +108,62 @@ export function PointsArt({ points, total }: { points: number; total: number }) 
   );
 }
 
-/** Calorie goal step (2026-11-15): the same ring as the points step, smaller (the step has more to fill in), filled to the goal on a
- *  0 to 4,000 scale and following every input on THE spring; the goal in the middle blur-morphs. No goal yet: an empty ring and a dash. */
+/** "About you" (2026-11-15, the goal's first screen): a raised stat card that fills in as they type. Four tiles (height, weight, age,
+ *  sex); each value blur-morphs in (Swap) from a dash, and the bar under them fills on THE spring as answers arrive (a quarter each). */
+export function BodyArt({ ft, inch, lb, age, sex }: { ft: string; inch: string; lb: string; age: string; sex: Sex | null }) {
+  const reduce = useReducedMotion();
+  const sexText = sex === "male" ? "Male" : sex === "female" ? "Female" : sex === "unsaid" ? "Not said" : "";
+  const tiles: [string, string][] = [
+    ["Height", ft ? `${ft}\u2032${inch || "0"}\u2033` : ""], ["Weight", lb ? `${lb} lb` : ""], ["Age", age], ["Sex", sexText],
+  ];
+  const share = tiles.filter(([, v]) => v).length / tiles.length;
+  const fill = useSpring(share, SPRING_CFG);
+  useEffect(() => { if (reduce) fill.jump(share); else fill.set(share); }, [share, reduce, fill]);
+  return (
+    <Frame h={200}>
+      <div className="art-card raised" style={{ width: 260, padding: 14, display: "grid", gap: 12 }} aria-hidden>
+        <span className="art-chip" style={{ justifySelf: "start" }}><Icon icon={BodyWeightIcon} size={14} sw={2} /> Your stats</span>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
+          {tiles.map(([k, v]) => (
+            <div key={k} style={{ background: "var(--paper-2)", borderRadius: 14, padding: "8px 12px", display: "grid", gap: 2, minWidth: 0 }}>
+              <span className="label" style={{ fontSize: 11 }}>{k}</span>
+              <span className="num" style={{ fontSize: 20, fontWeight: 700, letterSpacing: "-0.03em", lineHeight: 1.15, color: v ? undefined : "var(--ink-3)", whiteSpace: "nowrap" }}>
+                <Swap id={v || "none"}>{v || "\u2013"}</Swap>
+              </span>
+            </div>
+          ))}
+        </div>
+        <div style={{ height: 6, borderRadius: 3, background: "var(--paper-2)", overflow: "hidden" }}>
+          <motion.div style={{ height: "100%", background: "var(--p9)", borderRadius: 3, transformOrigin: "0 50%", scaleX: fill }} />
+        </div>
+      </div>
+    </Frame>
+  );
+}
+
+/** "Your goal" (the goal's second screen, 2026-11-15): the same ring as the points step, filled to the goal on a 0 to 4,000 scale and
+ *  following every change (activity, lose / maintain / gain, a typed number) on THE spring; the goal in the middle blur-morphs. No
+ *  goal yet: an empty ring and a dash. */
 export function GoalArt({ goal }: { goal: number | null }) {
-  const r = 58, c = 2 * Math.PI * r, SWEEP = 250, arc = c * (SWEEP / 360);
+  const r = 72, size = 176, c = 2 * Math.PI * r, SWEEP = 250, arc = c * (SWEEP / 360);
   const share = goal ? Math.max(0.04, Math.min(1, goal / 4000)) : 0;
   const reduce = useReducedMotion();
   const fill = useSpring(share, SPRING_CFG);
   useEffect(() => { if (reduce) fill.jump(share); else fill.set(share); }, [share, reduce, fill]);
   const dash = useTransform(fill, (v) => `${arc * Math.max(0, v)} ${c}`);
   const shows = useTransform(fill, (v) => (v > 0.004 ? 1 : 0)); // a round cap draws a dot at zero length: hide it
-  const text = goal ? goal.toLocaleString("en-US") : "–";
+  const text = goal ? goal.toLocaleString("en-US") : "\u2013";
+  const m = size / 2;
   return (
-    <Frame h={150}>
-      <div style={{ position: "relative", width: 144, height: 144 }}>
-        <svg width="144" height="144" viewBox="0 0 144 144" style={{ transform: `rotate(${90 + (360 - SWEEP) / 2}deg)` }} aria-hidden>
-          <circle cx="72" cy="72" r={r} fill="none" stroke="var(--paper-2)" strokeWidth="12" strokeDasharray={`${arc} ${c}`} strokeLinecap="round" />
-          <motion.circle cx="72" cy="72" r={r} fill="none" stroke="var(--p9)" strokeWidth="12" strokeLinecap="round" style={{ strokeDasharray: dash, strokeOpacity: shows }} />
+    <Frame h={190}>
+      <div style={{ position: "relative", width: size, height: size }}>
+        <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} style={{ transform: `rotate(${90 + (360 - SWEEP) / 2}deg)` }} aria-hidden>
+          <circle cx={m} cy={m} r={r} fill="none" stroke="var(--paper-2)" strokeWidth="14" strokeDasharray={`${arc} ${c}`} strokeLinecap="round" />
+          <motion.circle cx={m} cy={m} r={r} fill="none" stroke="var(--p9)" strokeWidth="14" strokeLinecap="round" style={{ strokeDasharray: dash, strokeOpacity: shows }} />
         </svg>
         <div style={{ position: "absolute", inset: 0, display: "grid", placeItems: "center", textAlign: "center" }}>
           <div>
-            <div className="hero-num" style={{ fontSize: 30, color: goal ? undefined : "var(--ink-3)" }}><Swap id={text}>{text}</Swap></div>
+            <div className="hero-num" style={{ fontSize: 36, color: goal ? undefined : "var(--ink-3)" }}><Swap id={text}>{text}</Swap></div>
             <div className="label" style={{ fontSize: 12 }}>cal a day</div>
           </div>
         </div>
