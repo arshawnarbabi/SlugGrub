@@ -20,3 +20,10 @@
 .st-state { display: inline-flex; align-items: center; height: 26px; padding: 0 10px; border-radius: var(--r-pill); font-size: 12px; font-weight: 600; background: var(--paper-2); color: var(--ink-2); }
 .st-state.on { background: var(--p3); color: var(--p9); }
 .st-foot { font-size: 12px; margin: 2px 4px 0; line-height: 1.4; }
+
+/* Skip setup switch (2026-11-15): the flat --paper-2 track with the Sidestash thumb, like the app's switches; the track turns the
+   primary blue when on. The thumb moves on THE spring's duration and curve. */
+.st-switch { flex: none; width: 50px; height: 30px; border-radius: 999px; background: var(--paper-2); box-shadow: var(--chip-shadow); position: relative; transition: background-color var(--dur-ui) var(--ease); }
+.st-switch > span { position: absolute; top: 3px; left: 3px; width: 24px; height: 24px; border-radius: 50%; background: var(--raise); border: 0.5px solid var(--hi); box-shadow: var(--chip-shadow); transition: transform var(--dur-spring) var(--spring); }
+.st-switch.on { background: var(--p9); }
+.st-switch.on > span { transform: translateX(20px); }

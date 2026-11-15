@@ -4,7 +4,7 @@ Written 2026-11-15 for DevFest judging. Live at https://sluggrub.vercel.app.
 
 ## Before judging (5 minutes, once)
 
-1. **Phone (the one you demo on):** Today → profile button (top right) → Settings → Start demo → tap again to confirm. Finish onboarding with a plan, your college and your hall. Demo mode is now on for this phone only: full leaderboards, college rivalry, an example plate on Today.
+1. **Phone (the one you demo on):** Today → profile button (top right) → Settings → leave "Skip setup" on → Start demo → tap again to confirm. It opens Today already set up (Gold plan, Porter, a hall that is open today, a 2,710 calorie goal) with full leaderboards and college rivalry. Demo mode is on for this phone only. Turn "Skip setup" off to walk through onboarding instead.
 2. **Laptop on the projector:** open https://sluggrub.vercel.app/vote/screen. **Do not turn demo mode on here.** Demo mode lives in one device's browser, so a laptop in demo mode would show its own mock tally and never the judges' real votes. Tap "Next round" once so the round is fresh.
 3. Test the live vote once: vote from a spare phone, and check the count goes up by exactly one on the projector.
 
