@@ -24,7 +24,6 @@ import { getProfile, goalCalories, saveGoal, saveProfile, type CalorieGoal } fro
 import { ACTIVITY, DIRECTION, goalFromBody, type Activity, type Direction, type Sex } from "@/lib/calorieGoal";
 import { signInWithGoogle } from "@/lib/auth";
 import { demoOn } from "@/lib/demoMode";
-import { seedDemoPlates } from "./demoSeed";
 import type { College, HallId, MealPlanId } from "@/lib/types";
 
 const COLLEGES: College[] = ["Cowell", "Stevenson", "Crown", "Merrill", "Porter", "Kresge", "Oakes", "Rachel Carson", "College Nine", "John R. Lewis"];
@@ -149,11 +148,11 @@ export function OnboardingScreen() {
     const savedAt = was && was.pointsNow === points && was.plan === plan ? was.savedAt : undefined;
     return saveProfile({ plan, pointsNow: points, college, usualHall: hall, ...extra, goal: g, savedAt });
   };
-  // finishing in demo mode primes the app: if nothing is logged today, one or two example plates from today's real menus (demoSeed.ts)
+  // finishing never logs a plate, demo or not (his ask 2026-11-15: "have it not log a plate as soon as onboarding is finished"): Today
+  // opens with an empty calorie ring that shows the goal
   const finish = (g: CalorieGoal | undefined) => {
     if (goalOnly) { saveGoal(g); router.replace("/"); return; }
     save(who, g);
-    if (demoOn()) void seedDemoPlates(hall);
     setStep(steps.length);
   };
   const LAST = steps.length - 1; // the goal number; GOAL_STEP is the "About you" step before it
