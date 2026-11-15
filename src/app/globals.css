@@ -457,8 +457,9 @@ input, textarea, select { font-size: 17px !important; }     /* 16px or more also
    its blue, raised the way the food button is: a lighter-topped blue gradient, a soft white inner top highlight and the food
    button's shadow, the same way the top bar chips kept their own color in the Sidestash finish. The white button takes the plain
    finish (raise, white hairline, chip shadow). Presses still only dim. */
-.btn-primary.raised { background: linear-gradient(180deg, color-mix(in oklch, var(--p9) 86%, white) 0%, var(--p9) 100%);
-  box-shadow: inset 0 1px 0 oklch(1 0 0 / 0.3), 0 1px 2px oklch(0.22 0.01 255 / 0.12), 0 8px 18px -8px oklch(0.22 0.01 255 / 0.32); }
+:root { --raise-blue: linear-gradient(180deg, color-mix(in oklch, var(--p9) 86%, white) 0%, var(--p9) 100%);
+  --raise-blue-shadow: inset 0 1px 0 oklch(1 0 0 / 0.3), 0 1px 2px oklch(0.22 0.01 255 / 0.12), 0 8px 18px -8px oklch(0.22 0.01 255 / 0.32); }
+.btn-primary.raised { background: var(--raise-blue); box-shadow: var(--raise-blue-shadow); }
 .btn-secondary.raised { background: var(--raise); border: 0.5px solid var(--hi); box-shadow: var(--chip-shadow); }
 
 /* Onboarding college and hall cards (his review 2026-11-14, S12/S13, replacing the campus maps: "i dont like this ggraphic"): the
@@ -466,3 +467,13 @@ input, textarea, select { font-size: 17px !important; }     /* 16px or more also
 .art-seal { min-width: 40px; height: 40px; padding: 0 8px; border-radius: var(--r-pill); display: grid; place-items: center; background: var(--p9); color: white; font-size: 14px; font-weight: 700; letter-spacing: -0.01em;
   box-shadow: inset 0 1px 0 oklch(1 0 0 / 0.3), var(--chip-shadow); }
 .clamp1 { display: block; min-width: 0; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+
+/* Ask's prompt bar (his review 2026-11-14, S09: "put the prompt bar near the bottom with the suggestions above it. make the prompt bar
+   and the prompt send button sidestash style"). The bar sticks to the bottom of the scroller, above the nav bar; its shelf is the
+   page color, running down under the nav bar (the negative margin takes back the scroller's bottom padding), so answers scroll away
+   behind it instead of showing between the bar and the nav bar. The field is .input.raised; the send button is the blue raise. */
+/* position: sticky is set inline (.scroller > :not(.wash):not(.topbar) makes every child relative); sticky offsets count from the
+   scroller's padding edge, so the negative bottom lets the shelf reach the screen's bottom edge */
+.ask-dock { bottom: calc(-1 * (env(safe-area-inset-bottom, 0px) + 116px)); z-index: 2; display: flex; gap: 8px; padding: 10px 0 calc(env(safe-area-inset-bottom, 0px) + 116px);
+  margin-bottom: calc(-1 * (env(safe-area-inset-bottom, 0px) + 116px)); background: linear-gradient(to bottom, color-mix(in oklch, var(--paper) 0%, transparent), var(--paper) 10px); }
+.iconbtn.send { width: 50px; height: 50px; color: white; background: var(--raise-blue); box-shadow: var(--raise-blue-shadow); }

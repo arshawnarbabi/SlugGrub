@@ -2,6 +2,7 @@
 
 // Owner: Arshawn (UI; moved out of MoreScreens.tsx with its look unchanged). Wired by the menus code to /api/ask
 // (src/app/api/ask/contract.ts): Gemini picks from the meal each hall is serving now; calories come from the UCSC labels.
+// Layout (his review 2026-11-14): title and answers on top, suggestions and the Sidestash prompt bar at the bottom, above the nav bar.
 import Link from "next/link";
 import { useState } from "react";
 import { ArrowLeft01Icon, SparklesIcon, RiceBowl01Icon, Alert02Icon } from "@hugeicons/core-free-icons";
@@ -39,13 +40,6 @@ export function AskScreen() {
         <span style={{ width: 38 }} />
       </div>}>
 <h1 className="title-xl">What are you in the mood for?</h1>
-      <form onSubmit={(e) => { e.preventDefault(); ask(q); }} style={{ display: "flex", gap: 8 }}>
-        <input id="ask" value={q} onChange={(e) => setQ(e.target.value)} maxLength={ASK_MAX_CHARS} placeholder="High protein under 700 cal" aria-label="Ask SlugGrub" style={{ flex: 1, height: 50, borderRadius: 999, border: 0, background: "var(--card)", padding: "0 18px", font: "inherit", fontSize: 15, color: "var(--ink)", outlineColor: "var(--p8)" }} />
-        <button type="submit" className="iconbtn" disabled={state.phase === "asking"} style={{ width: 50, height: 50, background: "var(--p9)", color: "white" }} aria-label="Ask"><Icon icon={SparklesIcon} size={20} sw={1.9} /></button>
-      </form>
-      <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
-        {SUGGESTIONS.map((s) => <button key={s} type="button" className="tint blue" onClick={() => { setQ(s); ask(s); }}>{s}</button>)}
-      </div>
       {state.phase !== "idle" && (
         <Appear id={key} style={{ display: "grid", gap: 10 }}>
           {state.phase === "asking" && <div className="label">Reading what the halls are serving now</div>}
@@ -79,6 +73,14 @@ export function AskScreen() {
           )}
         </Appear>
       )}
+      {/* suggestions sit just above the prompt bar at the bottom (his review 2026-11-14, S09) */}
+      <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginTop: "auto", paddingTop: 8 }}>
+        {SUGGESTIONS.map((s) => <button key={s} type="button" className="tint blue" onClick={() => { setQ(s); ask(s); }}>{s}</button>)}
+      </div>
+      <form className="ask-dock" style={{ position: "sticky" }} onSubmit={(e) => { e.preventDefault(); ask(q); }}>
+        <input id="ask" className="input raised" value={q} onChange={(e) => setQ(e.target.value)} maxLength={ASK_MAX_CHARS} placeholder="High protein under 700 cal" aria-label="Ask SlugGrub" enterKeyHint="send" style={{ flex: 1, fontSize: 16 }} />
+        <button type="submit" className="iconbtn send" disabled={state.phase === "asking"} aria-label="Ask"><Icon icon={SparklesIcon} size={20} sw={1.9} /></button>
+      </form>
     </Screen>
   );
 }
