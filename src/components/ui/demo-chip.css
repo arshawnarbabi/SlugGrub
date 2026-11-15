@@ -1,5 +1,7 @@
 /* Demo data chip, easier to see (2026-11-15, docs/DESIGN.md note of the same date). Builds on .demo-chip in globals.css (26px pill,
    12px 600 text): the blue tint fill with --p9 text and a 6px solid --p9 dot before the words. Blue is the app's "this is about you
    / the app's state" color; gold stays for #1 moments only. Two classes, so it wins over .demo-chip wherever the CSS loads. */
-.demo-chip.demo-chip-on { gap: 6px; background: var(--p3); border-color: color-mix(in oklch, var(--p9) 22%, transparent); color: var(--p9); box-shadow: none; }
+/* 2026-11-15, his ask after running the demo: the flat tint was the version he had turned down for the top chips; it now wears the
+   same Sidestash blue as Today's status chip (.topbar .tint.blue: blue raise gradient, white hairline, chip shadow). */
+.demo-chip.demo-chip-on { gap: 6px; background: linear-gradient(180deg, color-mix(in oklch, var(--p3) 55%, white) 0%, var(--p3) 100%); border: 0.5px solid var(--hi); box-shadow: var(--chip-shadow); color: var(--p9); }
 .demo-chip.demo-chip-on::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--p9); flex: none; }

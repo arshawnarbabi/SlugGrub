@@ -297,3 +297,5 @@ ADR (Architecture Decision Record) practice, adapted as an append-only log for a
 - **Status:** draft
 
 - 2026-11-15: Onboarding art moves between options on THE spring (his ask, DESIGN.md note of the same date): plan cards shuffle, the points ring springs, the college pin and tag travel across the map, the hall card deals in as the old one tilts away. Text inside still blur-fades.
+
+- 2026-11-15: The "Demo data" chip wears the Sidestash blue of Today's status chip (blue raise gradient, white hairline, chip shadow) instead of the flat blue tint, his ask after running the demo ("the other version i said i didnt like, i wnat hte versiom we just haad with the blue backgroudn"). The flat tint is the version he turned down for the top chips on 2026-11-14.
