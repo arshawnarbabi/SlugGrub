@@ -5,7 +5,7 @@
 // Layout (his review 2026-11-14): title and answers on top, suggestions and the Sidestash prompt bar at the bottom, above the nav bar.
 import Link from "next/link";
 import { useState } from "react";
-import { ArrowLeft01Icon, SparklesIcon, RiceBowl01Icon, Alert02Icon } from "@hugeicons/core-free-icons";
+import { ArrowLeft01Icon, ArrowUp02Icon, RiceBowl01Icon, Alert02Icon } from "@hugeicons/core-free-icons";
 import { Icon } from "@/components/ui/Icon";
 import { Photo } from "@/components/ui/Photo";
 import { Screen } from "@/components/ui/Screen";
@@ -78,9 +78,11 @@ export function AskScreen() {
       <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginTop: "auto", paddingTop: 8 }}>
         {SUGGESTIONS.map((s) => <button key={s} type="button" className="tint blue" onClick={() => { setQ(s); ask(s); }}>{s}</button>)}
       </div>
-      <form className="ask-dock" style={{ position: "sticky" }} onSubmit={(e) => { e.preventDefault(); ask(q); }}>
+      <form className="ask-dock" style={{ position: "sticky" }} onSubmit={(e) => { e.preventDefault(); (document.activeElement as HTMLElement | null)?.blur(); ask(q); }}>
         <input id="ask" className="input raised" value={q} onChange={(e) => setQ(e.target.value)} maxLength={ASK_MAX_CHARS} placeholder="High protein under 700 cal" aria-label="Ask SlugGrub" enterKeyHint="send" style={{ flex: 1, fontSize: 16 }} />
-        <button type="submit" className="iconbtn send" disabled={state.phase === "asking"} aria-label="Ask"><Icon icon={SparklesIcon} size={20} sw={1.9} /></button>
+        {/* iOS: a tap on the button first blurs the field, the keyboard drops, the dock jumps and the tap misses. Keeping focus on
+            pointer down lets the tap land; the keyboard is dismissed once the question is sent (his report 2026-11-15). */}
+        <button type="submit" className="iconbtn send" disabled={state.phase === "asking"} aria-label="Ask" onPointerDown={(e) => e.preventDefault()} onMouseDown={(e) => e.preventDefault()}><Icon icon={ArrowUp02Icon} size={22} sw={2.1} /></button>
       </form>
     </Screen>
   );

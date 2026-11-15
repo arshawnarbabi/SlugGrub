@@ -73,7 +73,7 @@ export function LogScreen({ demo }: { demo: DemoPlates }) {
   const file = useRef<HTMLInputElement>(null);
   const run = useRef(0);
 
-  const send = async (blob: Blob, preview: string) => {
+  const send = async (blob: Blob, preview: string, menuDate?: string) => {
     const id = ++run.current;
     setPhoto(preview);
     setPhase("reading");
@@ -82,7 +82,7 @@ export function LogScreen({ demo }: { demo: DemoPlates }) {
       form.append("photo", await shrink(blob), "plate.jpg");
       form.append("hall", HALL.id);
       form.append("meal", meal);
-      form.append("date", date ?? campusNow(new Date()).date);
+      form.append("date", menuDate ?? date ?? campusNow(new Date()).date);
       const res: LogResponse = await (await fetch("/api/log", { method: "POST", body: form })).json();
       if (id !== run.current) return; // the student started over meanwhile
       if (!res.ok) { setProblem(res.message); setPhase("error"); return; }
@@ -98,7 +98,7 @@ export function LogScreen({ demo }: { demo: DemoPlates }) {
   const fromCamera = (f: File) => send(f, URL.createObjectURL(f));
   const fromDemo = async () => {
     if (!plate) return;
-    try { send(await (await fetch(plate.photo)).blob(), plate.photo); }
+    try { send(await (await fetch(plate.photo)).blob(), plate.photo, plate.date); }
     catch { setProblem("Couldn't load the demo plate."); setPhase("error"); }
   };
   const again = () => { run.current++; setResult(null); setPhase("pick"); };
