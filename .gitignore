@@ -44,3 +44,4 @@ next-env.d.ts
 # food image script scratch
 scripts/.food-images-cache.json
 scripts/.ucsc-cookies.txt
+.claude/worktrees/
