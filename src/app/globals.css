@@ -519,3 +519,7 @@ input, textarea, select { font-size: 17px !important; }     /* 16px or more also
    part that took a touch, so a finger on the thumb's upper or lower edge missed it. The whole 44px row is now the track's hit area. */
 .gs-track::before { content: ""; position: absolute; left: -13px; right: -13px; top: -18px; bottom: -18px; }
 
+
+/* Log's saved state: what the door cost for this plate's dining hall visit (2026-11-15; src/lib/diningEntry.ts). The small Sidestash
+   chip (raise, white hairline, chip shadow), ink-2 text, information only. */
+.visit-chip { display: inline-flex; align-items: center; height: 30px; padding: 0 12px; border-radius: var(--r-pill); background: var(--raise); border: 0.5px solid var(--hi); box-shadow: var(--chip-shadow); font-size: 13px; font-weight: 600; color: var(--ink-2); white-space: nowrap; cursor: default; }

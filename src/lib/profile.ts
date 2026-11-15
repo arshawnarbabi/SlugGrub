@@ -7,12 +7,31 @@ import type { College, HallId, MealPlanId, UserProfile } from "./types";
 export const PROFILE_KEY = "sluggrub.profile";
 const CHANGED = "sluggrub:profile";
 
+/** The optional daily calorie goal (onboarding's goal step, 2026-11-15). Private: it stays in this key on this phone, never sent to
+ *  the server or Firebase, never shown to anyone else. `calories` is the goal; the body stats are kept only to refill the step. */
+export interface CalorieGoal {
+  calories: number;
+  heightIn?: number; // total inches
+  weightLb?: number;
+  age?: number;
+  sex?: "male" | "female" | "unsaid"; // for the formula only
+  activity?: "light" | "moderate" | "very";
+  typed?: boolean; // true when the student typed their own number instead of the formula's
+}
+
 /** UserProfile plus when it was saved (ISO), so points entered days ago can be aged to today. */
 export interface SavedProfile extends UserProfile {
   savedAt: string;
   name?: string; // from Google sign-in, if the student used it
   uid?: string;
+  goal?: CalorieGoal; // optional; profiles saved before 2026-11-15 have none
 }
+
+/** A goal worth showing: a whole number of calories in a sane range. */
+export const goalCalories = (p: { goal?: CalorieGoal } | null | undefined): number | null => {
+  const c = p?.goal?.calories;
+  return typeof c === "number" && Number.isFinite(c) && c >= 800 && c <= 8000 ? Math.round(c) : null;
+};
 
 const PLANS: MealPlanId[] = ["blue", "gold", "banana-slug", "unlimited"];
 const HALL_IDS: HallId[] = ["40", "05", "20", "25", "30"];
@@ -34,7 +53,7 @@ export function getProfile(): SavedProfile | null {
 }
 
 /** Saves the profile (savedAt is set now unless given). False if this device would not store it. */
-export function saveProfile(p: UserProfile & { savedAt?: string; name?: string; uid?: string }): boolean {
+export function saveProfile(p: UserProfile & { savedAt?: string; name?: string; uid?: string; goal?: CalorieGoal }): boolean {
   try {
     const out: SavedProfile = { ...p, pointsNow: Math.max(0, Math.round(p.pointsNow)), savedAt: p.savedAt ?? new Date().toISOString() };
     window.localStorage.setItem(PROFILE_KEY, JSON.stringify(out));
@@ -43,6 +62,15 @@ export function saveProfile(p: UserProfile & { savedAt?: string; name?: string; 
   } catch {
     return false;
   }
+}
+
+/** Sets or clears only the calorie goal, keeping everything else (and savedAt, so entered points are not re-dated). Today's "Set a goal". */
+export function saveGoal(goal: CalorieGoal | undefined): boolean {
+  const p = getProfile();
+  if (!p) return false;
+  const next: SavedProfile = { ...p };
+  if (goal) next.goal = goal; else delete next.goal;
+  return saveProfile(next);
 }
 
 function subscribe(cb: () => void) {

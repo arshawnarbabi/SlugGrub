@@ -55,7 +55,8 @@ export async function seedDemoPlates(hall: HallId, now = new Date()): Promise<nu
     const at = new Date(now);
     at.setHours(h, m, 0, 0);
     const items = dishes.map((d) => ({ recipeId: d.recipeId, name: d.name, servings: 1, calories: Math.round(d.calories ?? 0) }));
-    plates.push({ id: `${DEMO_PLATE}${today}-${meal.toLowerCase()}`, at: at.toISOString(), hallId: dishes[0].hallId, meal, items, totalCalories: items.reduce((n, i) => n + i.calories, 0) });
+    const proteinG = Math.round(dishes.reduce((n, d) => n + (Number((d as { proteinG?: number }).proteinG) || 0), 0));
+    plates.push({ id: `${DEMO_PLATE}${today}-${meal.toLowerCase()}`, at: at.toISOString(), hallId: dishes[0].hallId, meal, items, totalCalories: items.reduce((n, i) => n + i.calories, 0), proteinG });
   }
   return plates.length && savePlates(plates) ? plates.length : 0;
 }

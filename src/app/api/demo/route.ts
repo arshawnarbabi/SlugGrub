@@ -4,9 +4,10 @@
 import { connection } from "next/server";
 import { getAllMenus } from "@/lib/menus";
 import { campusDate, getCatalog } from "@/lib/rankCatalog";
-import { catalogFromMenus, weekOf, type CatalogDish } from "@/lib/rankCore";
+import { catalogFromMenus, dishKey, weekOf, type CatalogDish } from "@/lib/rankCore";
 
-export interface DemoCatalog { week: string; date: string; today: CatalogDish[]; others: CatalogDish[] }
+// today's dishes also carry their UCSC label protein (2026-11-15), so demo mode's example plates fill Today's protein line
+export interface DemoCatalog { week: string; date: string; today: (CatalogDish & { proteinG?: number })[]; others: CatalogDish[] }
 
 const cache = new Map<string, Promise<DemoCatalog>>();
 
@@ -18,7 +19,13 @@ function addDays(date: string, n: number): string {
 
 async function build(date: string): Promise<DemoCatalog> {
   const week = weekOf(date);
-  const today = (await getCatalog(date)).dishes;
+  const protein = new Map<string, number>();
+  for (const m of await getAllMenus(date).catch(() => [])) {
+    for (const d of Object.values(m.meals).flat()) {
+      if (d?.recipeId && typeof d.nutrition?.proteinG === "number") protein.set(dishKey(m.hallId, d.recipeId), d.nutrition.proteinG);
+    }
+  }
+  const today = (await getCatalog(date)).dishes.map((c) => ({ ...c, proteinG: protein.get(c.key) }));
   const days = await Promise.all(Array.from({ length: 7 }, (_, i) => getAllMenus(addDays(week, i)).catch(() => [])));
   const seen = new Set(today.map((c) => c.key));
   const rest: CatalogDish[] = [];

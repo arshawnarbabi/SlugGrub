@@ -21,6 +21,7 @@ export interface PaceDetail extends BudgetSnapshot {
   perDayToFinish: number; // points a day that would last exactly to the end
   idealLeft: number; // points you'd have now at an even pace
   estimated: boolean; // true when the points were entered on an earlier day and aged to today at the student's own pace
+  charged?: number; // Slug Points charged at the door by dining hall visits logged since the points were entered (when any were)
   enteredPoints: number;
   enteredOn: string; // campus date the points were entered
 }
@@ -29,8 +30,10 @@ function elapsed(date: string) {
   return Math.min(TOTAL_DAYS, Math.max(0, daysBetween(QUARTER_START, date)));
 }
 
-/** Pace from the points a student had on `enteredOn`, aged to `now` at their own average so far. */
-export function computePace(points: number, planId: MealPlanId, now: Date, enteredOn?: string): PaceDetail {
+/** Pace from the points a student had on `enteredOn`, aged to `now` at their own average so far. When dining hall visits were logged
+ *  since then, `charged` is what their doors cost (src/lib/diningEntry.ts) and points left are the entered points minus it instead of
+ *  the time-based estimate (2026-11-15). Everything after pointsLeft (pace, run-out date, the chart's line) follows from it. */
+export function computePace(points: number, planId: MealPlanId, now: Date, enteredOn?: string, charged?: number): PaceDetail {
   const today = campusClock(now).date;
   const entered = enteredOn && enteredOn < today ? enteredOn : today;
   const total = planTotal(planId);
@@ -39,7 +42,8 @@ export function computePace(points: number, planId: MealPlanId, now: Date, enter
   // their average daily spend as of the day they entered the number (rolled-over points above the plan count as unspent)
   const rate = Math.max(0, total - enteredPoints) / Math.max(1, elapsed(entered));
   const sinceEntered = Math.max(0, daysBetween(entered, today));
-  const pointsLeft = Math.max(0, Math.round(enteredPoints - rate * sinceEntered));
+  const real = typeof charged === "number" && charged > 0;
+  const pointsLeft = real ? Math.max(0, Math.round(enteredPoints - charged)) : Math.max(0, Math.round(enteredPoints - rate * sinceEntered));
 
   const elapsedDays = elapsed(today);
   const daysLeft = Math.max(1, TOTAL_DAYS - elapsedDays);
@@ -60,13 +64,13 @@ export function computePace(points: number, planId: MealPlanId, now: Date, enter
   return {
     pointsLeft, daysLeft, pace, runOutDate, leftoverAtQuarterEnd, planTotal: total,
     today, totalDays: TOTAL_DAYS, elapsedDays, spentPerDay, perDayToFinish: pointsLeft / daysLeft, idealLeft,
-    estimated: entered !== today && sinceEntered > 0, enteredPoints, enteredOn: entered,
+    estimated: !real && entered !== today && sinceEntered > 0, charged: real ? charged : undefined, enteredPoints, enteredOn: entered,
   };
 }
 
 /** The shared BudgetSnapshot shape (Today's card). Same name and signature as before. */
-export function computeBudgetSnapshot(pointsLeft: number, planId: MealPlanId = "blue", now: Date = new Date(), enteredOn?: string): BudgetSnapshot {
-  const p = computePace(pointsLeft, planId, now, enteredOn);
+export function computeBudgetSnapshot(pointsLeft: number, planId: MealPlanId = "blue", now: Date = new Date(), enteredOn?: string, charged?: number): BudgetSnapshot {
+  const p = computePace(pointsLeft, planId, now, enteredOn, charged);
   return { pointsLeft: p.pointsLeft, daysLeft: p.daysLeft, pace: p.pace, runOutDate: p.runOutDate, leftoverAtQuarterEnd: p.leftoverAtQuarterEnd, planTotal: p.planTotal };
 }
 

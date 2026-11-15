@@ -2,6 +2,9 @@
 
 // Owner: Arshawn (UI). Real pace math wired in by the budget code (PLAN.md, Budget tab): src/lib/budgetCalc.ts on the plan and
 // points saved at onboarding (src/lib/profile.ts, on this device). With no profile it shows example numbers and says so.
+// 2026-11-15: points left are the points entered minus the dining hall visits logged since (charged at the door once per visit,
+// src/lib/diningEntry.ts); only with no visit logged since does it fall back to the time-based estimate. The pace, the outlook line and
+// the chart all read the same computePace result, so they agree.
 import { useState } from "react";
 import Link from "next/link";
 import { Screen } from "@/components/ui/Screen";
@@ -10,6 +13,8 @@ import { useProfile, type SavedProfile } from "@/lib/profile";
 import { computePace } from "@/lib/budgetCalc";
 import { MEAL_PLANS } from "@/lib/halls";
 import { PaceChart } from "./PaceChart";
+import { useChargedSince } from "./plates";
+import { ENTRY_PRICE, pointsText } from "@/lib/diningEntry";
 import { campusClock, weekdayOf } from "@/lib/campusTime";
 
 const RANGES = ["This quarter", "This week"] as const;
@@ -20,18 +25,19 @@ const short = (iso: string) => new Date(`${iso}T12:00:00Z`).toLocaleDateString("
 export function BudgetScreen() {
   const [range, setRange] = useState<(typeof RANGES)[number]>("This quarter");
   const profile = useProfile();
+  const charged = useChargedSince(profile?.savedAt);
   // The profile lives on the phone: until it is read (server render, first hydration pass) show only the title, so the numbers
   // render once, in place, with no swap from example to real (pages open static). This also keeps the clock out of server render.
-  if (profile === undefined) return <Screen top={<div className="topbar"><h1 className="title-xl">Budget</h1></div>}>{null}</Screen>;
-  return <BudgetBody profile={profile} range={range} setRange={setRange} />;
+  if (profile === undefined || charged === null) return <Screen top={<div className="topbar"><h1 className="title-xl">Budget</h1></div>}>{null}</Screen>;
+  return <BudgetBody profile={profile} charged={profile ? charged : { total: 0, visits: 0 }} range={range} setRange={setRange} />;
 }
 
-function BudgetBody({ profile, range, setRange }: { profile: SavedProfile | null; range: (typeof RANGES)[number]; setRange: (r: (typeof RANGES)[number]) => void }) {
+function BudgetBody({ profile, charged, range, setRange }: { profile: SavedProfile | null; charged: { total: number; visits: number }; range: (typeof RANGES)[number]; setRange: (r: (typeof RANGES)[number]) => void }) {
   const mine = profile;
   const src = mine ?? EXAMPLE;
   const now = new Date();
   const enteredOn = mine ? campusClock(new Date(mine.savedAt)).date : undefined;
-  const p = computePace(src.pointsNow, src.plan, now, enteredOn);
+  const p = computePace(src.pointsNow, src.plan, now, enteredOn, charged.total);
   const planLabel = MEAL_PLANS.find((x) => x.id === src.plan)?.label ?? "Gold";
   // ring: 250 degrees, opening at the bottom where the pace pill sits (his ask 2026-11-14: "put it in that disconnect at the bottom so
   // you might have to shorten the ring to fit it")
@@ -62,9 +68,11 @@ function BudgetBody({ profile, range, setRange }: { profile: SavedProfile | null
         </div>
         <span className={`pill ${pillTone}`} style={{ position: "absolute", top: 184, left: "50%", transform: "translateX(-50%)" }}><span className="dot" />{pillText}</span>
       </div>
-      {(!mine || p.estimated) && (
-        <p className="label" style={{ fontSize: 12, margin: "0 4px" }}>
-          {!mine ? "Example numbers. Set up your plan below to see your own." : p.estimated ? `Estimated from the ${p.enteredPoints.toLocaleString()} you entered ${short(p.enteredOn)}, at your pace so far.` : ""}
+      {(!mine || p.estimated || p.charged) && (
+        <p className="label num" style={{ fontSize: 12, margin: "0 4px" }}>
+          {!mine ? "Example numbers. Set up your plan below to see your own."
+            : p.charged ? `The ${p.enteredPoints.toLocaleString()} you entered ${short(p.enteredOn)}, minus ${pointsText(p.charged)} for the ${charged.visits === 1 ? "dining hall visit" : `${charged.visits} dining hall visits`} you logged since.`
+            : `Estimated from the ${p.enteredPoints.toLocaleString()} you entered ${short(p.enteredOn)}, at your pace so far.`}
         </p>
       )}
       <Seg options={RANGES} value={range} onChange={setRange} label="Range" />
@@ -90,7 +98,7 @@ function BudgetBody({ profile, range, setRange }: { profile: SavedProfile | null
           <div style={{ fontSize: 16, fontWeight: 600, letterSpacing: "-0.01em", color: "var(--ink)", marginTop: 16, textAlign: "center", textWrap: "balance" }}>{outlook}</div>
         </div>
         <p className="label" style={{ fontSize: 12, margin: "0 4px" }}>SlugGrub can&apos;t see your card, so it doesn&apos;t split spending between dining halls, cafes and markets. The GET app lists every purchase.</p>
-        <p className="label" style={{ fontSize: 12, margin: "0 4px" }}>A dining hall meal costs the same at every hall. Cafes and markets take 10% off with Slug Points.</p>
+        <p className="label num" style={{ fontSize: 12, margin: "0 4px" }}>Dining halls charge once at the door, the same at every hall: {pointsText(ENTRY_PRICE.Breakfast)} breakfast, {pointsText(ENTRY_PRICE.Lunch)} lunch, {pointsText(ENTRY_PRICE.Dinner)} dinner, {pointsText(ENTRY_PRICE["Late Night"])} late night. Plates logged at one hall within 2 hours count as one visit. Cafes and markets take 10% off with Slug Points.</p>
       </Appear>
       {/* a full button at the bottom of the page, the Sidestash white like "Continue with Google" (his ask 2026-11-15: the inline
           link was "so small. make it follow the style of the other buttons ... and put it at the bottom of thsi page") */}

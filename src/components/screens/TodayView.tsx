@@ -17,6 +17,9 @@ import { useDemoMode } from "@/lib/demoMode";
 import { useDemoRank } from "@/lib/rankDemo";
 import { demoToday } from "./demoViews";
 import { computeBudgetSnapshot } from "@/lib/budgetCalc";
+import { campusClock } from "@/lib/campusTime";
+import { useChargedSince } from "./plates";
+import { useSettle } from "./settle";
 import type { HallId } from "@/lib/types";
 import type { MealNow } from "@/lib/halls";
 import { mealLabel } from "./now";
@@ -59,8 +62,12 @@ export function TodayView({ data: served }: { data: TodayData }) {
   // the top dish card opens Halls on the hall it names (his usual hall, or the open one shown instead)
   const topHall: HallId = altAt?.[0] ?? (data.halls[hallId] ? hallId : DEFAULT_HALL);
   const topTag = alt ? `#1 at ${alt.short}` : "#1 at your hall";
-  const budget = profile ? computeBudgetSnapshot(profile.pointsNow, profile.plan, new Date(), profile.savedAt.slice(0, 10)) : null;
-  const pct = budget ? Math.max(0, Math.min(100, Math.round((budget.pointsLeft / (budget.planTotal ?? budget.pointsLeft)) * 100))) : 0;
+  // points left count each dining hall visit logged since the points were entered (src/lib/diningEntry.ts), like Budget
+  const charged = useChargedSince(profile?.savedAt);
+  const budget = profile && charged ? computeBudgetSnapshot(profile.pointsNow, profile.plan, new Date(), campusClock(new Date(profile.savedAt)).date, charged.total) : null;
+  // after a visit is charged on Log, the number morphs down from what Today last showed, a moment after Today opens (settle.ts)
+  const shownPoints = useSettle("points", budget ? budget.pointsLeft : null);
+  const pct = budget && shownPoints !== null ? Math.max(0, Math.min(100, Math.round((shownPoints / (budget.planTotal ?? shownPoints)) * 100))) : 0;
   const standing = profile ? data.rivalry.find((r) => r.college === profile.college) : undefined;
   const [a, b] = hall.pair.length >= 2 ? hall.pair : (alt?.pair ?? []);
   const statusText = hall.status.meal ? `${mealLabel(hall.status.meal)} · ${hall.status.text}` : hall.status.text;
@@ -79,7 +86,7 @@ export function TodayView({ data: served }: { data: TodayData }) {
           <span className="iconbtn" style={{ width: 44, height: 44, borderRadius: "50%", background: "var(--paper-2)", color: "var(--ink-2)" }}><Icon icon={UserAdd01Icon} size={20} sw={2} /></span>
           <div style={{ flex: 1, minWidth: 0 }}>
             <b style={{ fontSize: 14 }}>Set up SlugGrub</b>
-            <div className="label" style={{ fontSize: 12 }}>Your hall, plan and college · 4 quick questions</div>
+            <div className="label" style={{ fontSize: 12 }}>Your hall, plan and college · 4 quick questions and an optional goal</div>
           </div>
         </Link>
       )}
@@ -102,8 +109,8 @@ export function TodayView({ data: served }: { data: TodayData }) {
           <span className="card-chev" aria-hidden><Icon icon={ArrowRight01Icon} size={16} sw={2} /></span>
           <div className="label">Slug Points</div>
           {budget ? <>
-            <div className="num" style={big}><CountUp to={budget.pointsLeft} /></div>
-            <div style={{ height: 6, background: "var(--paper-2)", borderRadius: 9, marginTop: 6, overflow: "hidden" }}><div style={{ width: `${pct}%`, height: "100%", background: "var(--p9)", borderRadius: 9 }} /></div>
+            <div className="num" style={big}><CountUp to={shownPoints ?? budget.pointsLeft} /></div>
+            <div style={{ height: 6, background: "var(--paper-2)", borderRadius: 9, marginTop: 6, overflow: "hidden" }}><div style={{ width: `${pct}%`, height: "100%", background: "var(--p9)", borderRadius: 9, transition: "width var(--dur-spring) var(--spring)" }} /></div>
             <div style={{ fontSize: 12, color: PACE[budget.pace][1], marginTop: 6, fontWeight: 700 }}>{PACE[budget.pace][0]}</div>
           </> : <>
             <div className="num" style={{ ...big, color: "var(--ink-3)" }}>–</div>
