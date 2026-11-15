@@ -210,7 +210,7 @@ function Duels({ catalog, state }: { catalog: CatalogDish[]; state: RankState | 
                     </motion.span>
                   )}
                 </div>
-                <span style={{ fontSize: 15, fontWeight: 700, letterSpacing: "-0.01em", lineHeight: 1.2, minHeight: 36, display: "grid", alignItems: "center" }}>{d?.name ?? " "}</span>
+                <span style={{ height: 36, display: "grid", alignItems: "center" }}><span className="clamp2" title={d?.name} style={{ fontSize: 15, fontWeight: 700, letterSpacing: "-0.01em", lineHeight: 1.2 }}>{d?.name ?? " "}</span></span>
                 <span className="num label" style={{ fontSize: 12, marginTop: -6 }}>{d ? [d.calories !== undefined && `${d.calories} cal`, hallShort(d.hallId)].filter(Boolean).join(" · ") : " "}</span>
               </motion.button>
             ))}

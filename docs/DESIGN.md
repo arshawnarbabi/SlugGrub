@@ -3207,3 +3207,5 @@ One page margin: .carousel rows scroll edge to edge but rest their first item on
 - Budget chart: lines labeled on the chart (You, Your pace, Even pace), legend row and readout line removed; touching shows the day's values inside the plot (his ask: "put the you and pace ahead as labels on teh actual graph and remove a lot of the text up top its less easy to skim"). -->
 
 <!-- 2026-11-14 (later): Sidestash switches are now a flat --paper-2 track with the chip shadow and a Sidestash thumb (raise, hairline, chip shadow); the pressed-in thumb is dropped (his call). Today's "Set up SlugGrub" is a pill (radius --r-pill) with its icon in a neutral circle (--paper-2 fill, --ink-2 icon), not blue (his ask). Budget ring sweeps 250 degrees and the pace pill sits in the opening at the bottom, below the number (his ask: "put it in that disconnect at the bottom ... shorten the ring to fit it"). -->
+
+<!-- 2026-11-14 Rank card names clamp to two lines in a fixed 36px box (same .clamp2 as Halls), so both cards keep one height. -->
