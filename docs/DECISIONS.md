@@ -278,3 +278,5 @@ ADR (Architecture Decision Record) practice, adapted as an append-only log for a
 
 
 - 2026-11-15: Rank text buttons renamed to say what they do, his yes: "Too tough" is now "Can't decide" (moves on, records nothing) and "Skip" is now "Haven't tried these" (records a skip, which feeds Least picked on Dining services; its note reads "Noted. We'll ask about those another time"). The brand page sample in src/app/brand/Interactive.tsx still shows the old labels until that file is free.
+
+- 2026-11-15: Budget "Update points" (and "Set up your plan" with no profile) is a full-width Sidestash secondary button (btn btn-secondary btn-block raised) at the bottom of the page instead of a small inline link under the ring, his ask ("so small. make it follow the style of the other buttons ... put it at the bottom"). The note under the ring keeps only its sentence and hides when it has nothing to say.
