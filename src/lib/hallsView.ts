@@ -1,9 +1,9 @@
 // Owner: Ethan. What the Halls tab shows, trimmed on the server so the phone gets only that (a day's full menu file is a few
 // hundred KB; this is a few dozen): each hall's real dishes per meal today (no salad bar, condiments, drinks, sauces or bars),
 // its hours and what it is doing now, and the cafe and market board.
-import { getAllMenus, getCafes, type Cafe } from "./menus";
-import { cafeNow } from "./cafeHours";
-import { isAddOn } from "./foodpro";
+import { getAllMenus, getCafes, type Cafe, type CafeCategory } from "./menus";
+import { cafeNow, cafeWeek } from "./cafeHours";
+import { isAddOn, SITE_CAFES } from "./foodpro";
 import { HALLS, hallHoursOn, mealNow, type MealNow } from "./halls";
 import { isRealDish } from "./dishKinds";
 import type { CampusNow } from "./campusTime";
@@ -100,4 +100,22 @@ export async function getHallsData(now: CampusNow): Promise<HallsData> {
     cafes: cafes.filter((c) => c.itemCount > 0 && c.kind !== "market").map((c) => cafeView(c, now)),
     markets: cafes.filter((c) => c.itemCount > 0 && c.kind === "market").map((c) => cafeView(c, now)),
   };
+}
+
+/** One cafe or market's full menu page (/halls/cafe/[id]): everything the board row shows, plus its posted week and every
+ *  category with its items (portion, price and diet tags where the site lists them; cafes have no nutrition labels). */
+export interface CafeMenuView extends CafeView {
+  date: string; // campus date asked for
+  description: string;
+  week: { days: string; hours: string }[]; // posted hours, empty when none are posted
+  categories: CafeCategory[];
+}
+
+/** The cafe or market with this id (SITE_CAFES in src/lib/foodpro.ts), or null when there is none. */
+export async function getCafeMenu(id: string, now: CampusNow): Promise<CafeMenuView | null> {
+  const site = SITE_CAFES.find((x) => x.id === id);
+  // a location the site lists no menu for keeps its page, with no items
+  const c: Cafe | undefined = (await getCafes(now.date)).find((x) => x.id === id) ?? (site && { ...site, short: site.name, itemCount: 0, categories: [] });
+  if (!c) return null;
+  return { ...cafeView(c, now), date: now.date, description: c.description, week: cafeWeek(c.id), categories: c.categories.filter((k) => k.items.length) };
 }

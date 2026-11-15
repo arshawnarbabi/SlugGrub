@@ -23,6 +23,7 @@ import type { HallId, MealName } from "@/lib/types";
 import { MEAL_LABELS as MEALS, type MealLabel as Meal } from "./now";
 import { dishPhoto } from "./dishPhoto";
 import { portionText } from "./portion";
+import { menuFromNote } from "./menuDay";
 
 const toMeal = (m: Meal): MealName => (m === "Late night" ? "Late Night" : m);
 const toLabel = (m: MealName): Meal => (m === "Late Night" ? "Late night" : m);
@@ -158,21 +159,21 @@ export function HallsScreen({ data, best: served }: { data: HallsData; best: Bes
 /** Which day the board's menus are from: today, or the day they open next (cafes and markets close on weekends). */
 function menusNote(list: CafeView[], today: string): string {
   const dates = [...new Set(list.map((c) => c.menuDate).filter(Boolean))] as string[];
-  const first = dates.sort()[0];
-  if (!first || first === today) return "Today's menus";
-  return `Menus from ${new Date(`${first}T12:00:00Z`).toLocaleDateString("en-US", { weekday: "long", timeZone: "UTC" })}`;
+  return menuFromNote(dates.sort()[0], today, true);
 }
 
-/** Cafe or market rows: name; where it is, whether it is open now (posted hours only) and up to three things to eat; item count. */
+/** Cafe or market rows: name; where it is, whether it is open now (posted hours only) and up to three things to eat; item count.
+ *  Each row opens that location's full menu (/halls/cafe/[id]) and carries the chevron, as in Settings' rows. */
 function CafeRows({ list, icon }: { list: CafeView[]; icon: typeof Coffee02Icon }) {
   return (
     <div className="card" style={{ padding: "2px 14px" }}>
       {list.map((c) => (
-        <div className="row" key={c.id}>
+        <Link href={`/halls/cafe/${c.id}`} prefetch className="row press" key={c.id} style={{ color: "inherit", textDecoration: "none", minHeight: 44 }}>
           <span className="iconbtn" style={{ width: 36, height: 36, background: "var(--paper-2)" }}><Icon icon={icon} size={17} /></span>
           <div className="grow"><div className="title">{c.name}</div><div className="sub">{[c.location, c.status ? cap(c.status) : null, ...c.highlights].filter(Boolean).join(" · ")}</div></div>
           <span className="num label" style={{ fontSize: 12 }}>{c.itemCount} items</span>
-        </div>
+          <span aria-hidden style={{ display: "grid", color: "var(--ink-3)", flex: "none" }}><Icon icon={ArrowRight01Icon} size={16} sw={2} /></span>
+        </Link>
       ))}
     </div>
   );
