@@ -276,7 +276,7 @@
 .sg[data-surface="stroke"] :is(.card, .duel .opt, .chip:not(.on), .sw, .scale, .seeall, .iconbtn) { box-shadow: none; }
 .sg[data-surface="flat"] .duel .opt.picked, .sg[data-surface="stroke"] .duel .opt.picked { box-shadow: inset 0 0 0 2.5px var(--p9); }
 
-/* ── "Chalk" surface: cloned from ~/Downloads/school-app/design-tokens/tokens.css (his ask 2026-11-14: "i really like the ui of
+/* ── "Chalk" surface: cloned from the Chalk app's design tokens (his ask 2026-11-14: "i really like the ui of
    the cards and interface and shadwos and stroke and everything of chalk"). White canvas, white raised cards, 0.75px hairline
    strokes in 8% black, two-layer shadows with negative spread (elev-1 cards, elev-2 floating), radius 16 cards / 24 big
    surfaces, concentric corners. Floating chrome uses Chalk's elev-2/elev-3. ── */
@@ -309,7 +309,7 @@
 .sg .fc-note { font-family: var(--sans); font-size: 12px; color: var(--ink-3); line-height: 1.45; }
 .sg .fc-apply { font-family: var(--sans); font-size: 12px; font-weight: 600; color: var(--p9); }
 
-/* ── "Sidestash" surface (his design, ~/Downloads/reference app/Sidestash/Sources/Sidestash/UI/Palette.swift, cooled to SlugGrub's
+/* ── "Sidestash" surface (his design, the Sidestash app's palette, cooled to SlugGrub's
    neutrals). His spec 2026-11-14: the background is not the brightest neutral and neither are the cards; cards and buttons are
    LIGHTER than the background, with a very subtle top-to-bottom neutral gradient (lighter on top) and a pure white stroke. Shadow is
    Sidestash's chip shadow (ink at 8%, blur 2, y 1); floating chrome adds a soft wide layer. ── */
