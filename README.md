@@ -55,7 +55,7 @@ docs/               design system, decisions, demo run sheet
 
 ## Team
 
-Arshawn (design, Today, photo log), Karen (rankings, Firebase, live vote, dining services view) and Ethan (menus, Halls, Budget, onboarding, Ask SlugGrub).
+Arshawn (team lead; design, Today, photo log), Karen (rankings, Firebase, live vote, dining services view) and Ethan (menus, Halls, Budget, onboarding, Ask SlugGrub).
 
 ## Earlier work
 
